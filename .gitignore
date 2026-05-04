@@ -1,0 +1,16 @@
+# Secrets
+.env
+.env.*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Mac
+.DS_Store
+
+# Project artefacts (regenerated)
+data/raw/nfl_research.duckdb
+data/datasets/*.csv
+data/raw/*.csv

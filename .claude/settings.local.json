@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/opt/anaconda3/bin/python --version)",
+      "Bash(/opt/anaconda3/bin/pip --version)",
+      "Bash(/opt/anaconda3/bin/pip install *)",
+      "Bash(/opt/anaconda3/bin/python -c \"import nfl_data_py, cfbd, duckdb, pandas, requests, bs4; print\\('all deps OK'\\)\")",
+      "Bash(/opt/anaconda3/bin/python 01_build_db.py)",
+      "Bash(/opt/anaconda3/bin/python 02_load_nfl.py)",
+      "Bash(/opt/anaconda3/bin/python -c ' *)"
+    ]
+  }
+}
