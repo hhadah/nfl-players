@@ -16,7 +16,8 @@ from config import DB_PATH
 from race_utils import infer_race, _OUT_COLS  # noqa: F401  (column list reused)
 
 OUT_COLS = ["race_white", "race_black", "race_api", "race_aian",
-            "race_2prace", "race_hispanic", "race_pred", "race_source"]
+            "race_2prace", "race_hispanic", "race_pred", "race_source",
+            "race_pred_surname"]
 
 # Each entry: table, PK columns, plus name-source columns. We pass first AND
 # last where available — race_utils combines them via BIFSG (Bayesian

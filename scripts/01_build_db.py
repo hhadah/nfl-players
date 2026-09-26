@@ -314,14 +314,15 @@ CREATE INDEX IF NOT EXISTS idx_cfb_players_name ON college_players(full_name);
 # Race / ethnicity columns added via ALTER (so we can add them to existing
 # databases without dropping data). Populated by 04c_infer_race.py.
 _RACE_COLS = [
-    ("race_white",    "DOUBLE"),
-    ("race_black",    "DOUBLE"),
-    ("race_api",      "DOUBLE"),
-    ("race_aian",     "DOUBLE"),
-    ("race_2prace",   "DOUBLE"),
-    ("race_hispanic", "DOUBLE"),
-    ("race_pred",     "VARCHAR"),
-    ("race_source",   "VARCHAR"),  # bifsg / surname / firstname / NULL
+    ("race_white",        "DOUBLE"),
+    ("race_black",        "DOUBLE"),
+    ("race_api",          "DOUBLE"),
+    ("race_aian",         "DOUBLE"),
+    ("race_2prace",       "DOUBLE"),
+    ("race_hispanic",     "DOUBLE"),
+    ("race_pred",         "VARCHAR"),  # BIFSG argmax
+    ("race_source",       "VARCHAR"),  # bifsg / surname / firstname / NULL
+    ("race_pred_surname", "VARCHAR"),  # surname-only Census argmax
 ]
 _RACE_TARGETS = [
     "nfl_players", "college_players", "recruits",

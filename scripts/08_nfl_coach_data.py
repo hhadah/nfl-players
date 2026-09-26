@@ -132,10 +132,13 @@ def _named_pivot_columns():
     parts = []
     for role, alias in NAMED_ROLES:
         parts.append(
-            f"MAX(CASE WHEN role = '{role}' THEN full_name     END) AS {alias}"
+            f"MAX(CASE WHEN role = '{role}' THEN full_name         END) AS {alias}"
         )
         parts.append(
-            f"MAX(CASE WHEN role = '{role}' THEN race_pred     END) AS {alias}_race_pred"
+            f"MAX(CASE WHEN role = '{role}' THEN race_pred         END) AS {alias}_race_pred"
+        )
+        parts.append(
+            f"MAX(CASE WHEN role = '{role}' THEN race_pred_surname END) AS {alias}_race_pred_surname"
         )
         for race in ["white", "black", "api", "aian", "2prace", "hispanic"]:
             parts.append(
@@ -224,7 +227,8 @@ def build_dataset_sql():
             SELECT
                 {PFR_TO_NFLVERSE} AS team_abbr,
                 nc.season, nc.role, nc.full_name,
-                nc.race_pred, nc.race_white, nc.race_black,
+                nc.race_pred, nc.race_pred_surname,
+                nc.race_white, nc.race_black,
                 nc.race_api, nc.race_aian, nc.race_2prace, nc.race_hispanic
             FROM nfl_coaches nc
         )
@@ -250,15 +254,16 @@ def build_dataset_sql():
             wc.season,
             wc.week,
             wc.season_type,
-            wc.full_name        AS head_coach,
-            wc.coach_id         AS head_coach_id,
-            wc.race_pred        AS head_coach_race_pred,
-            wc.race_white       AS head_coach_race_white,
-            wc.race_black       AS head_coach_race_black,
-            wc.race_api         AS head_coach_race_api,
-            wc.race_aian        AS head_coach_race_aian,
-            wc.race_2prace      AS head_coach_race_2prace,
-            wc.race_hispanic    AS head_coach_race_hispanic,
+            wc.full_name             AS head_coach,
+            wc.coach_id              AS head_coach_id,
+            wc.race_pred             AS head_coach_race_pred,
+            wc.race_pred_surname     AS head_coach_race_pred_surname,
+            wc.race_white            AS head_coach_race_white,
+            wc.race_black            AS head_coach_race_black,
+            wc.race_api              AS head_coach_race_api,
+            wc.race_aian             AS head_coach_race_aian,
+            wc.race_2prace           AS head_coach_race_2prace,
+            wc.race_hispanic         AS head_coach_race_hispanic,
             CASE
                 WHEN LAG(wc.coach_id) OVER (
                     PARTITION BY wc.team, wc.season
@@ -300,6 +305,7 @@ def build_dataset_sql():
             wh.head_coach_id,
             wh.coach_change,
             wh.head_coach_race_pred,
+            wh.head_coach_race_pred_surname,
             wh.head_coach_race_white, wh.head_coach_race_black,
             wh.head_coach_race_api,   wh.head_coach_race_aian,
             wh.head_coach_race_2prace, wh.head_coach_race_hispanic,

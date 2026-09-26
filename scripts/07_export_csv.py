@@ -64,15 +64,19 @@ EXPORTS = {
             nc.broad_jump       AS combine_broad_jump,
             nc.cone             AS combine_cone,
             nc.shuttle          AS combine_shuttle,
-            -- Inferred race (Census 2010 surname). NFL row preferred, then
-            -- recruit, then college player.
-            COALESCE(np.race_pred,     r.race_pred,     cp.race_pred)     AS race_pred,
-            COALESCE(np.race_white,    r.race_white,    cp.race_white)    AS race_white,
-            COALESCE(np.race_black,    r.race_black,    cp.race_black)    AS race_black,
-            COALESCE(np.race_api,      r.race_api,      cp.race_api)      AS race_api,
-            COALESCE(np.race_aian,     r.race_aian,     cp.race_aian)     AS race_aian,
-            COALESCE(np.race_2prace,   r.race_2prace,   cp.race_2prace)   AS race_2prace,
-            COALESCE(np.race_hispanic, r.race_hispanic, cp.race_hispanic) AS race_hispanic
+            -- Inferred race (Census 2010 surname + Tzioumis first names).
+            -- NFL row preferred, then recruit, then college player.
+            -- race_pred is BIFSG (first + last); race_pred_surname is the
+            -- surname-only Census argmax — useful when first names like
+            -- "Mike" or "Aaron" pull BIFSG away from the surname signal.
+            COALESCE(np.race_pred,         r.race_pred,         cp.race_pred)         AS race_pred,
+            COALESCE(np.race_pred_surname, r.race_pred_surname, cp.race_pred_surname) AS race_pred_surname,
+            COALESCE(np.race_white,        r.race_white,        cp.race_white)        AS race_white,
+            COALESCE(np.race_black,        r.race_black,        cp.race_black)        AS race_black,
+            COALESCE(np.race_api,          r.race_api,          cp.race_api)          AS race_api,
+            COALESCE(np.race_aian,         r.race_aian,         cp.race_aian)         AS race_aian,
+            COALESCE(np.race_2prace,       r.race_2prace,       cp.race_2prace)       AS race_2prace,
+            COALESCE(np.race_hispanic,     r.race_hispanic,     cp.race_hispanic)     AS race_hispanic
         FROM player_id_map m
         LEFT JOIN recruits r        ON r.recruit_id = m.recruit_id
         LEFT JOIN college_players cp ON cp.cfbd_id  = m.cfbd_id
@@ -286,7 +290,12 @@ def build_panel_sql(con):
                 MAX(CASE WHEN nc.role = 'OC'  THEN nc.race_pred END) AS team_offensive_coordinator_race_pred,
                 MAX(CASE WHEN nc.role = 'DC'  THEN nc.race_pred END) AS team_defensive_coordinator_race_pred,
                 MAX(CASE WHEN nc.role = 'STC' THEN nc.race_pred END) AS team_st_coordinator_race_pred,
-                MAX(CASE WHEN nc.role = 'GM'  THEN nc.race_pred END) AS team_general_manager_race_pred
+                MAX(CASE WHEN nc.role = 'GM'  THEN nc.race_pred END) AS team_general_manager_race_pred,
+                MAX(CASE WHEN nc.role = 'HC'  THEN nc.race_pred_surname END) AS team_head_coach_race_pred_surname,
+                MAX(CASE WHEN nc.role = 'OC'  THEN nc.race_pred_surname END) AS team_offensive_coordinator_race_pred_surname,
+                MAX(CASE WHEN nc.role = 'DC'  THEN nc.race_pred_surname END) AS team_defensive_coordinator_race_pred_surname,
+                MAX(CASE WHEN nc.role = 'STC' THEN nc.race_pred_surname END) AS team_st_coordinator_race_pred_surname,
+                MAX(CASE WHEN nc.role = 'GM'  THEN nc.race_pred_surname END) AS team_general_manager_race_pred_surname
             FROM nfl_coaches nc
             GROUP BY 1, 2
         ),
@@ -411,8 +420,12 @@ def build_panel_sql(con):
             np.draft_team,
             np.rookie_year,
             np.last_season,
-            -- ---- Inferred race (Census 2010 surname) ----
+            -- ---- Inferred race ----
+            -- BIFSG (first + last)
             np.race_pred,
+            -- Surname-only fallback (often more accurate than BIFSG when
+            -- a white-leaning first name dilutes a racially-mixed surname)
+            np.race_pred_surname,
             np.race_white, np.race_black, np.race_api,
             np.race_aian, np.race_2prace, np.race_hispanic,
             -- ---- NFL weekly player stats (NULL for non-skill positions) ----
@@ -434,14 +447,19 @@ def build_panel_sql(con):
             -- ---- Team coaches (season-level; same value for every week) ----
             ncp.team_head_coach,
             ncp.team_head_coach_race_pred,
+            ncp.team_head_coach_race_pred_surname,
             ncp.team_offensive_coordinator,
             ncp.team_offensive_coordinator_race_pred,
+            ncp.team_offensive_coordinator_race_pred_surname,
             ncp.team_defensive_coordinator,
             ncp.team_defensive_coordinator_race_pred,
+            ncp.team_defensive_coordinator_race_pred_surname,
             ncp.team_st_coordinator,
             ncp.team_st_coordinator_race_pred,
+            ncp.team_st_coordinator_race_pred_surname,
             ncp.team_general_manager,
             ncp.team_general_manager_race_pred,
+            ncp.team_general_manager_race_pred_surname,
             -- ---- Contract active that season ----
             con.contract_year_signed, con.contract_years,
             con.contract_value, con.contract_apy, con.contract_guaranteed,

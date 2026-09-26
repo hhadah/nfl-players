@@ -22,9 +22,16 @@ prediction columns are NaN (no fabrication).
 
 Output columns appended to a DataFrame:
   race_white, race_black, race_api, race_aian, race_2prace, race_hispanic
-  race_pred  (one of: white, black, api, aian, 2prace, hispanic; NULL if no match)
-  race_source  ("bifsg" if both signals merged, "surname" if last-only,
-                "firstname" if first-only fallback, NULL if no match)
+              — BIFSG-combined probability vector (or whichever single
+                signal was available)
+  race_pred   — argmax of the BIFSG vector; NULL if no signal matched
+  race_source — "bifsg" / "surname" / "firstname" / NULL — which signal
+                contributed to race_pred
+  race_pred_surname — argmax of surname-only Census lookup, regardless of
+                first-name signal. Use this when you want to bypass BIFSG
+                for individual cases where a white-leaning first name
+                (e.g. "Mike", "Aaron") is dragging the BIFSG label away
+                from a more racially-mixed surname.
 """
 from __future__ import annotations
 import re
@@ -208,6 +215,17 @@ def infer_race(df: pd.DataFrame,
         )
     out["race_pred"] = pred
     out["race_source"] = pd.Series(source, index=df.index, dtype="object")
+
+    # Surname-only argmax — same Census lookup, no first-name dilution.
+    # NULL where the surname didn't match the Census table at all.
+    surname_df = pd.DataFrame(last_pct, columns=_OUT_COLS, index=df.index)
+    pred_surname = pd.Series(pd.NA, index=df.index, dtype="object")
+    if last_has.any():
+        pred_surname.loc[last_has] = (
+            surname_df.loc[last_has].idxmax(axis=1)
+            .str.replace("race_", "", regex=False)
+        )
+    out["race_pred_surname"] = pred_surname
 
     out.index = df.index
     return pd.concat([df, out], axis=1)
