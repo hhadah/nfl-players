@@ -1,0 +1,262 @@
+# ============================================================================
+# 01-staff-person-season.R
+# Builds analysis/staff_person_season: one row per franchise_id x season x
+# person_id (1999-2025) for every coach and front-office member listed on a
+# team's Wikipedia staff box (staff template revisions 2007-2025, season
+# articles 1999-2006; table staff_team_season, one row per person x role).
+# Adds the person's primary role (priority order below), all roles, role
+# flags, unit, snapshot flags, tenure/mobility measures and race measures
+# from load_person_race() (hand-coded > Wikipedia category > BIFSG).
+# Date: 2026-09-26
+# ============================================================================
+
+# Primary-role priority (lower = higher priority). Coaching roles rank above
+# front-office roles, so a head coach who is also GM gets role HC (IsGM stays
+# TRUE). RoleTier is the level in the hierarchy used to define promotions.
+RolePriority <- tribble(
+  ~role_std,              ~Priority, ~RoleTier, ~Domain,
+  "HC",                   1,         1,         "coach",
+  "ASST_HC",              2,         2,         "coach",
+  "OC",                   3,         3,         "coach",
+  "DC",                   4,         3,         "coach",
+  "STC",                  5,         3,         "coach",
+  "PASS_GAME_COORD",      6,         4,         "coach",
+  "RUN_GAME_COORD",       7,         4,         "coach",
+  "QB",                   10,        5,         "coach",
+  "OL",                   11,        5,         "coach",
+  "WR",                   12,        5,         "coach",
+  "RB",                   13,        5,         "coach",
+  "TE",                   14,        5,         "coach",
+  "DL",                   15,        5,         "coach",
+  "EDGE_OLB",             16,        5,         "coach",
+  "LB",                   17,        5,         "coach",
+  "ILB",                  18,        5,         "coach",
+  "DB",                   19,        5,         "coach",
+  "CB",                   20,        5,         "coach",
+  "S",                    21,        5,         "coach",
+  "NICKEL",               22,        5,         "coach",
+  "OFF_ASST",             30,        6,         "coach",
+  "DEF_ASST",             31,        6,         "coach",
+  "ST_ASST",              32,        6,         "coach",
+  "QC_OFF",               33,        6,         "coach",
+  "QC_DEF",               34,        6,         "coach",
+  "COACH_ASST",           35,        6,         "coach",
+  "S_AND_C",              40,        7,         "coach",
+  "OTHER_COACH",          45,        8,         "coach",
+  "OWNER",                50,        1,         "front_office",
+  "CHAIR",                51,        1,         "front_office",
+  "CEO",                  52,        1,         "front_office",
+  "PRESIDENT",            53,        1,         "front_office",
+  "VICE_CHAIR",           54,        1,         "front_office",
+  "GM",                   60,        2,         "front_office",
+  "FOOTBALL_OPS_EXEC",    61,        3,         "front_office",
+  "ASST_GM",              62,        3,         "front_office",
+  "VP_PLAYER_PERSONNEL",  70,        4,         "front_office",
+  "DIR_PLAYER_PERSONNEL", 71,        4,         "front_office",
+  "DIR_PRO_PERSONNEL",    72,        4,         "front_office",
+  "DIR_COLLEGE_SCOUTING", 73,        5,         "front_office",
+  "SCOUT",                74,        5,         "front_office",
+  "CAP_ADMIN",            80,        6,         "front_office",
+  "OTHER_FO",             81,        6,         "front_office"
+)
+
+con <- db_connect()
+
+# Person x role rows; every role_std must have a priority
+StaffRoles <- tbl(con, "staff_team_season") |>
+  filter(season >= 1999, season <= 2025) |>
+  collect() |>
+  mutate(season = as.integer(season)) |>
+  left_join(RolePriority, by = "role_std")
+if (anyNA(StaffRoles$Priority)) {
+  stop("role_std without a priority: ",
+       paste(unique(StaffRoles$role_std[is.na(StaffRoles$Priority)]), collapse = ", "))
+}
+
+# Collapse to one row per franchise x season x person: primary role = the
+# highest-priority role; flags are "any role of this type"
+coach_groups <- c("head_coach", "coordinator", "position_coach", "assistant_coach")
+fo_groups <- c("owner_executive", "general_manager", "personnel_scouting",
+               "other_front_office")
+
+StaffPersonSeason <- StaffRoles |>
+  arrange(franchise_id, season, person_id, Priority) |>
+  group_by(franchise_id, season, person_id) |>
+  summarise(person_name = first(person_name),
+            PrimaryRole = first(role_std),
+            PrimaryRoleGroup = first(role_group),
+            PrimaryUnit = first(unit),
+            RoleTier = first(RoleTier),
+            Domain = first(Domain),
+            AllRoles = paste(unique(role_std), collapse = "|"),
+            NRoles = n_distinct(role_std),
+            IsHeadCoach = any(role_std == "HC"),
+            IsInterimHC = any(role_std == "HC" & interim_any),
+            IsInterimAnyRole = any(interim_any),
+            IsCoach = any(role_group %in% coach_groups),
+            IsCoordinator = any(role_std %in% c("OC", "DC", "STC")),
+            IsOC = any(role_std == "OC"),
+            IsDC = any(role_std == "DC"),
+            IsSTC = any(role_std == "STC"),
+            IsOtherCoordinator = any(role_std %in% c("ASST_HC", "PASS_GAME_COORD",
+                                                     "RUN_GAME_COORD")),
+            IsPositionCoach = any(role_group == "position_coach"),
+            IsAssistantCoach = any(role_group == "assistant_coach"),
+            IsStrengthCond = any(role_group == "strength_conditioning"),
+            IsSupportStaff = any(role_group == "support_staff"),
+            IsFrontOffice = any(role_group %in% fo_groups),
+            IsGM = any(role_std == "GM"),
+            IsOwnerExec = any(role_group == "owner_executive"),
+            IsPersonnelScouting = any(role_group == "personnel_scouting"),
+            IsOffenseCoach = any(role_group %in% coach_groups & unit == "offense"),
+            IsDefenseCoach = any(role_group %in% coach_groups & unit == "defense"),
+            IsSpecialTeamsCoach = any(role_group %in% coach_groups &
+                                        unit == "special_teams"),
+            in_preseason = any(in_preseason),
+            in_midseason = any(in_midseason),
+            in_late = any(in_late),
+            in_season_article = any(in_season_article),
+            StaffSource = first(source),
+            .groups = "drop") |>
+  # (the primary role is renamed only now: inside summarise() a new role_std
+  # would mask the person's other roles in the flags above)
+  rename(role_std = PrimaryRole) |>
+  mutate(Unit = case_when(PrimaryUnit %in% c("offense", "defense", "special_teams",
+                                             "front_office") ~ PrimaryUnit,
+                          TRUE ~ "general")) |>
+  select(-PrimaryUnit)
+
+# Team-seasons whose staff box was observed (22 article-era seasons have none)
+ObservedTeamSeasons <- StaffPersonSeason |> distinct(franchise_id, season)
+PrevObserved <- ObservedTeamSeasons |>
+  transmute(franchise_id, season = season + 1L, PrevTeamSeasonObserved = TRUE)
+
+# Previous season's primary role of the same person at the same franchise
+PrevRole <- StaffPersonSeason |>
+  transmute(franchise_id, person_id, season = season + 1L,
+            PrevRoleTier = RoleTier, PrevDomain = Domain, OnStaffPrevSeason = TRUE)
+
+# Person career: franchises in each season, cumulative seasons on any staff,
+# and the franchise(s) of the person's most recent earlier staff season
+PersonCareer <- StaffPersonSeason |>
+  group_by(person_id, season) |>
+  summarise(SeasonFranchises = paste(sort(unique(franchise_id)), collapse = "|"),
+            .groups = "drop") |>
+  arrange(person_id, season) |>
+  group_by(person_id) |>
+  mutate(SeasonsOnStaffAnyTeam = row_number(),
+         PrevFranchise = lag(SeasonFranchises),
+         PrevStaffSeason = lag(season)) |>
+  ungroup() |>
+  select(person_id, season, SeasonsOnStaffAnyTeam, PrevFranchise, PrevStaffSeason)
+
+StaffPersonSeason <- StaffPersonSeason |>
+  # Consecutive seasons with the franchise, including the current one
+  arrange(person_id, franchise_id, season) |>
+  group_by(person_id, franchise_id) |>
+  mutate(SpellId = cumsum(season - lag(season, default = first(season) - 2L) != 1L)) |>
+  group_by(person_id, franchise_id, SpellId) |>
+  mutate(SeasonsWithFranchise = row_number(),
+         TenureLeftCensored = first(season) == 1999L) |>
+  ungroup() |>
+  select(-SpellId) |>
+  left_join(PrevObserved, by = c("franchise_id", "season")) |>
+  left_join(PrevRole, by = c("franchise_id", "person_id", "season")) |>
+  left_join(PersonCareer, by = c("person_id", "season")) |>
+  mutate(PrevTeamSeasonObserved = coalesce(PrevTeamSeasonObserved, FALSE),
+         OnStaffPrevSeason = coalesce(OnStaffPrevSeason, FALSE),
+         NewToFranchise = case_when(!PrevTeamSeasonObserved ~ NA,
+                                    TRUE ~ !OnStaffPrevSeason),
+         PromotedWithinFranchise = case_when(!PrevTeamSeasonObserved ~ NA,
+                                             !OnStaffPrevSeason ~ FALSE,
+                                             PrevDomain != Domain ~ FALSE,
+                                             TRUE ~ RoleTier < PrevRoleTier)) |>
+  select(-PrevRoleTier, -PrevDomain, -OnStaffPrevSeason)
+
+# Race measures (person_uid = 'staff:<person_id>')
+PersonRace <- load_person_race(con, hand_coded) |>
+  filter(entity == "staff") |>
+  select(person_id, race, hispanic, black_any, nonwhite, race_source,
+         black_provisional, black_provisional_source, wiki_cat_black,
+         wiki_cat_hispanic_latino, p_white_bifsg, p_black_bifsg, p_hispanic_bifsg,
+         p_api_bifsg, p_aian_bifsg, p_multi_bifsg, race_bifsg)
+
+StaffPersonSeason <- StaffPersonSeason |>
+  left_join(PersonRace, by = "person_id") |>
+  select(franchise_id, season, person_id, person_name, role_std, PrimaryRoleGroup,
+         RoleTier, Domain, Unit, AllRoles, NRoles, starts_with("Is"),
+         in_preseason, in_midseason, in_late, in_season_article, StaffSource,
+         SeasonsWithFranchise, TenureLeftCensored, SeasonsOnStaffAnyTeam,
+         PrevStaffSeason, PrevFranchise, PrevTeamSeasonObserved, NewToFranchise,
+         PromotedWithinFranchise, race:race_bifsg) |>
+  arrange(franchise_id, season, RoleTier, person_id)
+
+# Codebook labels
+StaffPersonSeasonLabels <- c(
+  franchise_id = "Franchise identifier (stable across relocations)",
+  season = "NFL season (1999-2025)",
+  person_id = "Staff person identifier (Wikipedia title, or 'name:<key>' when unlinked)",
+  person_name = "Person name as listed on the staff box",
+  role_std = "Primary standardized role: highest priority among the person's roles (HC > ASST_HC > OC/DC/STC > pass/run-game coordinators > position coaches > assistants/quality control > S&C > other coaching support > owner/chair/CEO/president/vice-chair > GM > football-ops executive/ASST_GM > VP/director personnel > college scouting/scouts > cap/admin > other front office; coaching roles rank above front-office roles)",
+  PrimaryRoleGroup = "Role group of the primary role (staff_team_season.role_group)",
+  RoleTier = "Hierarchy tier of the primary role within its domain (1 = top: HC or owner/executive)",
+  Domain = "Domain of the primary role: coach or front_office",
+  Unit = "Unit of the primary role: offense, defense, special_teams, front_office, or general (HC, assistant HC without unit, S&C, support)",
+  AllRoles = "All standardized roles held in the franchise-season, pipe-separated in priority order",
+  NRoles = "Number of distinct standardized roles held",
+  IsHeadCoach = "Listed as head coach (including interim) in any snapshot",
+  IsInterimHC = "Listed as interim head coach",
+  IsInterimAnyRole = "Listed as interim in any role",
+  IsCoach = "Holds an on-field coaching role (head coach, coordinator, position coach, assistant/quality control); excludes S&C and support staff",
+  IsCoordinator = "Offensive, defensive or special-teams coordinator (OC/DC/STC)",
+  IsOC = "Offensive coordinator",
+  IsDC = "Defensive coordinator",
+  IsSTC = "Special-teams coordinator",
+  IsOtherCoordinator = "Assistant head coach or pass/run-game coordinator",
+  IsPositionCoach = "Position coach (QB, OL, WR, RB, TE, DL, EDGE/OLB, LB, ILB, DB, CB, S, nickel)",
+  IsAssistantCoach = "Assistant or quality-control coach",
+  IsStrengthCond = "Strength and conditioning staff",
+  IsSupportStaff = "Other coaching support staff (role_std OTHER_COACH)",
+  IsFrontOffice = "Holds any front-office role",
+  IsGM = "General manager",
+  IsOwnerExec = "Owner, chair, vice-chair, CEO or president",
+  IsPersonnelScouting = "Player-personnel or scouting role (VP/director personnel, director of college scouting, scout)",
+  IsOffenseCoach = "Holds an on-field coaching role in the offensive unit",
+  IsDefenseCoach = "Holds an on-field coaching role in the defensive unit",
+  IsSpecialTeamsCoach = "Holds an on-field coaching role in the special-teams unit",
+  in_preseason = "Listed in the Sep 10 staff-template revision (template era)",
+  in_midseason = "Listed in the Nov 1 staff-template revision (template era)",
+  in_late = "Listed in the Dec 31 (or day after last REG game) revision (template era)",
+  in_season_article = "Listed in the season article staff box (1999-2006)",
+  StaffSource = "Source: staff_template (Wikipedia template revisions, 2007-2025) or season_article (1999-2006)",
+  SeasonsWithFranchise = "Consecutive seasons on this franchise's staff, including the current one (a season whose staff box is unobserved breaks the run)",
+  TenureLeftCensored = "The current run with the franchise starts in 1999, the first observed season",
+  SeasonsOnStaffAnyTeam = "Cumulative number of seasons on any NFL staff since 1999, including the current one",
+  PrevStaffSeason = "Most recent earlier season in which the person is on any staff",
+  PrevFranchise = "Franchise(s) of the person in PrevStaffSeason (pipe-separated when several)",
+  PrevTeamSeasonObserved = "The franchise's staff box for season - 1 is observed",
+  NewToFranchise = "Not on this franchise's staff in season - 1 (NA when that staff box is unobserved)",
+  PromotedWithinFranchise = "On this franchise's staff in season - 1 in the same domain with a lower tier (e.g. position coach to coordinator); NA when season - 1 is unobserved",
+  race = "Hand-coded race (NA until coded; notes/race-coding-protocol.md)",
+  hispanic = "Hand-coded Hispanic ethnicity (yes/no/unknown)",
+  black_any = "Hand-coded Black (alone or in combination); NA until coded",
+  nonwhite = "Hand-coded non-white or Hispanic; NA until coded",
+  race_source = "Source of the hand code: adjudicated, coder_agree, single_coder, disputed",
+  black_provisional = "Hand-coded black_any when coded, else 1 if a Wikipedia category flags the person as Black, else NA (positive-only; a lower bound)",
+  black_provisional_source = "Source of black_provisional",
+  wiki_cat_black = "Wikipedia category flags the person as Black/African American (positive-only screening aid)",
+  wiki_cat_hispanic_latino = "Wikipedia category flags the person as Hispanic/Latino (positive-only screening aid)",
+  p_white_bifsg = "Name-based BIFSG posterior P(white) (secondary measure; misclassifies most Black coaches)",
+  p_black_bifsg = "Name-based BIFSG posterior P(Black)",
+  p_hispanic_bifsg = "Name-based BIFSG posterior P(Hispanic)",
+  p_api_bifsg = "Name-based BIFSG posterior P(Asian/Pacific Islander)",
+  p_aian_bifsg = "Name-based BIFSG posterior P(American Indian/Alaska Native)",
+  p_multi_bifsg = "Name-based BIFSG posterior P(multiracial)",
+  race_bifsg = "Argmax BIFSG category"
+)
+
+write_sample(StaffPersonSeason, "staff_person_season",
+             key = c("franchise_id", "season", "person_id"),
+             labels = StaffPersonSeasonLabels)
+
+db_disconnect(con)
