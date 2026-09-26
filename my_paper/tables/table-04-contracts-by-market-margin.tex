@@ -1,0 +1,28 @@
+\begin{table}[!h]
+\centering
+\caption{Contract Sample by Market Margin \label{tab:contracts-margin}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\fontsize{8}{10}\selectfont
+\begin{threeparttable}
+\begin{tabular}[t]{lrrrrrrrrrrr}
+\toprule
+\multicolumn{2}{c}{ } & \multicolumn{2}{c}{APY, \$M} & \multicolumn{2}{c}{Guarantees} & \multicolumn{1}{c}{ } & \multicolumn{3}{c}{Prior NFL season} & \multicolumn{2}{c}{Pre-NFL signals} \\
+\cmidrule(l{3pt}r{3pt}){3-4} \cmidrule(l{3pt}r{3pt}){5-6} \cmidrule(l{3pt}r{3pt}){8-10} \cmidrule(l{3pt}r{3pt}){11-12}
+Market margin & N & Mean & Median & Mean & Share zero & Years & Rostered & Snaps & Box score & College stats & Recruit\\
+\midrule
+Rookie scale (drafted) & 4,068 & 1.38 & 0.98 & 2.89 & 0.009 & 4.0 & 0.003 & 0.003 & 0.002 & 0.872 & 0.859\\
+UDFA entry & 4,060 & 0.77 & 0.81 & 0.04 & 0.206 & 3.0 & 0.002 & 0.002 & 0.001 & 0.584 & 0.519\\
+Veteran free agent (UFA) & 4,578 & 3.79 & 2.30 & 4.47 & 0.088 & 1.8 & 0.997 & 0.973 & 0.942 & 0.618 & 0.683\\
+Re-sign/Extension & 974 & 12.07 & 9.94 & 18.45 & 0.018 & 3.3 & 0.996 & 0.992 & 0.970 & 0.661 & 0.715\\
+Tag/Tender & 1,609 & 2.64 & 0.96 & 2.11 & 0.812 & 1.3 & 0.991 & 0.937 & 0.868 & 0.667 & 0.681\\
+Other/SFA/Practice & 27,109 & 0.72 & 0.49 & 0.20 & 0.919 & 1.2 & 0.783 & 0.508 & 0.434 & 0.751 & 0.729\\
+Type unmatched & 992 & 0.78 & 0.53 & 0.12 & 0.913 & 1.7 & 0.374 & 0.294 & 0.270 & 0.420 & 0.467\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item The unit of observation is an OverTheCap (OTC) contract in the main contract sample: signed 2011--2026, linked to an NFL player id, with a signing year, keeping the first of any rows with identical terms. The market margin groups the OTC contract type: rookie scale = Drafted; UDFA entry = undrafted free agent; veteran free agent = UFA; re-sign/extension = Extension; tag/tender = Franchise, Transition, RFA and ERFA; other = SFA, Practice and Other; type unmatched = no OTC contract-history type. APY is the average value per year and guarantees are in millions of nominal dollars; OTC does not separate zero from unknown guarantees (Share zero). Years is the mean contract length. Prior season (signing year minus one): Rostered is the share on a regular-season weekly roster; Snaps the share with positive offensive, defensive or special-teams snaps, among contracts signed 2014 or later (snap counts start in 2013); Box score the share with an nflverse or PFR statistics row. College stats is the share whose final pre-NFL college season has complete box scores (FBS 2009+, FCS 2022+), among players outside OL and LS (OTC position), which have no box-score statistics; Recruit the share linked to a 247Sports recruit profile. OTC records the signing year but not the signing date.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

@@ -312,6 +312,50 @@ QBInstability <- tbl(con, "nfl_team_games") |>
             .groups = "drop")
 
 # ---------------------------------------------------------------------------
+# Unit outcomes (play-weighted pass/rush EPA, sacks) and the market's
+# season-opening expectation (implied win probability of the first REG game)
+# ---------------------------------------------------------------------------
+
+sum_if_any <- function(x) if (all(is.na(x))) NA_real_ else sum(x, na.rm = TRUE)
+
+UnitOutcomes <- tbl(con, "nfl_team_games") |>
+  filter(game_type == "REG") |>
+  select(franchise_id, season, week, implied_win_prob,
+         off_pass_plays, off_rush_plays, def_pass_plays, def_rush_plays,
+         off_pass_epa_per_play, off_rush_epa_per_play,
+         def_pass_epa_per_play, def_rush_epa_per_play, off_sacks, def_sacks) |>
+  collect() |>
+  mutate(season = as.integer(season)) |>
+  group_by(franchise_id, season) |>
+  summarise(OffPassEPAPerPlay = weighted.mean(off_pass_epa_per_play, off_pass_plays, na.rm = TRUE),
+            OffRushEPAPerPlay = weighted.mean(off_rush_epa_per_play, off_rush_plays, na.rm = TRUE),
+            DefPassEPAPerPlay = weighted.mean(def_pass_epa_per_play, def_pass_plays, na.rm = TRUE),
+            DefRushEPAPerPlay = weighted.mean(def_rush_epa_per_play, def_rush_plays, na.rm = TRUE),
+            SacksAllowed = sum_if_any(off_sacks),
+            SacksMade = sum_if_any(def_sacks),
+            SeasonOpenerImpliedWinProb = implied_win_prob[which.min(week)],
+            .groups = "drop") |>
+  mutate(across(where(is.double), \(x) if_else(is.nan(x), NA_real_, x)))
+
+# ---------------------------------------------------------------------------
+# GM tenure: consecutive seasons the same person is the season GM
+# ---------------------------------------------------------------------------
+
+GMTenure <- RoleHolders |>
+  select(franchise_id, season, GMPersonId) |>
+  arrange(franchise_id, season) |>
+  group_by(franchise_id) |>
+  mutate(PrevGM = lag(GMPersonId),
+         NewSpell = is.na(GMPersonId) | is.na(PrevGM) | GMPersonId != PrevGM |
+           season != lag(season) + 1L,
+         Spell = cumsum(NewSpell)) |>
+  group_by(franchise_id, Spell) |>
+  mutate(GMTenure = if_else(is.na(GMPersonId), NA_integer_, row_number()),
+         GMTenureLeftCensored = !is.na(GMPersonId) & min(season) == 1999L) |>
+  ungroup() |>
+  select(franchise_id, season, GMTenure, GMTenureLeftCensored)
+
+# ---------------------------------------------------------------------------
 # Staff-source flags and Rooney Rule eras
 # ---------------------------------------------------------------------------
 
@@ -352,6 +396,7 @@ TeamSeason <- tbl(con, "franchise_seasons") |>
   filter(season >= 1999, season <= 2025) |>
   left_join(Outcomes, by = c("franchise_id", "season")) |>
   left_join(QBInstability, by = c("franchise_id", "season")) |>
+  left_join(UnitOutcomes, by = c("franchise_id", "season")) |>
   left_join(StaffSnapshotFlags, by = c("franchise_id", "season")) |>
   left_join(StaffComposition, by = c("franchise_id", "season")) |>
   left_join(HeadCoach, by = c("franchise_id", "season")) |>
@@ -362,6 +407,7 @@ TeamSeason <- tbl(con, "franchise_seasons") |>
   left_join(HCCollege, by = c("franchise_id", "season")) |>
   left_join(RoleHolders, by = c("franchise_id", "season")) |>
   left_join(RoleChanges, by = c("franchise_id", "season")) |>
+  left_join(GMTenure, by = c("franchise_id", "season")) |>
   left_join(CoachInflow, by = c("franchise_id", "season")) |>
   # Staff observation flags; group counts are 0 (not NA) when the staff box
   # is observed but lists nobody in the group
@@ -434,6 +480,15 @@ TeamSeasonLabels <- c(
   PlayoffWins = "Playoff wins",
   NStartingQBs = "Number of distinct starting QBs in REG games (nfl_team_games)",
   TopQBStartShare = "Share of REG games started by the most frequent starting QB",
+  OffPassEPAPerPlay = "Offensive EPA per pass play (REG games, weighted by pass plays)",
+  OffRushEPAPerPlay = "Offensive EPA per rush play (REG games, weighted by rush plays)",
+  DefPassEPAPerPlay = "Defensive EPA per pass play allowed (lower is better)",
+  DefRushEPAPerPlay = "Defensive EPA per rush play allowed (lower is better)",
+  SacksAllowed = "Sacks taken by the offense (REG, pbp)",
+  SacksMade = "Sacks made by the defense (REG, pbp)",
+  SeasonOpenerImpliedWinProb = "Market implied win probability of the first REG game (lines set after the offseason hiring cycle; a pre-season expectation benchmark, not pre-hire)",
+  GMTenure = "Consecutive seasons the season GM has been this franchise's season GM, including the current one (a gap in GM observation starts a new spell)",
+  GMTenureLeftCensored = "GM spell starts in 1999 (first observed season)",
   StaffSource = "Staff source: staff_template (2007-2025, three snapshots) or season_article (1999-2006, one partial box)",
   HeadCoachName = "Season head coach: coached the most REG games (ties: the later spell); nflverse schedule coach corrected for in-season changes (load_game_head_coaches)",
   NHeadCoaches = "Distinct head coaches in REG games",
