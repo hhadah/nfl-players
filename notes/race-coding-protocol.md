@@ -1,5 +1,12 @@
 # Race and ethnicity coding protocol
 
+> **Status (2026-10-03):** hand coding was not carried out. The PI chose
+> predicted race instead (`notes/race-prediction-design.md`). This protocol
+> and the sheets stay in the repository. If codes are entered, every
+> estimation script uses them automatically once they cover at least 80% of
+> its sample.
+
+
 Purpose: produce a validated race/ethnicity measure for NFL coaches, front-office
 staff and players. Name-based inference (BIFSG, `race_bifsg` in the DuckDB)
 misclassifies most Black individuals in this population: in the 2026-05 build,

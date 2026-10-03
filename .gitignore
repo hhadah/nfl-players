@@ -25,3 +25,10 @@ __pycache__/
 data/raw/
 data/datasets/
 data/archive/
+
+# Person-level race statements classified from Wikipedia text (names + race).
+# Kept local only: the race-coding protocol forbids publishing person-level
+# race codes. scripts/04e_predict_race.py reads them for the documented
+# (preddoc) variant and the validation; the primary predicted measure does
+# not depend on them. Back them up outside the repository.
+data/derived/

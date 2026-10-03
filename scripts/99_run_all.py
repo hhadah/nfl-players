@@ -11,7 +11,13 @@ Run order:
   04c_infer_race         name-based BIFSG (secondary race measure)
   05_join_players        NFL <-> college <-> recruit crosswalk
   09_race_coding_sheets  human race-coding sheets (appends, never overwrites codes)
-  06_validate_db         cross-table checks; fails on critical problems
+  04d_race_documented    documented race evidence: Wikidata P172 + Wikipedia
+                         candidate sentences (needs player_wiki_signals from 09)
+  04e_predict_race       predicted race: model-only posterior (primary; BIFSG
+                         likelihood x EM-estimated NFL prior on predetermined
+                         covariates) + documented sensitivity variant (preddoc)
+                         (needs 04c, 05, 09, 04d, data/derived/race_text_labels.csv)
+  06_validate_db        cross-table checks; fails on critical problems
 
 Every network response is cached under data/raw/, so after the first run a
 rebuild is offline (and spends no CFBD quota). --refresh is passed through to
@@ -49,6 +55,8 @@ STEPS = [
     ("04c_infer_race.py",        "Name-based race inference (BIFSG)",   False),
     ("05_join_players.py",       "Player ID crosswalk",                 False),
     ("09_race_coding_sheets.py", "Race-coding sheets",                  False),
+    ("04d_race_documented.py",   "Documented race evidence (Wiki)",     True),
+    ("04e_predict_race.py",      "Predicted race (EM prior; + documented)", False),
     ("06_validate_db.py",        "Validate DB",                         False),
 ]
 

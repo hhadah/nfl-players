@@ -146,6 +146,21 @@ def main():
     bad = scalar(con, """SELECT count(*) FROM race_bifsg WHERE race_bifsg IS NOT NULL AND
         abs(p_white + p_black + p_hispanic + p_api + p_aian + p_multi - 1) > 1e-6""")
     check("CRITICAL", "BIFSG probabilities sum to 1", bad == 0, f"{bad} rows off")
+    if exists(con, "race_predicted"):
+        for sfx in ["pred", "preddoc"]:
+            bad = scalar(con, f"""SELECT count(*) FROM race_predicted WHERE
+                p_white_{sfx} IS NULL OR abs(p_white_{sfx} + p_black_{sfx} + p_hispanic_{sfx}
+                + p_api_{sfx} + p_aian_{sfx} + p_multi_{sfx} - 1) > 1e-6
+                OR p_black_any_{sfx} < p_black_{sfx} - 1e-9 OR p_black_any_{sfx} > 1 + 1e-9""")
+            check("CRITICAL", f"race_predicted {sfx} probabilities defined and sum to 1",
+                  bad == 0, f"{bad} rows off")
+        for entity, table, col in [("player", "nfl_players", "gsis_id"),
+                                   ("staff", "staff_persons", "person_id")]:
+            missing = scalar(con, f"""SELECT count(*) FROM {table} t WHERE NOT EXISTS (
+                SELECT 1 FROM race_predicted r WHERE r.entity = '{entity}'
+                AND r.entity_id = t.{col})""")
+            check("CRITICAL", f"race_predicted covers every {table} row", missing == 0,
+                  f"{missing} missing")
     bad = scalar(con, "SELECT count(*) FROM nfl_team_seasons WHERE win_pct < 0 OR win_pct > 1")
     check("CRITICAL", "team-season win_pct in [0, 1]", bad == 0, f"{bad} rows")
     bad = scalar(con, "SELECT count(*) FROM nfl_team_games WHERE points_for < 0")

@@ -11,3 +11,4 @@ requests==2.34.2
 beautifulsoup4==4.15.0
 mwparserfromhell==0.7.2
 tqdm==4.70.1
+scikit-learn==1.9.1     # 04e_predict_race.py: weighted multinomial logit (EM prior)
