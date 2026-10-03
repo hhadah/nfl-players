@@ -227,11 +227,21 @@ check_key(Prospects, "ProspectId", "Prospects")
 
 # Measurables come from the prospect's own combine row (CombineRowId), so
 # they are available for invitees without a gsis_id as well
+# The RAS-style athletic score is computed on all nfl_combine rows (the
+# reference population) and joined by the row's natural key
+AthleticScores <- combine_athletic_scores(con) |>
+  select(season, player_name, pos, school, AthleticScore, AthleticScoreN,
+         AthleticSizeScore, AthleticSpeedScore, AthleticExplosionScore,
+         AthleticAgilityScore)
+stopifnot(!anyDuplicated(AthleticScores[c("season", "player_name", "pos", "school")]))
 CombineMeasures <- Combine |>
+  left_join(AthleticScores, by = c("season", "player_name", "pos", "school")) |>
   transmute(CombineRowId, CombineYear = season,
             CombineHeight = height_to_inches(ht), CombineWeight = wt,
             Forty = forty, Vertical = vertical, Bench = bench,
             BroadJump = broad_jump, Cone = cone, Shuttle = shuttle,
+            AthleticScore, AthleticScoreN, AthleticSizeScore,
+            AthleticSpeedScore, AthleticExplosionScore, AthleticAgilityScore,
             CombineLinkMethod = link_method)
 
 # CFBD draft records (drafted players only; 2000-2026) joined by slot
@@ -516,7 +526,9 @@ draft_vars <- c("Drafted", "DraftStatusUncertain", "Round", "Pick", "LogPick",
                 "DraftFranchise")
 combine_vars <- c("CombineInvite", "CombineRowId", "CombineMatch", "CombineYear",
                   "CombineHeight", "CombineWeight", "Forty", "Vertical", "Bench",
-                  "BroadJump", "Cone", "Shuttle", "CombineLinkMethod")
+                  "BroadJump", "Cone", "Shuttle", "AthleticScore", "AthleticScoreN",
+                  "AthleticSizeScore", "AthleticSpeedScore", "AthleticExplosionScore",
+                  "AthleticAgilityScore", "CombineLinkMethod")
 cfbd_vars <- c("CfbdDraftRecord", "PreDraftRank", "PreDraftPosRank", "PreDraftGrade",
                "CfbdDraftConference", "CfbdHeight", "CfbdWeight")
 pfr_vars <- c("PfrNoGames", "PfrGames", "PfrWeightedAV", "PfrDraftTeamAV",
@@ -585,6 +597,12 @@ CombineLabels <- c(
   Vertical = "Vertical jump, inches", Bench = "Bench press reps (225 lb)",
   BroadJump = "Broad jump, inches", Cone = "3-cone drill, seconds",
   Shuttle = "20-yard shuttle, seconds",
+  AthleticScore = "RAS-style athletic score, 0-10: percentile of the mean component score within position through the combine year (combine_athletic_scores(); >= 6 of 8 measurables)",
+  AthleticScoreN = "Number of the 8 measurables scored (height, weight, forty, bench, vertical, broad jump, cone, shuttle)",
+  AthleticSizeScore = "Mean 0-10 percentile score of height and weight within position",
+  AthleticSpeedScore = "0-10 percentile score of the forty within position (faster = higher)",
+  AthleticExplosionScore = "Mean 0-10 percentile score of bench, vertical and broad jump within position",
+  AthleticAgilityScore = "Mean 0-10 percentile score of the cone and shuttle within position (faster = higher)",
   CombineLinkMethod = "Upstream combine-to-gsis link method (pfr_id, draft_slot, name_pos_year)"
 )
 

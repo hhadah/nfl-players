@@ -8,8 +8,14 @@
 #      category is NOT evidence of race)
 #   3. name-based BIFSG posteriors (race_bifsg; secondary measure, known to
 #      misclassify most Black individuals in this population)
+#   4. PREDICTED race (race_predicted, scripts/04e_predict_race.py; design in
+#      notes/race-prediction-design.md): the primary measure while hand codes
+#      are absent. pred = model-only posterior (BIFSG likelihood x an NFL prior
+#      estimated by EM on predetermined covariates); preddoc = documented race
+#      where a public source states it, else a prior for the undocumented
+#      (fame-dependent; sensitivity only).
 # Every analysis sample takes race from load_person_race().
-# Date: 2026-09-26
+# Date: 2026-09-26; predicted race added 2026-10-02
 # ============================================================================
 
 race_levels <- c("black", "white", "asian", "pacific_islander",
@@ -109,11 +115,35 @@ bifsg_measures <- function(con) {
               race_bifsg)
 }
 
+# Predicted race (race_predicted): probabilities under the primary model-only
+# variant (*_pred) and the documented sensitivity variant (*_preddoc), the
+# documented race used for validation, and the predetermined covariates of the
+# EM prior (prefixed pred_; regressions under the predicted measure control for
+# them, as regression calibration requires). NULL when the table is absent.
+predicted_race_measures <- function(con) {
+  if (!dbExistsTable(con, "race_predicted")) return(NULL)
+  tbl(con, "race_predicted") |>
+    select(person_uid, p_white_pred, p_black_pred, p_hispanic_pred, p_api_pred,
+           p_aian_pred, p_multi_pred, p_black_any_pred, pred_method,
+           prior_black_pred, p_white_preddoc, p_black_preddoc, p_hispanic_preddoc,
+           p_api_preddoc, p_aian_preddoc, p_multi_preddoc, p_black_any_preddoc,
+           pred_method_preddoc, documented_race, documented_black_any,
+           documented_hispanic, documented_sources,
+           pred_pos_group = pos_group, pred_rookie_era = rookie_era,
+           pred_draft_bucket = draft_bucket, pred_college_type = college_type,
+           pred_role_group_first = role_group_first, pred_unit_first = unit_first,
+           pred_first_era = first_era, pred_former_player = former_player) |>
+    collect() |>
+    mutate(documented_black_any = as.integer(documented_black_any),
+           pred_former_player = as.character(pred_former_player))
+}
+
 # One row per person: person_uid ('staff:<person_id>' or 'player:<gsis_id>'),
 # hand-coded race (race, hispanic, black_any, nonwhite, race_source), Wikipedia
 # flags (wiki_cat_*), BIFSG posteriors (p_*_bifsg, race_bifsg), and
 # black_provisional = hand-coded black_any when coded, else 1 when a Wikipedia
-# category flags the person as Black, else NA (never 0 from a missing flag).
+# category flags the person as Black, else NA (never 0 from a missing flag),
+# and the predicted-race columns of predicted_race_measures().
 load_person_race <- function(con, hand_coded_dir) {
   persons <- bind_rows(
     tbl(con, "staff_persons") |> select(id = person_id) |> collect() |>
@@ -136,10 +166,14 @@ load_person_race <- function(con, hand_coded_dir) {
     hand <- bind_rows(hand, inherited)
   }
 
+  predicted <- predicted_race_measures(con)
+  if (is.null(predicted)) predicted <- tibble(person_uid = character())
+
   persons |>
     left_join(hand, by = "person_uid") |>
     left_join(wiki_signals(con), by = "person_uid") |>
     left_join(bifsg_measures(con), by = "person_uid") |>
+    left_join(predicted, by = "person_uid") |>
     mutate(black_provisional = case_when(!is.na(black_any) ~ black_any,
                                          wiki_cat_black == 1L ~ 1L,
                                          TRUE ~ NA_integer_),

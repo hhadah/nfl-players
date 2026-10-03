@@ -12,11 +12,13 @@
 #     snapshot for games before Nov 1, the midseason (Nov 1) snapshot from
 #     Nov 1 to the day before the late-snapshot date, the late snapshot from
 #     then on (incl. playoffs). Article era (1999-2006): the season article.
-#     Black-share measures (hand-coded, provisional lower bound, BIFSG mean)
-#     for coaches, coordinators, offensive coaches, defensive coaches and front
-#     office, plus OC and DC race for the offense-vs-defense unit designs.
+#     Black-share measures (hand-coded, provisional lower bound, BIFSG mean,
+#     predicted expected share: model-only Pred and documented PredDoc, with
+#     the members' mean prior P(Black)) for coaches, coordinators, offensive
+#     coaches, defensive coaches and front office, plus OC and DC race for the
+#     offense-vs-defense unit designs.
 # Uses the shared helpers in 00-setup-functions.R and 00-race-measures.R.
-# Date: 2026-09-26
+# Date: 2026-09-26; predicted race added 2026-10-02
 # ============================================================================
 
 con <- db_connect()
@@ -46,7 +48,8 @@ Games <- tbl(con, "nfl_team_games") |>
 
 StaffRace <- load_person_race(con, hand_coded) |>
   filter(entity == "staff") |>
-  select(person_id, black_any, nonwhite, black_provisional, p_black_bifsg)
+  select(person_id, black_any, nonwhite, black_provisional, p_black_bifsg,
+         p_black_any_pred, p_black_any_preddoc, prior_black_pred)
 
 GameHC <- load_game_head_coaches(con) |>
   select(franchise_id, game_id, HeadCoachName, HeadCoachPersonId, HCMatchMethod,
@@ -55,8 +58,12 @@ GameHC <- load_game_head_coaches(con) |>
   mutate(HCBlackHand = black_any, HCNonwhiteHand = nonwhite,
          HCBlackProv = if_else(!is.na(HeadCoachPersonId),
                                coalesce(black_provisional, 0L), NA_integer_),
-         HCPBlackBifsg = p_black_bifsg) |>
-  select(-black_any, -nonwhite, -black_provisional, -p_black_bifsg)
+         HCPBlackBifsg = p_black_bifsg,
+         HCBlackPred = p_black_any_pred,
+         HCBlackPredDoc = p_black_any_preddoc,
+         HCPriorBlackPred = prior_black_pred) |>
+  select(-black_any, -nonwhite, -black_provisional, -p_black_bifsg,
+         -p_black_any_pred, -p_black_any_preddoc, -prior_black_pred)
 
 # ---------------------------------------------------------------------------
 # Staff snapshot in force on game day
@@ -108,8 +115,9 @@ SnapshotStaff <- tbl(con, "staff_team_season") |>
             .groups = "drop") |>
   left_join(StaffRace, by = "person_id")
 
-# Composition of one group in each snapshot (the three Black-share measures
-# are kept separate; CodedShare is the coverage of hand codes)
+# Composition of one group in each snapshot (the Black-share measures are
+# kept separate; CodedShare is the coverage of hand codes; the predicted
+# shares are means over all members, who all have a prediction)
 compose_snapshot <- function(flag, suffix) {
   SnapshotStaff |>
     filter(.data[[flag]]) |>
@@ -119,6 +127,9 @@ compose_snapshot <- function(flag, suffix) {
               ShareBlackHand = mean_or_na(black_any),
               ShareBlackProv = sum(black_provisional == 1, na.rm = TRUE) / n(),
               MeanPBlackBifsg = mean_or_na(p_black_bifsg),
+              ShareBlackPred = mean_or_na(p_black_any_pred),
+              ShareBlackPredDoc = mean_or_na(p_black_any_preddoc),
+              MeanPriorBlackPred = mean_or_na(prior_black_pred),
               .groups = "drop") |>
     rename_with(\(x) paste0(x, suffix), -c(franchise_id, season, StaffSnapshot))
 }
@@ -140,6 +151,9 @@ coordinator_race <- function(flag, prefix) {
               BlackHand = mean_or_na(black_any),
               BlackProv = sum(black_provisional == 1, na.rm = TRUE) / n(),
               PBlackBifsg = mean_or_na(p_black_bifsg),
+              BlackPred = mean_or_na(p_black_any_pred),
+              BlackPredDoc = mean_or_na(p_black_any_preddoc),
+              MeanPriorBlackPred = mean_or_na(prior_black_pred),
               .groups = "drop") |>
     rename_with(\(x) paste0(prefix, x), -c(franchise_id, season, StaffSnapshot))
 }
@@ -180,13 +194,19 @@ snapshot_group_labels <- function(group, desc) {
     CodedShare = glue("Share of {desc} in the snapshot with a hand-coded black_any"),
     ShareBlackHand = glue("Share Black among hand-coded {desc} in the snapshot (NA until coded)"),
     ShareBlackProv = glue("Share of {desc} in the snapshot flagged Black by black_provisional; positive-only lower bound"),
-    MeanPBlackBifsg = glue("Mean BIFSG P(Black) of {desc} in the snapshot (secondary measure)")) |>
+    MeanPBlackBifsg = glue("Mean BIFSG P(Black) of {desc} in the snapshot (secondary measure)"),
+    ShareBlackPred = glue("Expected Black share of {desc} in the snapshot: mean model-only predicted P(non-Hispanic Black alone) (p_black_any_pred; primary measure while hand codes are absent)"),
+    ShareBlackPredDoc = glue("Expected Black share of {desc} in the snapshot under the documented variant (mean p_black_any_preddoc; sensitivity only)"),
+    MeanPriorBlackPred = glue("Mean EM prior P(Black) of {desc} in the snapshot (regression-calibration control for ShareBlackPred)")) |>
     set_names(\(x) paste0(x, group))
 }
 unit_race_labels <- function(prefix, role) {
   c(BlackHand = glue("Share of {role}s in the snapshot hand-coded Black (NA until coded)"),
     BlackProv = glue("Share of {role}s in the snapshot flagged Black by black_provisional (lower bound)"),
-    PBlackBifsg = glue("Mean BIFSG P(Black) of the snapshot's {role}s")) |>
+    PBlackBifsg = glue("Mean BIFSG P(Black) of the snapshot's {role}s"),
+    BlackPred = glue("Mean model-only predicted P(non-Hispanic Black alone) of the snapshot's {role}s (the holder's probability when there is one; NA when none listed)"),
+    BlackPredDoc = glue("Mean documented-variant P(Black any) of the snapshot's {role}s (sensitivity only; NA when none listed)"),
+    MeanPriorBlackPred = glue("Mean EM prior P(Black) of the snapshot's {role}s")) |>
     set_names(\(x) paste0(prefix, x))
 }
 
@@ -225,6 +245,9 @@ TeamGameLabels <- c(
   HCNonwhiteHand = "Game HC hand-coded non-white or Hispanic (NA until coded)",
   HCBlackProv = "Game HC flagged Black by black_provisional (1) or not flagged (0); lower bound",
   HCPBlackBifsg = "Game HC BIFSG P(Black)",
+  HCBlackPred = "Game HC model-only predicted P(non-Hispanic Black alone) (primary measure while hand codes are absent); calibrated to the staff population at first appearance, not to the selected population of head coaches; NA when the HC is unmatched to a staff person",
+  HCBlackPredDoc = "Game HC P(Black) under the documented variant (sensitivity only); NA when unmatched",
+  HCPriorBlackPred = "Game HC EM prior P(Black) (prior_black_pred; person-level calibration control for HCBlackPred); NA when unmatched",
   SnapshotObserved = "The staff snapshot in force is observed (22 article-era team-seasons lack a staff box)",
   NOC = "Offensive coordinators listed in the snapshot in force",
   NDC = "Defensive coordinators listed in the snapshot in force"
@@ -275,7 +298,7 @@ message("corr(team_spread_line, implied_win_prob) = ",
 
 # No impossible values: shares in [0, 1], counts >= 0
 share_cols <- names(TeamGame)[str_detect(names(TeamGame),
-  "^(Share|CodedShare|MeanPBlack|OCBlack|DCBlack|OCPBlack|DCPBlack|implied_win_prob$)")]
+  "^(Share|CodedShare|MeanPBlack|MeanPrior|OCBlack|DCBlack|OCPBlack|DCPBlack|OCMeanPrior|DCMeanPrior|HCBlackPred|HCPriorBlackPred|implied_win_prob$)")]
 count_cols <- names(TeamGame)[str_detect(names(TeamGame), "^N[A-Z]")]
 bad_share <- map_lgl(TeamGame[share_cols], \(x) any(x < 0 | x > 1, na.rm = TRUE))
 bad_count <- map_lgl(TeamGame[count_cols], \(x) any(x < 0, na.rm = TRUE))

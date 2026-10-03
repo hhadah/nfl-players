@@ -6,7 +6,9 @@
 #   - college_production(con)    gsis_id: pre-NFL college production, final
 #                                college team context, PPA/usage
 #   - recruit_signals(con)       gsis_id: 247 composite recruit profile
-#   - combine_signals(con)       gsis_id: NFL combine measurables
+#   - combine_signals(con)       gsis_id: NFL combine measurables and the
+#                                RAS-style athletic score
+#   - combine_athletic_scores(con) nfl_combine row: RAS-style athletic score
 #   - predraft_signals(con)      gsis_id: CFBD pre-draft ranking and grade
 #   - nfl_season_usage(con)      gsis_id x season (REG): roster weeks by
 #                                status, franchise, games, snaps, injuries
@@ -17,7 +19,7 @@
 # Sourced at the top of each player script:
 #   source(file.path(programs, "00-player-functions.R"))
 # Expects 00-setup-functions.R (safe_div, mean_or_na) to be loaded.
-# Date: 2026-09-26
+# Date: 2026-09-26; athletic score added 2026-10-02
 # ============================================================================
 
 # ---------------------------------------------------------------------------
@@ -82,16 +84,132 @@ recruit_signals <- function(con) {
 # samples, which means "no linked combine row" (59% of undrafted invitees and
 # 97% of drafted invitees link, so 0 undercounts invitations among UDFAs).
 combine_signals <- function(con) {
+  Scores <- combine_athletic_scores(con) |>
+    filter(!is.na(gsis_id)) |>
+    select(gsis_id, season, AthleticScore, AthleticScoreN, AthleticSizeScore,
+           AthleticSpeedScore, AthleticExplosionScore, AthleticAgilityScore)
   tbl(con, "nfl_combine") |>
     filter(!is.na(gsis_id)) |>
     select(gsis_id, season, ht, wt, forty, vertical, bench, broad_jump, cone,
            shuttle, link_method) |>
     collect() |>
-    transmute(gsis_id, CombineYear = as.integer(season), CombineInvite = 1L,
+    mutate(season = as.integer(season)) |>
+    left_join(Scores, by = c("gsis_id", "season")) |>
+    transmute(gsis_id, CombineYear = season, CombineInvite = 1L,
               CombineHeight = height_to_inches(ht), CombineWeight = wt,
               Forty = forty, Vertical = vertical, Bench = bench,
               BroadJump = broad_jump, Cone = cone, Shuttle = shuttle,
+              AthleticScore, AthleticScoreN, AthleticSizeScore,
+              AthleticSpeedScore, AthleticExplosionScore, AthleticAgilityScore,
               CombineLinkMethod = link_method)
+}
+
+# ---------------------------------------------------------------------------
+# Athletic score (RAS-style; one row per nfl_combine row)
+# ---------------------------------------------------------------------------
+
+# Combine position -> scoring position. EDGE is scored with DE, OLB/ILB with
+# LB, SAF with S and G with OG. The generic labels OL, DL and DB (used in some
+# 2016-2023 classes) are scored against the pooled position family.
+athletic_position <- function(pos) {
+  case_when(pos %in% c("OG", "G") ~ "OG",
+            pos %in% c("DE", "EDGE") ~ "DE",
+            pos %in% c("OLB", "ILB", "LB") ~ "LB",
+            pos %in% c("S", "SAF") ~ "S",
+            pos == "CB/WR" ~ "CB",
+            TRUE ~ pos)
+}
+athletic_family <- function(position) {
+  case_when(position %in% c("OT", "OG", "C", "OL") ~ "OL",
+            position %in% c("DE", "DT", "DL") ~ "DL",
+            position %in% c("CB", "S", "DB") ~ "DB",
+            TRUE ~ position)
+}
+
+# 0-10 percentile score of x against the reference values ref (x is itself in
+# ref): 10 * (#{ref worse than x} + 0.5 * #{other ref equal to x}) / (n - 1).
+# NA when x is NA or fewer than 10 reference values exist.
+athletic_percentile <- function(x, ref, higher_better = TRUE) {
+  if (!higher_better) {
+    x <- -x
+    ref <- -ref
+  }
+  ref <- sort(ref[!is.na(ref)])
+  n <- length(ref)
+  out <- rep(NA_real_, length(x))
+  ok <- !is.na(x)
+  if (n < 10 || !any(ok)) return(out)
+  below <- findInterval(x[ok], ref, left.open = TRUE)
+  ties <- findInterval(x[ok], ref) - below - 1
+  out[ok] <- pmin(pmax(10 * (below + 0.5 * pmax(ties, 0)) / (n - 1), 0), 10)
+  out
+}
+
+# Athletic score on a 0-10 scale, following the published Relative Athletic
+# Score method (Kent Lee Platte; ras.football/about, read 2026-10-02):
+#   1. each measurable is scored 0-10 as a percentile among all combine
+#      participants at the same scoring position from the first observed
+#      class through the prospect's combine year: bigger is better for height
+#      and weight, faster is better for the forty, cone and shuttle, and
+#      higher is better for bench, vertical and broad jump;
+#   2. a score needs at least 6 measured components; the raw score is the
+#      mean of the component scores;
+#   3. the raw score is scored again as a percentile among the raw scores at
+#      the same position through that year.
+# Differences from RAS: 8 of its 10 measurables (no 10- and 20-yard splits),
+# combine results only (no pro days), and reference classes from 2000 (the
+# first nflverse combine class) rather than 1987, so the earliest classes are
+# scored against small reference sets. Hence the name AthleticScore, not RAS.
+# Size/Speed/Explosion/Agility are means of their component scores.
+# Returns one row per nfl_combine row (season, player_name, pos, school,
+# gsis_id) with the scores.
+combine_athletic_scores <- function(con) {
+  Rows <- tbl(con, "nfl_combine") |>
+    select(season, player_name, pos, school, gsis_id, ht, wt, forty, bench,
+           vertical, broad_jump, cone, shuttle) |>
+    collect() |>
+    mutate(season = as.integer(season), HeightIn = height_to_inches(ht),
+           AthleticPosition = athletic_position(pos),
+           Generic = AthleticPosition %in% c("OL", "DL", "DB"),
+           Family = athletic_family(AthleticPosition),
+           RowId = row_number())
+  components <- c(HeightIn = TRUE, wt = TRUE, forty = FALSE, bench = TRUE,
+                  vertical = TRUE, broad_jump = TRUE, cone = FALSE, shuttle = FALSE)
+  # Reference set of a row: same specific position (or the pooled family for
+  # a generic label), classes up to and including the row's class
+  score_against <- function(values, higher) {
+    out <- rep(NA_real_, nrow(Rows))
+    for (p in unique(Rows$AthleticPosition)) {
+      in_pos <- which(Rows$AthleticPosition == p)
+      in_ref <- if (p %in% c("OL", "DL", "DB")) which(Rows$Family == athletic_family(p)) else in_pos
+      for (t in unique(Rows$season[in_pos])) {
+        target <- in_pos[Rows$season[in_pos] == t]
+        ref <- in_ref[Rows$season[in_ref] <= t]
+        out[target] <- athletic_percentile(values[target], values[ref], higher)
+      }
+    }
+    out
+  }
+  Scores <- imap(components, \(higher, v) score_against(Rows[[v]], higher)) |>
+    as_tibble() |>
+    set_names(paste0("Score", names(components)))
+  Rows <- bind_cols(Rows, Scores) |>
+    mutate(AthleticScoreN = rowSums(!is.na(pick(starts_with("Score")))),
+           RawScore = if_else(AthleticScoreN >= 6,
+                              rowMeans(pick(starts_with("Score")), na.rm = TRUE),
+                              NA_real_))
+  Rows$AthleticScore <- score_against(Rows$RawScore, TRUE)
+  Rows |>
+    mutate(AthleticSizeScore = rowMeans(pick(ScoreHeightIn, Scorewt), na.rm = TRUE),
+           AthleticSpeedScore = Scoreforty,
+           AthleticExplosionScore = rowMeans(pick(Scorebench, Scorevertical,
+                                                  Scorebroad_jump), na.rm = TRUE),
+           AthleticAgilityScore = rowMeans(pick(Scorecone, Scoreshuttle), na.rm = TRUE),
+           across(c(AthleticSizeScore, AthleticExplosionScore, AthleticAgilityScore),
+                  \(x) if_else(is.nan(x), NA_real_, x))) |>
+    select(season, player_name, pos, school, gsis_id, AthleticPosition,
+           AthleticScore, AthleticScoreN, AthleticSizeScore, AthleticSpeedScore,
+           AthleticExplosionScore, AthleticAgilityScore)
 }
 
 # ---------------------------------------------------------------------------

@@ -487,7 +487,9 @@ ContractSample <- ContractSample |>
          FinalCollegeSPRating, FinalCollegeSRS, starts_with("Coll"),
          HasRecruit, recruit_id, starts_with("Recruit"),
          CombineInvite, CombineYear, CombineHeight, CombineWeight, Forty,
-         Vertical, Bench, BroadJump, Cone, Shuttle, CombineLinkMethod,
+         Vertical, Bench, BroadJump, Cone, Shuttle, AthleticScore,
+         AthleticScoreN, AthleticSizeScore, AthleticSpeedScore,
+         AthleticExplosionScore, AthleticAgilityScore, CombineLinkMethod,
          PreDraftRank, PreDraftPosRank, PreDraftGrade, CfbdDraftConference,
          # race measures
          race, hispanic, black_any, nonwhite, race_source, black_provisional,

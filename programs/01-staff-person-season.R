@@ -6,8 +6,11 @@
 # articles 1999-2006; table staff_team_season, one row per person x role).
 # Adds the person's primary role (priority order below), all roles, role
 # flags, unit, snapshot flags, tenure/mobility measures and race measures
-# from load_person_race() (hand-coded > Wikipedia category > BIFSG).
-# Date: 2026-09-26
+# from load_person_race(): hand-coded, provisional (hand code > Wikipedia
+# category), BIFSG, and predicted race (primary measure while hand codes are
+# absent: model-only *_pred, documented sensitivity variant *_preddoc, and the
+# predetermined covariates of the prior; notes/race-prediction-design.md).
+# Date: 2026-09-26; predicted race added 2026-10-02
 # ============================================================================
 
 # Primary-role priority (lower = higher priority). Coaching roles rank above
@@ -126,8 +129,15 @@ StaffPersonSeason <- StaffRoles |>
                           TRUE ~ "general")) |>
   select(-PrimaryUnit)
 
-# Team-seasons whose staff box was observed (22 article-era seasons have none)
-ObservedTeamSeasons <- StaffPersonSeason |> distinct(franchise_id, season)
+# Team-seasons whose staff box was observed: someone is listed in a parsed
+# snapshot (season article or template revision). In 22 article-era
+# team-seasons only the infobox (HC, GM, owner; 2-4 rows) is observed, so they
+# count as unobserved.
+ObservedTeamSeasons <- StaffPersonSeason |>
+  filter(in_season_article | in_preseason | in_midseason | in_late) |>
+  distinct(franchise_id, season)
+message("Team-seasons with a parsed staff box: ", nrow(ObservedTeamSeasons), " of ",
+        nrow(distinct(StaffPersonSeason, franchise_id, season)), " with any staff row")
 PrevObserved <- ObservedTeamSeasons |>
   transmute(franchise_id, season = season + 1L, PrevTeamSeasonObserved = TRUE)
 
@@ -179,7 +189,12 @@ PersonRace <- load_person_race(con, hand_coded) |>
   select(person_id, race, hispanic, black_any, nonwhite, race_source,
          black_provisional, black_provisional_source, wiki_cat_black,
          wiki_cat_hispanic_latino, p_white_bifsg, p_black_bifsg, p_hispanic_bifsg,
-         p_api_bifsg, p_aian_bifsg, p_multi_bifsg, race_bifsg)
+         p_api_bifsg, p_aian_bifsg, p_multi_bifsg, race_bifsg,
+         p_black_any_pred, p_white_pred, p_black_pred, p_hispanic_pred, p_api_pred,
+         p_aian_pred, p_multi_pred, prior_black_pred, p_black_any_preddoc,
+         p_white_preddoc, p_black_preddoc, p_hispanic_preddoc, p_api_preddoc,
+         p_aian_preddoc, p_multi_preddoc, documented_black_any,
+         pred_role_group_first, pred_unit_first, pred_first_era, pred_former_player)
 
 StaffPersonSeason <- StaffPersonSeason |>
   left_join(PersonRace, by = "person_id") |>
@@ -188,7 +203,7 @@ StaffPersonSeason <- StaffPersonSeason |>
          in_preseason, in_midseason, in_late, in_season_article, StaffSource,
          SeasonsWithFranchise, TenureLeftCensored, SeasonsOnStaffAnyTeam,
          PrevStaffSeason, PrevFranchise, PrevTeamSeasonObserved, NewToFranchise,
-         PromotedWithinFranchise, race:race_bifsg) |>
+         PromotedWithinFranchise, race:pred_former_player) |>
   arrange(franchise_id, season, RoleTier, person_id)
 
 # Codebook labels
@@ -252,7 +267,27 @@ StaffPersonSeasonLabels <- c(
   p_api_bifsg = "Name-based BIFSG posterior P(Asian/Pacific Islander)",
   p_aian_bifsg = "Name-based BIFSG posterior P(American Indian/Alaska Native)",
   p_multi_bifsg = "Name-based BIFSG posterior P(multiracial)",
-  race_bifsg = "Argmax BIFSG category"
+  race_bifsg = "Argmax BIFSG category",
+  p_black_any_pred = "Predicted P(non-Hispanic Black alone), model-only (primary measure; equals p_black_pred despite the name, so multiracial and Hispanic Black persons count as non-Black): BIFSG name/county likelihood x NFL staff prior estimated by EM on predetermined covariates; documented race not used",
+  p_white_pred = "Predicted P(white), model-only",
+  p_black_pred = "Predicted P(non-Hispanic Black alone), model-only",
+  p_hispanic_pred = "Predicted P(Hispanic), model-only",
+  p_api_pred = "Predicted P(Asian/Pacific Islander), model-only",
+  p_aian_pred = "Predicted P(American Indian/Alaska Native), model-only",
+  p_multi_pred = "Predicted P(multiracial), model-only",
+  prior_black_pred = "EM prior P(non-Hispanic Black alone) given the predetermined covariates of the primary staff prior (pred_role_group_first, pred_unit_first, pred_first_era), before the name/county likelihood",
+  p_black_any_preddoc = "P(Black), documented variant: 1 for documented Black alone or in combination (incl. multiracial and Hispanic Black), 0 for other documented race, else the posterior P(non-Hispanic Black alone) under a prior fitted on the undocumented (fame-dependent; sensitivity only)",
+  p_white_preddoc = "P(white), documented variant (sensitivity only)",
+  p_black_preddoc = "P(non-Hispanic Black alone), documented variant (sensitivity only)",
+  p_hispanic_preddoc = "P(Hispanic), documented variant (sensitivity only)",
+  p_api_preddoc = "P(Asian/Pacific Islander), documented variant (sensitivity only)",
+  p_aian_preddoc = "P(American Indian/Alaska Native), documented variant (sensitivity only)",
+  p_multi_preddoc = "P(multiracial), documented variant (sensitivity only)",
+  documented_black_any = "Black per a public source (Wikidata, Wikipedia category or article text); NA when undocumented; validation only",
+  pred_role_group_first = "Primary prior covariate: role group at the person's first staff appearance",
+  pred_unit_first = "Primary prior covariate: unit at the person's first staff appearance",
+  pred_first_era = "Primary prior covariate: era of the person's first staff season",
+  pred_former_player = "Former NFL player: covariate of the preddoc prior only (fame proxy, coded through a Wikidata link); not in the primary staff prior"
 )
 
 write_sample(StaffPersonSeason, "staff_person_season",

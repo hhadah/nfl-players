@@ -3,13 +3,20 @@
 # Builds analysis/team_season: one row per franchise_id x season, 1999-2025
 # (31 teams in 1999-2001, 32 from 2002; 861 rows). Combines
 #   - REG-season outcomes (nfl_team_seasons) and their one-season lags,
-#   - staff composition by group (counts; Black share under three separate
-#     measures: hand-coded, provisional lower bound, BIFSG mean; expected and
-#     categorical Blau indices) from analysis/staff_person_season (01),
-#   - head coach, coordinator and GM race and experience,
+#   - staff composition by group (counts; Black share under separate
+#     measures: hand-coded, provisional lower bound, BIFSG mean, and the
+#     predicted expected share (model-only Pred, the primary measure while
+#     hand codes are absent, and the documented PredDoc variant) with the
+#     members' mean prior P(Black); expected and categorical Blau indices)
+#     from analysis/staff_person_season (01), incl. the opening-day coaches
+#     (CoachesPre: preseason snapshot); NA where no staff box is parsed
+#     (StaffObserved FALSE: 22 article-era team-seasons with infobox rows only),
+#   - head coach, coordinator and GM race (incl. predicted P(Black) and the
+#     holder's prior) and
+#     experience,
 #   - staff turnover, starting-QB instability and Rooney Rule era indicators.
 # Requires 01-staff-person-season.R to have run.
-# Date: 2026-09-26
+# Date: 2026-09-26; predicted race added 2026-10-02
 # ============================================================================
 
 con <- db_connect()
@@ -50,6 +57,9 @@ Outcomes <- Outcomes |>
 StaffPersonSeason <- read_parquet(file.path(analysis, "staff_person_season.parquet"))
 bifsg_cols <- c("p_white_bifsg", "p_black_bifsg", "p_hispanic_bifsg",
                 "p_api_bifsg", "p_aian_bifsg", "p_multi_bifsg")
+pred_cols <- c("p_white_pred", "p_black_pred", "p_hispanic_pred", "p_api_pred",
+               "p_aian_pred", "p_multi_pred")
+preddoc_cols <- str_replace(pred_cols, "_pred$", "_preddoc")
 
 # Hand-coded category for the categorical Blau: Hispanic of any race is its
 # own category; otherwise the hand-coded race ('unknown' treated as uncoded)
@@ -58,8 +68,10 @@ StaffPersonSeason <- StaffPersonSeason |>
                                       race == "unknown" ~ NA_character_,
                                       TRUE ~ race))
 
-# Composition of one group of staff: N, the three Black-share measures kept
-# separate, coverage of hand codes, and the expected/categorical Blau indices
+# Composition of one group of staff: N, the Black-share measures kept
+# separate, coverage of hand codes, and the expected/categorical Blau indices.
+# Every staff person has a predicted probability, so the predicted shares are
+# means over all members (the expected Black share; no coverage gating).
 compose_group <- function(df, suffix) {
   df |>
     group_by(franchise_id, season) |>
@@ -70,6 +82,11 @@ compose_group <- function(df, suffix) {
               MeanPBlackBifsg = mean_or_na(p_black_bifsg),
               BlauBifsg = blau_expected(na.omit(pick(all_of(bifsg_cols)))),
               BlauHand = blau_categorical(RaceCategoryHand),
+              ShareBlackPred = mean_or_na(p_black_any_pred),
+              ShareBlackPredDoc = mean_or_na(p_black_any_preddoc),
+              MeanPriorBlackPred = mean_or_na(prior_black_pred),
+              BlauPred = blau_expected(na.omit(pick(all_of(pred_cols)))),
+              BlauPredDoc = blau_expected(na.omit(pick(all_of(preddoc_cols)))),
               .groups = "drop") |>
     rename_with(\(x) paste0(x, suffix), -c(franchise_id, season))
 }
@@ -77,6 +94,10 @@ compose_group <- function(df, suffix) {
 StaffGroups <- list(
   AllStaff = StaffPersonSeason,
   Coaches = filter(StaffPersonSeason, IsCoach),
+  # Opening-day coaches: listed in the preseason (Sep 10) template snapshot,
+  # or in the season article (1999-2006, one box); excludes in-season hires
+  # and interim promotions, which respond to results
+  CoachesPre = filter(StaffPersonSeason, IsCoach & (in_preseason | in_season_article)),
   Coordinators = filter(StaffPersonSeason, IsCoordinator),
   PositionCoaches = filter(StaffPersonSeason, IsPositionCoach),
   Assistants = filter(StaffPersonSeason, IsAssistantCoach),
@@ -94,13 +115,16 @@ StaffComposition <- StaffGroups |>
 # Head coach of the season (REG games)
 # ---------------------------------------------------------------------------
 
-# Person-level race for staff (hand-coded, provisional, BIFSG)
+# Person-level race for staff (hand-coded, provisional, BIFSG, predicted)
 StaffRace <- load_person_race(con, hand_coded) |>
   filter(entity == "staff") |>
-  select(person_id, black_any, nonwhite, hispanic, black_provisional, p_black_bifsg)
+  select(person_id, black_any, nonwhite, hispanic, black_provisional, p_black_bifsg,
+         p_black_any_pred, p_black_any_preddoc, prior_black_pred)
 
 # Race variables for a role holder, prefixed (e.g. HCBlackHand); the
-# provisional indicator is 1 when flagged Black and 0 otherwise (lower bound)
+# provisional indicator is 1 when flagged Black and 0 otherwise (lower bound);
+# the predicted measures are the holder's predicted P(Black) and the holder's
+# EM prior (the person-level calibration control), NA without a holder
 role_race <- function(df, prefix) {
   df |>
     left_join(StaffRace, by = c(PersonId = "person_id")) |>
@@ -111,7 +135,10 @@ role_race <- function(df, prefix) {
                                        TRUE ~ NA_integer_),
               BlackProv = if_else(!is.na(PersonId), coalesce(black_provisional, 0L),
                                   NA_integer_),
-              PBlackBifsg = p_black_bifsg) |>
+              PBlackBifsg = p_black_bifsg,
+              BlackPred = p_black_any_pred,
+              BlackPredDoc = p_black_any_preddoc,
+              PriorBlackPred = prior_black_pred) |>
     rename_with(\(x) paste0(prefix, x), -c(franchise_id, season))
 }
 
@@ -359,6 +386,18 @@ GMTenure <- RoleHolders |>
 # Staff-source flags and Rooney Rule eras
 # ---------------------------------------------------------------------------
 
+# Team-seasons with a parsed staff box: someone listed in the season article
+# or a template snapshot. In 22 article-era team-seasons only the infobox (HC,
+# GM, owner) is observed; their group compositions would describe the head
+# coach alone, so they are set to NA below (as in team_game, 03).
+ParsedStaffBox <- tbl(con, "staff_team_season") |>
+  group_by(franchise_id, season) |>
+  summarise(StaffObserved = any(in_season_article | in_preseason | in_midseason | in_late,
+                                na.rm = TRUE),
+            .groups = "drop") |>
+  collect() |>
+  mutate(season = as.integer(season))
+
 StaffSnapshotFlags <- tbl(con, "staff_snapshots") |>
   select(franchise_id, season, source, parse_ok) |>
   collect() |>
@@ -398,6 +437,7 @@ TeamSeason <- tbl(con, "franchise_seasons") |>
   left_join(QBInstability, by = c("franchise_id", "season")) |>
   left_join(UnitOutcomes, by = c("franchise_id", "season")) |>
   left_join(StaffSnapshotFlags, by = c("franchise_id", "season")) |>
+  left_join(ParsedStaffBox, by = c("franchise_id", "season")) |>
   left_join(StaffComposition, by = c("franchise_id", "season")) |>
   left_join(HeadCoach, by = c("franchise_id", "season")) |>
   left_join(HCTurnover |> select(franchise_id, season, HCChange, InSeasonHCChange),
@@ -410,9 +450,14 @@ TeamSeason <- tbl(con, "franchise_seasons") |>
   left_join(GMTenure, by = c("franchise_id", "season")) |>
   left_join(CoachInflow, by = c("franchise_id", "season")) |>
   # Staff observation flags; group counts are 0 (not NA) when the staff box
-  # is observed but lists nobody in the group
-  mutate(StaffObserved = !is.na(NAllStaff),
+  # is observed but lists nobody in the group. Group compositions and coach
+  # inflow are NA when no staff box is parsed (infobox-only team-seasons);
+  # role holders (HC, coordinators, GM) keep the infobox information.
+  mutate(StaffObserved = coalesce(StaffObserved, FALSE),
          FullStaffObserved = StaffSource == "staff_template" & AllSnapshotsParsed,
+         across(all_of(c(setdiff(names(StaffComposition), c("franchise_id", "season")),
+                         "ShareCoachesNewToFranchise", "ShareCoachesPromoted")),
+                \(x) if_else(StaffObserved, x, NA)),
          across(c(starts_with("N") & where(is.integer) & !c(NHeadCoaches, NStartingQBs)),
                 \(x) if_else(StaffObserved, coalesce(x, 0L), x)),
          RooneyEra = rooney_era(season),
@@ -430,6 +475,7 @@ TeamSeason <- tbl(con, "franchise_seasons") |>
 GroupDescriptions <- c(
   AllStaff = "all listed staff (coaches, S&C, support and front office)",
   Coaches = "on-field coaches (HC, coordinators, position coaches, assistants/QC)",
+  CoachesPre = "opening-day on-field coaches (listed in the preseason Sep 10 snapshot; season article 1999-2006)",
   Coordinators = "OC, DC and STC",
   PositionCoaches = "position coaches",
   Assistants = "assistant and quality-control coaches",
@@ -445,7 +491,12 @@ group_labels <- function(group, desc) {
     ShareBlackProv = glue("Share of {desc} flagged Black by black_provisional (hand code, else Wikipedia category); positive-only lower bound"),
     MeanPBlackBifsg = glue("Mean BIFSG P(Black) of {desc} (secondary; understates Black share)"),
     BlauBifsg = glue("Expected Blau index of {desc} from BIFSG probability vectors: P(two distinct randomly drawn members differ in race) = 1 - sum_k[(sum_i p_ik)^2 - sum_i p_ik^2]/(n(n-1)); NA if n < 2"),
-    BlauHand = glue("Categorical Blau index of hand-coded {desc} (Hispanic of any race its own category), same without-replacement formula over coded members; NA if fewer than 2 coded")) |>
+    BlauHand = glue("Categorical Blau index of hand-coded {desc} (Hispanic of any race its own category), same without-replacement formula over coded members; NA if fewer than 2 coded"),
+    ShareBlackPred = glue("Expected Black share of {desc}: mean model-only predicted P(non-Hispanic Black alone) (p_black_any_pred; primary measure while hand codes are absent). Equals the expected true share only if the probabilities are calibrated at the team level given the regression's controls; the sign of any bias is not known"),
+    ShareBlackPredDoc = glue("Expected Black share of {desc} under the documented variant: mean p_black_any_preddoc (documented Black alone or in combination = 1, else model P(non-Hispanic Black alone); fame-dependent; sensitivity only)"),
+    MeanPriorBlackPred = glue("Mean EM prior P(Black) of {desc} (team-level summary of the prior's predetermined covariates; regression-calibration control for ShareBlackPred)"),
+    BlauPred = glue("Expected Blau index of {desc} from model-only predicted probability vectors (p_*_pred), same formula as BlauBifsg; NA if n < 2"),
+    BlauPredDoc = glue("Expected Blau index of {desc} from documented-variant probability vectors (p_*_preddoc), same formula; NA if n < 2; sensitivity only")) |>
     set_names(\(x) paste0(x, group))
 }
 role_labels <- function(prefix, role) {
@@ -454,7 +505,10 @@ role_labels <- function(prefix, role) {
     NonwhiteHand = glue("{role} hand-coded non-white or Hispanic (NA until coded)"),
     HispanicHand = glue("{role} hand-coded Hispanic (NA until coded)"),
     BlackProv = glue("{role} flagged Black by black_provisional (1) or not flagged (0); lower bound"),
-    PBlackBifsg = glue("{role} BIFSG P(Black)")) |>
+    PBlackBifsg = glue("{role} BIFSG P(Black)"),
+    BlackPred = glue("{role} model-only predicted P(non-Hispanic Black alone) (primary measure while hand codes are absent); calibrated to the staff population at first appearance, not to the selected population of role holders, so miscalibrated for promoted holders (Black head coaches are under-predicted); NA when no holder"),
+    BlackPredDoc = glue("{role} P(Black) under the documented variant (sensitivity only); NA when no holder"),
+    PriorBlackPred = glue("{role} EM prior P(Black) (prior_black_pred: first role group, unit and era; person-level calibration control for {prefix}BlackPred); NA when no holder")) |>
     set_names(\(x) paste0(prefix, x))
 }
 
@@ -510,9 +564,9 @@ TeamSeasonLabels <- c(
   OCChange = "Season OC differs from the previous season's (NA if either unobserved)",
   DCChange = "Season DC differs from the previous season's (NA if either unobserved)",
   GMChange = "Season GM differs from the previous season's (NA if either unobserved)",
-  ShareCoachesNewToFranchise = "Share of on-field coaches not on the franchise's staff in season - 1 (NA when season - 1 unobserved)",
+  ShareCoachesNewToFranchise = "Share of on-field coaches not on the franchise's staff in season - 1 (NA when season - 1 or season is unobserved)",
   ShareCoachesPromoted = "Share of on-field coaches promoted within the franchise from season - 1",
-  StaffObserved = "Staff box observed (any staff listed; 22 article-era team-seasons lack one)",
+  StaffObserved = "Staff box observed: someone listed in a parsed season-article box or template snapshot (FALSE for the 22 article-era team-seasons with only infobox rows; group compositions are NA there, role holders are kept)",
   FullStaffObserved = "Full staff observed: template era (2007+) with all three snapshots parsed; article-era boxes are partial",
   RooneyEra = "Rooney Rule era by hiring cycle: pre_rule (<2003), rule_2003 (2003-2020), amend_2020 (2021), amend_2022 (2022+)",
   RooneyRule = "Season >= 2003 (Rooney Rule in force for the preceding hiring cycle)",
@@ -571,15 +625,16 @@ CheckStaff <- tbl(con, "staff_team_season") |>
   summarise(CheckN = n_distinct(person_id), .groups = "drop") |>
   collect() |>
   mutate(season = as.integer(season)) |>
-  full_join(TeamSeason |> select(franchise_id, season, NAllStaff),
+  full_join(TeamSeason |> select(franchise_id, season, NAllStaff, StaffObserved),
             by = c("franchise_id", "season"))
-if (any(coalesce(CheckStaff$CheckN, -1L) != coalesce(CheckStaff$NAllStaff, -1L))) {
-  stop("NAllStaff disagrees with staff_team_season")
+if (any(with(filter(CheckStaff, StaffObserved), coalesce(CheckN, -1L) != coalesce(NAllStaff, -1L))) ||
+    any(!is.na(CheckStaff$NAllStaff[!CheckStaff$StaffObserved]))) {
+  stop("NAllStaff disagrees with staff_team_season (or is set where no staff box is parsed)")
 }
 
 # No impossible values: shares and indices in [0, 1], counts >= 0
 share_cols <- names(TeamSeason)[str_detect(names(TeamSeason),
-  "^(Share|CodedShare|MeanPBlack|Blau|HCGamesShare|TopQBStartShare|WinPct|Pythagorean)")]
+  "^(Share|CodedShare|MeanPBlack|MeanPrior|Blau|HCGamesShare|TopQBStartShare|WinPct|Pythagorean)|BlackPred")]
 count_cols <- names(TeamSeason)[str_detect(names(TeamSeason), "^N[A-Z]")]
 bad_share <- TeamSeason |> select(all_of(share_cols)) |>
   map_lgl(\(x) any(x < 0 | x > 1, na.rm = TRUE))
@@ -611,6 +666,15 @@ TeamSeason |>
             ShareWithOC = mean(NOC > 0, na.rm = TRUE),
             .groups = "drop") |>
   print()
+# Predicted measures by era (expected shares; every person has a prediction)
+TeamSeason |>
+  mutate(Era = if_else(season < 2007, "1999-2006", "2007-2025")) |>
+  group_by(Era) |>
+  summarise(across(c(ShareBlackPredCoaches, ShareBlackPredDocCoaches,
+                     ShareBlackProvCoaches, ShareBlackPredFrontOffice,
+                     HCBlackPred, HCBlackPredDoc), \(x) mean(x, na.rm = TRUE)),
+            .groups = "drop") |>
+  print(width = Inf)
 message("Share of season HCs with any hand-coded race: ",
         round(mean(!is.na(TeamSeason$HCBlackHand)), 3))
 TeamSeason |>
