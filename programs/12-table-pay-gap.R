@@ -21,7 +21,11 @@
 #     (probability-weighted under the predicted measures)
 #   - table-08-pay-gap-veteran-contracts: progressive controls, columns (1)-(8)
 #     (and, under the predicted measure, column (9): the raw benchmark on the
-#     draft-free posterior, since the primary prior conditions on draft round)
+#     draft-free posterior, since the primary prior conditions on draft round);
+#     under the predicted measure also the identifying variation of P(Black)
+#     by column (overlap row) and a documented-race check of calibration
+#     given the controls (notes; estimates tables table-08-overlap and
+#     table-08-calibration-check in 12-pay-gap.csv)
 #   - table-09-pay-gap-gelbach: Gelbach (2016) decomposition of b(1) - b(5)
 #     with a player-cluster bootstrap (NFL_BOOT_REPS replications, default 199);
 #     under the predicted measure on the draft-free posterior, so that draft
@@ -31,9 +35,23 @@
 #   - table-12-pay-gap-player-season + figure-pay-gap-by-experience
 #     (log cap number; Altonji and Pierret 2001 signal x experience terms;
 #     columns (9)-(11) locate the non-rookie gap by contract type)
+#   - table-12b-pay-career-fe + figure-pay-career-fe: the experience profile
+#     of the gap with position group x season FE against player FE on the
+#     same UFA/extension seasons, both relative to the 4-6 bin (player FE
+#     absorb the race level, which is never reported there)
+#   - table-12c-pay-employer-fe: annual pay with and without paying
+#     franchise x season FE on the same seasons (log cap number; log cash
+#     paid companion)
+#   - table-12d-pay-repeat-contracts: successive freely bargained contracts
+#     of the same player (player FE + position x year-signed FE; race x
+#     observed deal order; adjacent-deal changes in log APY). Ties within a
+#     signing year are excluded and the player's sequence stops there
 #   - table-13-draft-margin-race: rookie (draft) margin
-#   - table-26-pay-gap-birdie: BIRDiE cross-check (McCartan et al. 2025) of
-#     the raw and conditional gaps, player-cluster bootstrap
+#   - table-26-pay-gap-birdie: BIRDiE cross-check (McCartan et al. 2025) and
+#     a diagnosis of its disagreement with regression calibration on the SAME
+#     sample, probabilities and X: a ladder (posterior vs prior weights, EM vs
+#     OLS slopes, race-specific vs common-slope contrast) with bootstrap SEs
+#     of each step, a one-contract-per-player rerun and posterior diagnostics
 #   - table-27-pay-gap-race-measures: columns (1) and (5) of table 08 under
 #     every race measure and predicted-race variant
 # Position-group slopes are built as EXPLICIT interaction columns from
@@ -51,13 +69,16 @@
 # availability, raked, draft-free and Black-or-multiracial variants; attached
 # by script 10, read here for older samples and for the draft prospects) and
 # a check that the samples come from the current 04e fit.
-# Outputs: output/tables/table-07 ... table-13, table-26, table-27 (.tex; also
-# my_paper/tables for the primary measure), output/figures/
-# figure-pay-gap-by-position and figure-pay-gap-by-experience (.pdf/.png),
-# output/estimates/12-pay-gap[-<measure>].csv,
-# 12-pay-gap-gelbach[-<measure>].csv, 12-pay-gap-birdie[-<measure>].csv and
-# 12-pay-gap-race-measures[-<measure>].csv.
-# Date: 2026-10-02
+# Outputs: output/tables/table-07 ... table-13 (with 12b, 12c, 12d), table-26,
+# table-27 (.tex; also my_paper/tables for the primary measure),
+# output/figures/figure-pay-gap-by-position, figure-pay-gap-by-experience and
+# figure-pay-career-fe (.pdf/.png), output/estimates/12-pay-gap[-<measure>].csv
+# (tables 07-13 incl. 12b/12c/12d and their joint tests, support and sample
+# flow rows), 12-pay-gap-gelbach[-<measure>].csv,
+# 12-pay-gap-birdie[-<measure>].csv and 12-pay-gap-race-measures[-<measure>].csv.
+# Date: 2026-10-02 (revised 2026-10-03: overlap and documented-race checks
+# replace the controls-predict-P(Black) test; BIRDiE diagnosis; tables 12b,
+# 12c and 12d: player FE profiles, employer FE, successive contracts)
 # ============================================================================
 
 T0Script <- Sys.time()
@@ -238,11 +259,16 @@ PredDefNote <- if (is_pred(measure)) {
         "Standard errors treat the predicted probabilities as known; the prior is estimated by EM on the whole player population of the database, so the omitted first-stage variance is likely small.")
 } else ""
 # Conditions of regression calibration beyond the names exclusion, for tables
-# whose columns add controls to the prior covariates (the diagnostic sentence
-# is added where it is computed, in table 08)
+# whose columns add controls to the prior covariates. Controls that predict
+# P(Black) are NOT evidence against calibration: under calibration given the
+# controls, E[P(Black) | X] = E[Black | X], so the controls predict P(Black)
+# exactly when they predict race. What they do is shrink the identifying
+# variation (overlap), reported per column in table 08; calibration itself
+# can only be checked against observed race, which table 08 does on the
+# documented players (DiagNote, computed there)
 RCNote <- if (is_pred(measure)) {
   paste("Regression calibration identifies the Black-white gap only if, in addition to names and hometown being unrelated to pay given race and the controls, (i) P(Black) is calibrated given every control in the column, not only given the prior's covariates, and (ii) the gap does not vary with the controls (otherwise the coefficient is a variance-weighted average of gaps).",
-        "Controls that predict race beyond the prior violate (i) and attenuate the coefficient on P(Black) even when they do not affect pay, so part of any change in the coefficient as controls are added is mechanical.")
+        "Controls that predict P(Black) within the prior's cells do not by themselves violate (i): under (i) they predict P(Black) exactly when they predict race. They do reduce the variation in P(Black) that identifies the coefficient (overlap), and if (i) fails for them the coefficient moves as they are added for reasons unrelated to pay. Table \\ref{tab:pay-gap-veteran} reports the identifying variation by column and checks (i) against documented race.")
 } else ""
 
 # Text for "known race" by measure: under the provisional measure a person has
@@ -610,51 +636,143 @@ Rows08 <- bind_rows(Rows08, as_tibble(c(
   map(Models08, \(m) fmt_se_pg(se_twoway(m), 3)))))
 
 tick("table 08 models and two-way SEs done")
-# Precision of the main estimate: 95% CI of column (5) and, under the
-# predicted measures, the residual SD of P(Black) given the fixed effects and
-# prior dummies (the identifying variation)
+# Precision of the main estimate: 95% CI of column (5)
 CI5 <- confint(Models08[["(5)"]])["Black", ]
-ResidSD08 <- if (is_pred(measure)) {
-  sd(resid(feols(make_fml("Black", PriorCols08, FE08), data = VetData, notes = FALSE)))
-} else NA_real_
+# Identifying variation (overlap) of P(Black) under each column's design:
+# the residual SD and the R^2 of P(Black) regressed on the column's fixed
+# effects, prior dummies and controls. Controls that predict P(Black) shrink
+# this variation and the precision of the coefficient on P(Black); they are
+# not evidence against calibration given the controls (condition (i) of
+# RCNote), which only observed race can test (DocCheck08 below). Author
+# decision 2026-10-03: this replaces a joint Wald test of "controls predict
+# P(Black)" that was reported as a calibration violation; under calibration
+# the controls predict P(Black) exactly when they predict race, so that test
+# rejected under the null it claimed to test.
+Overlap08 <- NULL
+OverlapFits08 <- list()
+if (is_pred(measure)) {
+  Overlap08 <- imap_dfr(Spec08, \(s, nm) {
+    controls <- setdiff(unlist(VetCols[s$blocks], use.names = FALSE), s$drop %||% character())
+    d <- if (isTRUE(s$nodraft)) nodraft_race(VetData) else VetData
+    prior <- if (isTRUE(s$nodraft)) PriorCols08NoDraft else PriorCols08
+    m <- feols(make_fml("Black", c(prior, controls), s$fe), data = d, notes = FALSE)
+    if (nobs(m) != nrow(d)) {
+      stop(glue("12: overlap regression of P(Black), column {nm}: {nobs(m)} of {nrow(d)} rows used"))
+    }
+    OverlapFits08[[nm]] <<- m
+    tibble(model = nm, sd_pblack = sd(d$Black), resid_sd_pblack = sd(resid(m)),
+           r2_pblack = 1 - var(resid(m)) / var(d$Black), nobs = nobs(m))
+  })
+  print(Overlap08)
+  Rows08 <- bind_rows(Rows08, as_tibble(c(
+    list(term = "Residual SD of P(Black) given column's regressors"),
+    set_names(as.list(fmt_pg(Overlap08$resid_sd_pblack, 3)), Overlap08$model))))
+  Estimates <- c(Estimates, list(
+    Overlap08 |>
+      pivot_longer(c(sd_pblack, resid_sd_pblack, r2_pblack), names_to = "term",
+                   values_to = "estimate") |>
+      mutate(table = "table-08-overlap") |>
+      select(table, model, term, estimate, nobs)))
+}
 PrecisionNote08 <- paste0(
   glue("The 95\\% confidence interval for {BlackLab} in column (5) is [{fmt_pg(CI5[[1]], 3)}, {fmt_pg(CI5[[2]], 3)}] log points"),
-  if (is_pred(measure)) glue("; the residual standard deviation of P(Black) given the position $\\times$ year and prior fixed effects is {fmt_pg(ResidSD08, 3)}, so the estimates are imprecise") else "",
+  if (is_pred(measure)) glue("; the residual standard deviation of P(Black) given the column-(5) regressors is {fmt_pg(Overlap08$resid_sd_pblack[Overlap08$model == '(5)'], 3)} (row 'Residual SD of P(Black)'), so the estimates are imprecise") else "",
   ".")
 
-# Diagnostic of condition (i) of regression calibration: do the column-(5)
-# controls predict P(Black) within position x year x prior-covariate cells?
-# Joint Wald tests (player-clustered) of all block A-D controls and of block D
-CalibDiag <- NULL
-if (is_pred(measure)) {
-  Cols5Diag <- unlist(VetCols[c("A", "B", "C", "D")], use.names = FALSE)
-  DiagFit <- feols(make_fml("Black", c(PriorCols08, Cols5Diag), FE08), data = VetData,
-                   vcov = ~gsis_id, notes = FALSE)
-  # The clustered covariance of several hundred coefficients is singular
-  # (fewer independent cluster scores than restrictions in some directions),
-  # so the Wald statistic uses its pseudo-inverse on the scaled matrix; F has
-  # rank(V) and G - 1 degrees of freedom (G = player clusters)
-  NClust08 <- n_distinct(VetData$gsis_id)
-  diag_wald <- function(cols) {
-    kept <- intersect(cols, names(coef(DiagFit)))
-    b <- coef(DiagFit)[kept]
-    V <- vcov(DiagFit)[kept, kept]
-    sc <- 1 / sqrt(diag(V))
-    e <- eigen(V * outer(sc, sc), symmetric = TRUE)
-    pos <- e$values > 1e-8 * max(e$values)
-    stat <- sum(drop(crossprod(e$vectors[, pos], b * sc))^2 / e$values[pos])
-    r <- sum(pos)
-    f <- stat / r
-    tibble(n_terms = length(kept), rank = r, stat = f,
-           p = pf(f, r, NClust08 - 1, lower.tail = FALSE))
+# Calibration given the controls (condition (i)) checked against observed
+# race where it exists: contracts of players whose race a public source
+# states (documented_race from 04e via load_person_race(); validation only,
+# never a regressor). Label DocAlone08 = 1 documented non-Hispanic Black alone
+# (the event P(Black) models), 0 any other documented race (documented
+# Hispanic and multiracial Black players are known non-target), NA
+# undocumented or conflicting sources. Under (i), logit P(DocAlone = 1 | p, X)
+# = logit(p) + c, where c absorbs selection of documented players on race,
+# and no function of the controls enters. The controls enter through ONE
+# index that depends only on observed X and P(Black), never on pay: the
+# P(Black) index X'gamma (column-(5) controls' coefficients in the overlap
+# regression), the direction of X along which the controls predict P(Black).
+# Author decision 2026-10-03 (parent review): an index built from the pay
+# coefficients was dropped, because weights learned from the same salary
+# outcomes can correlate with the documented-label calibration error even
+# under valid calibration, and a Wald test treating that index as fixed is
+# not valid. The test is one restriction in one direction: a non-rejection
+# does not validate calibration given every control. Documentation is
+# positive-only and requires a Wikipedia article: documented players are
+# mostly Black and famous, so the check speaks to this subsample, not to the
+# population.
+# Fatal if the logit fails; skipped (and said so in the notes) only when one
+# label value has fewer than MinDocCheck08 contracts. Under preddoc the
+# documented players' P(Black) IS their documentation, so the check is
+# undefined there and the notes say so
+MinDocCheck08 <- 20L
+DocCheck08 <- NULL
+DocCheckSkip08 <- if (measure == "preddoc") {
+  "The documented-race check of condition (i) is not defined under the preddoc measure, whose P(Black) for documented players is their documented race."
+} else ""
+if (measure == "predicted") {
+  if (!"documented_race" %in% names(VetData)) {
+    stop("12: documented_race is missing from the pay sample; rerun programs/10-pay-analysis-sample.R")
   }
-  CalibDiag <- bind_rows(all = diag_wald(Cols5Diag),
-                         blockD = diag_wald(VetCols[["D"]]), .id = "set")
-  print(CalibDiag)
-  tick("table 08 calibration diagnostic done")
+  bad_doc <- setdiff(unique(na.omit(VetData$documented_race)), documented_race_levels)
+  if (length(bad_doc) > 0) {
+    stop(glue("12: unexpected documented_race values: {paste(bad_doc, collapse = ', ')}"))
+  }
+  Cols5Diag <- unlist(VetCols[c("A", "B", "C", "D")], use.names = FALSE)
+  g5 <- coef(OverlapFits08[["(5)"]])
+  race_cols <- intersect(Cols5Diag, names(g5))
+  DocData08 <- VetData |>
+    mutate(DocAlone08 = case_when(documented_race == "black" ~ 1L,
+                                  documented_race %in% documented_race_levels ~ 0L,
+                                  TRUE ~ NA_integer_),
+           LogitP08 = qlogis(pmin(pmax(Black, 1e-4), 1 - 1e-4)),
+           RaceIndex08 = drop(as.matrix(pick(all_of(race_cols))) %*% g5[race_cols]))
+  DocN08 <- c(n = sum(!is.na(DocData08$DocAlone08)),
+              n1 = sum(DocData08$DocAlone08 %in% 1L), n0 = sum(DocData08$DocAlone08 %in% 0L),
+              players = n_distinct(DocData08$gsis_id[!is.na(DocData08$DocAlone08)]),
+              players_all = n_distinct(DocData08$gsis_id))
+  DocMeanP08 <- c(doc = mean(DocData08$Black[!is.na(DocData08$DocAlone08)]),
+                  undoc = mean(DocData08$Black[is.na(DocData08$DocAlone08)]))
+  message(glue("12: documented-race calibration check: {DocN08[['n']]} contracts of ",
+               "{DocN08[['players']]} players (Black alone {DocN08[['n1']]}, other {DocN08[['n0']]})"))
+  if (min(DocN08[c("n1", "n0")]) < MinDocCheck08) {
+    DocCheckSkip08 <- glue("The documented-race check of condition (i) is not reported: only {DocN08[['n1']]} documented non-Hispanic Black-alone and {DocN08[['n0']]} other documented contracts are in the sample (fewer than {MinDocCheck08} in one group).")
+  } else {
+    DocFit <- filter(DocData08, !is.na(DocAlone08))
+    doc_logit <- function(rhs, label) {
+      tryCatch(feglm(make_fml("DocAlone08", c(rhs, varying(DocFit, PriorCols08)), "position"),
+                     data = DocFit, family = "logit", vcov = ~gsis_id, notes = FALSE, warn = FALSE),
+               error = \(e) stop(glue("12: documented-race calibration logit ({label}) failed: ",
+                                      "{conditionMessage(e)}"), call. = FALSE))
+    }
+    DocSlope08 <- doc_logit("LogitP08", "slope")
+    DocIndex08 <- doc_logit(c("LogitP08", "RaceIndex08"), "index")
+    need <- c("LogitP08", "RaceIndex08")
+    if (!all(need %in% names(coef(DocIndex08)))) {
+      stop(glue("12: documented-race calibration logit dropped {paste(setdiff(need, names(coef(DocIndex08))), collapse = ', ')}"))
+    }
+    DocWald08 <- wald(DocIndex08, keep = "^RaceIndex08$", print = FALSE)
+    DocCheck08 <- bind_rows(
+      tidy_terms(list(slope = DocSlope08), "LogitP08"),
+      tidy_terms(list(index = DocIndex08), need)) |>
+      mutate(table = "table-08-calibration-check",
+             wald_p = if_else(model == "index", DocWald08$p, NA_real_),
+             wald_stat = if_else(model == "index", DocWald08$stat, NA_real_))
+    print(DocCheck08)
+    Estimates <- c(Estimates, list(DocCheck08))
+  }
+  tick("table 08 overlap and documented-race checks done")
 }
-DiagNote <- if (!is.null(CalibDiag)) {
-  glue("Within position $\\times$ year and prior-covariate cells the column-(5) controls predict P(Black): a joint Wald test of the block A-D controls in a regression of P(Black) on them gives F = {fmt_pg(CalibDiag$stat[1], 2)} (p = {fmt_p(CalibDiag$p[1])}), and of the block D controls alone F = {fmt_pg(CalibDiag$stat[2], 2)} (p = {fmt_p(CalibDiag$p[2])}) (player-clustered covariance, inverted by pseudo-inverse; numerator degrees of freedom are its rank, {CalibDiag$rank[1]} of {CalibDiag$n_terms[1]} and {CalibDiag$rank[2]} of {CalibDiag$n_terms[2]} coefficients).")
+doc_cell <- function(m, term) {
+  r <- DocCheck08[DocCheck08$model == m & DocCheck08$term == term, ]
+  glue("{fmt_pg(r$estimate, 3)} (SE {fmt_pg(r$std_error, 3)})")
+}
+DiagNote <- if (is_pred(measure)) {
+  paste(
+    glue("The row 'Residual SD of P(Black) given column's regressors' is the standard deviation of P(Black) after partialling out each column's fixed effects, prior-covariate dummies and controls, the variation that identifies the coefficient on P(Black); it falls from {fmt_pg(Overlap08$resid_sd_pblack[Overlap08$model == '(1)'], 3)} in column (1) to {fmt_pg(Overlap08$resid_sd_pblack[Overlap08$model == '(5)'], 3)} in column (5) (the column-(5) regressors explain {fmt_pg(100 * Overlap08$r2_pblack[Overlap08$model == '(5)'], 1)}\\% of the variance of P(Black)). This measures overlap and precision, not calibration: under condition (i) the controls predict P(Black) exactly when they predict race."),
+    if (is.null(DocCheck08)) DocCheckSkip08 else
+      glue("Condition (i) is checked against documented race on the {fmt_pg(DocN08[['n']], 0)} contracts of {fmt_pg(DocN08[['players']], 0)} players whose race a public source states ({fmt_pg(100 * DocN08[['n']] / nrow(VetData), 1)}\\% of the sample; {fmt_pg(DocN08[['n1']], 0)} documented non-Hispanic Black alone, the event P(Black) models, and {fmt_pg(DocN08[['n0']], 0)} of any other documented race, documented Hispanic and multiracial Black players among them as non-target; conflicting sources excluded). ",
+           "A logit of the documented label on logit P(Black), the prior-covariate dummies and position fixed effects (player-clustered) has slope {doc_cell('slope', 'LogitP08')} (one under calibrated relative odds). Adding the controls' P(Black) index ($X'\\hat\\gamma$: the column-(5) controls weighted by their coefficients in a regression of P(Black) on the column-(5) regressors, a function of observed characteristics and P(Black) only, never of pay) gives {doc_cell('index', 'RaceIndex08')}, $p$ = {fmt_p(DocWald08$p)}; under (i) it is zero. This is one restriction in the one direction along which the controls predict P(Black): a non-rejection does not establish calibration given every control, and a rejection shows that the documented label departs from P(Black) along that direction. ",
+           "Documentation is positive-only and requires a Wikipedia article: documented players are mostly Black and famous (mean P(Black) {fmt_pg(DocMeanP08[['doc']], 3)} against {fmt_pg(DocMeanP08[['undoc']], 3)} for the undocumented), selection on race shifts only the logit intercept, and selection on fame within race is not controlled, so the check describes documented players and makes no claim about calibration in the population."))
 } else ""
 
 # Note on column (8)'s race measure under the predicted measures
@@ -750,9 +868,10 @@ GelbachRef5 <- if (UseNoDraft) {
 # of the base regressors W = [Black, OtherRace, prior dummies], so b(1), b(5)
 # and the deltas condition on them and the decomposition stays exact.
 # Collinear columns are found by a pivoted Cholesky of the scaled
-# cross-product matrix (the race regressors, the first two columns, must
-# survive); dropped columns get a zero coefficient. y may be a matrix
-ols_normal <- function(Z, y, tol = 1e-10) {
+# cross-product matrix (the columns in `keep`, by default the race regressors
+# in the first two columns, must survive); dropped columns get a zero
+# coefficient. y may be a matrix
+ols_normal <- function(Z, y, tol = 1e-10, keep = c(1L, 2L)) {
   y <- as.matrix(y)
   A <- crossprod(Z)
   zy <- crossprod(Z, y)
@@ -764,7 +883,7 @@ ols_normal <- function(Z, y, tol = 1e-10) {
   ch <- suppressWarnings(chol(As, pivot = TRUE, tol = tol))
   r <- attr(ch, "rank")
   kept <- attr(ch, "pivot")[seq_len(r)]
-  if (!all(c(1L, 2L) %in% cand[kept])) stop("ols_normal: a race regressor was dropped as collinear")
+  if (!all(keep %in% cand[kept])) stop("ols_normal: a race regressor was dropped as collinear")
   U <- ch[seq_len(r), seq_len(r), drop = FALSE]
   b <- matrix(0, ncol(Z), ncol(y))
   # Solve the scaled system (the columns' scales differ by many orders)
@@ -856,7 +975,7 @@ Tab09 <- GelbachRes |>
       caption = paste0("Gelbach decomposition of the change in the Black pay gap",
                        if (!is_primary_measure(measure)) paste0(" (", measure, " race measure)"),
                        " \\label{tab:pay-gap-gelbach}")) |>
-  kable_styling(latex_options = c("hold_position")) |>
+  kable_styling(latex_options = c("hold_position", "scale_down")) |>
   pack_rows(paste("Coefficient on", BlackLab), 1, 2) |>
   pack_rows("Contribution of each block to the change", 3, 7) |>
   add_notes(drop_empty(c(
@@ -869,8 +988,8 @@ Tab09 <- GelbachRes |>
     if (!ShowShares09) "Shares of the total change are not reported because the total change is not distinguishable from zero (its absolute value is below two bootstrap standard errors)." else "",
     if (UseNoDraft) "" else PriorNote,
     BlockNotes[c("A", "B", "C", "D", "Miss")],
-    if (is_pred(measure)) paste(RCNote, "The block contributions therefore mix the controls' relation to pay with their information on race; block D (combine, recruit and college signals) is the most likely to carry race information beyond the prior.") else "",
-    DiagNote, PredDefNote,
+    if (is_pred(measure)) paste(RCNote, "If P(Black) is calibrated given each block's controls, a block's contribution has its usual meaning (the part of the raw gap that the block's relation to pay accounts for); if calibration fails for a block, its contribution also includes the change in measurement bias. The overlap row and the documented-race check of condition (i) are in the notes to Table \\ref{tab:pay-gap-veteran}.") else "",
+    PredDefNote,
     glue("Standard errors come from a player-cluster bootstrap with {BootReps} replications: players are resampled with replacement and the whole decomposition is repeated in each replication."),
     RefNote, race_measure_note(measure))))
 save_exhibit_tex(Tab09, "table-09-pay-gap-gelbach", measure)
@@ -1356,6 +1475,623 @@ FigExpPlot <- ggplot(FigExp, aes(x = Bin, y = estimate, colour = model)) +
 save_exhibit_figure(FigExpPlot, "figure-pay-gap-by-experience", measure)
 
 # ---------------------------------------------------------------------------
+# Table 12b and figure: career pay profile, position group x season FE
+# against player FE on the same seasons
+# ---------------------------------------------------------------------------
+
+tick("table 12b")
+
+# Companion to columns (4)-(6) of Table 12. Both designs run on exactly the
+# same UFA/extension seasons (PanelVet) and are normalized the same way:
+# Black x experience bin and OtherRace x experience bin relative to the 4-6
+# bin, so the 4-6 interaction is zero by construction in both. The between
+# design (position group x season FE) keeps the race main terms, which then
+# give the 4-6 gap; the within design adds player FE, which absorb every
+# time-invariant characteristic (the race score among them), so only the
+# interactions remain and the race level is NOT estimated there. The
+# difference between the two profiles mixes selective survival with every
+# other time-invariant characteristic correlated with race (pre-NFL signals,
+# unmeasured quality), so it is not a decomposition of survivor composition.
+RefBin12b <- "4-6"
+ProfileBins <- setdiff(ExpBins, RefBin12b)
+# A single observed season has no within-player information. Remove those
+# players from BOTH designs rather than letting only the baseline use them.
+PanelCareer <- PanelVet |>
+  group_by(gsis_id) |>
+  filter(n() >= 2L) |>
+  ungroup() |>
+  mutate(Bin = ExpBinOf[ExperienceBin])
+SingleSeasons12b <- nrow(PanelVet) - nrow(PanelCareer)
+RaceStable12b <- PanelCareer |>
+  group_by(gsis_id) |>
+  summarise(BlackN = n_distinct(Black), OtherN = n_distinct(OtherRace),
+            .groups = "drop")
+stopifnot(all(RaceStable12b$BlackN == 1L), all(RaceStable12b$OtherN == 1L))
+for (b in ProfileBins) {
+  PanelCareer[[paste0("OtherExp_", level_tag(b))]] <-
+    PanelCareer$OtherRace * (PanelCareer$Bin == b)
+}
+BlackProfileAll <- paste0("BlackExp_", level_tag(ProfileBins))
+OtherProfileAll <- paste0("OtherExp_", level_tag(ProfileBins))
+
+# Support of each interaction. Between: seasons (expected seasons under the
+# predicted measures) in the bin. Within: players observed in the bin AND in
+# another bin (player FE identify the interaction from those players only);
+# their expected Black count is the sum of P(Black) over them
+PlayerBins12b <- PanelCareer |>
+  group_by(gsis_id) |>
+  summarise(NBins = n_distinct(Bin), NSeasons = n(),
+            Bins = paste(sort(unique(Bin)), collapse = "|"),
+            Black = first(Black), OtherRace = first(OtherRace), .groups = "drop")
+CrossBin12b <- PlayerBins12b |>
+  filter(NBins > 1) |>
+  group_by(Bins) |>
+  summarise(Players = n(), BlackPlayers = sum(Black), OtherPlayers = sum(OtherRace),
+            .groups = "drop")
+print(CrossBin12b)
+bin_support <- function(b) {
+  has <- filter(PlayerBins12b, NBins > 1, str_detect(Bins, fixed(b)))
+  c(players = nrow(has), black = sum(has$Black), other = sum(has$OtherRace))
+}
+Support12b <- map_dfr(ProfileBins, \(b) {
+  s <- bin_support(b)
+  tibble(Bin = b, Seasons = sum(PanelCareer$Bin == b),
+         BlackSeasons = sum(PanelCareer$Black[PanelCareer$Bin == b]),
+         OtherSeasons = sum(PanelCareer$OtherRace[PanelCareer$Bin == b]),
+         CrossPlayers = s[["players"]], CrossBlack = s[["black"]], CrossOther = s[["other"]])
+})
+print(Support12b)
+# An interaction is estimable in BOTH designs only with a positive sum of the
+# interaction over cross-bin players; terms without it are left out of every
+# column (the notes say so) rather than estimated between and aliased within
+keep_bin <- function(w) ProfileBins[Support12b[[w]] > 0]
+BlackProfileTerms <- paste0("BlackExp_", level_tag(keep_bin("CrossBlack")))
+OtherProfileTerms <- paste0("OtherExp_", level_tag(keep_bin("CrossOther")))
+ProfileTerms <- c(BlackProfileTerms, OtherProfileTerms)
+if (length(BlackProfileTerms) == 0) {
+  stop("12: table 12b: no Black x experience interaction has within-player support")
+}
+UnsupportedNote12b <- if (length(ProfileTerms) < length(c(BlackProfileAll, OtherProfileAll))) {
+  glue("The interactions {paste(setdiff(c(BlackProfileAll, OtherProfileAll), ProfileTerms), collapse = ', ')} have no cross-bin support and are omitted from every column.")
+} else ""
+
+# Within each pair, request the same controls. Player FE absorb genuinely
+# time-invariant regressors, but position-specific pre-NFL slopes can change
+# when a player changes positions and must not be discarded in advance.
+FE12b <- c(between = FE12, within = paste("gsis_id +", FE12))
+Spec12b <- list(
+  "(1)" = list(design = "between", blocks = "A", signals = FALSE),
+  "(2)" = list(design = "within", blocks = "A", signals = FALSE),
+  "(3)" = list(design = "between", blocks = c("A", "B", "C"), signals = FALSE),
+  "(4)" = list(design = "within", blocks = c("A", "B", "C"), signals = FALSE),
+  "(5)" = list(design = "between", blocks = c("A", "D"), signals = TRUE),
+  "(6)" = list(design = "within", blocks = c("A", "D"), signals = TRUE),
+  "(7)" = list(design = "between", blocks = c("A", "B", "C", "D"), signals = TRUE),
+  "(8)" = list(design = "within", blocks = c("A", "B", "C", "D"), signals = TRUE))
+# Fit one column; fatal if the model fails, if a target interaction is
+# dropped as collinear or if any row of the common sample is lost
+fit_profile <- function(spec, nm) {
+  between <- spec$design == "between"
+  rhs <- c(if (between) Rhs0, ProfileTerms, panel_controls(PanelCareer, spec$blocks),
+           if (spec$signals) SignalExpTerms,
+           prior_cols(measure, PanelCareer))
+  m <- tryCatch(
+    feols(make_fml(YPanel, rhs, FE12b[[spec$design]]), data = PanelCareer,
+          vcov = ~gsis_id, fixef.rm = "none", fixef.tol = 1e-9, notes = FALSE),
+    error = \(e) stop(glue("12: table 12b column {nm} ({spec$design}, blocks ",
+                           "{paste(spec$blocks, collapse = '')}) failed: {conditionMessage(e)}"),
+                      call. = FALSE))
+  dropped <- intersect(c(if (between) Rhs0, ProfileTerms), m$collin.var %||% character())
+  if (length(dropped) > 0) {
+    stop(glue("12: table 12b column {nm}: {paste(dropped, collapse = ', ')} dropped as collinear"))
+  }
+  if (!identical(obs(m), seq_len(nrow(PanelCareer)))) {
+    stop(glue("12: table 12b column {nm}: {nobs(m)} of {nrow(PanelCareer)} seasons used"))
+  }
+  m
+}
+Models12b <- imap(Spec12b, fit_profile)
+# Report absorption without printing hundreds of time-invariant control
+# names in a table note. Focal contrasts must survive the rank check.
+message(glue("12: table 12b controls dropped as collinear by column: ",
+             "{paste(names(Models12b), lengths(map(Models12b, \\(m) m$collin.var %||% character())), sep = ' ', collapse = ', ')}"))
+DroppedNote12b <- paste(
+  "The collinearity row counts controls absorbed by the fixed effects or other regressors.",
+  "The requested controls are identical within each odd/even pair;",
+  "position-specific pre-NFL slopes remain when a position change makes them vary within player.",
+  "The script stops if a focal race interaction is unidentified.")
+
+# Joint tests of the race x experience interactions (player-clustered Wald)
+joint_wald <- function(m, terms) {
+  if (!all(terms %in% names(coef(m)))) {
+    stop(glue("12: joint test: {paste(setdiff(terms, names(coef(m))), collapse = ', ')} not in the model"))
+  }
+  w <- wald(m, keep = paste0("^(", paste(terms, collapse = "|"), ")$"), print = FALSE)
+  tibble(wald_stat = w$stat, wald_p = w$p, df1 = w$df1, df2 = w$df2)
+}
+Joint12b <- bind_rows(
+  imap_dfr(Models12b, \(m, nm) mutate(joint_wald(m, BlackProfileTerms), model = nm,
+                                     term = "BlackExp joint")),
+  if (length(OtherProfileTerms) > 0) {
+    imap_dfr(Models12b, \(m, nm) mutate(joint_wald(m, OtherProfileTerms), model = nm,
+                                       term = "OtherExp joint"))
+  })
+print(Joint12b)
+
+# Actual samples: players, players with two or more seasons (the only ones
+# that move the within estimates) and controls dropped as collinear
+NPlayers12b <- n_distinct(PanelCareer$gsis_id)
+NMulti12b <- sum(PlayerBins12b$NSeasons >= 2)
+NCross12b <- sum(PlayerBins12b$NBins > 1)
+joint_cell <- function(nm, term) {
+  r <- Joint12b[Joint12b$model == nm & Joint12b$term == term, ]
+  if (nrow(r) == 0) "" else fmt_p(r$wald_p)
+}
+Rows12b <- tibble(term = c("Design", "Player FE", "Position group $\\times$ season FE",
+                           "Experience bins, age (A)", "Lagged and career production (B, C)",
+                           "Pre-NFL signals (D)", "Signals $\\times$ experience",
+                           "Joint $p$, Black $\\times$ experience",
+                           "Joint $p$, other race $\\times$ experience",
+                           "Players", "Players with 2+ seasons",
+                           "Controls dropped as collinear",
+                           "Mean of outcome"))
+for (nm in names(Spec12b)) {
+  s <- Spec12b[[nm]]
+  within <- s$design == "within"
+  Rows12b[[nm]] <- c(
+    if (within) "Player FE" else "No player FE",
+    yes_no(within), "Yes", yes_no("A" %in% s$blocks),
+    yes_no("B" %in% s$blocks),
+    if ("D" %in% s$blocks) "Yes" else NoD12,
+    yes_no(s$signals),
+    joint_cell(nm, "BlackExp joint"), joint_cell(nm, "OtherExp joint"),
+    fmt_pg(NPlayers12b, 0), fmt_pg(NMulti12b, 0),
+    fmt_pg(length(Models12b[[nm]]$collin.var %||% character()), 0),
+    fmt_pg(mean_dep(Models12b[[nm]]), 3))
+}
+
+CoefMap12b <- c(
+  set_names(paste0(BlackLab, " $\\times$ experience ", ExpLabels[keep_bin("CrossBlack")],
+                   " (vs 4-6)"), BlackProfileTerms),
+  set_names(paste0(OtherLab, " $\\times$ experience ", ExpLabels[keep_bin("CrossOther")],
+                   " (vs 4-6)"), OtherProfileTerms),
+  Black = paste0(BlackLab, " (level at experience 4-6; no player FE)"),
+  OtherRace = paste0(OtherLab, " (level at experience 4-6; no player FE)"))
+cross_text <- paste0(CrossBin12b$Bins, " ", fmt_pg(CrossBin12b$Players, 0), " (",
+                     fmt_pg(CrossBin12b$BlackPlayers, 0), ")", collapse = ", ")
+ProfileBinCounts <- PanelCareer |>
+  group_by(Bin) |>
+  summarise(BlackSeasons = sum(Black), .groups = "drop")
+write_model_table(
+  Models12b, CoefMap12b,
+  title = "Career pay profiles with and without player fixed effects",
+  label = "pay-career-fe",
+  notes = drop_empty(c(
+    glue("This table compares the experience profile of the race gap of Table \\ref{{tab:pay-gap-learning}} on the same {fmt_pg(nrow(PanelCareer), 0)} UFA/extension player-seasons 2014-2025 with positive cap numbers and {KnownRace}. Both designs exclude {fmt_pg(SingleSeasons12b, 0)} single-season players before fitting. The outcome is log cap number (\\$ millions)."),
+    glue("Odd columns include {BlackLab}, {OtherLab}, their experience-bin interactions and position group $\\times$ season fixed effects. They use both between- and within-player variation. Even columns add player fixed effects, which absorb time-invariant characteristics including race. The race level is not estimated in the even columns."),
+    glue("Both designs are normalized to the 4-6 experience bin: each interaction is the change in the race gap relative to the gap at 4-6 seasons, and the 4-6 interaction is zero by construction in both. In the odd columns the main terms give the 4-6 gap itself."),
+    glue("Within player, an interaction is identified only by players observed in that bin and in another bin. Players observed in two or more bins (expected Black players, sums of P(Black), in parentheses): {cross_text}; {fmt_pg(NCross12b, 0)} of {fmt_pg(NPlayers12b, 0)} players in all. {if (is_pred(measure)) 'Expected Black seasons, sums of P(Black),' else 'Black seasons'} by bin: ",
+         paste0(ProfileBinCounts$Bin, " ", fmt_pg(ProfileBinCounts$BlackSeasons, 0), collapse = ", "), "."),
+    UnsupportedNote12b,
+    "Columns (1)-(2) control for career stage (block A); (3)-(4) add lagged and career production (B and C). Columns (5)-(6) add pre-NFL signals and their experience interactions without production; (7)-(8) add production. Both columns in each pair request the same control design. Truly time-invariant controls are absorbed by player fixed effects.",
+    DroppedNote12b,
+    if (is_pred(measure)) "All columns request the race-prior covariate controls; player fixed effects absorb them in the even columns." else "",
+    "Differences between profiles are specification sensitivity, not a causal decomposition or a bound on survivor selection. Player fixed effects remove permanent heterogeneity but not time-varying selection. Experience also advances with calendar time, so the profile does not isolate employer learning. Cap numbers reflect contracts signed earlier, and lagged production can postdate the pay decision.",
+    "The joint $p$-values are player-clustered Wald tests that the race $\\times$ experience interactions are jointly zero (that the race gap does not vary with experience); they are not tests of the gap's level.",
+    BlockNotes[["Miss"]], RCNote, PredDefNote,
+    NoteCluster, RefNote)),
+  name = "table-12b-pay-career-fe", measure = measure,
+  add_rows = Rows12b, font_size = 8)
+Estimates <- c(Estimates, list(
+  tidy_terms(Models12b, c(Rhs0, ProfileTerms)) |>
+    mutate(table = "table-12b",
+           design = Spec12b[model] |> map_chr("design"),
+           n_players = NPlayers12b, n_players_multi = NMulti12b,
+           n_single_season_dropped = SingleSeasons12b,
+           fixed_effects = unname(FE12b[design]),
+           scale = "Black-white log-cap-gap change versus experience 4-6; main terms only without player FE",
+           inference = "Player-clustered SE; 95% CI; race scores held fixed"),
+  Joint12b |> transmute(table = "table-12b-joint", model, term, estimate = wald_stat,
+                        p_value = wald_p, df1, df2, nobs = nrow(PanelCareer)),
+  Support12b |>
+    transmute(table = "table-12b-support", model = "support", term = paste0("bin_", Bin),
+              estimate = Seasons, support_black = BlackSeasons, support_other = OtherSeasons,
+              n_players = CrossPlayers, support_black_players = CrossBlack,
+              support_other_players = CrossOther, nobs = nrow(PanelCareer)),
+  CrossBin12b |>
+    transmute(table = "table-12b-support", model = "cross-bin players",
+              term = paste0("bins_", Bins), estimate = Players,
+              support_black_players = BlackPlayers, support_other_players = OtherPlayers,
+              nobs = nrow(PanelCareer))))
+
+# Figure: Black x experience profiles of both designs, relative to the 4-6
+# bin (drawn at zero without an interval), for the career-stage and the
+# production control sets
+FigCareerSets <- c("(1)" = "Career stage (A)", "(2)" = "Career stage (A)",
+                   "(3)" = "With lagged and career production (A, B, C)",
+                   "(4)" = "With lagged and career production (A, B, C)")
+FigCareer <- tidy_terms(Models12b[names(FigCareerSets)], BlackProfileTerms) |>
+  mutate(Bin = ExpLabels[ProfileBins[match(term, BlackProfileAll)]])
+FigCareerRef <- distinct(FigCareer, model) |>
+  mutate(term = paste0("BlackExp_", level_tag(RefBin12b)), Bin = ExpLabels[[RefBin12b]],
+         estimate = 0, std_error = NA_real_, p_value = NA_real_,
+         ci_low = NA_real_, ci_high = NA_real_, nobs = nrow(PanelCareer), dep_var = YPanel)
+FigCareer <- bind_rows(FigCareer, FigCareerRef) |>
+  mutate(Design = factor(if_else(map_chr(Spec12b[model], "design") == "within",
+                                 "With player FE", "Without player FE"),
+                         levels = c("Without player FE", "With player FE")),
+         Controls = factor(FigCareerSets[model], levels = unique(FigCareerSets)),
+         Bin = factor(Bin, levels = ExpLabels))
+Estimates <- c(Estimates, list(
+  FigCareer |> transmute(table = "figure-pay-career-fe", model, term, estimate, std_error,
+                         p_value, ci_low, ci_high, nobs, dep_var, design = as.character(Design),
+                         controls = as.character(Controls))))
+FigCareerPlot <- ggplot(FigCareer, aes(x = Bin, y = estimate, colour = Design)) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  geom_pointrange(aes(ymin = ci_low, ymax = ci_high),
+                  position = position_dodge(width = 0.45), na.rm = TRUE) +
+  geom_point(data = filter(FigCareer, Bin == RefBin12b),
+             position = position_dodge(width = 0.45), size = 2) +
+  facet_wrap(~Controls) +
+  scale_colour_manual(values = c("Without player FE" = "#b2182b",
+                                 "With player FE" = "#1f4e79")) +
+  labs(x = "Experience (seasons); 4-6 is the reference bin (zero by construction)",
+       y = "Change in Black gap in log cap number vs 4-6 (95% CI)",
+       colour = NULL,
+       title = "Career pay profiles with and without player FE",
+       subtitle = paste("Same repeat-player sample; position group x season FE",
+                        FigMeasureLine),
+       caption = glue("Within-player estimates rest on {NCross12b} players observed in two or more bins; player FE absorb the race level (not shown).")) +
+  theme_customs() +
+  theme(legend.position = "bottom", legend.direction = "vertical")
+save_exhibit_figure(FigCareerPlot, "figure-pay-career-fe", measure, width = 8, height = 5)
+
+# ---------------------------------------------------------------------------
+# Table 12c: annual pay with and without paying-franchise x season FE on the
+# same seasons
+# ---------------------------------------------------------------------------
+
+tick("table 12c")
+
+# Employer FE for the player-season outcome. PayFranchise is the franchise of
+# the cap-table row that carries the season's larger cap number: the team
+# whose books the pay sits on, not the player's primary roster team (a player
+# with cap hits from two teams in a season, after a trade or release, is
+# assigned to the team carrying the larger hit). Seasons without a paying
+# franchise are excluded from every column, so that columns with and without
+# the employer FE use exactly the same rows
+PanelEmployer <- filter(PanelVet, !is.na(PayFranchise), nzchar(PayFranchise))
+NoEmployer12c <- nrow(PanelVet) - nrow(PanelEmployer)
+NotPrimary12c <- sum(PanelEmployer$PayFranchise != coalesce(PanelEmployer$PrimaryFranchise, ""))
+Cells12c <- count(PanelEmployer, PayFranchise, season)
+NFranchise12c <- n_distinct(PanelEmployer$PayFranchise)
+message(glue("12: table 12c: {nrow(PanelEmployer)} seasons ({NoEmployer12c} without a paying ",
+             "franchise excluded), {NFranchise12c} franchises, {nrow(Cells12c)} franchise x season ",
+             "cells ({sum(Cells12c$n == 1)} singletons); PayFranchise differs from the primary ",
+             "franchise in {NotPrimary12c} seasons"))
+# Rich controls: blocks A-D as in column (9) of Table 12 (position-group
+# slopes; columns constant in the sample dropped)
+Controls12c <- panel_controls(PanelEmployer, c("A", "B", "C", "D"))
+FE12c <- c(group = FE12, employer = paste(FE12, "+ PayFranchise^season"))
+fit_employer <- function(d, y, fe, nm) {
+  m <- tryCatch(
+    feols(make_fml(y, c(Rhs0, prior_cols(measure, d), Controls12c), fe), data = d,
+          vcov = ~gsis_id, notes = FALSE),
+    error = \(e) stop(glue("12: table 12c column {nm} ({y}, {fe}) failed: {conditionMessage(e)}"),
+                      call. = FALSE))
+  if (any(Rhs0 %in% (m$collin.var %||% character()))) {
+    stop(glue("12: table 12c column {nm}: a race regressor was dropped as collinear"))
+  }
+  if (!identical(obs(m), seq_len(nrow(d)))) {
+    stop(glue("12: table 12c column {nm}: {nobs(m)} of {nrow(d)} seasons used"))
+  }
+  m
+}
+# Cash companion: cash paid is OTC's accounting amount for the season and
+# can be a few dollars for players released early (the log is then far
+# below the cap number); its columns use the seasons with positive cash
+PanelCash <- filter(PanelEmployer, !is.na(LogCashPaid))
+NoCash12c <- nrow(PanelEmployer) - nrow(PanelCash)
+SmallCash12c <- sum(PanelCash$CashPaid < 0.01)
+Models12c <- list(
+  "(1)" = fit_employer(PanelEmployer, YPanel, FE12c[["group"]], "(1)"),
+  "(2)" = fit_employer(PanelEmployer, YPanel, FE12c[["employer"]], "(2)"),
+  "(3)" = fit_employer(PanelCash, "LogCashPaid", FE12c[["group"]], "(3)"),
+  "(4)" = fit_employer(PanelCash, "LogCashPaid", FE12c[["employer"]], "(4)"))
+stopifnot(identical(obs(Models12c[["(1)"]]), obs(Models12c[["(2)"]])),
+          identical(obs(Models12c[["(3)"]]), obs(Models12c[["(4)"]])))
+# Two-way clustering by player and paying franchise (teams set pay)
+se_twoway_pay <- function(m) se(summary(m, vcov = ~gsis_id + PayFranchise))[["Black"]]
+Rows12c <- tibble(term = c("Outcome", "Position group $\\times$ season FE",
+                           "Paying franchise $\\times$ season FE", "Controls (A-D)",
+                           "Mean of outcome", "Implied Black gap (\\%)",
+                           paste("SE of", BlackLab, "clustered by player and paying franchise"),
+                           "Players"))
+for (nm in names(Models12c)) {
+  m <- Models12c[[nm]]
+  d <- if (nm %in% c("(1)", "(2)")) PanelEmployer else PanelCash
+  Rows12c[[nm]] <- c(if (nm %in% c("(1)", "(2)")) "Log cap number" else "Log cash paid",
+                     "Yes", yes_no(nm %in% c("(2)", "(4)")), "Yes",
+                     fmt_pg(mean_dep(m), 3), fmt_pg(pct_gap(coef(m)[["Black"]]), 1),
+                     fmt_se_pg(se_twoway_pay(m), 3), fmt_pg(n_distinct(d$gsis_id), 0))
+}
+write_model_table(
+  Models12c, CoefMap,
+  title = "Race gap in realized annual pay with and without paying-franchise fixed effects",
+  label = "pay-employer-fe",
+  notes = drop_empty(c(
+    glue("This table estimates the player-season analogue of equation (1) of Table \\ref{{tab:pay-gap-learning}} with and without paying franchise $\\times$ season fixed effects on exactly the same seasons. Columns (1)-(2) use the {fmt_pg(nrow(PanelEmployer), 0)} player-seasons 2014-2025 governed by a freely bargained veteran contract (UFA or extension), with {KnownRace}, a positive cap number and a known paying franchise ({NoEmployer12c} seasons without one are excluded from both columns). Columns (3)-(4) use the {fmt_pg(nrow(PanelCash), 0)} of those seasons with positive cash paid."),
+    glue("The paying franchise is the franchise on whose cap table the season's larger cap number sits, from OTC's contract-year rows, not the player's primary roster team of the season; the two differ in {fmt_pg(NotPrimary12c, 0)} seasons (players with cap hits from two teams after a trade or release are assigned to the team carrying the larger hit). There are {NFranchise12c} franchises and {fmt_pg(nrow(Cells12c), 0)} franchise $\\times$ season cells, {sum(Cells12c$n == 1)} of them with a single season."),
+    "The employer fixed effects absorb franchise-specific season pay levels. Each pair compares coefficient sensitivity to this conditioning on fixed rows. Residual race-score variation and its weighting also change, so the coefficient difference is not a causal decomposition of sorting or employer behavior.",
+    glue("Cash paid is OTC's accounting amount for the season (base salary plus bonuses actually paid); it can be a few dollars for players released early ({fmt_pg(SmallCash12c, 0)} seasons below \\$10,000), which pulls the log far below the log cap number, so columns (3)-(4) are a companion for reading accounting amounts and not the main estimates."),
+    "Controls are blocks A-D of Table \\ref{tab:pay-gap-learning}: experience bins, experience, age and its square (A), one-season lagged production (B), career production (C) and pre-NFL signals (D), with position-group slopes.",
+    PriorNote, BlockNotes[["Miss"]], BlockNotes[["Identify"]], RCNote, PredDefNote,
+    "The implied gap is $100(e^{\\hat\\beta_1}-1)$.",
+    NoteCluster,
+    glue("The row 'SE of {BlackLab} clustered by player and paying franchise' reports the standard error with two-way clustering by player and paying franchise."),
+    RefNote)),
+  name = "table-12c-pay-employer-fe", measure = measure,
+  add_rows = Rows12c)
+Estimates <- c(Estimates, list(
+  tidy_terms(Models12c, Rhs0) |>
+    mutate(table = "table-12c",
+           employer_fe = model %in% c("(2)", "(4)"),
+           n_players = if_else(model %in% c("(1)", "(2)"),
+                               n_distinct(PanelEmployer$gsis_id), n_distinct(PanelCash$gsis_id)),
+           n_dropped_no_employer = NoEmployer12c, n_dropped_no_cash = NoCash12c,
+           n_employer_cells = nrow(Cells12c), n_singleton_cells = sum(Cells12c$n == 1),
+           fixed_effects = if_else(employer_fe, FE12c[["employer"]], FE12c[["group"]]),
+           scale = "Black-white log-pay gap; annual accounting totals",
+           inference = "Player-clustered SE; 95% CI; race scores held fixed")))
+
+# ---------------------------------------------------------------------------
+# Table 12d: successive freely bargained contracts of the same player
+# ---------------------------------------------------------------------------
+
+tick("table 12d")
+
+# Observed order of a player's eligible contracts (VetData: UFA and
+# extensions 2014-2026 with known race and positive APY), by signing year.
+# The first observed eligible deal is NOT the player's first contract:
+# rookie deals, tags and tenders are not eligible, and deals signed before
+# 2014 are not in the sample. Author decision 2026-10-03: contract_id ends in
+# OTC's row sequence, which is not a signing date, so two eligible contracts
+# of one player in the same signing year have no observed order. Those
+# player-years are excluded, and so is everything the player signs after
+# them: dropping only the tied year would make the deals on either side of
+# it look consecutive. A player's sequence therefore stops at his first
+# ambiguous signing year, and successive deals are strictly increasing in
+# signing year
+ContractOrder <- VetData |>
+  select(contract_id, gsis_id, year_signed, Black) |>
+  group_by(gsis_id, year_signed) |>
+  mutate(NInYear = n()) |>
+  ungroup()
+AmbigCells <- ContractOrder |>
+  filter(NInYear > 1) |>
+  group_by(gsis_id) |>
+  summarise(FirstAmbig = min(year_signed), AmbigContracts = n(), .groups = "drop")
+ContractOrder <- ContractOrder |>
+  left_join(AmbigCells, by = "gsis_id") |>
+  mutate(Ambiguous = NInYear > 1,
+         AfterAmbiguous = !Ambiguous & !is.na(FirstAmbig) & year_signed > FirstAmbig)
+Ordered <- ContractOrder |>
+  filter(!Ambiguous, !AfterAmbiguous) |>
+  group_by(gsis_id) |>
+  arrange(year_signed, .by_group = TRUE) |>
+  mutate(Order = row_number(), NDeals = n(), GapYears = year_signed - lag(year_signed)) |>
+  ungroup()
+stopifnot(!anyDuplicated(Ordered[c("gsis_id", "year_signed")]),
+          all(Ordered$GapYears > 0, na.rm = TRUE))
+Flow12d <- c(
+  eligible_contracts = nrow(ContractOrder),
+  ambiguous_cells = nrow(distinct(filter(ContractOrder, Ambiguous), gsis_id, year_signed)),
+  ambiguous_contracts = sum(ContractOrder$Ambiguous),
+  truncated_after_ambiguity = sum(ContractOrder$AfterAmbiguous),
+  players_with_ambiguity = nrow(AmbigCells),
+  ordered_contracts = nrow(Ordered),
+  single_deal_contracts = sum(Ordered$NDeals == 1),
+  repeat_contracts = sum(Ordered$NDeals >= 2),
+  repeat_players = n_distinct(Ordered$gsis_id[Ordered$NDeals >= 2]),
+  repeat_black_players = sum(Ordered$Black[Ordered$NDeals >= 2 & Ordered$Order == 1]))
+stopifnot(Flow12d[["eligible_contracts"]] == Flow12d[["ambiguous_contracts"]] +
+            Flow12d[["truncated_after_ambiguity"]] + Flow12d[["ordered_contracts"]],
+          Flow12d[["ordered_contracts"]] == Flow12d[["single_deal_contracts"]] +
+            Flow12d[["repeat_contracts"]])
+print(Flow12d)
+
+# Common repeat-signer sample: players with two or more ordered deals. Order
+# terms: second and third-or-later observed deal (reference: the first
+# observed deal), interacted with the race regressors; player FE absorb the
+# race level, so the interactions are within-player race differences in the
+# progression from the first observed deal
+RepeatData <- VetData |>
+  inner_join(select(Ordered, contract_id, Order, NDeals, GapYears), by = "contract_id") |>
+  filter(NDeals >= 2) |>
+  mutate(Order2 = as.integer(Order == 2), Order3p = as.integer(Order >= 3),
+         BlackOrd_2 = Black * Order2, BlackOrd_3plus = Black * Order3p,
+         OtherOrd_2 = OtherRace * Order2, OtherOrd_3plus = OtherRace * Order3p)
+stopifnot(nrow(RepeatData) == Flow12d[["repeat_contracts"]])
+DealsByOrder <- RepeatData |>
+  mutate(OrderGroup = if_else(Order >= 3, "3+", as.character(Order))) |>
+  group_by(OrderGroup) |>
+  summarise(Contracts = n(), BlackContracts = sum(Black), OtherContracts = sum(OtherRace),
+            .groups = "drop")
+print(DealsByOrder)
+OrderTerms <- c("Order2", "Order3p")
+BlackOrdAll <- c("BlackOrd_2", "BlackOrd_3plus")
+OtherOrdAll <- c("OtherOrd_2", "OtherOrd_3plus")
+# Interactions without support (no Black or other-race contract at that
+# order) are omitted and noted; the Black terms must both have support
+BlackOrdTerms <- BlackOrdAll[map_lgl(BlackOrdAll, \(v) sum(RepeatData[[v]]) > 0)]
+OtherOrdTerms <- OtherOrdAll[map_lgl(OtherOrdAll, \(v) sum(RepeatData[[v]]) > 0)]
+if (length(BlackOrdTerms) < 2) {
+  stop(glue("12: table 12d: no Black contracts at order {paste(setdiff(BlackOrdAll, BlackOrdTerms), collapse = ', ')}"))
+}
+UnsupportedNote12d <- if (length(OtherOrdTerms) < 2) {
+  glue("The interactions {paste(setdiff(OtherOrdAll, OtherOrdTerms), collapse = ', ')} have no support and are omitted.")
+} else ""
+RaceOrdTerms <- c(BlackOrdTerms, OtherOrdTerms)
+
+# Prior controls as in Table 08: career stage at signing (A), production in
+# the season before signing (B) and career production before the signing
+# year (C), all dated before year_signed. Block D and, under the predicted
+# measures, the prior-covariate dummies are fixed within player and absorbed
+FE12d <- "gsis_id + position^year_signed"
+Spec12d <- list("(1)" = character(), "(2)" = "A", "(3)" = c("A", "B", "C"))
+fit_repeat <- function(blocks, nm) {
+  controls <- unlist(map(VetCols[blocks], \(cc) varying(RepeatData, cc)), use.names = FALSE)
+  m <- tryCatch(
+    feols(make_fml(YVet, c(OrderTerms, RaceOrdTerms, controls), FE12d), data = RepeatData,
+          vcov = ~gsis_id, notes = FALSE),
+    error = \(e) stop(glue("12: table 12d column {nm} (blocks {paste(blocks, collapse = '')}) ",
+                           "failed: {conditionMessage(e)}"), call. = FALSE))
+  dropped <- intersect(c(OrderTerms, RaceOrdTerms), m$collin.var %||% character())
+  if (length(dropped) > 0) {
+    stop(glue("12: table 12d column {nm}: {paste(dropped, collapse = ', ')} dropped as collinear"))
+  }
+  if (!identical(obs(m), seq_len(nrow(RepeatData)))) {
+    stop(glue("12: table 12d column {nm}: {nobs(m)} of {nrow(RepeatData)} contracts used"))
+  }
+  m
+}
+Models12d <- imap(Spec12d, fit_repeat)
+Joint12d <- bind_rows(
+  imap_dfr(Models12d, \(m, nm) mutate(joint_wald(m, BlackOrdTerms), model = nm,
+                                     term = "BlackOrd joint")),
+  if (length(OtherOrdTerms) > 0) {
+    imap_dfr(Models12d, \(m, nm) mutate(joint_wald(m, OtherOrdTerms), model = nm,
+                                       term = "OtherOrd joint"))
+  })
+print(Joint12d)
+
+# Adjacent observed deals: the change in log APY from deal k to deal k + 1 of
+# the same player. These are changes between distinct signed contracts (the
+# season panel of Table 12 repeats the governing contract's pay each year);
+# the summaries show how often APY actually changes. Columns (4)-(5) compare
+# adjacent changes by race, with separate position-by-signing-year effects
+# for BOTH deals. Later-year effects alone do not remove the previous
+# market's pay level. These are flexible conditional change associations,
+# not an algebraically identical first-difference fit of columns (1)-(3).
+ChangeCols <- unlist(VetCols[c("A", "B", "C")], use.names = FALSE)
+Adjacent <- RepeatData |>
+  arrange(gsis_id, Order) |>
+  group_by(gsis_id) |>
+  mutate(DeltaLogAPY = LogAPY - lag(LogAPY), PrevOrder = lag(Order),
+         PrevYear = lag(year_signed), PrevPosition = lag(position),
+         across(all_of(ChangeCols), \(x) x - lag(x), .names = "D_{.col}")) |>
+  ungroup() |>
+  filter(!is.na(DeltaLogAPY)) |>
+  mutate(BlackChange = Black, OtherChange = OtherRace)
+stopifnot(all(Adjacent$Order - Adjacent$PrevOrder == 1), all(Adjacent$year_signed > Adjacent$PrevYear),
+          nrow(Adjacent) == nrow(RepeatData) - Flow12d[["repeat_players"]])
+DeltaCols <- varying(Adjacent, paste0("D_", ChangeCols))
+ChangeSummary <- tibble(
+  term = c("pairs", "mean_change", "median_change", "sd_change", "share_unchanged",
+           "share_abs_change_over_0_10", "mean_gap_years", "mean_change_black_weighted",
+           "mean_change_white_weighted"),
+  estimate = c(nrow(Adjacent), mean(Adjacent$DeltaLogAPY), median(Adjacent$DeltaLogAPY),
+               sd(Adjacent$DeltaLogAPY), mean(abs(Adjacent$DeltaLogAPY) < 1e-8),
+               mean(abs(Adjacent$DeltaLogAPY) > 0.10), mean(Adjacent$GapYears),
+               weighted.mean(Adjacent$DeltaLogAPY, Adjacent$Black),
+               weighted.mean(Adjacent$DeltaLogAPY, Adjacent$PWhite)))
+print(ChangeSummary)
+fit_change <- function(rhs, nm) {
+  m <- tryCatch(
+    feols(make_fml("DeltaLogAPY", rhs,
+                    paste(FE08, "+ PrevPosition^PrevYear")), data = Adjacent,
+          vcov = ~gsis_id, fixef.rm = "none", notes = FALSE),
+    error = \(e) stop(glue("12: table 12d column {nm} (adjacent change) failed: {conditionMessage(e)}"),
+                      call. = FALSE))
+  if (any(c("BlackChange", "OtherChange") %in% (m$collin.var %||% character()))) {
+    stop(glue("12: table 12d column {nm}: a race regressor was dropped as collinear"))
+  }
+  if (!identical(obs(m), seq_len(nrow(Adjacent)))) {
+    stop(glue("12: table 12d column {nm}: {nobs(m)} of {nrow(Adjacent)} pairs used"))
+  }
+  m
+}
+Models12d[["(4)"]] <- fit_change(c("BlackChange", "OtherChange"), "(4)")
+Models12d[["(5)"]] <- fit_change(c("BlackChange", "OtherChange", DeltaCols), "(5)")
+
+change_cell <- function(term, digits = 3) {
+  fmt_pg(ChangeSummary$estimate[ChangeSummary$term == term], digits)
+}
+joint_cell_d <- function(nm, term) {
+  r <- Joint12d[Joint12d$model == nm & Joint12d$term == term, ]
+  if (nrow(r) == 0) "" else fmt_p(r$wald_p)
+}
+Rows12d <- tibble(term = c("Outcome", "Unit", "Player FE", "Position $\\times$ year-signed FE",
+                           "Career stage at signing (A)", "Prior and career production (B, C)",
+                           "Joint $p$, Black $\\times$ deal order",
+                           "Joint $p$, other race $\\times$ deal order",
+                           "Players", "Mean of outcome",
+                           "Share of adjacent pairs with unchanged APY",
+                           "Share of adjacent pairs with $|$change$|$ $>$ 0.10"))
+for (nm in names(Models12d)) {
+  levels_col <- nm %in% names(Spec12d)
+  blocks <- if (levels_col) Spec12d[[nm]] else if (nm == "(5)") c("A", "B", "C") else character()
+  Rows12d[[nm]] <- c(
+    if (levels_col) "Log APY" else "Change in log APY",
+    if (levels_col) "Contract" else "Adjacent pair",
+    yes_no(levels_col), if (levels_col) "Yes" else "Both deals",
+    if (levels_col) yes_no("A" %in% blocks) else if (nm == "(5)") "Changes" else "No",
+    if (levels_col) yes_no("B" %in% blocks) else if (nm == "(5)") "Changes" else "No",
+    joint_cell_d(nm, "BlackOrd joint"), joint_cell_d(nm, "OtherOrd joint"),
+    fmt_pg(Flow12d[["repeat_players"]], 0), fmt_pg(mean_dep(Models12d[[nm]]), 3),
+    if (levels_col) "" else change_cell("share_unchanged"),
+    if (levels_col) "" else change_cell("share_abs_change_over_0_10"))
+}
+CoefMap12d <- c(
+  Order2 = "Second observed deal", Order3p = "Third or later observed deal",
+  set_names(paste(BlackLab, "$\\times$", c("second observed deal", "third or later observed deal")),
+            BlackOrdAll)[BlackOrdTerms],
+  set_names(paste(OtherLab, "$\\times$", c("second observed deal", "third or later observed deal")),
+            OtherOrdAll)[OtherOrdTerms],
+  BlackChange = paste0(BlackLab, " (race difference in the adjacent change)"),
+  OtherChange = paste0(OtherLab, " (race difference in the adjacent change)"))
+order_text <- paste0(c("1" = "first", "2" = "second", "3+" = "third or later")[DealsByOrder$OrderGroup],
+                     " ", fmt_pg(DealsByOrder$Contracts, 0), " (", fmt_pg(DealsByOrder$BlackContracts, 0), ")",
+                     collapse = ", ")
+write_model_table(
+  Models12d, CoefMap12d,
+  title = "Race differences in pay across successive freely bargained contracts of the same player",
+  label = "pay-repeat-contracts",
+  notes = drop_empty(c(
+    glue("This table follows players across their successive freely bargained veteran contracts (UFA and extensions) signed 2014-2026 in the sample of Table \\ref{{tab:pay-gap-veteran}}. The outcome of columns (1)-(3) is log APY (\\$ millions); the unit is the contract. Columns (1)-(3) include player fixed effects and OTC position $\\times$ year-signed fixed effects on the common sample of {fmt_pg(Flow12d[['repeat_contracts']], 0)} contracts of the {fmt_pg(Flow12d[['repeat_players']], 0)} players with two or more ordered eligible deals ({if (is_pred(measure)) 'expected Black players, sum of P(Black), ' else 'Black players '}{fmt_pg(Flow12d[['repeat_black_players']], 0)})."),
+    glue("Deals are ordered by signing year within player. The first observed eligible deal is not the player's first contract: rookie deals, tags and tenders are not eligible, and deals signed before 2014 are not observed. Order indicators mark the second and the third-or-later observed deal (reference: the first observed deal); contracts (expected Black contracts) by order: {order_text}."),
+    glue("Two eligible contracts of one player in the same signing year have no observed order (OTC's row sequence is not a signing date). Of {fmt_pg(Flow12d[['eligible_contracts']], 0)} eligible contracts, {fmt_pg(Flow12d[['ambiguous_contracts']], 0)} in {fmt_pg(Flow12d[['ambiguous_cells']], 0)} such player-years are excluded, together with the {fmt_pg(Flow12d[['truncated_after_ambiguity']], 0)} later contracts of those {fmt_pg(Flow12d[['players_with_ambiguity']], 0)} players, so that deals on either side of a tie are never treated as consecutive; {fmt_pg(Flow12d[['single_deal_contracts']], 0)} contracts of players with a single ordered deal do not enter columns (1)-(3). Successive deals are strictly increasing in signing year ({change_cell('mean_gap_years', 1)} years apart on average)."),
+    glue("The player fixed effects absorb every time-invariant characteristic, including the race measure, so no race level is estimated: each {BlackLab} $\\times$ order coefficient is the difference between Black and white players in the change in log APY from the first observed deal to that deal, within player and within position $\\times$ year. Column (1) has no controls; column (2) adds career stage at signing (block A); column (3) adds production in the season before signing and career production before the signing year (blocks B and C), all dated before the signing year, as in Table \\ref{{tab:pay-gap-veteran}}. Pre-NFL signals{if (is_pred(measure)) ' and the race-prior covariates' else ''} are fixed within player and absorbed."),
+    UnsupportedNote12d,
+    glue("Columns (4)-(5) use {fmt_pg(nrow(Adjacent), 0)} adjacent observed deal pairs. The outcome is the change in log APY, with separate position $\\times$ signing-year fixed effects for both the earlier and later deal. These are flexible conditional change models, not an algebraically identical first-difference fit of columns (1)-(3). The share with unchanged APY is {change_cell('share_unchanged')}; the share changing by more than 0.10 log points is {change_cell('share_abs_change_over_0_10')}. Race coefficients describe differences in adjacent changes; column (5) adds differences in block A-C controls. Intervals between deals vary, so changes are per deal, not annual growth rates."),
+    "A player enters the repeat sample only if he signs a second eligible deal, which is itself a market outcome; the within-player comparisons describe the progression of players the market re-signed and say nothing about players who did not get a second deal.",
+    "Signing dates are observed only as years. Prior-season statistics can include games played after an early-January signing; timing is therefore approximate. The 2026 signing window is partial.",
+    "The joint $p$-values are player-clustered Wald tests that the race $\\times$ order interactions are jointly zero.",
+    BlockNotes[c("A", "B", "C", "Miss")], RCNote, PredDefNote,
+    NoteCluster, RefNote)),
+  name = "table-12d-pay-repeat-contracts", measure = measure,
+  add_rows = Rows12d, font_size = 8)
+Estimates <- c(Estimates, list(
+  tidy_terms(Models12d, c(OrderTerms, RaceOrdTerms, "BlackChange", "OtherChange")) |>
+    mutate(table = "table-12d", n_players = Flow12d[["repeat_players"]],
+           fixed_effects = if_else(model %in% names(Spec12d), FE12d,
+                                    paste(FE08, "+ PrevPosition^PrevYear")),
+           scale = if_else(model %in% names(Spec12d),
+             "Black-white log-APY-gap change versus first observed eligible deal",
+             "Black-white difference in adjacent log-APY change; per deal"),
+           inference = "Player-clustered SE; 95% CI; race scores held fixed"),
+  Joint12d |> transmute(table = "table-12d-joint", model, term, estimate = wald_stat,
+                        p_value = wald_p, df1, df2, nobs = nrow(RepeatData)),
+  ChangeSummary |> mutate(table = "table-12d-changes", model = "adjacent pairs",
+                          nobs = nrow(Adjacent)),
+  tibble(table = "table-12d-flow", model = "sample flow", term = names(Flow12d),
+         estimate = unname(Flow12d), nobs = nrow(VetData)),
+  DealsByOrder |> transmute(table = "table-12d-flow", model = "contracts by order",
+                            term = paste0("order_", OrderGroup), estimate = Contracts,
+                            support_black = BlackContracts, support_other = OtherContracts,
+                            nobs = nrow(RepeatData))))
+
+# ---------------------------------------------------------------------------
 # Table 13: rookie (draft) margin
 # ---------------------------------------------------------------------------
 
@@ -1542,40 +2278,179 @@ BirdieFml <- make_fml(YVet, BirdieX)
 # names independent of pay given race alone)
 BirdieFml0 <- as.formula(paste(YVet, "~ 1"))
 
-# One BIRDiE fit on rows idx: E[Y | R] by race (finite-population estimates,
-# coef()), the Black-white difference, the conditional gap (mean over players,
-# weighted by P(Black), of X_i'(beta_Black - beta_white), from the
-# race-specific linear predictors) and, for comparison, probability-weighted
-# means. The r_probs columns are ordered white, Black, other
-birdie_fit <- function(idx) {
+# Design matrix of X (intercept first; factor levels fixed on the full sample,
+# so bootstrap subsamples keep the same columns and ols_normal() zeroes any
+# level that is absent) for the regression-calibration comparators, and the
+# first main-sample contract of each player (ties in year_signed broken by
+# row order) for the one-row-per-player comparison
+BirdieM <- model.matrix(as.formula(paste("~", paste(BirdieX, collapse = " + "))),
+                        data = BirdieData)
+stopifnot(nrow(BirdieM) == nrow(BirdieData), colnames(BirdieM)[1] == "(Intercept)")
+BirdieData <- BirdieData |>
+  group_by(gsis_id) |>
+  mutate(FirstContract = row_number(year_signed) == 1L) |>
+  ungroup()
+stopifnot(sum(BirdieData$FirstContract) == n_distinct(BirdieData$gsis_id))
+
+# One BIRDiE EM fit; non-convergence is an error (the point fit then stops
+# the script, a bootstrap replication is dropped and counted)
+birdie_em <- function(rp, fml, d, label) {
+  fit <- suppressMessages(suppressWarnings(
+    birdie::birdie(rp, fml, data = as.data.frame(d), family = gaussian(),
+                   algorithm = "em")))
+  if (!isTRUE(fit$algo$converge)) {
+    stop(glue("12: BIRDiE EM ({label}) did not converge in {fit$algo$iters} iterations"),
+         call. = FALSE)
+  }
+  fit
+}
+
+# Conditional Black-white gaps on rows d (design M, normalised probabilities
+# rp, BIRDiE fit on the same rows), a ladder from BIRDiE to the common-slope
+# regression-calibration coefficient in which one thing changes per step:
+#   cond_gap        BIRDiE: race-specific slopes beta_r from the EM, gap
+#                   X_i'(beta_Black - beta_white), on estimable contrast rows,
+#                   weighted by posterior P(Black | Y, X, names, county)
+#   cond_gap_prior  the same BIRDiE slopes, averaged with the prior P(Black)
+#                   (under calibration given X both weightings estimate the
+#                   gap at the characteristics of Black players; they differ
+#                   only through the posterior update by pay)
+#   rc_int_prior    the same estimand by OLS instead of EM: regression
+#                   calibration with race-specific slopes, Y on X, P(Black) x X
+#                   and P(other) x X (under calibration given X the
+#                   coefficients on P(Black) x X are beta_Black - beta_white),
+#                   averaged with the prior P(Black)
+#   rc_same_x       regression calibration with common slopes, Y on P(Black),
+#                   P(other) and X: the coefficient is a variance-weighted
+#                   average of the X-specific gaps, a different contrast
+#   rc_nox          Y on P(Black) and P(other) only: the raw gap under
+#                   unconditional calibration (comparator of the
+#                   intercept-only BIRDiE)
+# cond_gap - cond_gap_prior (weights) and cond_gap_prior - rc_int_prior
+# (EM vs OLS slopes) are model disagreement at a fixed estimand;
+# rc_int_prior - rc_same_x is an estimand difference (contrast and slope
+# heterogeneity)
+cond_gaps <- function(d, M, rp, fit) {
+  y <- d[[YVet]]
+  p <- rp$pr_black
+  po <- rp$pr_other
+  lp <- fit$linpred
+  g_em <- lp[, 2] - lp[, 1]
+  w <- as.data.frame(fit$p_ryxs)[[2]]
+  rc <- race_contrast_fit(M, p, po, y)
+  supported <- rc$estimable
+  if (sum(p[supported]) <= 0 || sum(w[supported]) <= 0) {
+    stop("12: no estimable Black-white contrast with positive target weight")
+  }
+  c(cond_gap_full = weighted.mean(g_em, w),
+    cond_gap = weighted.mean(g_em[supported], w[supported]),
+    cond_gap_prior = weighted.mean(g_em[supported], p[supported]),
+    rc_int_prior = weighted.mean(rc$gap[supported], p[supported]),
+    rc_same_x = ols_normal(cbind(p, po, M), y)[[1]],
+    rc_nox = ols_normal(cbind(p, po, 1), y)[[1]],
+    support_n = sum(supported), support_pblack_share = sum(p[supported]) / sum(p),
+    interacted_rank = rc$rank, interacted_columns = rc$columns)
+}
+
+# One replication on rows idx: E[Y | R] by race (finite-population estimates,
+# coef()), the Black-white difference with and without X, the
+# probability-weighted means, the conditional-gap ladder on all contracts and
+# on the first contract of each player, and the steps of the ladder. The
+# r_probs columns are ordered white, Black, other. keep_fit attaches the
+# full-sample BIRDiE fit (diagnostics)
+birdie_fit <- function(idx, keep_fit = FALSE) {
   d <- BirdieData[idx, ]
+  M <- BirdieM[idx, , drop = FALSE]
   rp <- as.data.frame(d[c("pr_white", "pr_black", "pr_other")])
   rp <- rp / rowSums(rp)
-  fit <- suppressMessages(suppressWarnings(
-    birdie::birdie(rp, BirdieFml, data = as.data.frame(d), family = gaussian(),
-                   algorithm = "em")))
-  fit0 <- suppressMessages(suppressWarnings(
-    birdie::birdie(rp, BirdieFml0, data = as.data.frame(d), family = gaussian(),
-                   algorithm = "em")))
+  fit <- birdie_em(rp, BirdieFml, d, "with X")
+  fit0 <- birdie_em(rp, BirdieFml0, d, "intercept only")
   ey <- as.numeric(coef(fit))
   ey0 <- as.numeric(coef(fit0))
-  lp <- fit$linpred
-  # Weights: BIRDiE's posterior P(R = Black | Y, X, names, county), which
-  # estimates the mean over Black players under the model; the prior P(Black)
-  # would do so only if it were calibrated given X
-  w <- as.data.frame(fit$p_ryxs)[[2]]
-  c(ey_white = ey[1], ey_black = ey[2], ey_other = ey[3], marg_gap = ey[2] - ey[1],
-    marg_gap0 = ey0[2] - ey0[1],
-    cond_gap = weighted.mean(lp[, 2] - lp[, 1], w),
-    pw_gap = weighted.mean(d[[YVet]], rp$pr_black) - weighted.mean(d[[YVet]], rp$pr_white))
+  gaps <- cond_gaps(d, M, rp, fit)
+  first <- which(d$FirstContract)
+  d1 <- d[first, ]
+  rp1 <- rp[first, ]
+  fit1 <- birdie_em(rp1, BirdieFml, d1, "first contract per player")
+  gaps1 <- cond_gaps(d1, M[first, , drop = FALSE], rp1, fit1)
+  out <- c(ey_white = ey[1], ey_black = ey[2], ey_other = ey[3], marg_gap = ey[2] - ey[1],
+           marg_gap0 = ey0[2] - ey0[1], rc_nox = gaps[["rc_nox"]],
+           pw_gap = weighted.mean(d[[YVet]], rp$pr_black) - weighted.mean(d[[YVet]], rp$pr_white),
+           gaps[c("cond_gap_full", "cond_gap", "cond_gap_prior", "rc_int_prior", "rc_same_x",
+                  "support_n", "support_pblack_share", "interacted_rank", "interacted_columns")],
+           cond_gap_first = gaps1[["cond_gap"]], rc_int_prior_first = gaps1[["rc_int_prior"]],
+           rc_same_x_first = gaps1[["rc_same_x"]],
+           support_n_first = gaps1[["support_n"]],
+           support_pblack_share_first = gaps1[["support_pblack_share"]],
+           diff_weights = gaps[["cond_gap"]] - gaps[["cond_gap_prior"]],
+           diff_slopes = gaps[["cond_gap_prior"]] - gaps[["rc_int_prior"]],
+           diff_contrast = gaps[["rc_int_prior"]] - gaps[["rc_same_x"]],
+           diff_total = gaps[["cond_gap"]] - gaps[["rc_same_x"]])
+  if (keep_fit) attr(out, "fit") <- fit
+  out
 }
-BirdiePoint <- birdie_fit(seq_len(nrow(BirdieData)))
+BirdiePoint <- birdie_fit(seq_len(nrow(BirdieData)), keep_fit = TRUE)
+BirdieFitPoint <- attr(BirdiePoint, "fit")
+attr(BirdiePoint, "fit") <- NULL
+
+# Regression calibration with the same X by feols (common slopes; SE
+# clustered by player) must reproduce the matrix version, and the main
+# specification (table 08, column (5)) is the reference
+BirdieRC <- feols(make_fml(YVet, c("Black", "OtherRace", BirdieX)), data = BirdieData,
+                  vcov = ~gsis_id, notes = FALSE)
+rc_row <- function(m) coeftable(m)["Black", 1:2]
+if (abs(rc_row(BirdieRC)[[1]] - BirdiePoint[["rc_same_x"]]) > 1e-6) {
+  stop(glue("12: table 26: feols and matrix regression calibration differ ",
+            "({signif(rc_row(BirdieRC)[[1]], 6)} vs {signif(BirdiePoint[['rc_same_x']], 6)})"))
+}
+
+# Posterior diagnostics of the full-sample BIRDiE fit (point fit only): how
+# far the pay update moves P(Black) from the prior, and, because BIRDiE
+# treats each contract's race as its own latent variable, how much the
+# posterior varies across the contracts of one player (whose race does not)
+BirdiePrior <- BirdieData$pr_black / (BirdieData$pr_white + BirdieData$pr_black + BirdieData$pr_other)
+BirdiePost <- as.data.frame(BirdieFitPoint$p_ryxs)[[2]]
+stopifnot(length(BirdiePost) == nrow(BirdieData))
+WithinPlayer26 <- tibble(gsis_id = BirdieData$gsis_id, post = BirdiePost) |>
+  group_by(gsis_id) |>
+  filter(n() >= 2) |>
+  summarise(sd = sd(post), range = max(post) - min(post), .groups = "drop")
+BirdieDiag <- tibble(
+  term = c("post_prior_mad", "post_prior_cor", "post_prior_move20",
+           "within_player_sd", "within_player_range25", "n_players_multi",
+           "sigma", "em_iters", "n_first", "support_n", "support_pblack_share",
+           "support_n_first", "support_pblack_share_first",
+           "interacted_rank", "interacted_columns"),
+  Row = c("Mean $|$posterior $-$ prior$|$ P(Black)",
+          "Correlation of posterior and prior P(Black)",
+          "Share of contracts with $|$posterior $-$ prior$|$ $>$ 0.2",
+          "Mean within-player SD of posterior P(Black) (players with 2+ contracts)",
+          "Share of such players with posterior range $>$ 0.25",
+          "Players with 2+ contracts",
+          "Residual SD $\\hat\\sigma$ (common to the three race groups)",
+          "EM iterations",
+          "Contracts in the one-per-player sample",
+          "Contracts with an estimable Black-white contrast",
+          "Share of prior Black weight on estimable contrasts",
+          "First contracts with an estimable contrast",
+          "Share of first-contract prior Black weight on estimable contrasts",
+          "Interacted design rank", "Interacted design columns"),
+  estimate = c(mean(abs(BirdiePost - BirdiePrior)), cor(BirdiePost, BirdiePrior),
+               mean(abs(BirdiePost - BirdiePrior) > 0.2),
+               mean(WithinPlayer26$sd), mean(WithinPlayer26$range > 0.25),
+               nrow(WithinPlayer26), BirdieFitPoint$sigma, BirdieFitPoint$algo$iters,
+               sum(BirdieData$FirstContract),
+               unname(BirdiePoint[c("support_n", "support_pblack_share",
+                                   "support_n_first", "support_pblack_share_first",
+                                   "interacted_rank", "interacted_columns")])))
+print(BirdieDiag)
 
 # Player-cluster bootstrap (birdie's em_boot does not return replicate
-# coefficients, so the conditional gap needs its own resampling): resample
-# players with replacement and refit by EM; failed replications are dropped.
-# The draws are made up front, so the results do not depend on the number of
-# forked workers (Cores)
+# coefficients, so the conditional gaps need their own resampling): resample
+# players with replacement and refit by EM; replications whose EM fails or
+# does not converge are dropped and counted, and fewer than half successful
+# stops the script. The draws are made up front, so the results do not
+# depend on the number of forked workers (Cores)
 set.seed(20261003)
 BirdieRowsByPlayer <- split(seq_len(nrow(BirdieData)), BirdieData$gsis_id)
 BirdieDraws <- map(seq_len(BootReps), \(r) {
@@ -1583,58 +2458,110 @@ BirdieDraws <- map(seq_len(BootReps), \(r) {
   unlist(BirdieRowsByPlayer[draw], use.names = FALSE)
 })
 T0Birdie <- Sys.time()
-BirdieBoot <- parallel::mclapply(BirdieDraws, \(idx) {
-  tryCatch(birdie_fit(idx), error = \(e) NULL)
-}, mc.cores = Cores) |>
-  compact() |>
-  map_dfr(as_tibble_row)
+BirdieBootRaw <- parallel::mclapply(BirdieDraws, \(idx) {
+  tryCatch(birdie_fit(idx), error = \(e) conditionMessage(e))
+}, mc.cores = Cores)
+BirdieBootOk <- map_lgl(BirdieBootRaw, is.numeric)
+BirdieBoot <- map_dfr(BirdieBootRaw[BirdieBootOk], as_tibble_row)
+if (any(!BirdieBootOk)) {
+  message(glue("12: BIRDiE bootstrap failures: ",
+               "{paste(head(unique(unlist(BirdieBootRaw[!BirdieBootOk])), 3), collapse = ' | ')}"))
+}
 message(glue("12: BIRDiE bootstrap, {nrow(BirdieBoot)} of {BootReps} replications in ",
              "{round(difftime(Sys.time(), T0Birdie, units = 'secs'))}s"))
+if (nrow(BirdieBoot) < BootReps / 2) {
+  stop(glue("12: BIRDiE bootstrap: only {nrow(BirdieBoot)} of {BootReps} replications succeeded"))
+}
 
-# Regression calibration with the same X (common slopes; SE clustered by
-# player), and the main specification (table 08, column (5)) for reference
-BirdieRC <- feols(make_fml(YVet, c("Black", "OtherRace", BirdieX)), data = BirdieData,
-                  vcov = ~gsis_id, notes = FALSE)
-rc_row <- function(m) coeftable(m)["Black", 1:2]
-BirdieTerms <- c("ey_white", "ey_black", "ey_other", "marg_gap", "marg_gap0", "pw_gap",
-                 "cond_gap")
-Res26 <- tibble(
-  term = c(BirdieTerms, "rc_same_x", "rc_main"),
-  Row = c("White", "Black", "Other race", "Black $-$ white",
-          "Black $-$ white, intercept-only BIRDiE (no X)",
-          "Black $-$ white, probability-weighted means",
-          "BIRDiE conditional gap",
-          "Regression calibration, same X",
-          "Regression calibration, main specification (Table \\ref{tab:pay-gap-veteran}, column (5))"),
-  estimate = c(BirdiePoint[BirdieTerms],
-               rc_row(BirdieRC)[[1]], rc_row(Models08[["(5)"]])[[1]]),
-  std_error = c(map_dbl(BirdieTerms, \(k) sd(BirdieBoot[[k]], na.rm = TRUE)),
-                rc_row(BirdieRC)[[2]], rc_row(Models08[["(5)"]])[[2]]),
-  se_type = c(rep("bootstrap", length(BirdieTerms)), "cluster", "cluster"))
+boot_se <- function(k) sd(BirdieBoot[[k]])
+Panels26 <- list(
+  "A. Mean log APY by race, E[Y $|$ R], and raw Black-white gap" = tibble(
+    term = c("ey_white", "ey_black", "ey_other", "marg_gap", "marg_gap0", "rc_nox", "pw_gap"),
+    Row = c("White (BIRDiE, with X)", "Black (BIRDiE, with X)", "Other race (BIRDiE, with X)",
+            "Black $-$ white (BIRDiE, with X)",
+            "Black $-$ white, intercept-only BIRDiE (no X)",
+            "Black $-$ white, regression calibration without X (log APY on P(Black), P(other race))",
+            "Black $-$ white, probability-weighted means")),
+  "B. Conditional gaps: unrestricted EM and the estimable-contrast comparison" = tibble(
+    term = c("cond_gap_full", "cond_gap", "cond_gap_prior", "rc_int_prior", "rc_same_x", "rc_main"),
+    Row = c("BIRDiE, unrestricted Black characteristics (includes unsupported extrapolation)",
+            "BIRDiE: EM slopes, posterior-weighted on estimable contrasts",
+            "BIRDiE: EM slopes, prior-weighted on estimable contrasts",
+            "Interacted regression calibration, prior-weighted on estimable contrasts",
+            "Regression calibration, same X, common slopes",
+            "Regression calibration, main specification (Table \\ref{tab:pay-gap-veteran}, column (5))")),
+  "C. Steps of panel B (bootstrap SE of each difference)" = tibble(
+    term = c("diff_weights", "diff_slopes", "diff_contrast", "diff_total"),
+    Row = c("Weights: posterior $-$ prior (same EM slopes); model disagreement",
+            "Slopes: EM $-$ OLS (same prior weights); model disagreement",
+            "Contrast: supported race-specific average $-$ full-sample common slope (OLS)",
+            "Total: supported BIRDiE gap $-$ common-slope regression calibration")),
+  "D. One contract per player (first main-sample contract)" = tibble(
+    term = c("cond_gap_first", "rc_int_prior_first", "rc_same_x_first"),
+    Row = c("BIRDiE conditional gap on estimable contrasts, posterior-weighted",
+            "Interacted regression calibration on estimable contrasts, prior-weighted",
+            "Regression calibration, same X, common slopes")),
+  "E. Posterior diagnostics of the BIRDiE fit (point values, no SE)" =
+    select(BirdieDiag, term, Row))
+Res26 <- imap_dfr(Panels26, \(p, panel) mutate(p, panel = panel)) |>
+  mutate(estimate = case_when(
+           term == "rc_main" ~ rc_row(Models08[["(5)"]])[[1]],
+           term %in% BirdieDiag$term ~ BirdieDiag$estimate[match(term, BirdieDiag$term)],
+           TRUE ~ unname(BirdiePoint[term])),
+         std_error = case_when(
+           term == "rc_same_x" ~ rc_row(BirdieRC)[[2]],
+           term == "rc_main" ~ rc_row(Models08[["(5)"]])[[2]],
+           term %in% BirdieDiag$term ~ NA_real_,
+           TRUE ~ map_dbl(term, \(k) if (k %in% names(BirdieBoot)) boot_se(k) else NA_real_)),
+         se_type = case_when(term %in% c("rc_same_x", "rc_main") ~ "cluster",
+                             term %in% BirdieDiag$term ~ "none",
+                             TRUE ~ "bootstrap"))
+stopifnot(!anyNA(Res26$estimate), !anyNA(Res26$std_error[Res26$se_type != "none"]))
+Ends26 <- cumsum(map_int(Panels26, nrow))
+
+# Facts quoted in the notes
+r26 <- function(k) Res26$estimate[Res26$term == k]
+s26 <- function(k) Res26$std_error[Res26$term == k]
+cell26 <- function(k) glue("{fmt_pg(r26(k), 3)} ({fmt_pg(s26(k), 3)})")
+CountTerms26 <- c("n_players_multi", "em_iters", "n_first", "support_n",
+                  "support_n_first", "interacted_rank", "interacted_columns")
 
 Tab26 <- Res26 |>
-  transmute(Row, Estimate = fmt_pg(estimate, 3), SE = fmt_se_pg(std_error, 3)) |>
+  transmute(Row, Estimate = if_else(term %in% CountTerms26, fmt_pg(estimate, 0), fmt_pg(estimate, 3)),
+            SE = fmt_se_pg(std_error, 3)) |>
   kbl(format = "latex", booktabs = TRUE, escape = FALSE, linesep = "", align = "lrr",
       col.names = c("", "Log APY", "SE"),
-      caption = paste0("Race gap in veteran-contract pay: BIRDiE cross-check",
+      caption = paste0("Race gap in veteran-contract pay: BIRDiE cross-check and diagnosis of its disagreement with regression calibration",
                        if (!is_primary_measure(measure)) paste0(" (", measure, " race measure)"),
                        " \\label{tab:pay-gap-birdie}")) |>
-  kable_styling(latex_options = c("hold_position")) |>
-  pack_rows("A. Mean log APY by race, E[Y $|$ R] (BIRDiE)", 1, 6, escape = FALSE) |>
-  pack_rows("B. Conditional Black-white gap", 7, 9) |>
+  kable_styling(latex_options = c("hold_position", "scale_down"), font_size = 8)
+for (i in seq_along(Panels26)) {
+  Tab26 <- pack_rows(Tab26, names(Panels26)[i], Ends26[i] - nrow(Panels26[[i]]) + 1, Ends26[i],
+                     escape = FALSE)
+}
+Tab26 <- Tab26 |>
   add_notes(drop_empty(c(
-    glue("This table compares the regression-calibration estimates of equation (1) with BIRDiE \\citep{{mccartan2025birdie}}, which treats race as a latent variable whose prior is the race prediction (P(white), P(Black), P(other race)) and fits a Normal linear model of log APY with race-specific coefficients by EM. ",
-         "The sample is the main sample of Table \\ref{{tab:pay-gap-veteran}}: {fmt_pg(nrow(BirdieData), 0)} freely bargained veteran contracts (UFA and extensions) of {fmt_pg(n_distinct(BirdieData$gsis_id), 0)} players signed 2014-2026."),
+    glue("This table compares the regression-calibration estimates of equation (1) with BIRDiE \\citep{{mccartan2025birdie}}, which treats race as a latent variable whose prior is the race prediction (P(white), P(Black), P(other race)) and fits a Normal linear model of log APY with race-specific coefficients and a common residual variance by EM, and it traces their disagreement to its sources. ",
+         "Panels A-C use the same race probabilities (P(Black) is the predicted probability of non-Hispanic Black alone) and the main sample of Table \\ref{{tab:pay-gap-veteran}}: {fmt_pg(nrow(BirdieData), 0)} freely bargained veteran contracts (UFA and extensions) of {fmt_pg(n_distinct(BirdieData$gsis_id), 0)} players signed 2014-2026. The adjusted models share the parsimonious X defined below, except for the separately labelled Table 8 column-(5) benchmark with its richer controls."),
     glue("X is parsimonious: OTC market position group, signing-year bucket (2014-16, 2017-19, 2020-22, 2023-26), experience bin, the race prior's covariates (position at NFL entry, entry era, draft-round bucket, college type, whether a home county is known{if (measure == 'preddoc') ', whether a Wikipedia article was found, career length' else ''}), prior-season games played and games started, career games, log draft pick with missing and undrafted indicators, and the athletic score with its missing indicator."),
-    "Panel A reports BIRDiE's finite-sample estimates of mean log APY by race and their difference (the raw gap, without conditioning on position or year), from the model with X and from an intercept-only model, which does not depend on the race-specific X model; and, for comparison, the difference between means weighted by P(Black) and by P(white), which mixes the groups when the probabilities are not 0 or 1 and also picks up any relation between the prior covariates and pay, so its bias has no definite sign.",
-    "Panel B: the BIRDiE conditional gap is the mean over contracts, weighted by BIRDiE's posterior probability of being Black given pay, X, names and county, of $X_i'(\\hat\\beta_{Black} - \\hat\\beta_{white})$, the gap at the characteristics of Black players allowing every coefficient to differ by race. The regression-calibration rows regress log APY on P(Black), P(other race) and controls with common slopes: the same X, and the main specification (position $\\times$ year-signed fixed effects, blocks A-D and the prior-covariate fixed effects).",
-    "Both estimators assume that first name, surname and home county are independent of pay given race and X, and both treat the predicted probabilities as P(race $|$ names, county, X), i.e. as calibrated given X, although X includes characteristics (games, draft slot, athletic score) that are not in the prior; regression calibration in addition assumes common slopes.",
-    if (is_pred(measure)) "With correctly specified models and probabilities calibrated given X, the BIRDiE raw gaps with and without X would agree, as would the conditional BIRDiE and regression-calibration gaps up to the difference between race-specific and common slopes; where they differ, the differences point to sensitivity to the race-specific X model or to probabilities that are not calibrated given X, so the table is a diagnostic rather than an independent estimate of the gap." else "",
-    if (!is_pred(measure)) glue("Under the {measure} measure the race regressors are 0/1 indicators, so BIRDiE reduces to race-specific regressions and the probability-weighted means are group means.") else "",
-    glue("BIRDiE standard errors come from a player-cluster bootstrap with {nrow(BirdieBoot)} successful replications of {BootReps} (players resampled with replacement; BIRDiE refit by EM in each); regression-calibration standard errors are clustered at the player level."),
+    "Panel A reports BIRDiE's finite-population estimates of mean log APY by race and their difference (the raw gap, without conditioning on position or year), from the model with X and from an intercept-only model; the regression of log APY on P(Black) and P(other race) alone estimates the same raw gap under the same assumption as the intercept-only model (calibration unconditional on X), so the two differ only through BIRDiE's posterior update of race by pay; the difference between means weighted by P(Black) and by P(white) mixes the groups when the probabilities are not 0 or 1 and is descriptive.",
+    glue("Panel B first reports the unrestricted EM average, which includes counterfactuals not identified by the interacted design. The next three rows compare EM and OLS on the same estimable Black-white contrasts: {fmt_pg(BirdiePoint[['support_n']], 0)} contracts, carrying {fmt_pg(100 * BirdiePoint[['support_pblack_share']], 3)}\\% of prior Black weight. All contracts and all X columns remain in every fit. A scaled QR decomposition tests whether each contrast is orthogonal to the design's null space; aliased coefficients are not interpreted as zero effects. The EM gap $X_i'(\\hat\\beta_{{Black}}-\\hat\\beta_{{white}})$ is averaged first with posterior Black weights and then prior Black weights. The OLS comparison fits log APY on X, P(Black) $\\times$ X and P(other race) $\\times$ X and uses the same prior weights and estimable rows. The common-slope rows retain the full sample and therefore change both slope restrictions and the averaging target. The last row is the main specification of Table \\ref{{tab:pay-gap-veteran}}."),
+    glue("Panel C reports the weighting step ({cell26('diff_weights')}) and EM-versus-OLS step ({cell26('diff_slopes')}) at the same estimable contrasts. The contrast step ({cell26('diff_contrast')}) compares the supported race-specific average with the full-sample common-slope coefficient, a different estimand. These steps sum to the total ({cell26('diff_total')}); bootstrap standard errors of each difference use the same replications."),
+    "Panel D repeats the three X-based estimators on the first main-sample contract of each player, because BIRDiE treats each contract's race as a separate latent variable: a player's later contracts update his race afresh, and the within-player variation of the posterior in panel E measures how far the fitted model departs from one race per player. Panel E also reports how far the pay update moves P(Black) from the prior.",
+    "Both estimators assume that first name, surname and home county are independent of pay given race and X, and both treat the predicted probabilities as P(race $|$ names, county, X), i.e. as calibrated given X, although X includes characteristics (games, draft slot, athletic score) that are not in the prior; the common-slope rows in addition assume common slopes, and BIRDiE in addition assumes Normal residuals with one variance for the three groups, which lets the EM reassign race by residual pay. The documented-race check of calibration given the controls is in the notes to Table \\ref{tab:pay-gap-veteran}.",
+    if (is_pred(measure)) "With correctly specified models and probabilities calibrated given X, the BIRDiE raw gaps with and without X would agree, the panel C model-disagreement steps would be zero and only the contrast step would remain; where they are not, the table does not say which estimator is right: BIRDiE's extra information is the Normal model, not observed race, so the table is a diagnostic rather than an independent estimate of the gap." else "",
+    if (!is_pred(measure)) glue("Under the {measure} measure the race regressors are 0/1 indicators, so BIRDiE reduces to race-specific regressions, the probability-weighted means are group means and the posterior equals the prior.") else "",
+    glue("BIRDiE and interacted-regression standard errors come from a player-cluster bootstrap with {nrow(BirdieBoot)} successful replications of {BootReps}. Players are resampled with replacement, the three EM models refit, and estimable contrast support recomputed in each replication; failed or nonconvergent replications are counted and excluded. These SEs describe the support-adaptive diagnostic, not the unrestricted heterogeneous gap. Common-slope regression-calibration SEs cluster by player; panel E reports point diagnostics without SEs."),
     RefNote, race_measure_note(measure, "person"))))
 save_exhibit_tex(Tab26, "table-26-pay-gap-birdie", measure)
-save_estimates(mutate(Res26, boot_reps = nrow(BirdieBoot), nobs = nrow(BirdieData)) |>
+save_estimates(mutate(Res26, boot_reps = nrow(BirdieBoot), nobs = nrow(BirdieData),
+                      nobs_first = sum(BirdieData$FirstContract),
+                      contrast_target = if_else(term %in% c("cond_gap", "cond_gap_prior",
+                        "rc_int_prior", "cond_gap_first", "rc_int_prior_first"),
+                        "Black characteristics with estimable interacted contrast",
+                        "See panel and term"),
+                      support_n = BirdiePoint[["support_n"]],
+                      support_pblack_share = BirdiePoint[["support_pblack_share"]]) |>
                  select(-Row), "12-pay-gap-birdie", measure)
 
 # ---------------------------------------------------------------------------

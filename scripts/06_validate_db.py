@@ -26,6 +26,7 @@ KEYS = {
     "staff_snapshots": "franchise_id, season, snapshot",
     "staff_team_season": "franchise_id, season, person_id, role_std",
     "staff_persons": "person_id",
+    "nfl_hc_history": "franchise_id, season",
     "staff_person_wiki_signals": "person_id",
     "college_players": "season, player_id, team",
     "recruits": "recruit_id",
@@ -107,6 +108,52 @@ def main():
         WHERE season >= {STAFF_SEASONS[0]} GROUP BY 1, 2 HAVING n < 15)""")
     check("WARN", "template-era staffs list at least 15 people", thin == 0,
           f"{thin} team-seasons below 15")
+
+    print("Snapshot timing")
+    bad = scalar(con, """SELECT count(*) FROM staff_snapshots
+        WHERE source = 'staff_template' AND
+          (target_date IS NULL OR revision_timestamp IS NULL
+           OR revision_timestamp > timezone('UTC', target_date::TIMESTAMP))""")
+    check("CRITICAL", "template revisions precede their UTC target",
+          bad == 0, f"{bad} future or undated snapshots")
+    bad = scalar(con, """WITH openers AS (
+        SELECT franchise_id, season, min(CAST(gameday AS DATE)) AS opener
+        FROM nfl_team_games WHERE season_type = 'REG' GROUP BY 1, 2)
+        SELECT count(*) FROM staff_snapshots s
+        LEFT JOIN openers o USING (franchise_id, season)
+        WHERE s.source = 'staff_template' AND s.snapshot = 'preseason'
+          AND (o.opener IS NULL OR s.target_date IS DISTINCT FROM o.opener)""")
+    check("CRITICAL", "opening staff targets equal each team's first REG game",
+          bad == 0, f"{bad} mismatches")
+    bad = scalar(con, """SELECT count(*) FROM staff_team_season s
+        WHERE s.in_preseason AND NOT EXISTS (
+          SELECT 1 FROM staff_entries e
+          WHERE e.franchise_id = s.franchise_id AND e.season = s.season
+            AND e.person_id = s.person_id AND e.role_std = s.role_std
+            AND e.snapshot = 'preseason')""")
+    check("CRITICAL", "opening roles have opening-snapshot provenance",
+          bad == 0, f"{bad} roles without opening entries")
+
+    if exists(con, "nfl_hc_history"):
+        print("Historical head-coach coverage")
+        bad = scalar(con, """WITH coverage AS (
+            SELECT season, count(*) n FROM nfl_hc_history GROUP BY season)
+            SELECT count(*) FROM range(1989, 1999) y(season)
+            LEFT JOIN coverage c USING (season)
+            WHERE c.n IS DISTINCT FROM CASE WHEN y.season < 1995
+              THEN 28 ELSE 30 END""")
+        check("CRITICAL", "historical coach panel covers all 1989-1998 teams",
+              bad == 0, f"{bad} seasons with missing or excess teams")
+        bad = scalar(con, """SELECT count(*) FROM nfl_hc_history
+            WHERE wins IS NULL OR losses IS NULL OR ties IS NULL
+              OR games IS NULL OR games != 16
+              OR wins + losses + ties != games OR win_pct IS NULL
+              OR abs(win_pct - (wins + 0.5 * ties) / games) > 1e-9
+              OR opening_coach_name IS NULL OR trim(opening_coach_name) = ''
+              OR n_head_coaches IS NULL OR n_head_coaches < 1
+              OR source_url IS NULL OR coach_source_url IS NULL""")
+        check("CRITICAL", "historical records and opening coaches reconcile",
+              bad == 0, f"{bad} invalid or unsourced rows")
 
     print("Referential integrity")
     pairs = [

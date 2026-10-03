@@ -1,61 +1,60 @@
-\begin{table}[!h]
-\centering\centering
+\begin{table}[H]
+\centering\centering\centering
 \caption{Staff composition: placebo leads and selection on past performance \label{tab:staff-diversity-placebo}}
 \centering
 \resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
-\begin{threeparttable}
 \begin{tabular}[t]{lccccc}
 \toprule
   & (1) & (2) & (3) & (4) & (5)\\
 \midrule
-Coaches' expected share Black & -0.211 & -0.213 & -0.278* & -0.425** & -0.393**\\
- & (0.148) & (0.146) & (0.158) & (0.173) & (0.161)\\
-Coaches' expected share Black, season $t+1$ & -0.183 & -0.179 & -0.385 &  & \\
- & (0.146) & (0.152) & (0.233) &  & \\
-P(Black): head coach & -0.057 & -0.053 & -0.058 & 0.002 & 0.030\\
- & (0.072) & (0.068) & (0.070) & (0.073) & (0.063)\\
-P(Black): head coach, season $t+1$ &  & -0.007 & 0.026 &  & \\
- &  & (0.034) & (0.039) &  & \\
-P(Black): OC, season $t+1$ &  &  & 0.134* &  & \\
- &  &  & (0.075) &  & \\
-P(Black): DC, season $t+1$ &  &  & 0.032 &  & \\
- &  &  & (0.079) &  & \\
-P(Black): GM, season $t+1$ &  &  & 0.057 &  & \\
- &  &  & (0.049) &  & \\
-Coordinators' expected share Black, $t+1$ &  &  & -0.166 &  & \\
- &  &  & (0.208) &  & \\
-Position coaches' expected share Black, $t+1$ &  &  & 0.216 &  & \\
- &  &  & (0.140) &  & \\
-Front office expected share Black, $t+1$ &  &  & -0.011 &  & \\
- &  &  & (0.271) &  & \\
-P(Black): offensive coordinator & 0.009 & 0.009 & -0.027 &  & 0.054\\
- & (0.043) & (0.043) & (0.041) &  & (0.050)\\
-P(Black): defensive coordinator & -0.017 & -0.017 & -0.005 &  & -0.038\\
- & (0.035) & (0.036) & (0.041) &  & (0.039)\\
-P(Black): general manager & -0.026 & -0.026 & -0.038 &  & 0.066\\
- & (0.062) & (0.062) & (0.064) &  & (0.056)\\
+Coaches' expected share Black & -0.140 & -0.134 & -0.167 & -0.459** & -0.444**\\
+ & (0.163) & (0.162) & (0.192) & (0.172) & (0.166)\\
+Coaches' expected share Black, season $t+1$ & -0.265* & -0.278* & -0.226 &  & \\
+ & (0.131) & (0.141) & (0.236) &  & \\
+P(Black): head coach & -0.085 & -0.103 & -0.084 & 0.012 & 0.039\\
+ & (0.076) & (0.075) & (0.085) & (0.074) & (0.063)\\
+P(Black): head coach, season $t+1$ &  & 0.027 & 0.050 &  & \\
+ &  & (0.046) & (0.065) &  & \\
+P(Black): OC, season $t+1$ &  &  & 0.116 &  & \\
+ &  &  & (0.096) &  & \\
+P(Black): DC, season $t+1$ &  &  & 0.015 &  & \\
+ &  &  & (0.085) &  & \\
+P(Black): GM, season $t+1$ &  &  & 0.035 &  & \\
+ &  &  & (0.054) &  & \\
+Coordinators' expected share Black, $t+1$ &  &  & -0.139 &  & \\
+ &  &  & (0.211) &  & \\
+Position coaches' expected share Black, $t+1$ &  &  & 0.005 &  & \\
+ &  &  & (0.151) &  & \\
+Front office expected share Black, $t+1$ &  &  & 0.093 &  & \\
+ &  &  & (0.314) &  & \\
+P(Black): offensive coordinator & 0.023 & 0.022 & -0.046 &  & 0.063\\
+ & (0.048) & (0.048) & (0.056) &  & (0.049)\\
+P(Black): defensive coordinator & -0.018 & -0.018 & -0.000 &  & -0.038\\
+ & (0.034) & (0.035) & (0.041) &  & (0.038)\\
+P(Black): general manager & -0.023 & -0.024 & -0.051 &  & 0.073\\
+ & (0.063) & (0.064) & (0.069) &  & (0.055)\\
 \midrule
-Observations & 575 & 575 & 575 & 608 & 608\\
-R$^2$ & 0.340 & 0.340 & 0.366 & 0.217 & 0.310\\
-Within R$^2$ & 0.191 & 0.191 & 0.223 & 0.033 & 0.148\\
+Observations & 576 & 576 & 492 & 608 & 608\\
+R$^2$ & 0.330 & 0.330 & 0.378 & 0.217 & 0.312\\
+Within R$^2$ & 0.178 & 0.178 & 0.199 & 0.034 & 0.151\\
 Season FE & Yes & Yes & Yes & Yes & Yes\\
 Franchise FE & Yes & Yes & Yes & Yes & Yes\\
 Controls (column 4 of Table 19) & Yes & Yes & Yes & No & No\\
 Roster controls & Lagged & Lagged & Lagged & No & Season $t$\\
 Outcome & Win \% ($t$) & Win \% ($t$) & Win \% ($t$) & Win \% ($t-1$) & Win \% ($t-1$)\\
 Model-only prior controls & Yes & Yes & Yes & Yes & Yes\\
-Mean of outcome & 0.500 & 0.500 & 0.500 & 0.500 & 0.500\\
-Joint test of all leads, $p$-value &  &  & 0.102 &  & \\
-WCB $p$-value: coaches' share & 0.168 & 0.155 & 0.096 & 0.032 & 0.031\\
-WCB $p$-value: coaches' share, $t+1$ & 0.206 & 0.237 & 0.114 &  & \\
-WCB $p$-value: head coach & 0.467 & 0.474 & 0.457 & 0.980 & 0.657\\
-WCB $p$-value: head coach, $t+1$ &  & 0.828 & 0.496 &  & \\
+Mean of outcome & 0.500 & 0.500 & 0.495 & 0.500 & 0.500\\
+Joint test of all leads, $p$-value &  &  & 0.597 &  & \\
+WCB $p$-value: coaches' share & 0.412 & 0.423 & 0.411 & 0.020 & 0.020\\
+WCB $p$-value: coaches' share, $t+1$ & 0.042 & 0.049 & 0.346 &  & \\
+WCB $p$-value: head coach & 0.313 & 0.227 & 0.366 & 0.872 & 0.572\\
+WCB $p$-value: head coach, $t+1$ &  & 0.562 & 0.448 &  & \\
 \bottomrule
 \multicolumn{6}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
-\end{tabular}
-\begin{tablenotes}[para]
-\item \textit{Notes:} 
-\item This table includes placebo and selection versions of equation (3) on FullStaffObserved team-seasons (2007-2025). Columns (1)-(3) add next-season staff composition to the column-(4) specification of Table 19: the coaches' Black share (column 1), the head coach's race (column 2), and the OC, DC and GM regressors and the coordinators', position coaches' and front-office shares (column 3; role regressors zero-filled with missing indicators, group shares not filled). The 2025 season and seasons without an observed next season drop out. Conditional on current composition, next season's composition should not predict this season's performance unless unobserved franchise trends drive both. A nonzero lead is also expected if staff are replaced in response to season-$t$ results (firings after bad seasons, poaching after good ones) even when current composition has a causal effect, so the test is informative mainly when the leads are small. The joint test of all leads in column (3) is a cluster-robust Wald test. Columns (4) and (5) regress the previous season's win percentage on current composition: a nonzero coefficient means that past performance predicts current staff composition (selection), the threat that the lagged-outcome controls address. Column (5) adds the role-holder regressors and season-$t$ roster controls (cap share, mean log draft pick, mean age, roster Black share). Under the predicted measure the next-season shares are controlled by the next-season mean priors; no prior exists for the next-season role holders (HC, OC, DC, GM), so those leads enter without one. Under the predicted measure, staff shares are expected shares (mean member P(Black)), role-holder regressors are the holder's P(Black), and every specification controls for the matching model-only priors (the members' mean prior for each share, the holder's prior for each role holder); see the notes to Table 19 on their measurement and Table 29 for the other race measures. Role-holder regressors (HC, OC, DC, GM) are the holder's predicted probability of being Black; they are zero-filled when the role has no listed holder (e.g. teams without a GM title) and each enters with a missing indicator, so no team-season is dropped for a missing role holder. Standard errors, in parentheses, are clustered at the franchise level (32 clusters). Wild cluster bootstrap-t $p$-values (restricted, Webb six-point weights, 9,999 replications, clustered by franchise) are reported in the bottom panel because 32 clusters are few. HC race coefficients are subject to the glass-cliff threat: if Black head coaches are hired into persistently worse situations than the controls capture, the coefficient on a level outcome is biased downward. LagWinPct and LagExpectedWins condition on the situation the coach inherits. Race is predicted, not observed: each person's probability of being non-Hispanic Black combines first name, surname and hometown county (BIFSG) with an NFL-specific prior estimated by EM on predetermined characteristics (players: position at entry, rookie era, draft round, college type, county availability; staff: role, unit and era at first appearance); documented race statements are not used (notes/race-prediction-design.md). Team shares are expected shares (mean member probability). Their error is Berkson-type: estimates are consistent if the probabilities are calibrated given the regression's controls (the team mean of the prior is one of them), but less precise than with observed race; individual coaches' probabilities are noisy because names carry little information for many Black coaches. The validation exhibit compares the predictions with published TIDES shares.
-\end{tablenotes}
-\end{threeparttable}}
+\end{tabular}}
 \end{table}
+
+{\footnotesize
+\noindent\textit{Notes:} This table includes placebo and selection versions of equation (3) on FullStaffObserved team-seasons (2007-2025). Columns (1)-(3) add next season's opening-day staff composition to the column-(4) specification of Table 19: the coaches' Black share (column 1), the head coach's race (column 2), and the OC, DC and GM regressors and the coordinators', position coaches' and front-office shares (column 3; role regressors zero-filled with missing indicators, group shares not filled). The 2025 season and seasons without an observed next season drop out. Conditional on current composition, next season's composition should not predict this season's performance unless unobserved franchise trends drive both. A nonzero lead is also expected if staff are replaced in response to season-$t$ results (firings after bad seasons, poaching after good ones) even when current composition has a causal effect, so the test is informative mainly when the leads are small; the next season's opening-day staff is the first one chosen after the season-$t$ results. The joint test of all leads in column (3) is a cluster-robust Wald test. Columns (4) and (5) regress the previous season's win percentage on current opening-day composition: a nonzero coefficient means that past performance predicts current staff composition (selection), the threat that the lagged-outcome controls address. Column (5) adds the role-holder regressors and season-$t$ roster controls (cap share, mean log draft pick, mean age, roster Black share). Under the predicted measure the next-season shares are controlled by the next-season mean priors; no prior exists for the next-season role holders (HC, OC, DC, GM), so those leads enter without one. All staff regressors (shares, role holders, their priors and the coaching-turnover shares) are measured at opening day, from the preseason staff snapshot taken before the franchise's first regular-season game, so in-season hires, firings and interim promotions, which respond to results, do not enter; Table 19d repeats the headline columns with the all-season union staff as a robustness check. Under the predicted measure, staff shares are expected shares (mean member P(Black)), role-holder regressors are the holder's P(Black), and every specification controls for the matching model-only priors (the members' mean prior for each share, the holder's prior for each role holder); see the notes to Table 19 on their measurement and Table 29 for the other race measures. Role-holder regressors (HC, OC, DC, GM) are the opening-day holder's predicted probability of being Black; they are zero-filled when the role has no listed holder at the opening (e.g. teams without a GM title) and each enters with a missing indicator, so no team-season is dropped for a missing role holder. Standard errors, in parentheses, are clustered at the franchise level (32 clusters). Wild cluster bootstrap-t $p$-values (restricted, Webb six-point weights, 9,999 replications, clustered by franchise) are reported in the bottom panel because 32 clusters are few. HC race coefficients are subject to the glass-cliff threat: if Black head coaches are hired into persistently worse situations than the controls capture, the coefficient on a level outcome is biased downward. LagWinPct and LagExpectedWins condition on the situation the coach inherits. Race is predicted, not observed: each person's probability of being non-Hispanic Black alone combines first name, surname and hometown county (BIFSG) with an NFL-specific prior estimated by EM on predetermined characteristics (players: position at entry, rookie era, draft round, college type, county availability; staff: role, unit and era at first appearance); documented race statements are not used (notes/race-prediction-design.md). Black Hispanic and multiracial Black persons are in the other-race probability, so P(Black) is narrower than the Black-alone-or-in-combination definition of the hand codes and of TIDES. Team shares are expected shares (mean member probability). Their error is Berkson-type: estimates are consistent if the probabilities are calibrated given the regression's controls (the team mean of the prior is one of them), but less precise than with observed race; individual coaches' probabilities are noisy because names carry little information for many Black coaches. The validation exhibit compares the predictions with published TIDES shares.
+\par}
+

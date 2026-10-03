@@ -1,0 +1,60 @@
+\begin{table}[H]
+\centering\centering\centering
+\caption{Coaching-staff racial composition and win percentage: all-season union staff (robustness) \label{tab:staff-diversity-union}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{tabular}[t]{lccc}
+\toprule
+  & (1) & (2) & (3)\\
+\midrule
+Coaches' expected share Black, all-season union & -0.320* & -0.177 & \\
+ & (0.158) & (0.198) & \\
+P(Black): head coach, season (most games) & -0.058 &  & \\
+ & (0.074) &  & \\
+P(Black): offensive coordinator, union & 0.005 & 0.091 & \\
+ & (0.045) & (0.058) & \\
+P(Black): defensive coordinator, union & -0.003 & 0.073* & \\
+ & (0.031) & (0.039) & \\
+P(Black): general manager, union & -0.001 & -0.171*** & \\
+ & (0.050) & (0.059) & \\
+Coaches' expected share Black, opening day &  &  & -0.311*\\
+ &  &  & (0.166)\\
+P(Black): head coach, opening day &  &  & -0.074\\
+ &  &  & (0.078)\\
+P(Black): offensive coordinator, opening day &  &  & 0.017\\
+ &  &  & (0.048)\\
+P(Black): defensive coordinator, opening day &  &  & -0.008\\
+ &  &  & (0.030)\\
+P(Black): general manager, opening day &  &  & -0.002\\
+ &  &  & (0.052)\\
+Share of coaches new to franchise, union & -0.061 & -0.069* & -0.066*\\
+ & (0.037) & (0.035) & (0.038)\\
+Share of coaches promoted, union & -0.257** & -0.169* & -0.248**\\
+ & (0.104) & (0.086) & (0.102)\\
+\midrule
+Observations & 607 & 579 & 607\\
+R$^2$ & 0.315 & 0.553 & 0.314\\
+Within R$^2$ & 0.163 & 0.161 & 0.162\\
+Staff composition and role holders & All-season union & All-season union & Opening day\\
+Turnover shares & All-season union & All-season union & All-season union\\
+Season FE & Yes & Yes & Yes\\
+Franchise FE & Yes & No & Yes\\
+Franchise $\times$ HC-spell FE & No & Yes & No\\
+Other controls (column 4 of Table 19) & Yes & Yes & Yes\\
+Model-only prior controls & Yes & Yes & Yes\\
+Mean of outcome & 0.500 & 0.510 & 0.500\\
+SD of expected share net of FE & 0.051 & 0.031 & 0.051\\
+Effect of 1 SD of expected share (win pp) & -1.634 & -0.545 & -1.592\\
+WCB $p$-value: coaches' share Black, union & 0.064 & 0.384 & \\
+WCB $p$-value: head coach, season & 0.473 &  & \\
+WCB $p$-value: coaches' share Black, opening day &  &  & 0.084\\
+WCB $p$-value: head coach, opening day &  &  & 0.385\\
+\bottomrule
+\multicolumn{4}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}}
+\end{table}
+
+{\footnotesize
+\noindent\textit{Notes:} Robustness check on the timing of the staff measures. The headline tables measure the staff at opening day (preseason snapshot before the first regular-season game). This table uses the all-season union: every coach listed in any of the season's staff snapshots counts in the coaches' share, the OC, DC and GM are the season's modal holders, the head coach is the coach of the most regular-season games, and the turnover shares are computed over all listed coaches. These measures include in-season hires, firings and interim promotions, which respond to the season's results, so the union coefficients are not predetermined and are reported for comparison only. Column (1) is the column-(4) specification of Table 19 with every staff regressor replaced by its union version; column (2) the column-(5) specification (franchise $\times$ incumbent head-coach-spell FE, singleton spells removed); column (3) keeps the opening-day share and role holders and replaces only the turnover shares by their union versions, which are observed in every season (no 2007 gap). Sample: FullStaffObserved team-seasons, 2007-2025. The coaches' share includes the head coach and the coordinators. Conditional on the role-holder regressors (from column 3 on), its coefficient is identified from the composition of the remaining coaches, and the role coefficients are net of the role holder's own contribution to the share. Under the predicted measure, staff shares are expected shares (mean member P(Black)), role-holder regressors are the holder's P(Black), and every specification controls for the matching model-only priors (the members' mean prior for each share, the holder's prior for each role holder); see the notes to Table 19 on their measurement and Table 29 for the other race measures. Role-holder regressors (HC, OC, DC, GM) are the opening-day holder's predicted probability of being Black; they are zero-filled when the role has no listed holder at the opening (e.g. teams without a GM title) and each enters with a missing indicator, so no team-season is dropped for a missing role holder. Standard errors, in parentheses, are clustered at the franchise level (32 clusters). Wild cluster bootstrap-t $p$-values (restricted, Webb six-point weights, 9,999 replications, clustered by franchise) are reported in the bottom panel because 32 clusters are few. Race is predicted, not observed: each person's probability of being non-Hispanic Black alone combines first name, surname and hometown county (BIFSG) with an NFL-specific prior estimated by EM on predetermined characteristics (players: position at entry, rookie era, draft round, college type, county availability; staff: role, unit and era at first appearance); documented race statements are not used (notes/race-prediction-design.md). Black Hispanic and multiracial Black persons are in the other-race probability, so P(Black) is narrower than the Black-alone-or-in-combination definition of the hand codes and of TIDES. Team shares are expected shares (mean member probability). Their error is Berkson-type: estimates are consistent if the probabilities are calibrated given the regression's controls (the team mean of the prior is one of them), but less precise than with observed race; individual coaches' probabilities are noisy because names carry little information for many Black coaches. The validation exhibit compares the predictions with published TIDES shares.
+\par}
+

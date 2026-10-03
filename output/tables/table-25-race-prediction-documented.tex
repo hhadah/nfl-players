@@ -1,10 +1,9 @@
-\begin{table}[!h]
-\centering
+\begin{table}[H]
+\centering\centering
 \caption{Predicted Race and Documented Race: Discrimination and Calibration \label{tab:race-prediction-documented}}
 \centering
 \resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
 \fontsize{9}{11}\selectfont
-\begin{threeparttable}
 \begin{tabular}[t]{lrrrrrrrrr}
 \toprule
 \multicolumn{1}{c}{ } & \multicolumn{3}{c}{Players} & \multicolumn{3}{c}{Staff} & \multicolumn{3}{c}{Head coaches, 2010--2025} \\
@@ -13,55 +12,59 @@
 \midrule
 \addlinespace[0.3em]
 \multicolumn{10}{l}{\textit{Panel A. AUC (documented race; bootstrap 95\% interval)}}\\
-\hspace{1em}Black vs.\ white & 0.935 & 0.913 & 0.775 & 0.969 & 0.950 & 0.723 &  &  & \\
-\hspace{1em} & {}[0.896, 0.970] & {}[0.872, 0.951] & {}[0.705, 0.837] & {}[0.938, 0.991] & {}[0.912, 0.980] & {}[0.617, 0.821] &  &  & \\
-\hspace{1em}Black vs.\ non-Black & 0.891 & 0.835 & 0.726 & 0.912 & 0.932 & 0.637 & 0.936 & 0.994 & 0.716\\
+\hspace{1em}Black (alone or in comb.) vs.\ white & 0.935 & 0.913 & 0.775 & 0.969 & 0.950 & 0.723 &  &  & \\
+\hspace{1em} & {}[0.896, 0.970] & {}[0.872, 0.951] & {}[0.705, 0.837] & {}[0.938, 0.992] & {}[0.912, 0.980] & {}[0.617, 0.821] &  &  & \\
+\hspace{1em}Black (alone or in comb.) vs.\ non-Black & 0.891 & 0.835 & 0.726 & 0.912 & 0.932 & 0.636 & 0.936 & 0.994 & 0.716\\
 \hspace{1em} & {}[0.872, 0.910] & {}[0.813, 0.857] & {}[0.701, 0.754] & {}[0.869, 0.950] & {}[0.901, 0.959] & {}[0.556, 0.710] & {}[0.824, 1.000] & {}[0.965, 1.000] & {}[0.517, 0.889]\\
-\hspace{1em}Black alone, non-Hispanic vs.\ non-Black & 0.898 & 0.843 & 0.729 & 0.914 & 0.932 & 0.639 & 0.951 & 0.994 & 0.747\\
-\hspace{1em}Black vs.\ non-Black, excl.\ Hispanic of unstated race & 0.896 & 0.823 & 0.716 & 0.916 & 0.924 & 0.645 & 0.930 & 0.991 & 0.702\\
-\hspace{1em}Black vs.\ all other head coaches &  &  &  &  &  &  & 0.880 & 0.830 & 0.772\\
-\hspace{1em} &  &  &  &  &  &  & {}[0.798, 0.943] & {}[0.745, 0.900] & {}[0.646, 0.879]\\
+\hspace{1em}Black alone, non-Hispanic (modelled event) vs.\ all other documented & 0.854 & 0.800 & 0.695 & 0.886 & 0.899 & 0.635 & 0.956 & 0.972 & 0.767\\
+\hspace{1em} & {}[0.834, 0.874] & {}[0.776, 0.822] & {}[0.671, 0.721] & {}[0.838, 0.926] & {}[0.858, 0.934] & {}[0.565, 0.711] & {}[0.850, 1.000] & {}[0.894, 1.000] & {}[0.564, 0.928]\\
+\hspace{1em}Black (alone or in comb.) vs.\ non-Black, excl.\ Hispanic of unstated race & 0.896 & 0.823 & 0.716 & 0.916 & 0.924 & 0.646 & 0.930 & 0.991 & 0.702\\
+\hspace{1em}Black alone, non-Hispanic vs.\ all other head coaches &  &  &  &  &  &  & 0.897 & 0.836 & 0.799\\
+\hspace{1em} &  &  &  &  &  &  & {}[0.831, 0.954] & {}[0.751, 0.913] & {}[0.693, 0.892]\\
 \addlinespace[0.3em]
-\multicolumn{10}{l}{\textit{Panel B. Calibration slope and reliability}}\\
-\hspace{1em}Calibration slope, logit on logit($p$) & 0.643 & 0.677 & 0.605 & 0.963 & 1.181 & 0.732 & 1.209 & 8.978 & 1.593\\
-\hspace{1em} & (0.033) & (0.038) & (0.038) & (0.121) & (0.121) & (0.173) & (0.459) & (2.917) & (0.830)\\
-\hspace{1em}Calibration slope, prior-covariate FE & 0.658 &  &  & 1.109 &  &  &  &  & \\
-\hspace{1em} & (0.040) &  &  & (0.147) &  &  &  &  & \\
+\multicolumn{10}{l}{\textit{Panel B. Calibration slope (documented Black alone, non-Hispanic) and reliability}}\\
+\hspace{1em}Calibration slope, logit on logit($p$) & 0.576 & 0.617 & 0.532 & 0.827 & 0.990 & 0.721 & 1.490 & 3.147 & 2.025\\
+\hspace{1em} & (0.028) & (0.034) & (0.037) & (0.107) & (0.101) & (0.162) & (0.690) & (1.622) & (0.945)\\
+\hspace{1em}Calibration slope, prior-covariate FE & 0.613 &  &  & 0.943 &  &  &  &  & \\
+\hspace{1em} & (0.033) &  &  & (0.131) &  &  &  &  & \\
 \hspace{1em}Reliability: Var($p$)/[E($p$)(1 $-$ E($p$))] & 0.632 & 0.398 & 0.299 & 0.484 & 0.398 & 0.092 & 0.418 & 0.350 & 0.071\\
 \addlinespace[0.3em]
-\multicolumn{10}{l}{\textit{Panel C. Mean P(Black)}}\\
-\hspace{1em}Documented Black & 0.797 & 0.418 & 0.698 & 0.486 & 0.374 & 0.257 & 0.438 & 0.265 & 0.305\\
-\hspace{1em}Documented Black alone, non-Hispanic & 0.808 & 0.423 & 0.701 & 0.489 & 0.378 & 0.259 & 0.461 & 0.278 & 0.314\\
-\hspace{1em}Documented white & 0.149 & 0.059 & 0.407 & 0.029 & 0.028 & 0.162 & 0.003 & 0.002 & 0.189\\
+\multicolumn{10}{l}{\textit{Panel C. Mean P(Black alone, non-Hispanic)}}\\
+\hspace{1em}Documented Black, alone or in combination & 0.797 & 0.418 & 0.698 & 0.486 & 0.374 & 0.257 & 0.438 & 0.265 & 0.305\\
+\hspace{1em}Documented Black alone, non-Hispanic (modelled event) & 0.808 & 0.423 & 0.701 & 0.489 & 0.378 & 0.258 & 0.461 & 0.278 & 0.314\\
+\hspace{1em}Documented Black Hispanic or multiracial Black (non-target) & 0.610 & 0.323 & 0.646 & 0.353 & 0.245 & 0.201 & 0.037 & 0.040 & 0.142\\
+\hspace{1em}Documented white & 0.149 & 0.059 & 0.407 & 0.029 & 0.028 & 0.161 & 0.003 & 0.002 & 0.189\\
 \hspace{1em}Documented other race or Hispanic & 0.267 & 0.131 & 0.512 & 0.132 & 0.049 & 0.232 & 0.110 & 0.014 & 0.239\\
-\hspace{1em}Undocumented & 0.597 & 0.308 & 0.592 & 0.173 & 0.138 & 0.194 & 0.102 & 0.089 & 0.187\\
-\hspace{1em}All persons & 0.618 & 0.319 & 0.606 & 0.200 & 0.158 & 0.200 & 0.157 & 0.113 & 0.209\\
-\hspace{1em}Calibration-implied, Black: E[$p^2$]/E[$p$] & 0.859 & 0.590 & 0.724 & 0.587 & 0.493 & 0.273 & 0.506 & 0.420 & 0.265\\
+\hspace{1em}Undocumented & 0.597 & 0.308 & 0.592 & 0.172 & 0.138 & 0.193 & 0.102 & 0.089 & 0.187\\
+\hspace{1em}All persons & 0.618 & 0.319 & 0.606 & 0.200 & 0.158 & 0.199 & 0.157 & 0.113 & 0.209\\
+\hspace{1em}Calibration-implied, modelled event: E[$p^2$]/E[$p$] & 0.859 & 0.590 & 0.724 & 0.587 & 0.493 & 0.273 & 0.506 & 0.420 & 0.265\\
 \addlinespace[0.3em]
-\multicolumn{10}{l}{\textit{Panel D. Share documented Black [mean P(Black)] by decile of P(Black)}}\\
-\hspace{1em}Decile 1 & 0.16 [0.01] & 0.24 [0.01] & 0.52 [0.14] & 0.10 [0.00] & 0.03 [0.00] & 0.57 [0.06] & 0.00 [0.00] & 0.00 [0.00] & 0.00 [0.08]\\
-\hspace{1em}Decile 2 & 0.57 [0.18] & 0.63 [0.04] & 0.75 [0.38] & 0.51 [0.04] & 0.59 [0.02] & 0.79 [0.10] & 0.00 [0.00] & 0.00 [0.00] & 0.00 [0.11]\\
-\hspace{1em}Decile 3 & 0.84 [0.47] & 0.84 [0.09] & 0.78 [0.55] & 0.87 [0.10] & 0.87 [0.06] & 0.76 [0.15] & 0.00 [0.00] & 0.00 [0.00] & 0.14 [0.14]\\
-\hspace{1em}Decile 4 & 0.86 [0.70] & 0.83 [0.17] & 0.77 [0.65] & 0.92 [0.19] & 0.87 [0.12] & 0.88 [0.21] & 0.00 [0.01] & 0.00 [0.01] & 0.00 [0.14]\\
-\hspace{1em}Decile 5 & 0.91 [0.83] & 0.93 [0.23] & 0.83 [0.71] & 0.95 [0.29] & 0.90 [0.18] & 0.88 [0.23] & 0.10 [0.03] & 0.10 [0.02] & 0.18 [0.19]\\
-\hspace{1em}Decile 6 & 0.97 [0.90] & 0.97 [0.35] & 0.83 [0.76] & 0.92 [0.42] & 0.97 [0.26] & 0.86 [0.25] & 0.09 [0.06] & 0.27 [0.03] & 0.21 [0.22]\\
-\hspace{1em}Decile 7 & 0.95 [0.95] & 0.92 [0.49] & 0.91 [0.79] & 0.95 [0.58] & 0.97 [0.39] & 0.85 [0.30] & 0.36 [0.10] & 0.18 [0.06] & 0.00 [0.23]\\
-\hspace{1em}Decile 8 & 0.97 [0.97] & 0.94 [0.61] & 0.92 [0.83] & 1.00 [0.71] & 1.00 [0.54] & 0.86 [0.36] & 0.18 [0.22] & 0.36 [0.15] & 0.25 [0.25]\\
-\hspace{1em}Decile 9 & 0.99 [0.99] & 0.96 [0.75] & 0.93 [0.87] & 0.97 [0.84] & 1.00 [0.68] & 0.89 [0.40] & 0.27 [0.44] & 0.36 [0.29] & 0.42 [0.36]\\
-\hspace{1em}Decile 10 & 0.99 [1.00] & 0.99 [0.93] & 0.98 [0.95] & 1.00 [0.96] & 1.00 [0.88] & 0.86 [0.49] & 0.80 [0.74] & 0.50 [0.61] & 0.50 [0.45]\\
+\multicolumn{10}{l}{\textit{Panel D. Share documented Black alone, non-Hispanic [mean $p$] by decile of $p$ (head coaches: documented-positive lower bounds)}}\\
+\hspace{1em}Decile 1 & 0.10 [0.01] & 0.15 [0.01] & 0.48 [0.14] & 0.10 [0.00] & 0.03 [0.00] & 0.57 [0.06] & 0.00 [0.00] & 0.00 [0.00] & 0.00 [0.08]\\
+\hspace{1em}Decile 2 & 0.51 [0.18] & 0.59 [0.04] & 0.68 [0.38] & 0.46 [0.04] & 0.56 [0.02] & 0.74 [0.10] & 0.00 [0.00] & 0.00 [0.00] & 0.00 [0.11]\\
+\hspace{1em}Decile 3 & 0.79 [0.47] & 0.78 [0.09] & 0.75 [0.55] & 0.85 [0.10] & 0.85 [0.06] & 0.71 [0.15] & 0.00 [0.00] & 0.00 [0.00] & 0.07 [0.14]\\
+\hspace{1em}Decile 4 & 0.82 [0.70] & 0.79 [0.17] & 0.72 [0.65] & 0.90 [0.19] & 0.87 [0.12] & 0.88 [0.21] & 0.00 [0.01] & 0.00 [0.01] & 0.00 [0.14]\\
+\hspace{1em}Decile 5 & 0.83 [0.83] & 0.92 [0.23] & 0.81 [0.71] & 0.95 [0.29] & 0.87 [0.18] & 0.88 [0.23] & 0.00 [0.03] & 0.10 [0.02] & 0.18 [0.18]\\
+\hspace{1em}Decile 6 & 0.95 [0.90] & 0.95 [0.35] & 0.79 [0.76] & 0.87 [0.42] & 0.92 [0.26] & 0.81 [0.25] & 0.09 [0.06] & 0.27 [0.03] & 0.21 [0.22]\\
+\hspace{1em}Decile 7 & 0.91 [0.95] & 0.87 [0.49] & 0.85 [0.79] & 0.92 [0.58] & 0.90 [0.39] & 0.83 [0.30] & 0.36 [0.10] & 0.09 [0.06] & 0.00 [0.23]\\
+\hspace{1em}Decile 8 & 0.95 [0.97] & 0.91 [0.61] & 0.89 [0.83] & 1.00 [0.71] & 1.00 [0.54] & 0.86 [0.36] & 0.18 [0.22] & 0.36 [0.15] & 0.25 [0.25]\\
+\hspace{1em}Decile 9 & 0.96 [0.99] & 0.92 [0.75] & 0.87 [0.87] & 0.97 [0.84] & 1.00 [0.68] & 0.87 [0.40] & 0.27 [0.44] & 0.36 [0.29] & 0.42 [0.36]\\
+\hspace{1em}Decile 10 & 0.96 [1.00] & 0.94 [0.93] & 0.95 [0.95] & 0.97 [0.96] & 1.00 [0.88] & 0.86 [0.49] & 0.80 [0.74] & 0.50 [0.61] & 0.50 [0.45]\\
 \addlinespace[0.3em]
 \multicolumn{10}{l}{\textit{Panel E. Persons}}\\
-\hspace{1em}Documented Black & 1,862 &  &  & 320 &  &  & 19 &  & \\
-\hspace{1em}of which Black alone, non-Hispanic & 1,763 &  &  & 312 &  &  & 18 &  & \\
+\hspace{1em}Documented Black, alone or in combination & 1,862 &  &  & 320 &  &  & 19 &  & \\
+\hspace{1em}of which Black alone, non-Hispanic (modelled event) & 1,763 &  &  & 312 &  &  & 18 &  & \\
+\hspace{1em}of which Black Hispanic or multiracial Black & 99 &  &  & 8 &  &  & 1 &  & \\
 \hspace{1em}Documented white & 55 &  &  & 35 &  &  & 5 &  & \\
 \hspace{1em}Documented other race or Hispanic & 351 &  &  & 36 &  &  & 4 &  & \\
 \hspace{1em}of which Hispanic, race unstated & 89 &  &  & 9 &  &  & 3 &  & \\
-\hspace{1em}Undocumented & 9,045 &  &  & 3,060 &  &  & 80 &  & \\
+\hspace{1em}Conflicting sources (excluded) & 0 &  &  & 0 &  &  & 0 &  & \\
+\hspace{1em}Undocumented & 9,045 &  &  & 3,062 &  &  & 80 &  & \\
 \bottomrule
-\end{tabular}
-\begin{tablenotes}[para]
-\item \textit{Notes:} 
-\item This table evaluates the predicted probability of being non-Hispanic Black alone on persons whose race a public source states (Wikidata, Wikipedia categories, or a two-coder classification of article sentences). Documented race is used here only: the primary posterior (Pred.) does not use it. Names is the names-and-county BIFSG posterior with Census population priors; Prior is the NFL prior alone (players: entry position, rookie era, draft round, college type, county availability; staff: first role group, unit and era), before the name update. Populations: players on a 2002--2025 game-day roster (11,313), staff persons of 2002--2025 (3,451), and the non-interim head coaches of 2010--2025, each counted once (108). Players and staff are separate person records (a staff member who played has both, each with its own prior). Documented Black is Black alone or in combination, including Black Hispanic and multiracial Black persons (head coaches: 1 of 19; TIDES counts head coaches of two or more races separately); the score targets non-Hispanic Black alone, so the Black-alone rows restrict documented Black to non-Hispanic Black alone. Documented other race includes Hispanic, Asian, Pacific Islander, American Indian and non-Black multiracial persons; a Hispanic person whose race no source states counts as other (head coaches: 3); whether such a person is Black is unknown, so the row excluding Hispanic persons of unstated race drops them. All head coaches have a Wikipedia article, so documentation is positive-only, and the last AUC row treats undocumented head coaches as non-Black. Panel A: the AUC is the probability that a randomly drawn documented Black person has a higher score than a randomly drawn comparison person; intervals resample persons within each group (999 draws); the Black-white AUC is left blank with fewer than 10 documented whites (head coaches: 5). Panel B: the calibration slope is the coefficient of a logit of documented Black on logit($p$) among documented persons (heteroskedasticity-robust standard errors in parentheses); the second row adds the prior covariates as fixed effects (cells without variation in documented race drop out). A slope of one means calibrated relative odds, below one overconfident predictions. Selection of documented persons on race shifts only the intercept, so the slope is robust to it, but not to fame-based selection within race. Reliability is Var($p$)/[E($p$)(1 $-$ E($p$))] over all persons of the population: under calibration, the $R^2$ of the race indicator on $p$, which governs the precision of regressions on $p$. Panel C: under calibration, the mean P(Black) of Black persons equals E[$p^2$]/E[$p$] over all persons of the population; documented Black persons below that value indicate miscalibration or the selection of documented persons. Panel D: deciles of each score among documented persons (head coaches: among all head coaches), with tied scores kept in one decile, so the Prior deciles are unequal; a calibrated score has a share documented Black close to the mean score in brackets. Documentation is itself selected on race (Wikipedia race categories are mostly African-American categories), so documented persons are mostly Black and the share documented Black exceeds the mean score in the low deciles; Panel D therefore checks ranking within the documented sample, not calibration in the population. Limitations: documented persons are famous (documentation requires an article), so these statistics may not carry over to the undocumented majority; documented whites are few (90 person records, 87 persons), 99\% of them come from article sentences and 94\% of the white text labels rest on European ancestry or national origin, so the Black-white AUC compares Black persons with whites of distinctive European surnames. Individual accuracy for head coaches is low: documented Black head coaches have a mean predicted P(Black) of 0.438 and the head-coach AUCs and calibration slopes rest on 19 documented Black and 9 other documented head coaches. Regression calibration with these probabilities requires, among other conditions, calibration given the prior covariates (notes/race-prediction-design.md, section 4).
-\end{tablenotes}
-\end{threeparttable}}
+\end{tabular}}
 \end{table}
+
+{\footnotesize
+\noindent\textit{Notes:} This table evaluates the predicted probability of being non-Hispanic Black alone on persons whose race a public source states (Wikidata, Wikipedia categories, or a two-coder classification of article sentences). Documented race is used here only: the primary posterior (Pred.) does not use it. Names is the names-and-county BIFSG posterior with Census population priors; Prior is the NFL prior alone (players: entry position, rookie era, draft round, college type, county availability; staff: first role group, unit and era), before the name update. All three scores model the same event, non-Hispanic Black alone (the Census category of the surname tables). Populations: players on a 2002--2025 game-day roster (11,313), staff persons of 2002--2025 (3,453), and the non-interim head coaches of 2010--2025, each counted once (108). Players and staff are separate person records (a staff member who played has both, each with its own prior). Two documented labels are used. Black (alone or in combination) is any documented Black statement, including Black Hispanic and multiracial Black persons (head coaches: 1 of 19; TIDES counts head coaches of two or more races separately); it measures discrimination of the broad Black group. The modelled event, Black alone and non-Hispanic, is a documented Black statement with no second race and no Hispanic statement from any source; documented Black Hispanic and multiracial Black persons, and every other documented race, are non-target (coded zero); persons whose sources state different single races are excluded. Documentation is positive-only, so a documented Black person whose Hispanic origin or second race no source states counts as Black alone; this is a measurement assumption of the label, not an observation. Documented other race includes Hispanic, Asian, Pacific Islander, American Indian and non-Black multiracial persons; a Hispanic person whose race no source states counts as other (head coaches: 3); whether such a person is Black in combination is unknown, so the broad-group row excluding Hispanic persons of unstated race drops them (for the modelled event a documented Hispanic person is non-target whatever his race). All head coaches have a Wikipedia article, so documentation is positive-only; the last AUC row and the head-coach deciles code undocumented head coaches as zero, so the head-coach decile shares are documented-positive lower bounds on the share Black alone, not observed calibration. Panel A: the AUC is the probability that a randomly drawn person with the label has a higher score than a randomly drawn comparison person; intervals resample persons within each group (999 draws); the Black-white AUC is left blank with fewer than 10 documented whites (head coaches: 5). Panel B: the calibration slope is the coefficient of a logit of the modelled event (documented Black alone, non-Hispanic) on logit($p$) among documented persons (heteroskedasticity-robust standard errors in parentheses); the second row adds the prior covariates as fixed effects (cells without variation in the label drop out). A slope of one means calibrated relative odds, below one overconfident predictions. Selection of documented persons on the event shifts only the intercept, so the slope is robust to it, but not to fame-based selection within race. Reliability is Var($p$)/[E($p$)(1 $-$ E($p$))] over all persons of the population: under calibration, the $R^2$ of the event indicator on $p$, which governs the precision of regressions on $p$. Panel C: under calibration, the mean $p$ of persons with the event equals E[$p^2$]/E[$p$] over all persons of the population; documented Black-alone persons below that value indicate miscalibration or the selection of documented persons. Panel D: deciles of each score among documented persons (head coaches: among all head coaches, undocumented coded zero), with tied scores kept in one decile, so the Prior deciles are unequal; a calibrated score has a share documented Black alone close to the mean score in brackets. Documentation is itself selected on race (Wikipedia race categories are mostly African-American categories), so documented persons are mostly Black and the share documented Black alone exceeds the mean score in the low deciles for players and staff, while the head-coach shares are lower bounds; Panel D therefore checks ranking within the documented sample, not calibration in the population. Limitations: documented persons are famous (documentation requires an article), so these statistics may not carry over to the undocumented majority; documented whites are few (90 person records, 87 persons), 99\% of them come from article sentences and 94\% of the white text labels rest on European ancestry or national origin, so the Black-white AUC compares Black persons with whites of distinctive European surnames. Individual accuracy for head coaches is low: documented Black head coaches have a mean predicted P(Black alone) of 0.438 and the head-coach AUCs and calibration slopes rest on 19 documented Black and 9 other documented head coaches. Regression calibration with these probabilities requires, among other conditions, calibration given the prior covariates (notes/race-prediction-design.md, section 4).
+\par}
+

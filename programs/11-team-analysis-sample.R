@@ -4,15 +4,18 @@
 # designs (notes/analysis-plan.md, sections 2-3):
 #   - analysis/analysis_team_season: team_season (all 861 franchise-seasons,
 #     1999-2025) + roster_composition_team_season (roster measures NA before
-#     2002) + one-season leads (F1*) of roster and staff composition for the
-#     placebo tests, one-season lags (L1*) of the roster shares (and of the
-#     roster calibration controls: preddoc mean prior, prior-covariate shares), the
-#     opening-day head coach's race + outcome transforms (higher = better,
-#     changes).
+#     2002) + one-season leads (F1*) of roster and staff composition (union
+#     and opening-snapshot Pre measures) for the placebo tests, one-season
+#     lags (L1*) of the roster shares (and of the roster calibration
+#     controls: preddoc mean prior, prior-covariate shares) and of the
+#     opening-snapshot coaches' shares and turnover, the opening-day head
+#     coach's race + outcome transforms (higher = better, changes).
 #   - analysis/analysis_team_unit_season: two rows per franchise-season
 #     (Unit = offense, defense) for the stacked unit design (A3): unit
-#     outcomes oriented so that higher is better, the unit coordinator's race,
-#     unit coaches' and unit roster Black shares, and unit roster quality.
+#     outcomes oriented so that higher is better, the unit coordinator's race
+#     (season holder, and the opening-snapshot holder with suffix Pre), unit
+#     coaches' (union and opening Pre) and unit roster Black shares, unit
+#     roster quality, and the opening-day head coach and incumbent spell.
 #   - analysis/analysis_team_game: team_game (REG + POST) +
 #     roster_composition_team_game for the team and the opponent (Opp*),
 #     the ATS margin and the season starting QB's race.
@@ -26,7 +29,8 @@
 #   analysis/roster_composition_team_season and _team_game (09).
 # Outputs: analysis/analysis_team_season, analysis/analysis_team_unit_season,
 #   analysis/analysis_team_game (.parquet, .csv, codebook).
-# Date: 2026-10-02 (predicted race added the same day)
+# Date: 2026-10-02 (predicted race added the same day); opening-snapshot
+# leads/lags and unit fields 2026-10-03
 # ============================================================================
 
 # ---------------------------------------------------------------------------
@@ -95,18 +99,28 @@ codebook_labels <- function(cb) set_names(cb$label, cb$variable)
 # (c) analysis_team_season
 # ---------------------------------------------------------------------------
 
+# Union groups, then the opening-snapshot (Pre) groups of 02; every lead
+# variable must exist in team_season
 LeadGroups <- c("Roster", "SnapW", "Coaches", "Coordinators", "PositionCoaches",
-                "FrontOffice")
+                "FrontOffice", "CoachesPre", "CoordinatorsPre", "PositionCoachesPre",
+                "FrontOfficePre")
 ShareMeasures <- c("ShareBlackHand", "ShareBlackProv", "CodedShare", "ShareBlackPred",
                    "ShareBlackPredDoc", "MeanPriorBlackPred")
-RoleMeasures <- c("BlackHand", "BlackProv", "BlackPred", "BlackPredDoc")
+RoleMeasures <- c("BlackHand", "BlackProv", "BlackPred", "BlackPredDoc", "PriorBlackPred")
+LeadRoles <- c("HC", "OC", "DC", "GM")
 LeadVars <- c(paste0(rep(ShareMeasures, each = length(LeadGroups)), LeadGroups),
-              paste0(rep(c("HC", "OC", "DC", "GM"), each = length(RoleMeasures)), RoleMeasures))
+              paste0(rep(LeadRoles, each = length(RoleMeasures)), RoleMeasures),
+              paste0(rep(LeadRoles, each = length(RoleMeasures)), RoleMeasures, "Pre"))
 
 # One-season lags (L1*) of the roster shares, for the reverse-causality test
-# (composition on past performance, conditional on past composition)
+# (composition on past performance, conditional on past composition), and of
+# the opening-snapshot coaches' shares and turnover (lagged opening staff is
+# predetermined with respect to season t - 1 results as well)
 LagGroups <- c("Roster", "SnapW")
-LagVars <- paste0(rep(ShareMeasures, each = length(LagGroups)), LagGroups)
+LagStaffGroups <- "CoachesPre"
+LagVars <- c(paste0(rep(ShareMeasures, each = length(LagGroups)), LagGroups),
+             paste0(ShareMeasures, LagStaffGroups),
+             "ShareCoachesNewToFranchisePre", "ShareCoachesPromotedPre")
 
 # Leads and lags of the roster calibration controls (preddoc mean prior and
 # the shares of the prior's covariate levels, 09) for the placebo and
@@ -118,10 +132,16 @@ RosterCalibVars <- paste0(rep(c("MeanPriorBlackPredDoc", CovShareVars), each = l
 stopifnot(length(CovShareVars) == 12, all(RosterCalibVars %in% names(RosterSeason)))
 LeadVars <- c(LeadVars, RosterCalibVars)
 LagVars <- c(LagVars, RosterCalibVars)
+StaffLeadLag <- setdiff(c(LeadVars, LagVars), c(names(RosterSeason)))
+if (!all(StaffLeadLag %in% names(TeamSeasonBase))) {
+  stop("Lead/lag variables missing from team_season: ",
+       paste(setdiff(StaffLeadLag, names(TeamSeasonBase)), collapse = ", "))
+}
 
-# Opening-day head coach: the head coach in force at the franchise's first
-# REG game (team_game staff snapshot; predetermined with respect to in-season
-# firings, unlike the season HC, who coached the most REG games)
+# Opening-day head coach: the head coach of the franchise's first REG game
+# (team_game; predetermined with respect to in-season firings, unlike the
+# season HC, who coached the most REG games). HCPersonIdPre (02) is the
+# Wikipedia opening-snapshot listing, HCIncumbentSpellId his franchise run.
 HCWeek1 <- TeamGameBase |>
   filter(game_type == "REG") |>
   group_by(franchise_id, season) |>
@@ -149,7 +169,7 @@ for (g in LeadGroups) {
   AnalysisTeamSeason <- gate_hand(AnalysisTeamSeason, glue("F1ShareBlackHand{g}"),
                                   glue("F1CodedShare{g}"))
 }
-for (g in LagGroups) {
+for (g in c(LagGroups, LagStaffGroups)) {
   AnalysisTeamSeason <- gate_hand(AnalysisTeamSeason, glue("L1ShareBlackHand{g}"),
                                   glue("L1CodedShare{g}"))
 }
@@ -190,6 +210,24 @@ unit_rows <- function(unit, p, sign) {
               UnitCoordBlackPredDoc = .data[[paste0(p$Coord, "BlackPredDoc")]],
               UnitCoordPriorBlackPred = .data[[paste0(p$Coord, "PriorBlackPred")]],
               UnitCoordChange = .data[[paste0(p$Coord, "Change")]],
+              # Opening-snapshot (Pre) coordinator and unit coaches (02)
+              UnitCoordPersonIdPre = .data[[paste0(p$Coord, "PersonIdPre")]],
+              UnitCoordBlackHandPre = .data[[paste0(p$Coord, "BlackHandPre")]],
+              UnitCoordBlackProvPre = .data[[paste0(p$Coord, "BlackProvPre")]],
+              UnitCoordPBlackBifsgPre = .data[[paste0(p$Coord, "PBlackBifsgPre")]],
+              UnitCoordBlackPredPre = .data[[paste0(p$Coord, "BlackPredPre")]],
+              UnitCoordBlackPredDocPre = .data[[paste0(p$Coord, "BlackPredDocPre")]],
+              UnitCoordPriorBlackPredPre = .data[[paste0(p$Coord, "PriorBlackPredPre")]],
+              UnitCoordChangePre = .data[[paste0(p$Coord, "ChangePre")]],
+              NUnitCoordPre = .data[[paste0("N", p$Coord, "Pre")]],
+              NUnitCoachesPre = .data[[paste0("N", p$Coaches, "Pre")]],
+              CodedShareUnitCoachesPre = .data[[paste0("CodedShare", p$Coaches, "Pre")]],
+              ShareBlackHandUnitCoachesPre = .data[[paste0("ShareBlackHand", p$Coaches, "Pre")]],
+              ShareBlackProvUnitCoachesPre = .data[[paste0("ShareBlackProv", p$Coaches, "Pre")]],
+              MeanPBlackBifsgUnitCoachesPre = .data[[paste0("MeanPBlackBifsg", p$Coaches, "Pre")]],
+              ShareBlackPredUnitCoachesPre = .data[[paste0("ShareBlackPred", p$Coaches, "Pre")]],
+              ShareBlackPredDocUnitCoachesPre = .data[[paste0("ShareBlackPredDoc", p$Coaches, "Pre")]],
+              MeanPriorBlackPredUnitCoachesPre = .data[[paste0("MeanPriorBlackPred", p$Coaches, "Pre")]],
               NUnitCoaches = .data[[paste0("N", p$Coaches)]],
               CodedShareUnitCoaches = .data[[paste0("CodedShare", p$Coaches)]],
               ShareBlackHandUnitCoaches = .data[[paste0("ShareBlackHand", p$Coaches)]],
@@ -233,7 +271,14 @@ unit_rows <- function(unit, p, sign) {
               UnitMeanAgeRoster = .data[[paste0(p$Roster, "MeanAgeRoster")]],
               UnitMeanAgeSnapW = .data[[paste0(p$Roster, "MeanAgeSnapW")]],
               HCPersonId, HCBlackHand, HCBlackProv, HCPBlackBifsg, HCBlackPred, HCBlackPredDoc,
-              FullStaffObserved, StaffSource, WinPct, LagWinPct, LagExpectedWins)
+              HCPriorBlackPred,
+              HCPersonIdPre, HCBlackHandPre, HCBlackProvPre, HCPBlackBifsgPre, HCBlackPredPre,
+              HCBlackPredDocPre, HCPriorBlackPredPre, HCIncumbentKey, HCFirstGameKey,
+              HCIncumbentSpellId,
+              HCWeek1BlackHand, HCWeek1BlackProv, HCWeek1BlackPred, HCWeek1BlackPredDoc,
+              HCWeek1PriorBlackPred,
+              FullStaffObserved, OpeningStaffObserved, StaffSource, WinPct, LagWinPct,
+              LagExpectedWins)
 }
 
 AnalysisTeamUnitSeason <- bind_rows(
@@ -416,11 +461,47 @@ AnalysisTeamUnitSeasonLabels <- c(
   HCPBlackBifsg = SeasonInputLabels[["HCPBlackBifsg"]],
   HCBlackPred = SeasonInputLabels[["HCBlackPred"]],
   HCBlackPredDoc = SeasonInputLabels[["HCBlackPredDoc"]],
+  HCPriorBlackPred = SeasonInputLabels[["HCPriorBlackPred"]],
+  HCPersonIdPre = SeasonInputLabels[["HCPersonIdPre"]],
+  HCBlackHandPre = SeasonInputLabels[["HCBlackHandPre"]],
+  HCBlackProvPre = SeasonInputLabels[["HCBlackProvPre"]],
+  HCPBlackBifsgPre = SeasonInputLabels[["HCPBlackBifsgPre"]],
+  HCBlackPredPre = SeasonInputLabels[["HCBlackPredPre"]],
+  HCBlackPredDocPre = SeasonInputLabels[["HCBlackPredDocPre"]],
+  HCPriorBlackPredPre = SeasonInputLabels[["HCPriorBlackPredPre"]],
+  HCIncumbentKey = SeasonInputLabels[["HCIncumbentKey"]],
+  HCFirstGameKey = SeasonInputLabels[["HCFirstGameKey"]],
+  HCIncumbentSpellId = SeasonInputLabels[["HCIncumbentSpellId"]],
   FullStaffObserved = SeasonInputLabels[["FullStaffObserved"]],
+  OpeningStaffObserved = SeasonInputLabels[["OpeningStaffObserved"]],
   StaffSource = SeasonInputLabels[["StaffSource"]],
   WinPct = SeasonInputLabels[["WinPct"]],
   LagWinPct = SeasonInputLabels[["LagWinPct"]],
-  LagExpectedWins = SeasonInputLabels[["LagExpectedWins"]]
+  LagExpectedWins = SeasonInputLabels[["LagExpectedWins"]],
+  # Opening-snapshot unit fields (02, suffix Pre): the OC/DC and unit coaches
+  # listed in the opening revision; NA before 2007 and when none is listed
+  UnitCoordPersonIdPre = "Staff person_id of the unit coordinator listed in the opening snapshot (OCPersonIdPre / DCPersonIdPre; non-interim holder first when several are listed)",
+  UnitCoordBlackHandPre = "Opening-snapshot unit coordinator hand-coded Black (NA until coded)",
+  UnitCoordBlackProvPre = "Opening-snapshot unit coordinator flagged Black by black_provisional (1) or not flagged (0); NA when none is listed",
+  UnitCoordPBlackBifsgPre = "Opening-snapshot unit coordinator BIFSG P(Black)",
+  UnitCoordBlackPredPre = "Opening-snapshot unit coordinator model-only predicted P(non-Hispanic Black alone) (OCBlackPredPre / DCBlackPredPre; miscalibrated for promoted holders; NA when none is listed)",
+  UnitCoordBlackPredDocPre = "Opening-snapshot unit coordinator P(Black), documented-race variant (sensitivity)",
+  UnitCoordPriorBlackPredPre = "Opening-snapshot unit coordinator EM prior P(Black) (person-level calibration control for UnitCoordBlackPredPre)",
+  UnitCoordChangePre = "Opening-snapshot unit coordinator differs from the previous season's opening-snapshot coordinator (OCChangePre / DCChangePre; NA if either is unobserved, all of 2007)",
+  NUnitCoordPre = "Number of unit coordinators listed in the opening snapshot (NOCPre / NDCPre)",
+  NUnitCoachesPre = "Number of on-field coaches of the unit listed in the opening snapshot (NOffenseCoachesPre / NDefenseCoachesPre; 0 when parsed and none, NA when unobserved or before 2007)",
+  CodedShareUnitCoachesPre = "Share of the opening snapshot's unit coaches with a hand-coded black_any",
+  ShareBlackHandUnitCoachesPre = "Share Black among the opening snapshot's hand-coded unit coaches (NA until coded)",
+  ShareBlackProvUnitCoachesPre = "Share of the opening snapshot's unit coaches flagged Black by black_provisional; positive-only lower bound",
+  MeanPBlackBifsgUnitCoachesPre = "Mean BIFSG P(Black) of the opening snapshot's unit coaches",
+  ShareBlackPredUnitCoachesPre = "Expected Black share of the opening snapshot's unit coaches: mean model-only predicted P(non-Hispanic Black alone) (ShareBlackPredOffenseCoachesPre / ShareBlackPredDefenseCoachesPre)",
+  ShareBlackPredDocUnitCoachesPre = "Mean P(Black) of the opening snapshot's unit coaches, documented-race variant (sensitivity)",
+  MeanPriorBlackPredUnitCoachesPre = "Mean EM prior P(Black) of the opening snapshot's unit coaches (regression-calibration control for ShareBlackPredUnitCoachesPre)",
+  HCWeek1BlackHand = "Opening-day head coach (head coach of the franchise's first REG game, team_game) hand-coded Black (NA until coded)",
+  HCWeek1BlackProv = "Opening-day head coach flagged Black by black_provisional (1) or not flagged (0); lower bound",
+  HCWeek1BlackPred = "Opening-day head coach model-only predicted P(non-Hispanic Black alone) (p_black_any_pred)",
+  HCWeek1BlackPredDoc = "Opening-day head coach P(Black), documented-race variant (sensitivity)",
+  HCWeek1PriorBlackPred = "Opening-day head coach EM prior P(Black) (person-level calibration control for HCWeek1BlackPred)"
 )
 
 GameRosterLabels <- codebook_labels(RosterGameCodebook)

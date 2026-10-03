@@ -6,6 +6,8 @@ Run order:
   02_load_nfl            nflverse players, rosters, draft, combine, contracts, injuries
   02c_load_nfl_stats     nflverse schedules, team games/seasons (pbp EPA), player stats, snaps
   02b_load_nfl_staff     full coaching staff + front office (Wikipedia staff templates)
+  02d_load_coach_history historical opening head coaches and records, 1989-1998
+  02e_coach_policy_reference sourced program participation, gender and job dates
   03_load_college        CFBD teams, rosters, player/team stats, coaches, transfers
   04_load_recruiting     CFBD recruits (247 composite) + CFBD draft picks
   04c_infer_race         name-based BIFSG (secondary race measure)
@@ -50,6 +52,8 @@ STEPS = [
     ("02_load_nfl.py",           "nflverse players/rosters/contracts",  True),
     ("02c_load_nfl_stats.py",    "nflverse games, team + player stats", True),
     ("02b_load_nfl_staff.py",    "Coaching staff + front office",       True),
+    ("02d_load_coach_history.py", "Historical head coaches, 1989-1998",  True),
+    ("02e_coach_policy_reference.py", "Coach policy source references", True),
     ("03_load_college.py",       "CFBD college data",                   True),
     ("04_load_recruiting.py",    "CFBD recruits + draft picks",         True),
     ("04c_infer_race.py",        "Name-based race inference (BIFSG)",   False),

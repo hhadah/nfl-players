@@ -1,0 +1,6 @@
+program,event,event_date,season,n_listed,n_matched,source_url,eligibility_basis
+nfl_coach_accelerator,2022-05 Atlanta,2022-05-23,2022,63,61,https://www.nfl.com/news/inaugural-nfl-coach-and-front-office-accelerator-program-slated-for-spring-leagu,NFL: 'senior women and minority prospects' nominated by clubs
+nfl_coach_accelerator,2023-05 Minneapolis,2023-05-21,2023,40,40,https://www.nfl.com/news/nfl-coach-accelerator-program-to-take-place-during-spring-league-meeting-in-minn,NFL: 'diverse coaching talent'; 40 head-coach prospects
+nfl_coach_accelerator,2024-05 Nashville,2024-05-20,2024,27,26,https://www.nfl.com/news/nfl-continues-efforts-to-boost-inclusion-across-league-with-coach-accelerator-during-spring-league-meeting-in-nashville,NFL: 'qualified coaching candidates from diverse backgrounds'
+offensive_assistant_mandate,ESPN 2026-05-13 report,2026-05-13,2022-2024,3,3,https://www.espn.com/nfl/story/_/id/48762073/nfl-ended-minority-offensive-assistant-mandate-25-season,ESPN 2026-05-13: job created under the 2022 minority/female offensive-assistant mandate
+nfl_minority_designation,NFL.com 2021-10-26 Rooney Rule enhancements,2021-10-26,2021,2,2,https://www.nfl.com/news/nfl-plans-to-enact-new-enhancements-to-rooney-rule-ahead-of-next-hiring-cycle,NFL.com 2021-10-26: named by the league as a minority head coach hired in the 2021 cycle

@@ -8,15 +8,27 @@
 #     predicted expected share (model-only Pred, the primary measure while
 #     hand codes are absent, and the documented PredDoc variant) with the
 #     members' mean prior P(Black); expected and categorical Blau indices)
-#     from analysis/staff_person_season (01), incl. the opening-day coaches
-#     (CoachesPre: preseason snapshot); NA where no staff box is parsed
-#     (StaffObserved FALSE: 22 article-era team-seasons with infobox rows only),
+#     in two timings:
+#       * union of the season's snapshots (no suffix; staff_person_season,
+#         01; includes in-season hires and interim promotions, which respond
+#         to results; descriptive and robustness use), NA where no staff box
+#         is parsed (StaffObserved FALSE: 22 article-era team-seasons with
+#         infobox rows only);
+#       * opening snapshot (suffix Pre; staff_person_opening_season, 01: the
+#         template revision in force at 00:00 UTC on the franchise's first
+#         REG game date, 2007+), predetermined with respect to the season's
+#         results; NA before 2007 and where the opening snapshot is not
+#         parsed (OpeningStaffObserved FALSE),
 #   - head coach, coordinator and GM race (incl. predicted P(Black) and the
-#     holder's prior) and
-#     experience,
-#   - staff turnover, starting-QB instability and Rooney Rule era indicators.
+#     holder's prior) and experience: the season holder (most snapshots /
+#     most REG games) and the opening-snapshot holder (suffix Pre),
+#   - staff turnover (union and opening-snapshot Pre versions), the
+#     opening-day head coach's franchise-run spell (HCIncumbentSpellId),
+#     starting-QB instability and the source-backed policy indicators of
+#     00-policy-functions.R (add_rooney_policies, opening-staff timing).
 # Requires 01-staff-person-season.R to have run.
-# Date: 2026-09-26; predicted race added 2026-10-02
+# Date: 2026-09-26; predicted race added 2026-10-02; opening-snapshot
+# measures and policy registry 2026-10-03
 # ============================================================================
 
 con <- db_connect()
@@ -55,6 +67,10 @@ Outcomes <- Outcomes |>
 # ---------------------------------------------------------------------------
 
 StaffPersonSeason <- read_parquet(file.path(analysis, "staff_person_season.parquet"))
+StaffPersonOpeningSeason <- read_parquet(file.path(analysis, "staff_person_opening_season.parquet"))
+OpeningCoverage <- read_parquet(file.path(analysis, "staff_opening_coverage.parquet")) |>
+  select(franchise_id, season, OpeningStaffObserved, OpeningTargetDate,
+         OpeningRevisionTimestamp, OpeningDaysStale)
 bifsg_cols <- c("p_white_bifsg", "p_black_bifsg", "p_hispanic_bifsg",
                 "p_api_bifsg", "p_aian_bifsg", "p_multi_bifsg")
 pred_cols <- c("p_white_pred", "p_black_pred", "p_hispanic_pred", "p_api_pred",
@@ -63,10 +79,13 @@ preddoc_cols <- str_replace(pred_cols, "_pred$", "_preddoc")
 
 # Hand-coded category for the categorical Blau: Hispanic of any race is its
 # own category; otherwise the hand-coded race ('unknown' treated as uncoded)
-StaffPersonSeason <- StaffPersonSeason |>
-  mutate(RaceCategoryHand = case_when(hispanic == "yes" ~ "hispanic",
-                                      race == "unknown" ~ NA_character_,
-                                      TRUE ~ race))
+hand_category <- function(df) {
+  mutate(df, RaceCategoryHand = case_when(hispanic == "yes" ~ "hispanic",
+                                          race == "unknown" ~ NA_character_,
+                                          TRUE ~ race))
+}
+StaffPersonSeason <- hand_category(StaffPersonSeason)
+StaffPersonOpeningSeason <- hand_category(StaffPersonOpeningSeason)
 
 # Composition of one group of staff: N, the Black-share measures kept
 # separate, coverage of hand codes, and the expected/categorical Blau indices.
@@ -91,24 +110,33 @@ compose_group <- function(df, suffix) {
     rename_with(\(x) paste0(x, suffix), -c(franchise_id, season))
 }
 
-StaffGroups <- list(
-  AllStaff = StaffPersonSeason,
-  Coaches = filter(StaffPersonSeason, IsCoach),
-  # Opening-day coaches: listed in the preseason (Sep 10) template snapshot,
-  # or in the season article (1999-2006, one box); excludes in-season hires
-  # and interim promotions, which respond to results
-  CoachesPre = filter(StaffPersonSeason, IsCoach & (in_preseason | in_season_article)),
-  Coordinators = filter(StaffPersonSeason, IsCoordinator),
-  PositionCoaches = filter(StaffPersonSeason, IsPositionCoach),
-  Assistants = filter(StaffPersonSeason, IsAssistantCoach),
-  OffenseCoaches = filter(StaffPersonSeason, IsOffenseCoach),
-  DefenseCoaches = filter(StaffPersonSeason, IsDefenseCoach),
-  FrontOffice = filter(StaffPersonSeason, IsFrontOffice),
-  Personnel = filter(StaffPersonSeason, IsPersonnelScouting)
-)
+# Group definitions shared by the union and the opening-snapshot panels. In
+# the union panel a flag means "held such a role in any snapshot of the
+# season"; in the opening panel it means "listed in such a role in the
+# opening snapshot" (roles first held later in the season are excluded).
+staff_groups <- function(df) {
+  list(
+    AllStaff = df,
+    Coaches = filter(df, IsCoach),
+    Coordinators = filter(df, IsCoordinator),
+    PositionCoaches = filter(df, IsPositionCoach),
+    Assistants = filter(df, IsAssistantCoach),
+    OffenseCoaches = filter(df, IsOffenseCoach),
+    DefenseCoaches = filter(df, IsDefenseCoach),
+    FrontOffice = filter(df, IsFrontOffice),
+    Personnel = filter(df, IsPersonnelScouting)
+  )
+}
 
-StaffComposition <- StaffGroups |>
+StaffComposition <- staff_groups(StaffPersonSeason) |>
   imap(compose_group) |>
+  reduce(full_join, by = c("franchise_id", "season"))
+
+# Opening-snapshot composition: the same groups with suffix Pre (CoachesPre
+# replaces the former union-flag definition, which also mixed in the
+# retrospective 1999-2006 season-article boxes)
+OpeningComposition <- staff_groups(StaffPersonOpeningSeason) |>
+  imap(\(df, g) compose_group(df, paste0(g, "Pre"))) |>
   reduce(full_join, by = c("franchise_id", "season"))
 
 # ---------------------------------------------------------------------------
@@ -121,11 +149,12 @@ StaffRace <- load_person_race(con, hand_coded) |>
   select(person_id, black_any, nonwhite, hispanic, black_provisional, p_black_bifsg,
          p_black_any_pred, p_black_any_preddoc, prior_black_pred)
 
-# Race variables for a role holder, prefixed (e.g. HCBlackHand); the
+# Race variables for a role holder, prefixed (e.g. HCBlackHand) and
+# optionally suffixed (HCBlackHandPre for the opening-snapshot holder); the
 # provisional indicator is 1 when flagged Black and 0 otherwise (lower bound);
 # the predicted measures are the holder's predicted P(Black) and the holder's
 # EM prior (the person-level calibration control), NA without a holder
-role_race <- function(df, prefix) {
+role_race <- function(df, prefix, suffix = "") {
   df |>
     left_join(StaffRace, by = c(PersonId = "person_id")) |>
     transmute(franchise_id, season, PersonId,
@@ -139,7 +168,7 @@ role_race <- function(df, prefix) {
               BlackPred = p_black_any_pred,
               BlackPredDoc = p_black_any_preddoc,
               PriorBlackPred = prior_black_pred) |>
-    rename_with(\(x) paste0(prefix, x), -c(franchise_id, season))
+    rename_with(\(x) paste0(prefix, x, suffix), -c(franchise_id, season))
 }
 
 GameHC <- load_game_head_coaches(con)
@@ -209,6 +238,39 @@ RoleHolders <- c("OC", "DC", "STC", "GM") |>
   map(\(r) season_role_holder(r, r)) |>
   reduce(full_join, by = c("franchise_id", "season"))
 
+# The holder of a role in the opening snapshot (template era): listed in
+# that role in the opening revision's raw entries (staff_entries, snapshot
+# 'preseason'; the entry's own interim tag, not the season-pooled
+# interim_any); when several are listed, the non-interim holder first, then
+# person_id (NO 2012 lists the suspended Sean Payton and two interim head
+# coaches). N<Role>Pre counts the listed holders. Variables carry the suffix
+# Pre (HCPersonIdPre, OCBlackPredPre).
+OpeningRoleEntries <- tbl(con, "staff_entries") |>
+  filter(snapshot == "preseason", source == "staff_template", !is.na(person_id), !vacant,
+         role_std %in% c("HC", "OC", "DC", "STC", "GM")) |>
+  select(franchise_id, season, person_id, role_std, interim) |>
+  collect() |>
+  mutate(season = as.integer(season)) |>
+  group_by(franchise_id, season, person_id, role_std) |>
+  summarise(Interim = any(interim), .groups = "drop")
+opening_role_holder <- function(role, prefix) {
+  holders <- OpeningRoleEntries |>
+    filter(role_std == role) |>
+    arrange(franchise_id, season, Interim, person_id) |>
+    group_by(franchise_id, season) |>
+    summarise(N = n(), PersonId = first(person_id), .groups = "drop")
+  holders |>
+    select(franchise_id, season, PersonId) |>
+    role_race(prefix, "Pre") |>
+    left_join(holders |> select(franchise_id, season, N) |>
+                rename_with(\(x) paste0("N", prefix, "Pre"), N),
+              by = c("franchise_id", "season"))
+}
+
+OpeningRoleHolders <- c("HC", "OC", "DC", "STC", "GM") |>
+  map(\(r) opening_role_holder(r, r)) |>
+  reduce(full_join, by = c("franchise_id", "season"))
+
 # ---------------------------------------------------------------------------
 # Staff turnover and head-coach tenure
 # ---------------------------------------------------------------------------
@@ -227,26 +289,89 @@ HCTurnover <- GameHC |>
   mutate(HCChange = as.integer(FirstHCKey != lag_within(LastHCKey, season))) |>
   ungroup()
 
+# Franchise runs of a head coach: consecutive seasons with an observation
+# (franchise_id, HCKey, season) for the same coach and franchise. Spell is
+# the run number, HCSpellKey the run id (franchise / coach key / run number);
+# left-censored in 1999.
+franchise_runs <- function(obs) {
+  obs |>
+    distinct(franchise_id, HCKey, season) |>
+    arrange(franchise_id, HCKey, season) |>
+    group_by(franchise_id, HCKey) |>
+    mutate(Spell = cumsum(season - lag(season, default = first(season) - 2L) != 1L)) |>
+    group_by(franchise_id, HCKey, Spell) |>
+    mutate(HCTenure = row_number(), HCTenureLeftCensored = first(season) == 1999L) |>
+    ungroup() |>
+    mutate(HCSpellKey = paste(franchise_id, HCKey, Spell, sep = "/")) |>
+    select(franchise_id, HCKey, season, HCTenure, HCTenureLeftCensored, HCSpellKey)
+}
+
 # Tenure of the season head coach: consecutive seasons in which he coached at
 # least one REG game for this franchise, including the current one
 # (left-censored in 1999). Counting any REG game keeps a coach's tenure intact
 # across a season in which a temporary acting HC coached most games (IND 2012).
-HCFranchiseRuns <- GameHC |>
+GameHCSeasons <- GameHC |>
   filter(game_type == "REG") |>
-  distinct(franchise_id, HCKey, season) |>
-  arrange(franchise_id, HCKey, season) |>
-  group_by(franchise_id, HCKey) |>
-  mutate(Spell = cumsum(season - lag(season, default = first(season) - 2L) != 1L)) |>
-  group_by(franchise_id, HCKey, Spell) |>
-  mutate(HCTenure = row_number(), HCTenureLeftCensored = first(season) == 1999L) |>
-  ungroup() |>
-  select(franchise_id, HCKey, season, HCTenure, HCTenureLeftCensored)
+  distinct(franchise_id, HCKey, season)
+HCFranchiseRuns <- franchise_runs(GameHCSeasons)
 HCTenure <- SeasonHC |>
   transmute(franchise_id, season, HCKey = coalesce(PersonId, HeadCoachName)) |>
-  left_join(HCFranchiseRuns, by = c("franchise_id", "HCKey", "season"))
+  left_join(HCFranchiseRuns, by = c("franchise_id", "HCKey", "season")) |>
+  select(-HCSpellKey)
+
+# Incumbent head coach of the season: the non-interim head coach listed in
+# the opening snapshot (2007+, parsed opening), else the head coach of the
+# franchise's first REG game (before 2007, or when the opening lists only
+# interim head coaches). The head coach of the first game is kept as a
+# separate field (HCFirstGameKey): a suspended incumbent (NO 2012: Payton
+# listed, Kromer coached the opener) is the incumbent, not the acting coach.
+# HCIncumbentSpellId is the incumbent's franchise run from the any-REG-game
+# observations augmented with the opening-incumbent observations, so a
+# season he opened as incumbent but coached no game (suspension) and a
+# season a temporary acting HC coached most games (IND 2012) both continue
+# his run, while a different coach always starts a new run. Full 1999-2025
+# panel.
+# The opening listing is used when it names the first-game coach, or when
+# it disagrees but itself lists an interim head coach acting for the
+# non-interim one (a suspension). A disagreement without a listed interim
+# is a stale box (a fired coach not yet removed), so the first-game coach is
+# the incumbent (HCIncumbentSource 'first_reg_game_opening_stale').
+OpeningIncumbentHC <- OpeningRoleEntries |>
+  filter(role_std == "HC") |>
+  arrange(franchise_id, season, Interim, person_id) |>
+  group_by(franchise_id, season) |>
+  summarise(OpeningHCKey = if (any(!Interim)) first(person_id) else NA_character_,
+            OpeningInterimListed = any(Interim), .groups = "drop")
+HCIncumbentKeys <- HCTurnover |>
+  select(franchise_id, season, HCFirstGameKey = FirstHCKey) |>
+  left_join(OpeningIncumbentHC, by = c("franchise_id", "season")) |>
+  mutate(UseOpening = !is.na(OpeningHCKey) &
+           (OpeningHCKey == HCFirstGameKey | coalesce(OpeningInterimListed, FALSE)),
+         HCIncumbentKey = if_else(UseOpening, OpeningHCKey, HCFirstGameKey),
+         HCIncumbentSource = case_when(
+           UseOpening ~ "opening_snapshot_non_interim",
+           !is.na(OpeningHCKey) ~ "first_reg_game_opening_stale",
+           TRUE ~ "first_reg_game")) |>
+  select(-UseOpening, -OpeningInterimListed)
+HCIncumbentRuns <- franchise_runs(bind_rows(
+  GameHCSeasons,
+  HCIncumbentKeys |> transmute(franchise_id, HCKey = HCIncumbentKey, season)))
+HCIncumbent <- HCIncumbentKeys |>
+  left_join(HCIncumbentRuns, by = c("franchise_id", HCIncumbentKey = "HCKey", "season")) |>
+  transmute(franchise_id, season, HCFirstGameKey, HCIncumbentKey, HCIncumbentSource,
+            HCIncumbentSpellId = HCSpellKey, HCIncumbentTenure = HCTenure,
+            HCIncumbentTenureLeftCensored = HCTenureLeftCensored)
+if (anyNA(HCIncumbent$HCIncumbentSpellId) || anyNA(HCIncumbent$HCIncumbentKey)) {
+  stop("HCIncumbentSpellId is missing for ", sum(is.na(HCIncumbent$HCIncumbentSpellId)),
+       " franchise-seasons")
+}
+message("Incumbent HC differs from the first-game HC in ",
+        sum(HCIncumbent$HCIncumbentKey != HCIncumbent$HCFirstGameKey), " franchise-seasons; ",
+        "incumbent from the opening snapshot in ",
+        sum(HCIncumbent$HCIncumbentSource == "opening_snapshot_non_interim"))
 
 # Change of OC / DC / GM holder relative to the previous season (NA when
-# either season has no holder observed)
+# either season has no holder observed); the same for the opening holders
 RoleChanges <- RoleHolders |>
   select(franchise_id, season, OCPersonId, DCPersonId, GMPersonId) |>
   group_by(franchise_id) |>
@@ -255,13 +380,35 @@ RoleChanges <- RoleHolders |>
          GMChange = as.integer(GMPersonId != lag_within(GMPersonId, season))) |>
   ungroup() |>
   select(franchise_id, season, OCChange, DCChange, GMChange)
+OpeningRoleChanges <- OpeningRoleHolders |>
+  select(franchise_id, season, HCPersonIdPre, OCPersonIdPre, DCPersonIdPre, GMPersonIdPre) |>
+  group_by(franchise_id) |>
+  mutate(HCChangePre = as.integer(HCPersonIdPre != lag_within(HCPersonIdPre, season)),
+         OCChangePre = as.integer(OCPersonIdPre != lag_within(OCPersonIdPre, season)),
+         DCChangePre = as.integer(DCPersonIdPre != lag_within(DCPersonIdPre, season)),
+         GMChangePre = as.integer(GMPersonIdPre != lag_within(GMPersonIdPre, season))) |>
+  ungroup() |>
+  select(franchise_id, season, HCChangePre, OCChangePre, DCChangePre, GMChangePre)
 
-CoachInflow <- StaffPersonSeason |>
-  filter(IsCoach) |>
-  group_by(franchise_id, season) |>
-  summarise(ShareCoachesNewToFranchise = mean_or_na(as.numeric(NewToFranchise)),
-            ShareCoachesPromoted = mean_or_na(as.numeric(PromotedWithinFranchise)),
-            .groups = "drop")
+# Coach turnover: union panel (new to the franchise relative to any snapshot
+# of season - 1) and opening panel (Pre: opening snapshot vs the previous
+# opening snapshot; NA in 2007, whose 2006 opening staff is unobserved, and
+# wherever the previous opening snapshot is unparsed, never 0)
+coach_inflow <- function(df, suffix = "") {
+  df |>
+    filter(IsCoach) |>
+    group_by(franchise_id, season) |>
+    summarise(ShareCoachesNewToFranchise = mean_or_na(as.numeric(NewToFranchise)),
+              ShareCoachesPromoted = mean_or_na(as.numeric(PromotedWithinFranchise)),
+              .groups = "drop") |>
+    rename_with(\(x) paste0(x, suffix), -c(franchise_id, season))
+}
+CoachInflow <- coach_inflow(StaffPersonSeason)
+OpeningCoachInflow <- coach_inflow(StaffPersonOpeningSeason, "Pre")
+if (any(!is.na(OpeningCoachInflow$ShareCoachesNewToFranchisePre[OpeningCoachInflow$season ==
+                                                                 min(OpeningCoachInflow$season)]))) {
+  stop("Opening turnover is defined in the first template season, whose prior opening is unobserved")
+}
 
 # ---------------------------------------------------------------------------
 # Head-coach experience
@@ -407,26 +554,22 @@ StaffSnapshotFlags <- tbl(con, "staff_snapshots") |>
             .groups = "drop") |>
   mutate(season = as.integer(season))
 
-# Rooney Rule eras, by the hiring cycle before the season: the 2003 rule
-# (adopted Dec 2002) covers HC hires for 2003+; the extension to GM and senior
-# football-operations searches took effect June 15, 2009 (first full hiring
-# cycle: 2010); the May 2020 amendments (two external minority candidates for
-# HC, one for coordinator and front-office posts) first cover the hiring cycle
-# before 2021; the March 28, 2022 amendment (a minority or female offensive
-# assistant on every staff; women count toward all interview requirements)
-# applies from 2022. Sources: NFL, "The Rooney Rule"
-# (nfl.com/causes/inclusion/the-rooney-rule); Wikipedia, "Rooney Rule"
-# (accessed 2026-09-26).
-rooney_era <- function(season) {
-  case_when(season < 2003 ~ "pre_rule",
-            season < 2021 ~ "rule_2003",
-            season < 2022 ~ "amend_2020",
-            TRUE ~ "amend_2022")
+# Policy indicators come from add_rooney_policies() (00-policy-functions.R,
+# registry data/reference/nfl_staff_policies.csv) under the opening-staff
+# timing convention: a provision counts in the first season whose opening
+# staff it was in force for. They describe the policy environment of the
+# season, not an assigned treatment.
+if (!exists("add_rooney_policies") || !exists("rooney_era")) {
+  stop("00-policy-functions.R must be sourced before 02-team-season-sample.R")
 }
 
 # ---------------------------------------------------------------------------
 # Assemble the team-season sample
 # ---------------------------------------------------------------------------
+
+OpeningVars <- c(setdiff(names(OpeningComposition), c("franchise_id", "season")),
+                 "ShareCoachesNewToFranchisePre", "ShareCoachesPromotedPre")
+OpeningCounts <- grep("^N[A-Z].*Pre$", OpeningVars, value = TRUE)
 
 TeamSeason <- tbl(con, "franchise_seasons") |>
   select(franchise_id, season) |>
@@ -438,35 +581,54 @@ TeamSeason <- tbl(con, "franchise_seasons") |>
   left_join(UnitOutcomes, by = c("franchise_id", "season")) |>
   left_join(StaffSnapshotFlags, by = c("franchise_id", "season")) |>
   left_join(ParsedStaffBox, by = c("franchise_id", "season")) |>
+  left_join(OpeningCoverage, by = c("franchise_id", "season")) |>
   left_join(StaffComposition, by = c("franchise_id", "season")) |>
+  left_join(OpeningComposition, by = c("franchise_id", "season")) |>
   left_join(HeadCoach, by = c("franchise_id", "season")) |>
   left_join(HCTurnover |> select(franchise_id, season, HCChange, InSeasonHCChange),
             by = c("franchise_id", "season")) |>
   left_join(HCTenure |> select(-HCKey), by = c("franchise_id", "season")) |>
+  left_join(HCIncumbent, by = c("franchise_id", "season")) |>
   left_join(PriorNFLHC, by = c("franchise_id", "season")) |>
   left_join(HCCollege, by = c("franchise_id", "season")) |>
   left_join(RoleHolders, by = c("franchise_id", "season")) |>
   left_join(RoleChanges, by = c("franchise_id", "season")) |>
+  left_join(OpeningRoleHolders, by = c("franchise_id", "season")) |>
+  left_join(OpeningRoleChanges, by = c("franchise_id", "season")) |>
   left_join(GMTenure, by = c("franchise_id", "season")) |>
   left_join(CoachInflow, by = c("franchise_id", "season")) |>
+  left_join(OpeningCoachInflow, by = c("franchise_id", "season")) |>
   # Staff observation flags; group counts are 0 (not NA) when the staff box
   # is observed but lists nobody in the group. Group compositions and coach
   # inflow are NA when no staff box is parsed (infobox-only team-seasons);
-  # role holders (HC, coordinators, GM) keep the infobox information.
+  # role holders (HC, coordinators, GM) keep the infobox information. The
+  # opening-snapshot (Pre) measures are gated by OpeningStaffObserved instead
+  # (NA before 2007; counts 0 when the opening snapshot is parsed and lists
+  # nobody in the group).
   mutate(StaffObserved = coalesce(StaffObserved, FALSE),
          FullStaffObserved = StaffSource == "staff_template" & AllSnapshotsParsed,
+         OpeningStaffObserved = coalesce(OpeningStaffObserved, FALSE),
          across(all_of(c(setdiff(names(StaffComposition), c("franchise_id", "season")),
                          "ShareCoachesNewToFranchise", "ShareCoachesPromoted")),
                 \(x) if_else(StaffObserved, x, NA)),
-         across(c(starts_with("N") & where(is.integer) & !c(NHeadCoaches, NStartingQBs)),
+         across(c(starts_with("N") & where(is.integer) & !ends_with("Pre") &
+                    !c(NHeadCoaches, NStartingQBs)),
                 \(x) if_else(StaffObserved, coalesce(x, 0L), x)),
-         RooneyEra = rooney_era(season),
-         RooneyRule = as.integer(season >= 2003),
-         RooneyFrontOffice2009 = as.integer(season >= 2010),
-         RooneyAmend2020 = as.integer(season >= 2021),
-         RooneyAmend2022 = as.integer(season >= 2022)) |>
+         across(all_of(OpeningVars), \(x) if_else(OpeningStaffObserved, x, NA)),
+         across(all_of(c(OpeningCounts, "NHCPre", "NOCPre", "NDCPre", "NSTCPre", "NGMPre")),
+                \(x) if_else(OpeningStaffObserved, coalesce(x, 0L), x))) |>
   select(-AllSnapshotsParsed) |>
+  add_rooney_policies(season_col = "season", timing = "opening_staff") |>
   arrange(franchise_id, season)
+
+# Opening-snapshot measures exist exactly where the opening snapshot is
+# observed, and the opening head coach is listed wherever it is parsed
+if (any(!is.na(TeamSeason$ShareBlackPredCoachesPre) & !TeamSeason$OpeningStaffObserved) ||
+    any(is.na(TeamSeason$NCoachesPre) & TeamSeason$OpeningStaffObserved) ||
+    any(TeamSeason$OpeningStaffObserved & TeamSeason$season < 2007) ||
+    any(is.na(TeamSeason$HCPersonIdPre) & TeamSeason$OpeningStaffObserved)) {
+  stop("Opening-snapshot (Pre) measures are inconsistent with OpeningStaffObserved")
+}
 
 # ---------------------------------------------------------------------------
 # Codebook labels
@@ -475,7 +637,6 @@ TeamSeason <- tbl(con, "franchise_seasons") |>
 GroupDescriptions <- c(
   AllStaff = "all listed staff (coaches, S&C, support and front office)",
   Coaches = "on-field coaches (HC, coordinators, position coaches, assistants/QC)",
-  CoachesPre = "opening-day on-field coaches (listed in the preseason Sep 10 snapshot; season article 1999-2006)",
   Coordinators = "OC, DC and STC",
   PositionCoaches = "position coaches",
   Assistants = "assistant and quality-control coaches",
@@ -484,8 +645,13 @@ GroupDescriptions <- c(
   FrontOffice = "front office (owner/executives, GM, personnel/scouting, other)",
   Personnel = "player-personnel and scouting staff"
 )
-group_labels <- function(group, desc) {
-  c(N = glue("Number of {desc} listed in any snapshot (0 when the staff box is observed and lists none; NA when unobserved)"),
+opening_desc <- "listed in the opening snapshot (template revision in force at 00:00 UTC on the franchise's first REG game date; 2007+)"
+OpeningGroupDescriptions <- set_names(paste(GroupDescriptions, opening_desc),
+                                      paste0(names(GroupDescriptions), "Pre"))
+group_labels <- function(group, desc, opening = FALSE) {
+  listed <- if (opening) "(0 when the opening snapshot is parsed and lists none; NA when it is unobserved or before 2007)"
+            else "listed in any snapshot of the season (0 when the staff box is observed and lists none; NA when unobserved)"
+  c(N = glue("Number of {desc} {listed}"),
     CodedShare = glue("Share of {desc} with a hand-coded black_any"),
     ShareBlackHand = glue("Share Black among hand-coded {desc} (NA until coded; use with CodedShare)"),
     ShareBlackProv = glue("Share of {desc} flagged Black by black_provisional (hand code, else Wikipedia category); positive-only lower bound"),
@@ -499,18 +665,27 @@ group_labels <- function(group, desc) {
     BlauPredDoc = glue("Expected Blau index of {desc} from documented-variant probability vectors (p_*_preddoc), same formula; NA if n < 2; sensitivity only")) |>
     set_names(\(x) paste0(x, group))
 }
-role_labels <- function(prefix, role) {
-  c(PersonId = glue("Staff person_id of the season {role}"),
-    BlackHand = glue("{role} hand-coded Black (NA until coded)"),
-    NonwhiteHand = glue("{role} hand-coded non-white or Hispanic (NA until coded)"),
-    HispanicHand = glue("{role} hand-coded Hispanic (NA until coded)"),
-    BlackProv = glue("{role} flagged Black by black_provisional (1) or not flagged (0); lower bound"),
-    PBlackBifsg = glue("{role} BIFSG P(Black)"),
-    BlackPred = glue("{role} model-only predicted P(non-Hispanic Black alone) (primary measure while hand codes are absent); calibrated to the staff population at first appearance, not to the selected population of role holders, so miscalibrated for promoted holders (Black head coaches are under-predicted); NA when no holder"),
-    BlackPredDoc = glue("{role} P(Black) under the documented variant (sensitivity only); NA when no holder"),
-    PriorBlackPred = glue("{role} EM prior P(Black) (prior_black_pred: first role group, unit and era; person-level calibration control for {prefix}BlackPred); NA when no holder")) |>
-    set_names(\(x) paste0(prefix, x))
+role_labels <- function(prefix, role, suffix = "") {
+  c(PersonId = glue("Staff person_id of the {role}"),
+    BlackHand = glue("{role}: hand-coded Black (NA until coded)"),
+    NonwhiteHand = glue("{role}: hand-coded non-white or Hispanic (NA until coded)"),
+    HispanicHand = glue("{role}: hand-coded Hispanic (NA until coded)"),
+    BlackProv = glue("{role}: flagged Black by black_provisional (1) or not flagged (0); lower bound"),
+    PBlackBifsg = glue("{role}: BIFSG P(Black)"),
+    BlackPred = glue("{role}: model-only predicted P(non-Hispanic Black alone) (primary measure while hand codes are absent); calibrated to the staff population at first appearance, not to the selected population of role holders, so miscalibrated for promoted holders (Black head coaches are under-predicted); NA when no holder"),
+    BlackPredDoc = glue("{role}: P(Black) under the documented variant (sensitivity only); NA when no holder"),
+    PriorBlackPred = glue("{role}: EM prior P(Black) (prior_black_pred: first role group, unit and era; person-level calibration control for {prefix}BlackPred{suffix}); NA when no holder")) |>
+    set_names(\(x) paste0(prefix, x, suffix))
 }
+opening_holder_rule <- "listed in that role in the opening snapshot (raw opening-revision entry; non-interim holder first when several are listed); NA before 2007 or when none is listed"
+
+# Policy indicator labels from the registry (00-policy-functions.R)
+PolicyLabels <- with(StaffPolicyRegistry, set_names(
+  paste0("Policy environment indicator (1/0), opening-staff timing: ", requirement,
+         " (scope ", scope, "; in force for opening staffs from ", first_season,
+         if_else(is.na(last_season), "", paste0(" through ", last_season)),
+         "; source ", source_url, "). Describes the season's policy environment, not an assigned treatment"),
+  indicator))
 
 role_holder_rule <- "holder listed in the most snapshots, ties to the preseason holder"
 TeamSeasonLabels <- c(
@@ -561,33 +736,61 @@ TeamSeasonLabels <- c(
   CollegeHCMatch = "College match: no_match, unique_name, ambiguous (several CFBD coach_ids), low_confidence_overlap (a matched college season overlaps an NFL staff season of the person)",
   NOC = "Number of offensive coordinators listed", NDC = "Number of defensive coordinators listed",
   NSTC = "Number of special-teams coordinators listed", NGM = "Number of general managers listed (teams without a GM title have 0)",
+  NHCPre = "Number of head coaches listed in the opening snapshot (2+ when an interim and a suspended head coach are both listed; NA before 2007)",
+  NOCPre = "Number of offensive coordinators listed in the opening snapshot (NA before 2007)",
+  NDCPre = "Number of defensive coordinators listed in the opening snapshot (NA before 2007)",
+  NSTCPre = "Number of special-teams coordinators listed in the opening snapshot (NA before 2007)",
+  NGMPre = "Number of general managers listed in the opening snapshot (NA before 2007)",
   OCChange = "Season OC differs from the previous season's (NA if either unobserved)",
   DCChange = "Season DC differs from the previous season's (NA if either unobserved)",
   GMChange = "Season GM differs from the previous season's (NA if either unobserved)",
-  ShareCoachesNewToFranchise = "Share of on-field coaches not on the franchise's staff in season - 1 (NA when season - 1 or season is unobserved)",
-  ShareCoachesPromoted = "Share of on-field coaches promoted within the franchise from season - 1",
+  HCChangePre = "Opening-snapshot head coach differs from the previous season's opening-snapshot head coach (NA if either is unobserved; all of 2007)",
+  OCChangePre = "Opening-snapshot OC differs from the previous season's (NA if either unobserved; all of 2007)",
+  DCChangePre = "Opening-snapshot DC differs from the previous season's (NA if either unobserved; all of 2007)",
+  GMChangePre = "Opening-snapshot GM differs from the previous season's (NA if either unobserved; all of 2007)",
+  ShareCoachesNewToFranchise = "Share of on-field coaches (any snapshot) not on the franchise's staff in season - 1 (NA when season - 1 or season is unobserved); union measure, includes in-season hires",
+  ShareCoachesPromoted = "Share of on-field coaches (any snapshot) promoted within the franchise from season - 1; union measure",
+  ShareCoachesNewToFranchisePre = "Share of the opening snapshot's on-field coaches not on the franchise's opening-snapshot staff in season - 1 (adjacent opening snapshots only; NA in 2007, whose 2006 opening staff is unobserved, and before 2007)",
+  ShareCoachesPromotedPre = "Share of the opening snapshot's on-field coaches promoted within the franchise from the previous opening snapshot (same domain, lower tier in season - 1; NA in 2007 and before)",
   StaffObserved = "Staff box observed: someone listed in a parsed season-article box or template snapshot (FALSE for the 22 article-era team-seasons with only infobox rows; group compositions are NA there, role holders are kept)",
   FullStaffObserved = "Full staff observed: template era (2007+) with all three snapshots parsed; article-era boxes are partial",
-  RooneyEra = "Rooney Rule era by hiring cycle: pre_rule (<2003), rule_2003 (2003-2020), amend_2020 (2021), amend_2022 (2022+)",
-  RooneyRule = "Season >= 2003 (Rooney Rule in force for the preceding hiring cycle)",
-  RooneyFrontOffice2009 = "Season >= 2010 (GM/senior football-operations searches covered from June 15, 2009)",
-  RooneyAmend2020 = "Season >= 2021 (May 2020 amendments in force for the preceding hiring cycle)",
-  RooneyAmend2022 = "Season >= 2022 (2022 amendment: minority or female offensive assistant)"
+  OpeningStaffObserved = "Opening snapshot observed: the staff-template revision in force at 00:00 UTC on the franchise's first REG game date parsed (>= 15 persons and a head coach); FALSE before 2007 (season-article boxes are retrospective, not an opening measure). All *Pre measures are NA when FALSE",
+  OpeningTargetDate = "Opening snapshot target: the franchise's first REG game date (revision in force at 00:00 UTC that day; revision_timestamp <= target by construction)",
+  OpeningRevisionTimestamp = "UTC timestamp of the template revision used for the opening snapshot",
+  OpeningDaysStale = "Days between the opening revision and its target (how long before the opener the box was last edited)",
+  HCFirstGameKey = "Identity key of the head coach of the franchise's first REG game (staff person_id, else the nflverse name); the acting coach of the opener, which differs from the incumbent under a suspension (NO 2012)",
+  HCIncumbentKey = "Identity key of the season's incumbent head coach: the non-interim head coach listed in the opening snapshot (2007+; used when he is the first-game coach, or when the opening listing also names an interim acting for him), else the first-game head coach (before 2007, no non-interim opening listing, or a stale opening box); see HCIncumbentSource",
+  HCIncumbentSource = "Source of HCIncumbentKey: opening_snapshot_non_interim, first_reg_game (no usable opening listing: pre-2007 or interim-only), first_reg_game_opening_stale (opening box names a different non-interim coach and no interim: a box not yet updated)",
+  HCIncumbentSpellId = "Franchise-run id of the incumbent head coach: franchise / coach key / run number. A run is the consecutive seasons in which the coach either coached at least one REG game for the franchise or opened the season as its incumbent, so a suspension season (NO 2012: Payton) and a season in which a temporary acting HC coached most games (IND 2012: Pagano) continue the run; a different coach always starts a new run. Full 1999-2025 panel; left-censored in 1999",
+  HCIncumbentTenure = "Consecutive seasons (incl. this one) of the incumbent head coach's run with this franchise (any REG game coached or opened as incumbent)",
+  HCIncumbentTenureLeftCensored = "HCIncumbentTenure run starts in 1999 (first observed season)",
+  RooneyEra = "Calendar policy cohort (rooney_era, 00-policy-functions.R): pre_rule (<2003), rule_2003 (2003-2020), amend_2020 (2021), amend_2022 (2022-2024), post_mandate_2025 (2025+). Bundles simultaneous provisions; descriptive, not a date-specific treatment",
+  PolicyTimingConvention = "Timing convention of the policy indicators: opening_staff (a provision counts from the first season whose opening staff it was in force for)"
 )
 lagged <- c("WinPct", "PointDiffPerGame", "Pythagorean", "OffEPAPerPlay", "DefEPAPerPlay",
             "OffSuccessRate", "DefSuccessRate", "ExpectedWins", "WinsOverExpected",
             "Playoffs", "PlayoffWins")
 TeamSeasonLabels <- c(
   TeamSeasonLabels,
+  PolicyLabels,
   set_names(paste0(TeamSeasonLabels[lagged], ", previous season (NA if not consecutive)"),
             paste0("Lag", lagged)),
   unlist(unname(imap(GroupDescriptions, \(desc, g) group_labels(g, desc)))),
-  role_labels("HC", "season head coach"),
-  role_labels("OC", paste("offensive coordinator,", role_holder_rule)),
-  role_labels("DC", paste("defensive coordinator,", role_holder_rule)),
-  role_labels("STC", paste("special-teams coordinator,", role_holder_rule)),
-  role_labels("GM", paste("general manager,", role_holder_rule))
+  unlist(unname(imap(OpeningGroupDescriptions, \(desc, g) group_labels(g, desc, opening = TRUE)))),
+  role_labels("HC", "season head coach (coached the most REG games)"),
+  role_labels("OC", paste("season offensive coordinator,", role_holder_rule)),
+  role_labels("DC", paste("season defensive coordinator,", role_holder_rule)),
+  role_labels("STC", paste("season special-teams coordinator,", role_holder_rule)),
+  role_labels("GM", paste("season general manager,", role_holder_rule)),
+  role_labels("HC", paste("opening-snapshot head coach,", opening_holder_rule), "Pre"),
+  role_labels("OC", paste("opening-snapshot offensive coordinator,", opening_holder_rule), "Pre"),
+  role_labels("DC", paste("opening-snapshot defensive coordinator,", opening_holder_rule), "Pre"),
+  role_labels("STC", paste("opening-snapshot special-teams coordinator,", opening_holder_rule), "Pre"),
+  role_labels("GM", paste("opening-snapshot general manager,", opening_holder_rule), "Pre")
 )
+if (!all(StaffPolicyRegistry$indicator %in% names(TeamSeason))) {
+  stop("add_rooney_policies() did not add every registry indicator")
+}
 
 # ---------------------------------------------------------------------------
 # Validation
@@ -675,6 +878,20 @@ TeamSeason |>
                      HCBlackPred, HCBlackPredDoc), \(x) mean(x, na.rm = TRUE)),
             .groups = "drop") |>
   print(width = Inf)
+# Opening snapshot vs union of snapshots (template era): headcounts, Black
+# share and turnover differ when in-season hires and interim promotions are
+# excluded; opening turnover is unknown in 2007 (NA), not zero
+Template <- filter(TeamSeason, OpeningStaffObserved)
+message("Opening vs union (", nrow(Template), " template-era team-seasons): coaches differ in ",
+        sum(Template$NCoachesPre != Template$NCoaches), "; |ShareBlackPredCoachesPre - ",
+        "ShareBlackPredCoaches| mean ",
+        round(mean(abs(Template$ShareBlackPredCoachesPre - Template$ShareBlackPredCoaches)), 4),
+        "; opening HC differs from season HC in ",
+        sum(Template$HCPersonIdPre != Template$HCPersonId, na.rm = TRUE),
+        "; ShareCoachesNewToFranchisePre NA in ",
+        sum(is.na(Template$ShareCoachesNewToFranchisePre)), " (2007: ",
+        sum(Template$season == 2007), "); distinct HCIncumbentSpellId ",
+        n_distinct(TeamSeason$HCIncumbentSpellId))
 message("Share of season HCs with any hand-coded race: ",
         round(mean(!is.na(TeamSeason$HCBlackHand)), 3))
 TeamSeason |>

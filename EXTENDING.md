@@ -92,42 +92,40 @@ threat, and the variables that support it.
   assumption: conditional on pre-hire performance and expectations
   (`LagWinPct`, `LagExpectedWins`), the race of the hire is unrelated to the
   counterfactual trajectory.
-- *Threat:* selection on the hiring situation. Teams that change coaches are
-  negatively selected: mean `LagWinPct` is 0.352 against 0.538 for teams that
-  keep their coach, a visible Ashenfelter dip. `ExpectedWins` for the hire
-  season is post-treatment, and `SeasonOpenerImpliedWinProb` is set after the
-  hiring cycle, so a true preseason win total is still missing.
-- *Data:* 170 between-season changes (`HCChange`), 54 team-seasons with an
-  in-season change, 162 distinct season head coaches, and 226 franchise x HC
-  runs (31 left-censored in 1999). The spell and hire file with interim flags
-  and firing reasons is not built yet.
+- *Threat:* selection on the hiring situation. The generated tables compare
+  lagged performance between hiring and continuing teams. `ExpectedWins` for
+  the hire season and `SeasonOpenerImpliedWinProb` are measured after hiring,
+  so neither is a pre-hire expectation. Historical preseason win totals
+  remain unavailable in the acquired data.
+- *Implemented:* opening and incumbent HC identities, job-listing spells,
+  sourced appointment dates where recoverable, and a 1990-2025 opening-HC
+  panel. Tables 22, 31 and 32 report hire comparisons and race-by-era
+  performance with diagnostics. Exact departure dates and separation reasons
+  are not comprehensively observed; listing intervals are not firing dates.
 
 **A2. Does diversity beyond the head coach (coordinators, position coaches,
 assistants, front office) affect performance?**
-- *Design:* team outcomes on the Black share (`ShareBlackHand*`) or Blau index
-  (`BlauHand*`) of each staff group, with team x head-coach-spell FE, so that
-  identification comes from assistant turnover within a head coach's tenure.
-  Identifying assumption: within-spell composition changes are not timed to
-  shocks in team quality.
+- *Design:* outcomes on opening-snapshot Black shares or Blau indices, with
+  franchise-by-incumbent-HC-spell FE. Variation comes from assistant
+  turnover within incumbent tenure, not artificial spell breaks caused by
+  temporary absence. A causal reading would require changes unrelated to
+  unobserved team-quality shocks.
 - *Threat:* coordinators are fired after bad seasons and replaced in bulk.
-  Mitigations: control for lagged outcomes and for
-  `ShareCoachesNewToFranchise`/`ShareCoachesPromoted`; placebo on leads of
-  composition changes; use `FullStaffObserved` (608 of 861 team-seasons,
-  2007+) or era FE, because boxes before 2007 are partial.
-- *Data:* `OCChange` (mean 0.408), `DCChange` (0.379), `GMChange`, `CodedShare*`.
-  On the provisional flag, the within-franchise SD of the coach Black share is
-  0.094 against a total SD of 0.100. That may partly reflect Wikipedia
-  coverage, so recompute it on hand codes.
+  Primary models use opening turnover, lagged outcomes and
+  `OpeningStaffObserved`, with unknown initial turnover flagged. Leads
+  diagnose selection; they do not remove it.
+- *Data:* opening roles and composition from `staff_person_opening_season`,
+  source revision dates, `*Pre` measures and `HCIncumbentSpellId`. Table 19d
+  uses the season-long union only as a contemporaneous sensitivity.
 
 **A3. Within a team-season, does the race of the OC versus the DC predict unit
 performance?**
 - *Design:* stack offense and defense units with team x season FE, which
   absorbs the head coach, GM, budget and schedule. Identifying assumption:
   nothing unit-specific is correlated with the coordinator's race.
-- *Threat:* unit-specific talent allocation. Control for unit roster quality
-  from `player_season`. On the provisional flags, Black coordinators are
-  concentrated on defense (mean `DCBlackProv` 0.168 against `OCBlackProv`
-  0.058), so power is asymmetric.
+- *Threat:* unit-specific talent allocation and different promotion paths.
+  Opening coordinator and unit-coach measures do not make the unit's
+  player quality or coordinator appointment exogenous.
 - *Data:* `Off/DefEPAPerPlay`, `Off/DefSuccessRate` and pass/rush splits;
   `OCBlackHand`/`DCBlackHand`; `ShareBlackHandOffenseCoaches`/`...DefenseCoaches`.
   `team_game` assigns the staff snapshot in force on game day.
@@ -140,10 +138,14 @@ rehired less ("glass cliff"; "last hired, first fired")?**
   rehiring as head coach conditional on `PriorNFLHCSeasons`. Identifying
   assumption for (b): conditional on performance over expectation, race is
   not correlated with the quality owners see and I do not.
-- *Threat:* minority coaches who clear a higher hiring bar may be better, so
-  treat the separation gap as a bound. Tenure is left-censored in 1999.
-- *Data:* 170 between-season and 54 in-season HC changes, 305 OC, 295 DC and
-  97 GM changes; `HCTenure`, `GMTenure`, `SeasonsWithFranchise`.
+- *Threat:* coaches who clear a higher hiring bar may differ in unobserved
+  quality. A separation association is not a bound without additional
+  assumptions. Tenure is censored at the first available source observation.
+- *Implemented:* `coach_job_spells`, one-/two-year coach transitions and
+  Table 31's inherited-situation comparisons. These measure presence on a
+  later opening staff, not involuntary firing. Role hierarchy supplies the
+  promotion definition; source-stated dates and interval censoring remain
+  separate.
 - *Literature:* Madden (2004, *Journal of Sports Economics*) on head-coach
   performance by race, 1990-2002; Ryan and Haslam (2005, *British Journal of
   Management*) define the glass cliff (on gender).
@@ -158,23 +160,34 @@ rehired less ("glass cliff"; "last hired, first fired")?**
 - *Threat:* sorting into units (offense feeds head-coach jobs differently), so
   report results with and without unit controls; network ties are endogenous
   to ability.
-- *Data:* 351 position coach -> coordinator transitions (6,893 at-risk
-  person-seasons), 124 coordinator -> head coach (2,419 at risk), 277
-  within-franchise promotions to coordinator, 6,914 `NewToFranchise`
-  person-seasons.
+- *Implemented:* opening-coach person-season transitions within and across
+  franchises, with next-period censoring and published program participation.
+  Table 33 reports unit-level retention and promotion comparisons. These
+  do not identify a hiring-network effect or an Accelerator treatment effect.
 
 **A6. Did the Rooney Rule and its amendments change the race of hires?**
-- *Design:* interrupted time series over hiring cycles (2003 head coaches;
-  2009 GM and front office, `RooneyFrontOffice2009` from season 2010;
-  `RooneyAmend2020`; `RooneyAmend2022`), using roles the rule did not yet
-  cover as comparisons (coordinators before 2020, position coaches).
-- *Threat:* every club is treated at once, so this is a before-after
-  comparison, not a difference-in-differences across teams. With 3-10 HC
-  hires per cycle (mean 6.5), use randomization or permutation inference.
-- *Data:* head-coach hires by `RooneyEra`: 19 before the rule, 115 under the
-  2003 rule (2003-2020), 7 in 2021 and 29 from 2022.
-- *Literature:* Solow, Solow and Walker (2011, *Labour Economics*); Madden and
-  Ruther (2011, *Journal of Sports Economics*).
+- *Implemented:* a source-backed registry separates interviews, mobility,
+  fellowships, compensatory picks, the 2022-2024 offensive-assistant mandate
+  and subsidy, and the voluntary program from 2025. Opening-staff and
+  offseason-hire timing differ, especially for March 2022.
+- *Design:* Tables 30-33 describe published diversity series, hires since
+  1990, inherited situations, race-by-era performance and offense-versus-
+  defense staffing/transitions. Priors do not substitute for documented
+  NFL woman/minority eligibility. Unknown eligibility is retained and
+  bounded, with the Census-white-man assumption labeled separately.
+- *Threat:* every club is treated at the same dates; offense and defense
+  have different trends and can share spillovers. Interviews, mobility and
+  incentives change together. Existing assistants could satisfy the mandate.
+  The acquired public sources lack a complete designated-participant roster
+  and reimbursements. Only one observed season follows termination.
+- *Inference:* clustered intervals, pretrends, placebo breaks and MDEs.
+  Hire-race permutations are conditional-exchangeability sensitivities,
+  not design-based randomization inference.
+- *Literature:* Solow, Solow and Walker (2011, *Labour Economics*);
+  [Madden and Ruther (2011)](https://doi.org/10.1177/1527002510379641);
+  [DuBois (2016)](https://doi.org/10.1093/aler/ahv019). A narrower relative
+  performance gap is not an aggregate team-quality effect. Generated
+  findings and identification failures are in `notes/results-memo.md`.
 
 **A7. Does front-office diversity shape roster construction and the pay of
 Black players?**
@@ -229,6 +242,11 @@ productivity?**
 - *Data:* 7,161 veteran-market contracts (UFA 4,578; tags and tenders 1,609;
   re-sign/extension 974). Of the 6,512 signed 2014+, 99.8% have prior-season
   snaps.
+- *Annual profiles:* `programs/12a` plots raw and adjusted White-minus-Black
+  gaps in veteran-contract APY on identical contracts and race scores.
+  The raw model has no position or quality controls; the adjusted model
+  uses Table 8 column 5 controls. Both are model-implied under predicted
+  race. The 2026 signing window is partial.
 
 **B4. Does the conditional race gap change as NFL output is revealed
 (employer learning)?**
@@ -236,15 +254,20 @@ productivity?**
   (`DraftPick`, `PreDraftGrade`, `RecruitRating`, combine) with `Experience` in
   regressions of log `GoverningAPY` or `CapPercent`, with and without realized
   output (Farber and Gibbons 1996, *QJE*; Altonji and Pierret 2001, *QJE*).
-  Under statistical discrimination with learning, the gap converges to the
-  gap implied by realized output. A gap that persists conditional on output
-  points toward taste.
+  Convergence or persistence alone does not distinguish employer learning,
+  taste, measurement error and selective survival.
 - *Threat:* rookie pay is slotted, so learning shows up only after the rookie
   deal (experience 3-5+). Survivors are selected (B6). NFL teams observe
   pre-market signals richly.
 - *Data:* 35,765 paid player-seasons for 8,138 players; for 2013+ at
   experience 0-12, 30,205 rows, of which 63.9% have `DraftPick` and 73.3%
   `RecruitRating`.
+- *Implemented extensions:* Table 12b compares career profiles with and
+  without player FE on a common repeat-player sample, relative to experience
+  4-6. Player FE absorb the race level; only race-by-stage changes remain.
+  Table 12c adds paying-franchise-by-season FE on fixed rows. Table 12d
+  follows successive observed veteran deals, excludes ambiguous chronology,
+  and separates contract-stage profiles from adjacent-deal changes.
 
 **B5. Does the gap operate through escaping the minimum-salary mass?**
 - *Design:* race gap in `NearMinimum` (LPM) and quantile or distribution
@@ -258,14 +281,24 @@ productivity?**
 
 **B6. Conditional on signals and early output, are Black players less likely to
 earn a veteran contract or to stay on a roster?**
-- *Design:* LPM of `VeteranContract` on race, `LogPick`, pre-draft signals and
-  `NFLGamesStartedFirst3`, with class x position FE; release and retention in
-  `player_season` (`WeeksCut`, presence in t+1). This margin disciplines
-  B3-B5; bound selection with Lee (2009, *Review of Economic Studies*).
-- *Threat:* voluntary exits (retirement, injury) are not separated from cuts.
-  The at-risk population misses undrafted players who were not combine
-  invitees.
-- *Data:* drafted 2011-22: `VeteranContract` = 1 for 57.7%.
+- *Implemented:* Tables 34-35 and 34b, using the weekly-roster universe,
+  including players without pay records. The primary retention margin is
+  under-contract employment next season; game-day, same-franchise,
+  final-week and practice-squad definitions are separate.
+- *Contract access:* first observed UFA/extension contracts among 2011+
+  entrant cohorts, with veteran-market and any-non-rookie alternatives.
+  Risk sets and unknown/censored outcomes are explicit; no wage rate is
+  constructed from annual pay divided by roster weeks.
+- *Controls/inference:* position-group-by-season FE, career stage,
+  position-specific current and earlier production, pre-NFL signals,
+  then usage/employment sensitivities; player-clustered SEs and CIs.
+- *Employer comparison:* Table 34c adds franchise-by-season FE on the same
+  known-employer rows. Employer means the last verified under-contract team
+  during t, excluding tied franchise listings, not a team chosen using t+1.
+  The comparison remains descriptive and does not require player FE.
+- *Threat:* survival into the risk set, voluntary exits, injuries and
+  unobserved quality remain selected. Dense drafted-player contract coverage
+  does not establish complete UDFA histories. Exact signing dates are absent.
 
 **B7. Positional sorting ("stacking"), quarterbacks, and bias in the signals
 themselves.**
@@ -311,29 +344,33 @@ likely to move to the NFL, conditional on their record?
 - *Limitation:* only 57 NFL team-seasons have a head coach with college
   head-coaching experience, and college assistants are not in CFBD.
 
-### Before any of this
+### Implementation status and remaining inputs
 
-1. **Race measure (done, 2026-10-03).** Predicted race replaces hand coding
-   (`notes/race-prediction-design.md`). It has known weaknesses:
-   - Black coaches with common surnames are under-predicted (assistant
-     coaches about 10 pp below TIDES).
-   - The full pre-NFL control set still predicts P(Black) within prior cells,
-     a calibration violation for the richest pay specification. A prior that
-     also conditions on those controls (`p_*_pred_fullx`) would address it.
-   - Even 200-300 hand-coded persons would let the misclassification be
-     measured directly.
-2. **Report the validation.** Report `programs/15` (TIDES, documented-race
-   AUC, calibration slope) in the data appendix.
-3. **Keep proxies out of the treatment.** Use `p_black_bifsg`, `race_bifsg`,
-   `black_provisional` and `*_preddoc` only as sensitivity measures, never as
-   the main treatment.
-4. **Build what the designs need** (see the gaps below):
-   - an HC spell and hire file (A1, A4);
-   - preseason win totals (A1);
-   - the player x position-coach crosswalk (C1);
-   - an HBCU list and pre-2022 FCS statistics (B2);
-   - a hand-coded top football executive (A7);
-   - OL quality measures (B3).
+1. **Race measurement.** Model-only probabilities target non-Hispanic Black
+   alone. Validation now uses the same documented event and separates
+   broad Black-any discrimination statistics. Documentation is selected,
+   not a representative gold standard.
+2. **Calibration and BIRDiE.** The invalid controls-predict-score test and
+   automatic `fullx` recommendation are removed. Table 8 separates overlap
+   from a documented-label index check. Table 26 decomposes weights,
+   model slopes and contrasts on estimable counterfactuals, retaining all
+   rows in the fits and reporting support. Unrestricted EM averages and
+   one-contract-per-player results are separate diagnostics. This does not
+   establish population calibration or validate the competing models.
+3. **Temporal construction.** Opening snapshots precede each team's first
+   REG game date. Primary staff models use opening roles/composition and
+   incumbent tenure. Annual cap totals enter predetermined controls only
+   with a consecutive-season lag. Season-union and current-cap controls
+   are labeled contemporaneous sensitivities.
+4. **Policy and employment outputs.** The policy registry, historical HC
+   extension, coach job and transition panels, and player-retention and
+   contract-access analyses are integrated into `95-make-all.R`. Coefficient
+   manifests generate the results memo; temporal checks fail on look-ahead.
+5. **Inputs still absent or incomplete:** representative independent race
+   validation; complete designated-assistant identities and reimbursements;
+   exact non-HC job dates and separation reasons; historical preseason win
+   totals; the player-position-coach crosswalk (C1); pre-2022 FCS statistics
+   (B2); a verified top football decision-maker (A7); OL quality (B3).
 
 ## Gaps that matter for the research designs
 
@@ -343,10 +380,11 @@ the loader in `scripts/99_run_all.py` and add checks to
 `scripts/06_validate_db.py`.
 
 ### Race (all designs)
-Hand-coding is set up but not done (`data/hand_coded/race_coding/`). Code
-tier 1 (176 head coaches) and tier 2 (coordinators, GMs, owners) first. The
-team-level designs need tiers 1-4. The pay designs need tiers 5-6, about
-8,200 players.
+The PI chose prediction rather than completing the hand-coding sheets.
+Those inputs remain available for sensitivity work. A representative,
+independent validation sample is still missing. Selected public statements
+cannot by themselves estimate population misclassification or establish
+conditional calibration in pay and employment regressions.
 
 ### Top football decision-maker
 In 59 of 608 template-era team-seasons nobody holds a GM title (e.g. NE under

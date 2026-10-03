@@ -1,6 +1,6 @@
 # ============================================================================
 # 00-analysis-functions.R
-# Shared helpers for the estimation scripts (12-14), sourced by 95-make-all.R
+# Shared helpers for the estimation scripts (12-19), sourced by 95-make-all.R
 # after 00-setup-functions.R and 00-race-measures.R:
 #   - choose_race_measure(): the primary measure is hand-coded race when it
 #     covers enough of the estimation sample, else predicted race;
@@ -8,20 +8,24 @@
 #   - apply_race_measure(): copies the *BlackHand* / *BlackPred* /
 #     *BlackPredDoc* / *BlackProv* columns of a team-level sample to generic
 #     *Black* names for the chosen measure
-#   - person_race_group(): Black / White / Other (hand, provisional)
+#   - person_race_group(): Black / White / Other (hand, provisional; Black =
+#     Black alone or in combination)
 #   - person_race_regressors(): Black / OtherRace regressors for any measure
-#     (probabilities under the predicted measures)
+#     (probabilities under the predicted measures; the primary predicted
+#     P(Black) is NON-HISPANIC BLACK ALONE, see person_race_regressors())
 #   - race_prior_controls(): covariates of the predicted-race prior
-#   - race_measure_note(), race_reference_note(): table-note text by measure
+#   - race_measure_note(), race_reference_note(): table-note text by measure,
+#     each naming the Black definition of the measure
 #   - save_exhibit_tex(), save_exhibit_figure(): non-primary measures get a
 #     -<measure> suffix and are never written to my_paper/tables
 #   - tidy_terms(), save_estimates(): tidy coefficient files in output/estimates
 #   - write_model_table(): modelsummary -> kableExtra LaTeX with project defaults
-#   - add_notes(): threeparttable notes that keep LaTeX backslashes
+#   - add_notes(): readable, page-breakable notes attached to the table body
 #   - wild_cluster_test(): wild cluster bootstrap-t (fwildclusterboot)
 #   - fill_missing(), blau_two_group(), fmt_p(): small helpers
 # Expects the directory objects defined in 95-make-all.R.
-# Date: 2026-10-02 (predicted race added the same day)
+# Date: 2026-10-02 (predicted race added the same day; Black definitions
+# named in the notes 2026-10-03)
 # ============================================================================
 
 # modelsummary returns kableExtra (not tinytable) LaTeX tables
@@ -167,18 +171,26 @@ race_prior_controls <- function(measure, entity = c("player", "staff"), draft = 
 }
 
 # Table-note sentence on the race measure. design = "person" (race of the
-# person on the left- or right-hand side) or "team" (team shares).
+# person on the left- or right-hand side) or "team" (team shares). Each
+# sentence names the Black definition the measure uses: the predicted
+# measure models NON-HISPANIC BLACK ALONE (Black Hispanic and multiracial
+# Black persons are in P(other race)); hand codes, documented race and the
+# Wikipedia flag are Black alone or in combination
 race_measure_note <- function(measure, design = c("person", "team")) {
   design <- match.arg(design)
   switch(measure,
-    hand = "Race is hand-coded by two independent coders with adjudication (notes/race-coding-protocol.md).",
+    hand = paste(
+      "Race is hand-coded by two independent coders with adjudication",
+      "(notes/race-coding-protocol.md); Black is Black alone or in combination."),
     predicted = paste(
       "Race is predicted, not observed: each person's probability of being non-Hispanic",
-      "Black combines first name, surname and hometown county (BIFSG) with an NFL-specific",
-      "prior estimated by EM on predetermined characteristics (players: position at entry,",
-      "rookie era, draft round, college type, county availability; staff: role, unit and era",
-      "at first appearance); documented race statements are not used",
-      "(notes/race-prediction-design.md).",
+      "Black alone combines first name, surname and hometown county (BIFSG) with an",
+      "NFL-specific prior estimated by EM on predetermined characteristics (players:",
+      "position at entry, rookie era, draft round, college type, county availability;",
+      "staff: role, unit and era at first appearance); documented race statements are",
+      "not used (notes/race-prediction-design.md). Black Hispanic and multiracial Black",
+      "persons are in the other-race probability, so P(Black) is narrower than the",
+      "Black-alone-or-in-combination definition of the hand codes and of TIDES.",
       if (design == "person") paste(
         "Regressions use the probabilities (regression calibration) and control for the",
         "prior's covariates; the coefficient on P(Black) is the Black-white gap if the",
@@ -194,10 +206,14 @@ race_measure_note <- function(measure, design = c("person", "team")) {
     preddoc = paste(
       "\\textbf{Sensitivity measure.} Race is documented where a public source",
       "(Wikidata, Wikipedia categories or article text) states it, and predicted",
-      "otherwise. Documentation depends on fame, so measurement error may be",
+      "otherwise. The measure mixes two Black definitions: documented persons are Black",
+      "alone or in combination (Black Hispanic and multiracial Black persons included),",
+      "undocumented persons carry the model's probability of non-Hispanic Black alone.",
+      "Documentation depends on fame, so measurement error may be",
       "correlated with the outcome."),
     provisional = paste(
-      "\\textbf{Sensitivity measure.} Race is the Wikipedia category flag. The flag",
+      "\\textbf{Sensitivity measure.} Race is the Wikipedia category flag (Black alone or",
+      "in combination). The flag",
       "is positive-only and misses most Black players and staff,",
       if (design == "person") "so the comparison group mixes white and unflagged Black persons and the estimates are attenuated."
       else "so team shares are lower bounds whose coverage varies with Wikipedia editing."))
@@ -209,7 +225,7 @@ race_reference_note <- function(measure) {
   switch(measure,
     hand = "The omitted group is white players (white, not Hispanic or Hispanic unknown).",
     predicted = ,
-    preddoc = "P(Black) and P(other race) enter together, so the coefficient on P(Black) compares a Black with a white player.",
+    preddoc = "P(Black) and P(other race) enter together, so the coefficient on P(Black) compares a Black (predicted: non-Hispanic Black alone) with a white player.",
     provisional = "The omitted group is players with a Wikipedia article and no race or Hispanic category flag.")
 }
 
@@ -270,14 +286,16 @@ tidy_terms <- function(models, terms) {
   })
 }
 
-# Write a tidy estimates table to <output>/estimates/<name>[-provisional].csv
-# (next to tables_wd), with the race measure as a column
+# Write tidy estimates to <output>/estimates/<name>[-<measure>].{csv,dta},
+# with the race measure recorded in both machine-readable files.
 save_estimates <- function(df, name, measure) {
   dir <- file.path(dirname(tables_wd), "estimates")
   dir.create(dir, recursive = TRUE, showWarnings = FALSE)
-  file <- paste0(exhibit_name(name, measure), ".csv")
-  readr::write_csv(mutate(df, race_measure = measure), file.path(dir, file), na = "")
-  message(glue("wrote estimates/{file}"))
+  stem <- file.path(dir, exhibit_name(name, measure))
+  out <- mutate(df, race_measure = measure)
+  readr::write_csv(out, paste0(stem, ".csv"), na = "")
+  haven::write_dta(out, paste0(stem, ".dta"))
+  message(glue("wrote estimates/{basename(stem)}.csv and .dta"))
   invisible(df)
 }
 
@@ -287,7 +305,7 @@ save_estimates <- function(df, name, measure) {
 
 Stars <- c("***" = 0.01, "**" = 0.05, "*" = 0.1)
 
-GofMap <- tribble(
+GofMap <- tibble::tribble(
   ~raw,            ~clean,           ~fmt,
   "nobs",          "Observations",   0,
   "r.squared",     "R$^2$",          3,
@@ -296,7 +314,7 @@ GofMap <- tribble(
 
 # modelsummary table of a named list of models (names become column headers),
 # with the project's stars and goodness-of-fit rows, a \label{tab:<label>}
-# in the title, and threeparttable notes that end with the race-measure note.
+# in the title, and page-breakable notes ending with the race-measure note.
 # Saved through save_exhibit_tex(); returns the kableExtra object.
 write_model_table <- function(models, coef_map, title, label, notes, name,
                               measure, add_rows = NULL, font_size = NULL,
@@ -314,13 +332,20 @@ write_model_table <- function(models, coef_map, title, label, notes, name,
   save_exhibit_tex(tab, name, measure)
 }
 
-# threeparttable notes for any kableExtra LaTeX table. Write notes as normal
-# LaTeX in R strings ("\\textbf{x}", "$<$"); kableExtra's footnote() strips
-# one level of backslashes, so they are doubled here.
+# Notes follow a fixed-position table body, rather than being trapped in an
+# unbreakable threeparttable box. Long methodological notes can span pages.
+# Inputs use ordinary LaTeX in R strings; no extra backslash escaping is needed.
 add_notes <- function(tab, notes) {
-  text <- gsub("\\", "\\\\", paste(notes, collapse = " "), fixed = TRUE)
-  footnote(tab, general = text, general_title = "Notes:",
-           footnote_as_chunk = TRUE, threeparttable = TRUE, escape = FALSE)
+  tex <- as.character(tab)
+  if (length(tex) != 1L || !grepl("\\end{table}", tex, fixed = TRUE)) {
+    stop("add_notes requires a kableExtra LaTeX table float")
+  }
+  tex <- sub("\\begin{table}[!h]", "\\begin{table}[H]", tex, fixed = TRUE)
+  tex <- sub("\\begin{table}\n", "\\begin{table}[H]\n", tex, fixed = TRUE)
+  block <- paste0("\\end{table}\n\n{\\footnotesize\n\\noindent\\textit{Notes:} ",
+                  paste(notes, collapse = " "), "\n\\par}\n")
+  tab[] <- sub("\\end{table}", block, tex, fixed = TRUE)
+  tab
 }
 
 # ---------------------------------------------------------------------------
@@ -388,4 +413,34 @@ blau_two_group <- function(s) 2 * s * (1 - s)
 # p-value as text for add_rows ("" for NA)
 fmt_p <- function(p, digits = 3) {
   if_else(is.na(p), "", formatC(p, format = "f", digits = digits))
+}
+
+# Race-specific Black-white contrasts from Y on X, P(Black)*X and P(other)*X.
+# Aliased coefficients are harmless only when the requested contrast is
+# orthogonal to every null direction. Unsupported counterfactuals stay NA.
+race_contrast_fit <- function(M, p, po, y, tol = 1e-9) {
+  k <- seq_len(ncol(M))
+  Z <- cbind(p * M, po * M, M)
+  scale <- sqrt(colSums(Z^2))
+  scale[scale == 0] <- 1
+  q <- qr(sweep(Z, 2, scale, "/"), tol = tol)
+  b <- qr.coef(q, y)
+  b[is.na(b)] <- 0
+  gap <- drop(M %*% (b[k] / scale[k]))
+  estimable <- rep(TRUE, nrow(M))
+  if (q$rank < ncol(Z)) {
+    kept <- seq_len(q$rank)
+    omitted <- seq.int(q$rank + 1L, ncol(Z))
+    R <- qr.R(q)
+    null <- matrix(0, ncol(Z), length(omitted))
+    null[q$pivot[kept], ] <- -backsolve(
+      R[kept, kept, drop = FALSE], R[kept, omitted, drop = FALSE])
+    null[cbind(q$pivot[omitted], seq_along(omitted))] <- 1
+    contrast <- sweep(M, 2, scale[k], "/")
+    alias_effect <- contrast %*% null[k, , drop = FALSE]
+    estimable <- sqrt(rowSums(alias_effect^2)) <=
+      100 * tol * pmax(1, sqrt(rowSums(contrast^2)))
+  }
+  gap[!estimable] <- NA_real_
+  list(gap = gap, estimable = estimable, rank = q$rank, columns = ncol(Z))
 }

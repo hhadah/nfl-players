@@ -32,3 +32,6 @@ data/archive/
 # (preddoc) variant and the validation; the primary predicted measure does
 # not depend on them. Back them up outside the repository.
 data/derived/
+
+# Stata companions are regenerated from the tracked CSV result manifests.
+output/estimates/*.dta

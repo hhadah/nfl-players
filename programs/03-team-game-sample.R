@@ -8,17 +8,24 @@
 #     overrides where staff_hc_reconciliation shows nflverse missed a firing;
 #     rule in load_game_head_coaches(), 00-setup-functions.R) and HC race,
 #   - TIME-VARYING staff composition: each game gets the staff snapshot in
-#     force on game day. Template era (2007+): the preseason (Sep 10)
-#     snapshot for games before Nov 1, the midseason (Nov 1) snapshot from
-#     Nov 1 to the day before the late-snapshot date, the late snapshot from
-#     then on (incl. playoffs). Article era (1999-2006): the season article.
+#     force on game day. Template era (2007+): the opening snapshot (the
+#     revision in force at 00:00 UTC on the franchise's first REG game date)
+#     for games before Nov 1, the midseason (Nov 1) snapshot from Nov 1 to
+#     the day before the late-snapshot date, the late snapshot from then on
+#     (incl. playoffs). Every snapshot's revision was saved at or before its
+#     target date and every game falls on or after the target date of the
+#     snapshot it receives (both asserted below), so no game is described by
+#     staff information observed after it. Article era (1999-2006): the
+#     season article's box, written after the season (StaffSnapshotTiming
+#     'retrospective'); not an opening or in-force measure.
 #     Black-share measures (hand-coded, provisional lower bound, BIFSG mean,
 #     predicted expected share: model-only Pred and documented PredDoc, with
 #     the members' mean prior P(Black)) for coaches, coordinators, offensive
 #     coaches, defensive coaches and front office, plus OC and DC race for the
 #     offense-vs-defense unit designs.
 # Uses the shared helpers in 00-setup-functions.R and 00-race-measures.R.
-# Date: 2026-09-26; predicted race added 2026-10-02
+# Date: 2026-09-26; predicted race added 2026-10-02; opening-date targets
+# and timing assertions 2026-10-03
 # ============================================================================
 
 con <- db_connect()
@@ -69,13 +76,22 @@ GameHC <- load_game_head_coaches(con) |>
 # Staff snapshot in force on game day
 # ---------------------------------------------------------------------------
 
-# Late-snapshot date per team-season (Dec 31, or the day after the team's
-# last REG game when earlier)
-LateDates <- tbl(con, "staff_snapshots") |>
-  filter(snapshot == "late") |>
-  select(franchise_id, season, LateDate = target_date) |>
+# Template snapshot targets and revisions per team-season: the preseason
+# target is the franchise's opening-game date, the late target is Dec 31 or
+# the day after the team's last REG game when earlier
+TemplateSnapshots <- tbl(con, "staff_snapshots") |>
+  filter(source == "staff_template") |>
+  select(franchise_id, season, StaffSnapshot = snapshot, StaffSnapshotTargetDate = target_date,
+         StaffSnapshotRevisionTimestamp = revision_timestamp,
+         StaffSnapshotRevisionId = revid) |>
   collect() |>
-  mutate(season = as.integer(season))
+  mutate(season = as.integer(season),
+         StaffSnapshotTargetDate = as.Date(StaffSnapshotTargetDate),
+         StaffSnapshotRevisionTimestamp = lubridate::with_tz(StaffSnapshotRevisionTimestamp, "UTC"),
+         StaffSnapshotRevisionId = as.integer(StaffSnapshotRevisionId))
+LateDates <- TemplateSnapshots |>
+  filter(StaffSnapshot == "late") |>
+  select(franchise_id, season, LateDate = StaffSnapshotTargetDate)
 
 Games <- Games |>
   left_join(LateDates, by = c("franchise_id", "season")) |>
@@ -83,8 +99,28 @@ Games <- Games |>
          StaffSnapshot = case_when(season < 2007 ~ "season_article",
                                    gameday < Nov1 ~ "preseason",
                                    gameday < LateDate ~ "midseason",
-                                   TRUE ~ "late")) |>
-  select(-Nov1, -LateDate)
+                                   TRUE ~ "late"),
+         StaffSnapshotTiming = if_else(StaffSnapshot == "season_article",
+                                       "retrospective", "in_force_on_game_day")) |>
+  select(-Nov1, -LateDate) |>
+  left_join(TemplateSnapshots, by = c("franchise_id", "season", "StaffSnapshot"))
+
+# No game may receive staff information observed after it: in the template
+# era the snapshot's target date is on or before game day and its revision
+# was saved at or before the target (00:00 UTC)
+TemplateGames <- filter(Games, season >= 2007)
+if (anyNA(TemplateGames$StaffSnapshotTargetDate) ||
+    any(TemplateGames$StaffSnapshotTargetDate > TemplateGames$gameday) ||
+    any(as.Date(TemplateGames$StaffSnapshotRevisionTimestamp, tz = "UTC") >
+        TemplateGames$StaffSnapshotTargetDate) ||
+    any(as.Date(TemplateGames$StaffSnapshotRevisionTimestamp, tz = "UTC") >
+        TemplateGames$gameday)) {
+  stop("A team-game was assigned a staff snapshot observed after game day")
+}
+if (!all(is.na(Games$StaffSnapshotTargetDate[Games$season < 2007]))) {
+  stop("Article-era games must not carry a template snapshot")
+}
+rm(TemplateGames)
 
 # ---------------------------------------------------------------------------
 # Staff composition by snapshot
@@ -235,7 +271,11 @@ TeamGameLabels <- c(
   Home = "Home team (1/0)", NeutralSite = "Neutral site (1/0)",
   WinOrHalfTie = "Win = 1, tie = 0.5, loss = 0",
   WinOverExpected = "WinOrHalfTie minus implied_win_prob",
-  StaffSnapshot = "Staff snapshot in force on game day: preseason (before Nov 1), midseason (Nov 1 to the day before the late-snapshot date), late (from the late-snapshot date, incl. playoffs), season_article (1999-2006)",
+  StaffSnapshot = "Staff snapshot assigned to the game: preseason (the opening snapshot, in force at 00:00 UTC on the franchise's first REG game date; games before Nov 1), midseason (Nov 1 revision; Nov 1 to the day before the late-snapshot date), late (from the late-snapshot date, incl. playoffs), season_article (1999-2006, retrospective)",
+  StaffSnapshotTiming = "in_force_on_game_day: the snapshot's revision was saved at or before its target date, which is on or before game day (template era, asserted); retrospective: season-article box written after the season (1999-2006), not an in-force measure",
+  StaffSnapshotTargetDate = "Target date of the assigned template snapshot (the revision in force at 00:00 UTC that day); on or before gameday; NA in the article era",
+  StaffSnapshotRevisionTimestamp = "UTC timestamp of the template revision used for the assigned snapshot (at or before the target by construction); NA in the article era",
+  StaffSnapshotRevisionId = "Wikipedia revision id of the assigned template snapshot; NA in the article era",
   HeadCoachName = "Head coach of the game: nflverse schedule coach, corrected by HCSpellCorrections (verified in-season change dates) and otherwise by the Wikipedia interim HC on or after the first snapshot revision listing him when nflverse missed a firing",
   HeadCoachPersonId = "Staff person_id of the game's head coach (NA when unmatched)",
   HCMatchMethod = "How HeadCoachName was matched to a staff person (see match_hc_person)",

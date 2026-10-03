@@ -8,11 +8,18 @@ starts in 2007, so the revision in force on a date is the staff on that date.
 
 Sources
   - Template revision history (STAFF_SEASONS, 2007-2025): for every
-    franchise x season, the revision in force at 00:00 UTC on Sep 10
-    (preseason), Nov 1 (midseason) and Dec 31 (late; or the day after the
-    team's last regular-season game when that is earlier, so the snapshot is
-    not taken after "Black Monday" firings). A revision that was reverted
-    within 3 days (vandalism) is skipped in favour of the restored one.
+    franchise x season, the revision in force at 00:00 UTC on the date of
+    the team's first regular-season game (preseason; 00:00 UTC is 20:00 ET
+    the evening before, so the revision precedes kickoff), Nov 1 (midseason)
+    and Dec 31 (late; or the day after the team's last regular-season game
+    when that is earlier, so the snapshot is not taken after "Black Monday"
+    firings). The revision in force is the last one saved at or before the
+    target (asserted: revision_timestamp <= target), so no snapshot is
+    observed after the games it is assigned to. A revision that was reverted
+    within 3 days (vandalism) is skipped in favour of the restored one, and a
+    revision whose box does not parse (an edit broke the table) is replaced
+    by the latest earlier parsable revision within 30 days
+    (damaged_box_revisions_skipped), never by a later one.
   - Season articles "<season> <team name that season> season" for 1999-2006:
     their staff box ({{NFL final staff}} or a substituted table; snapshot
     season_article) and their {{Infobox NFL team season}} (snapshot
@@ -28,9 +35,9 @@ Sources
     (article intro, fetched when the given names differ). Templates also
     link namesakes (John Glenn the astronaut) and relatives (A. G. Spanos to
     Dean Spanos); those entries are treated as unlinked.
-  - nflverse schedules (shared cache 'schedules'): each team's last
-    regular-season game date (late snapshot) and the game-level head coach
-    (head-coach reconciliation).
+  - nflverse schedules (shared cache 'schedules'): each team's first and last
+    regular-season game dates (preseason and late snapshot targets) and the
+    game-level head coach (head-coach reconciliation).
 
 Tables written
   staff_snapshots            franchise x season x snapshot: revision used,
@@ -59,20 +66,23 @@ import pandas as pd
 
 from common import (FRANCHISES, Wiki, cached_parquet, connect, team_season_name,
                     to_franchise, write_table)
-from config import NFL_SEASONS, STAFF_SEASONS
+from config import HAND_CODED_DIR, NFL_SEASONS, STAFF_SEASONS
 from staff_roles import COACH_GROUPS, FRONT_OFFICE_GROUPS, standardize_role
 from staff_wikitext import (evidence_sentences, extract_season_infobox,
                             extract_season_staff_box, given_names_match,
                             intro_names_person, normalize_name, parse_staff_box,
                             split_name, title_to_name)
 
-# Snapshot dates; "late" is moved earlier when the regular season ended
-# before Dec 31 (see late_snapshot_targets).
-SNAPSHOTS = [("preseason", 9, 10), ("midseason", 11, 1), ("late", 12, 31)]
+# Snapshot targets: "preseason" is each team's opening-game date and "late"
+# is moved earlier when the regular season ended before Dec 31 (see
+# snapshot_targets); "midseason" is fixed.
+SNAPSHOTS = ["preseason", "midseason", "late"]
+MIDSEASON = (11, 1)
 SNAPSHOT_ORDER = {"season_infobox": 0, "season_article": 1, "preseason": 2, "midseason": 3,
                   "late": 4}
 ARTICLE_SEASONS = [s for s in NFL_SEASONS if s < STAFF_SEASONS[0]]
 REVERT_WINDOW = dt.timedelta(days=3)
+DAMAGED_BOX_WINDOW = dt.timedelta(days=30)   # look-back for a parsable earlier revision
 BATCH = 50                       # titles / revids per API request
 MIN_ENTRIES = 15                 # a parsed box with fewer people is flagged
 LEADER_ROLES = {"GM", "ASST_GM", "FOOTBALL_OPS_EXEC"}
@@ -302,20 +312,27 @@ def snapshot_summary(meta, parsed, rows):
                 parse_ok=len(people) >= MIN_ENTRIES and has_hc)
 
 
-def load_template_snapshots(wiki, refresh, late_targets):
-    """Snapshots and entries from the staff templates (2007 onward)."""
+def load_template_snapshots(wiki, refresh, targets):
+    """Snapshots and entries from the staff templates (2007 onward).
+
+    `targets` maps (franchise_id, season, snapshot) to the target datetime
+    (snapshot_targets). The revision used is the last one saved at or before
+    the target; a later revision is never assigned (asserted), so a game on
+    or after the target date never receives staff observed after it.
+    """
     snaps, entries = [], []
     for fid in FRANCHISES:
         title, revs = fetch_history(wiki, template_title(fid), refresh)
         picks = []
         for season in STAFF_SEASONS:
-            for snap, month, day in SNAPSHOTS:
-                target = dt.datetime(season, month, day, tzinfo=dt.timezone.utc)
-                if snap == "late":
-                    target = late_targets[(fid, season)]
+            for snap in SNAPSHOTS:
+                target = targets[(fid, season, snap)]
                 rev, skipped = pick_revision(revs, target)
                 if rev is None:
                     raise RuntimeError(f"{title} has no revision before {target:%Y-%m-%d}")
+                if _ts(rev["timestamp"]) > target:
+                    raise RuntimeError(f"{title} {season} {snap}: revision {rev['revid']} "
+                                       f"({rev['timestamp']}) is after the target {target:%FT%TZ}")
                 picks.append((season, snap, target, rev, skipped))
         texts = fetch_revision_texts(wiki, {p[3]["revid"] for p in picks}, refresh)
         parsed = {rid: parse_staff_box(txt) for rid, txt in texts.items()}
@@ -323,14 +340,40 @@ def load_template_snapshots(wiki, refresh, late_targets):
             meta = dict(franchise_id=fid, season=season, snapshot=snap,
                         source="staff_template")
             rows = entry_rows(parsed[rev["revid"]], meta)
+            summary = snapshot_summary(meta, parsed[rev["revid"]], rows)
+            # A revision in force whose box does not parse (an edit that broke
+            # the table, e.g. MIA 2018-09-08 dropped the head-coach section
+            # for a day) is a measurement failure, not the staff: fall back to
+            # the latest EARLIER revision that parses (still at or before the
+            # target; never a later one), within DAMAGED_BOX_WINDOW.
+            steps = 0
+            if not summary["parse_ok"]:
+                i = next(k for k, r in enumerate(revs) if r["revid"] == rev["revid"])
+                for k in range(i - 1, -1, -1):
+                    if target - _ts(revs[k]["timestamp"]) > DAMAGED_BOX_WINDOW:
+                        break
+                    text = fetch_revision_texts(wiki, {revs[k]["revid"]}, refresh)
+                    cand = parse_staff_box(text[revs[k]["revid"]])
+                    cand_rows = entry_rows(cand, meta)
+                    cand_summary = snapshot_summary(meta, cand, cand_rows)
+                    if cand_summary["parse_ok"]:
+                        steps = i - k
+                        rev, rows, summary = revs[k], cand_rows, cand_summary
+                        print(f"  {fid} {season} {snap}: box in force did not parse; "
+                              f"using revision {rev['revid']} ({rev['timestamp']}), "
+                              f"{steps} revision(s) earlier")
+                        break
             entries += rows
             rev_ts = _ts(rev["timestamp"])
+            if rev_ts > target:
+                raise RuntimeError(f"{title} {season} {snap}: revision after target")
             snaps.append(dict(
-                **snapshot_summary(meta, parsed[rev["revid"]], rows),
+                **summary,
                 target_date=target.date(), template_title=title, revid=rev["revid"],
                 revision_timestamp=rev_ts, days_stale=(target - rev_ts).days,
-                reverted_revision_skipped=skipped, status="ok"))
-        print(f"  {fid}: {len(revs)} revisions, {len({p[3]['revid'] for p in picks})} "
+                reverted_revision_skipped=skipped, damaged_box_revisions_skipped=steps,
+                status="ok"))
+        print(f"  {fid}: {len(revs)} revisions, {len({s['revid'] for s in snaps if s['franchise_id'] == fid})} "
               f"used for {len(picks)} snapshots")
     return snaps, entries
 
@@ -607,6 +650,37 @@ def match_unlinked_names(df):
     return title_by_norm
 
 
+ALIASES_PATH = HAND_CODED_DIR / "staff_person_aliases.csv"
+
+
+def apply_person_aliases(df):
+    """Merge person_ids that a public source documents as one person
+    (data/hand_coded/staff_person_aliases.csv: person_id -> canonical_person_id,
+    listed names, evidence, source_url). Only name-based ids ('name:...') are
+    merged, both ids must occur in the entries, and the merged rows get
+    person_id_method 'documented_alias'. Not a nickname heuristic: every row
+    cites its source."""
+    if not ALIASES_PATH.exists():
+        return df
+    aliases = pd.read_csv(ALIASES_PATH)
+    for col in ("person_id", "canonical_person_id", "source_url"):
+        if aliases[col].isna().any():
+            raise RuntimeError(f"{ALIASES_PATH.name}: empty {col}")
+    ids = set(df["person_id"].dropna())
+    for a in aliases.itertuples(index=False):
+        if not (a.person_id.startswith("name:") and a.canonical_person_id.startswith("name:")):
+            raise RuntimeError(f"{ALIASES_PATH.name}: only name-based ids may be merged "
+                               f"({a.person_id} -> {a.canonical_person_id})")
+        if a.person_id not in ids or a.canonical_person_id not in ids:
+            raise RuntimeError(f"{ALIASES_PATH.name}: unknown person_id in "
+                               f"{a.person_id} -> {a.canonical_person_id}")
+        hit = df["person_id"].eq(a.person_id)
+        df.loc[hit, "person_id"] = a.canonical_person_id
+        df.loc[hit, "person_id_method"] = "documented_alias"
+        print(f"  alias: {a.person_id} -> {a.canonical_person_id} ({int(hit.sum())} entries)")
+    return df
+
+
 def build_team_season(df):
     """Canonical franchise x season x person x role_std roster."""
     people = df[df["person_id"].notna()].copy()
@@ -764,17 +838,36 @@ def schedule_team_games():
     return games
 
 
-def late_snapshot_targets(games):
-    """(franchise_id, season) -> late target: Dec 31, or 00:00 UTC on the day
-    after the team's last regular-season game when that is earlier (so the
-    snapshot precedes 'Black Monday' firings after a late-December finale)."""
+def snapshot_targets(games):
+    """(franchise_id, season, snapshot) -> target datetime (UTC) for the
+    template snapshots of every franchise x STAFF_SEASONS:
+      preseason  00:00 UTC on the team's first regular-season game date
+                 (20:00 ET the evening before; before kickoff), so the
+                 opening-day staff is never read from a revision saved after
+                 the opener (the former fixed Sep 10 target fell after the
+                 opener in 290 of 608 team-seasons);
+      midseason  00:00 UTC Nov 1;
+      late       Dec 31, or 00:00 UTC on the day after the team's last
+                 regular-season game when that is earlier (so the snapshot
+                 precedes 'Black Monday' firings after a late-December
+                 finale).
+    Raises when a franchise-season has no scheduled regular-season game."""
     reg = games[games["game_type"] == "REG"]
-    last = reg.groupby(["franchise_id", "season"])["gameday"].max()
+    span = reg.groupby(["franchise_id", "season"])["gameday"].agg(["min", "max"])
+    utc = dt.timezone.utc
     out = {}
-    for (fid, season), day in last.items():
-        after = dt.datetime.fromisoformat(day).replace(tzinfo=dt.timezone.utc) \
-            + dt.timedelta(days=1)
-        out[(fid, season)] = min(dt.datetime(season, 12, 31, tzinfo=dt.timezone.utc), after)
+    for fid in FRANCHISES:
+        for season in STAFF_SEASONS:
+            if (fid, season) not in span.index:
+                raise RuntimeError(f"No REG games scheduled for {fid} {season}; cannot "
+                                   "set the preseason/late snapshot targets")
+            first, last = span.loc[(fid, season)]
+            out[(fid, season, "preseason")] = dt.datetime.fromisoformat(first).replace(tzinfo=utc)
+            out[(fid, season, "midseason")] = dt.datetime(season, *MIDSEASON, tzinfo=utc)
+            after = dt.datetime.fromisoformat(last).replace(tzinfo=utc) + dt.timedelta(days=1)
+            out[(fid, season, "late")] = min(dt.datetime(season, 12, 31, tzinfo=utc), after)
+            if out[(fid, season, "preseason")] >= out[(fid, season, "midseason")]:
+                raise RuntimeError(f"{fid} {season}: opener {first} is not before Nov 1")
     return out
 
 
@@ -908,8 +1001,7 @@ def main():
     # 1. Staff boxes: template snapshots (2007+) and season articles (1999-2006).
     print("Staff templates:")
     games = schedule_team_games()
-    snaps, entries = load_template_snapshots(wiki, args.refresh,
-                                             late_snapshot_targets(games))
+    snaps, entries = load_template_snapshots(wiki, args.refresh, snapshot_targets(games))
     print("Season articles (pre-2007):")
     s2, e2 = load_season_articles(wiki, args.refresh)
     snaps = pd.DataFrame(snaps + s2)
@@ -917,6 +1009,8 @@ def main():
     snaps["revision_timestamp"] = pd.to_datetime(snaps["revision_timestamp"], utc=True)
     snaps["days_stale"] = snaps["days_stale"].astype("Int64")
     snaps["revid"] = snaps["revid"].astype("Int64")
+    snaps["damaged_box_revisions_skipped"] = \
+        snaps["damaged_box_revisions_skipped"].astype("Int64")
     entries = pd.DataFrame(entries + e2)
     for col in ("link_target", "person_name", "role_part", "coach_position"):
         entries[col] = entries[col].astype(object).where(entries[col].notna(), None)
@@ -927,6 +1021,7 @@ def main():
     intros = fetch_intros(wiki, entries, resolved, info, args.refresh)
     entries = check_links(entries, resolved, info, dab_choice, intros)
     title_by_norm = match_unlinked_names(entries)
+    entries = apply_person_aliases(entries)
     team_season = build_team_season(entries)
     persons = build_persons(entries, team_season, info, title_by_norm)
     print("Fetching article text for senior staff ...")
@@ -938,9 +1033,10 @@ def main():
     con = connect()
     src = "Wikipedia staff templates (revision history) + season articles"
     write_table(con, "staff_snapshots", snaps, source=src,
-                note="franchise x season x snapshot (preseason Sep 10, midseason "
-                     "Nov 1, late Dec 31 or day after last REG game; "
-                     "season_article and season_infobox for 1999-2006)")
+                note="franchise x season x snapshot (preseason = team's first REG "
+                     "game date, midseason Nov 1, late Dec 31 or day after last REG "
+                     "game; target_date is 00:00 UTC and revision_timestamp <= "
+                     "target; season_article and season_infobox for 1999-2006)")
     write_table(con, "staff_entries", entries, source=src,
                 note="one row per snapshot x listed person x standardized role")
     write_table(con, "staff_team_season", team_season, source=src,

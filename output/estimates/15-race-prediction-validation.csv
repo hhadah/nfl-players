@@ -1,240 +1,240 @@
 table,entity,season,stat,score,value,n,source,race_measure
-tides_season,players,2002,p_black_any_pred,,0.5603547510057157,24928,,predicted
-tides_season,players,2002,p_black_or_multi_pred,,0.5852534113463108,24928,,predicted
-tides_season,players,2002,p_black_any_preddoc,,0.5973229781945939,24928,,predicted
-tides_season,players,2002,p_black_bifsg,,0.29854234554243825,24928,,predicted
-tides_season,players,2002,prior_black_pred,,0.5210085933378791,24928,,predicted
-tides_season,players,2002,p_multi_pred,,0.024898660340601567,24928,,predicted
+tides_season,players,2002,p_black_any_pred,,0.560354751005716,24928,,predicted
+tides_season,players,2002,p_black_or_multi_pred,,0.5852534113463125,24928,,predicted
+tides_season,players,2002,p_black_any_preddoc,,0.5973229781945936,24928,,predicted
+tides_season,players,2002,p_black_bifsg,,0.29854234554243836,24928,,predicted
+tides_season,players,2002,prior_black_pred,,0.5210085933378789,24928,,predicted
+tides_season,players,2002,p_multi_pred,,0.02489866034060152,24928,,predicted
 tides_season,players,2002,Tides_black,,,24928,,predicted
 tides_season,players,2002,Tides_black_2plus,,,24928,,predicted
 tides_season,players,2002,Tides_not_disclosed,,,24928,,predicted
 tides_season,players,2002,Tides_upper_disclosed,,,24928,,predicted
-tides_season,players,2003,p_black_any_pred,,0.5616404250137671,24774,TIDES 2004,predicted
-tides_season,players,2003,p_black_or_multi_pred,,0.5857332747653571,24774,TIDES 2004,predicted
-tides_season,players,2003,p_black_any_preddoc,,0.5989909059469233,24774,TIDES 2004,predicted
-tides_season,players,2003,p_black_bifsg,,0.2993523902943774,24774,TIDES 2004,predicted
-tides_season,players,2003,prior_black_pred,,0.5231959324818868,24774,TIDES 2004,predicted
-tides_season,players,2003,p_multi_pred,,0.024092849751590102,24774,TIDES 2004,predicted
+tides_season,players,2003,p_black_any_pred,,0.5616404250137665,24774,TIDES 2004,predicted
+tides_season,players,2003,p_black_or_multi_pred,,0.5857332747653559,24774,TIDES 2004,predicted
+tides_season,players,2003,p_black_any_preddoc,,0.5989909059469248,24774,TIDES 2004,predicted
+tides_season,players,2003,p_black_bifsg,,0.29935239029437705,24774,TIDES 2004,predicted
+tides_season,players,2003,prior_black_pred,,0.5231959324818887,24774,TIDES 2004,predicted
+tides_season,players,2003,p_multi_pred,,0.024092849751589825,24774,TIDES 2004,predicted
 tides_season,players,2003,Tides_black,,0.6920000000000001,24774,TIDES 2004,predicted
 tides_season,players,2003,Tides_black_2plus,,,24774,TIDES 2004,predicted
 tides_season,players,2003,Tides_not_disclosed,,,24774,TIDES 2004,predicted
 tides_season,players,2003,Tides_upper_disclosed,,,24774,TIDES 2004,predicted
-tides_season,players,2004,p_black_any_pred,,0.5561854809514327,24868,,predicted
-tides_season,players,2004,p_black_or_multi_pred,,0.5831167498536796,24868,,predicted
-tides_season,players,2004,p_black_any_preddoc,,0.5921328526646368,24868,,predicted
-tides_season,players,2004,p_black_bifsg,,0.295757828022847,24868,,predicted
-tides_season,players,2004,prior_black_pred,,0.522762314969173,24868,,predicted
-tides_season,players,2004,p_multi_pred,,0.02693126890226095,24868,,predicted
+tides_season,players,2004,p_black_any_pred,,0.5561854809514314,24868,,predicted
+tides_season,players,2004,p_black_or_multi_pred,,0.583116749853683,24868,,predicted
+tides_season,players,2004,p_black_any_preddoc,,0.5921328526646377,24868,,predicted
+tides_season,players,2004,p_black_bifsg,,0.29575782802284606,24868,,predicted
+tides_season,players,2004,prior_black_pred,,0.5227623149691739,24868,,predicted
+tides_season,players,2004,p_multi_pred,,0.026931268902260854,24868,,predicted
 tides_season,players,2004,Tides_black,,,24868,,predicted
 tides_season,players,2004,Tides_black_2plus,,,24868,,predicted
 tides_season,players,2004,Tides_not_disclosed,,,24868,,predicted
 tides_season,players,2004,Tides_upper_disclosed,,,24868,,predicted
-tides_season,players,2005,p_black_any_pred,,0.5570251283225717,24722,TIDES 2005,predicted
-tides_season,players,2005,p_black_or_multi_pred,,0.5839837988697442,24722,TIDES 2005,predicted
-tides_season,players,2005,p_black_any_preddoc,,0.592540807593028,24722,TIDES 2005,predicted
-tides_season,players,2005,p_black_bifsg,,0.2969869637263747,24722,TIDES 2005,predicted
-tides_season,players,2005,prior_black_pred,,0.5242555205050211,24722,TIDES 2005,predicted
-tides_season,players,2005,p_multi_pred,,0.026958670547180184,24722,TIDES 2005,predicted
+tides_season,players,2005,p_black_any_pred,,0.5570251283225697,24722,TIDES 2005,predicted
+tides_season,players,2005,p_black_or_multi_pred,,0.5839837988697435,24722,TIDES 2005,predicted
+tides_season,players,2005,p_black_any_preddoc,,0.5925408075930259,24722,TIDES 2005,predicted
+tides_season,players,2005,p_black_bifsg,,0.29698696372637434,24722,TIDES 2005,predicted
+tides_season,players,2005,prior_black_pred,,0.5242555205050227,24722,TIDES 2005,predicted
+tides_season,players,2005,p_multi_pred,,0.026958670547179923,24722,TIDES 2005,predicted
 tides_season,players,2005,Tides_black,,0.655,24722,TIDES 2005,predicted
 tides_season,players,2005,Tides_black_2plus,,,24722,TIDES 2005,predicted
 tides_season,players,2005,Tides_not_disclosed,,,24722,TIDES 2005,predicted
 tides_season,players,2005,Tides_upper_disclosed,,,24722,TIDES 2005,predicted
-tides_season,players,2006,p_black_any_pred,,0.5648642743189114,24705,TIDES 2006,predicted
-tides_season,players,2006,p_black_or_multi_pred,,0.5980184104276265,24705,TIDES 2006,predicted
-tides_season,players,2006,p_black_any_preddoc,,0.6018134139581985,24705,TIDES 2006,predicted
-tides_season,players,2006,p_black_bifsg,,0.2987402234303004,24705,TIDES 2006,predicted
-tides_season,players,2006,prior_black_pred,,0.5332404990457057,24705,TIDES 2006,predicted
-tides_season,players,2006,p_multi_pred,,0.03315413610871516,24705,TIDES 2006,predicted
+tides_season,players,2006,p_black_any_pred,,0.5648642743189107,24705,TIDES 2006,predicted
+tides_season,players,2006,p_black_or_multi_pred,,0.5980184104276263,24705,TIDES 2006,predicted
+tides_season,players,2006,p_black_any_preddoc,,0.6018134139581977,24705,TIDES 2006,predicted
+tides_season,players,2006,p_black_bifsg,,0.2987402234303006,24705,TIDES 2006,predicted
+tides_season,players,2006,prior_black_pred,,0.5332404990457028,24705,TIDES 2006,predicted
+tides_season,players,2006,p_multi_pred,,0.033154136108715204,24705,TIDES 2006,predicted
 tides_season,players,2006,Tides_black,,0.67,24705,TIDES 2006,predicted
 tides_season,players,2006,Tides_black_2plus,,,24705,TIDES 2006,predicted
 tides_season,players,2006,Tides_not_disclosed,,,24705,TIDES 2006,predicted
 tides_season,players,2006,Tides_upper_disclosed,,,24705,TIDES 2006,predicted
-tides_season,players,2007,p_black_any_pred,,0.5646541888563579,24689,TIDES 2008,predicted
-tides_season,players,2007,p_black_or_multi_pred,,0.6066908415352871,24689,TIDES 2008,predicted
-tides_season,players,2007,p_black_any_preddoc,,0.6010214776397306,24689,TIDES 2008,predicted
-tides_season,players,2007,p_black_bifsg,,0.2916327869159327,24689,TIDES 2008,predicted
-tides_season,players,2007,prior_black_pred,,0.5424075927801153,24689,TIDES 2008,predicted
-tides_season,players,2007,p_multi_pred,,0.04203665267892489,24689,TIDES 2008,predicted
+tides_season,players,2007,p_black_any_pred,,0.5646541888563577,24689,TIDES 2008,predicted
+tides_season,players,2007,p_black_or_multi_pred,,0.6066908415352888,24689,TIDES 2008,predicted
+tides_season,players,2007,p_black_any_preddoc,,0.6010214776397308,24689,TIDES 2008,predicted
+tides_season,players,2007,p_black_bifsg,,0.29163278691593114,24689,TIDES 2008,predicted
+tides_season,players,2007,prior_black_pred,,0.5424075927801164,24689,TIDES 2008,predicted
+tides_season,players,2007,p_multi_pred,,0.04203665267892495,24689,TIDES 2008,predicted
 tides_season,players,2007,Tides_black,,0.66,24689,TIDES 2008,predicted
 tides_season,players,2007,Tides_black_2plus,,,24689,TIDES 2008,predicted
 tides_season,players,2007,Tides_not_disclosed,,,24689,TIDES 2008,predicted
 tides_season,players,2007,Tides_upper_disclosed,,,24689,TIDES 2008,predicted
-tides_season,players,2008,p_black_any_pred,,0.5711209670795233,24717,TIDES 2009,predicted
-tides_season,players,2008,p_black_or_multi_pred,,0.6203283344815087,24717,TIDES 2009,predicted
-tides_season,players,2008,p_black_any_preddoc,,0.6140515322837962,24717,TIDES 2009,predicted
-tides_season,players,2008,p_black_bifsg,,0.2956567259612725,24717,TIDES 2009,predicted
-tides_season,players,2008,prior_black_pred,,0.5513759959610763,24717,TIDES 2009,predicted
-tides_season,players,2008,p_multi_pred,,0.049207367401990804,24717,TIDES 2009,predicted
+tides_season,players,2008,p_black_any_pred,,0.5711209670795228,24717,TIDES 2009,predicted
+tides_season,players,2008,p_black_or_multi_pred,,0.6203283344815065,24717,TIDES 2009,predicted
+tides_season,players,2008,p_black_any_preddoc,,0.6140515322837979,24717,TIDES 2009,predicted
+tides_season,players,2008,p_black_bifsg,,0.2956567259612736,24717,TIDES 2009,predicted
+tides_season,players,2008,prior_black_pred,,0.55137599596108,24717,TIDES 2009,predicted
+tides_season,players,2008,p_multi_pred,,0.04920736740199062,24717,TIDES 2009,predicted
 tides_season,players,2008,Tides_black,,0.67,24717,TIDES 2009,predicted
 tides_season,players,2008,Tides_black_2plus,,,24717,TIDES 2009,predicted
 tides_season,players,2008,Tides_not_disclosed,,,24717,TIDES 2009,predicted
 tides_season,players,2008,Tides_upper_disclosed,,,24717,TIDES 2009,predicted
-tides_season,players,2009,p_black_any_pred,,0.5674576771735506,24653,TIDES 2010,predicted
-tides_season,players,2009,p_black_or_multi_pred,,0.6247440291196789,24653,TIDES 2010,predicted
-tides_season,players,2009,p_black_any_preddoc,,0.6143756420422817,24653,TIDES 2010,predicted
-tides_season,players,2009,p_black_bifsg,,0.2848354240705739,24653,TIDES 2010,predicted
-tides_season,players,2009,prior_black_pred,,0.5592816389633131,24653,TIDES 2010,predicted
-tides_season,players,2009,p_multi_pred,,0.05728635194612909,24653,TIDES 2010,predicted
+tides_season,players,2009,p_black_any_pred,,0.5674576771735508,24653,TIDES 2010,predicted
+tides_season,players,2009,p_black_or_multi_pred,,0.6247440291196793,24653,TIDES 2010,predicted
+tides_season,players,2009,p_black_any_preddoc,,0.6143756420422801,24653,TIDES 2010,predicted
+tides_season,players,2009,p_black_bifsg,,0.284835424070575,24653,TIDES 2010,predicted
+tides_season,players,2009,prior_black_pred,,0.5592816389633118,24653,TIDES 2010,predicted
+tides_season,players,2009,p_multi_pred,,0.05728635194612878,24653,TIDES 2010,predicted
 tides_season,players,2009,Tides_black,,0.67,24653,TIDES 2010,predicted
 tides_season,players,2009,Tides_black_2plus,,,24653,TIDES 2010,predicted
 tides_season,players,2009,Tides_not_disclosed,,,24653,TIDES 2010,predicted
 tides_season,players,2009,Tides_upper_disclosed,,,24653,TIDES 2010,predicted
-tides_season,players,2010,p_black_any_pred,,0.5743670193439339,24447,TIDES 2011,predicted
-tides_season,players,2010,p_black_or_multi_pred,,0.6457286077624965,24447,TIDES 2011,predicted
-tides_season,players,2010,p_black_any_preddoc,,0.6228930620008577,24447,TIDES 2011,predicted
-tides_season,players,2010,p_black_bifsg,,0.2894365225885451,24447,TIDES 2011,predicted
-tides_season,players,2010,prior_black_pred,,0.5671984937283027,24447,TIDES 2011,predicted
-tides_season,players,2010,p_multi_pred,,0.07136158841857808,24447,TIDES 2011,predicted
+tides_season,players,2010,p_black_any_pred,,0.5743670193439306,24447,TIDES 2011,predicted
+tides_season,players,2010,p_black_or_multi_pred,,0.6457286077624955,24447,TIDES 2011,predicted
+tides_season,players,2010,p_black_any_preddoc,,0.6228930620008584,24447,TIDES 2011,predicted
+tides_season,players,2010,p_black_bifsg,,0.2894365225885446,24447,TIDES 2011,predicted
+tides_season,players,2010,prior_black_pred,,0.567198493728306,24447,TIDES 2011,predicted
+tides_season,players,2010,p_multi_pred,,0.07136158841857844,24447,TIDES 2011,predicted
 tides_season,players,2010,Tides_black,,0.67,24447,TIDES 2011,predicted
 tides_season,players,2010,Tides_black_2plus,,,24447,TIDES 2011,predicted
 tides_season,players,2010,Tides_not_disclosed,,,24447,TIDES 2011,predicted
 tides_season,players,2010,Tides_upper_disclosed,,,24447,TIDES 2011,predicted
-tides_season,players,2011,p_black_any_pred,,0.5726969187594867,24640,TIDES 2012,predicted
-tides_season,players,2011,p_black_or_multi_pred,,0.6549408500615098,24640,TIDES 2012,predicted
-tides_season,players,2011,p_black_any_preddoc,,0.6178986679115671,24640,TIDES 2012,predicted
-tides_season,players,2011,p_black_bifsg,,0.29007039528054257,24640,TIDES 2012,predicted
-tides_season,players,2011,prior_black_pred,,0.5762699964028357,24640,TIDES 2012,predicted
-tides_season,players,2011,p_multi_pred,,0.08224393130203882,24640,TIDES 2012,predicted
+tides_season,players,2011,p_black_any_pred,,0.5726969187594846,24640,TIDES 2012,predicted
+tides_season,players,2011,p_black_or_multi_pred,,0.6549408500615088,24640,TIDES 2012,predicted
+tides_season,players,2011,p_black_any_preddoc,,0.6178986679115688,24640,TIDES 2012,predicted
+tides_season,players,2011,p_black_bifsg,,0.290070395280543,24640,TIDES 2012,predicted
+tides_season,players,2011,prior_black_pred,,0.5762699964028359,24640,TIDES 2012,predicted
+tides_season,players,2011,p_multi_pred,,0.08224393130203884,24640,TIDES 2012,predicted
 tides_season,players,2011,Tides_black,,0.67,24640,TIDES 2012,predicted
 tides_season,players,2011,Tides_black_2plus,,,24640,TIDES 2012,predicted
 tides_season,players,2011,Tides_not_disclosed,,,24640,TIDES 2012,predicted
 tides_season,players,2011,Tides_upper_disclosed,,,24640,TIDES 2012,predicted
-tides_season,players,2012,p_black_any_pred,,0.5804033133180114,24340,TIDES 2013,predicted
-tides_season,players,2012,p_black_or_multi_pred,,0.6770301367019244,24340,TIDES 2013,predicted
-tides_season,players,2012,p_black_any_preddoc,,0.6216371243028802,24340,TIDES 2013,predicted
-tides_season,players,2012,p_black_bifsg,,0.2881806125299285,24340,TIDES 2013,predicted
-tides_season,players,2012,prior_black_pred,,0.585256613007929,24340,TIDES 2013,predicted
-tides_season,players,2012,p_multi_pred,,0.09662682338392646,24340,TIDES 2013,predicted
+tides_season,players,2012,p_black_any_pred,,0.5804033133180106,24340,TIDES 2013,predicted
+tides_season,players,2012,p_black_or_multi_pred,,0.6770301367019234,24340,TIDES 2013,predicted
+tides_season,players,2012,p_black_any_preddoc,,0.6216371243028811,24340,TIDES 2013,predicted
+tides_season,players,2012,p_black_bifsg,,0.28818061252992827,24340,TIDES 2013,predicted
+tides_season,players,2012,prior_black_pred,,0.5852566130079281,24340,TIDES 2013,predicted
+tides_season,players,2012,p_multi_pred,,0.09662682338392631,24340,TIDES 2013,predicted
 tides_season,players,2012,Tides_black,,0.6629999999999999,24340,TIDES 2013,predicted
 tides_season,players,2012,Tides_black_2plus,,,24340,TIDES 2013,predicted
 tides_season,players,2012,Tides_not_disclosed,,,24340,TIDES 2013,predicted
 tides_season,players,2012,Tides_upper_disclosed,,,24340,TIDES 2013,predicted
-tides_season,players,2013,p_black_any_pred,,0.5844034998730039,24673,TIDES 2014,predicted
-tides_season,players,2013,p_black_or_multi_pred,,0.6860019631545415,24673,TIDES 2014,predicted
-tides_season,players,2013,p_black_any_preddoc,,0.6243398195870217,24673,TIDES 2014,predicted
-tides_season,players,2013,p_black_bifsg,,0.2960437766722708,24673,TIDES 2014,predicted
-tides_season,players,2013,prior_black_pred,,0.588855004767502,24673,TIDES 2014,predicted
-tides_season,players,2013,p_multi_pred,,0.10159846328155137,24673,TIDES 2014,predicted
+tides_season,players,2013,p_black_any_pred,,0.5844034998730044,24673,TIDES 2014,predicted
+tides_season,players,2013,p_black_or_multi_pred,,0.6860019631545456,24673,TIDES 2014,predicted
+tides_season,players,2013,p_black_any_preddoc,,0.6243398195870228,24673,TIDES 2014,predicted
+tides_season,players,2013,p_black_bifsg,,0.29604377667226944,24673,TIDES 2014,predicted
+tides_season,players,2013,prior_black_pred,,0.5888550047675035,24673,TIDES 2014,predicted
+tides_season,players,2013,p_multi_pred,,0.10159846328155149,24673,TIDES 2014,predicted
 tides_season,players,2013,Tides_black,,0.6729999999999999,24673,TIDES 2014,predicted
 tides_season,players,2013,Tides_black_2plus,,,24673,TIDES 2014,predicted
 tides_season,players,2013,Tides_not_disclosed,,,24673,TIDES 2014,predicted
 tides_season,players,2013,Tides_upper_disclosed,,,24673,TIDES 2014,predicted
-tides_season,players,2014,p_black_any_pred,,0.595477478232221,24435,TIDES 2015,predicted
-tides_season,players,2014,p_black_or_multi_pred,,0.7003197272303393,24435,TIDES 2015,predicted
-tides_season,players,2014,p_black_any_preddoc,,0.6403446995862888,24435,TIDES 2015,predicted
-tides_season,players,2014,p_black_bifsg,,0.30179539789942156,24435,TIDES 2015,predicted
-tides_season,players,2014,prior_black_pred,,0.5962947548920374,24435,TIDES 2015,predicted
-tides_season,players,2014,p_multi_pred,,0.10484224899813961,24435,TIDES 2015,predicted
+tides_season,players,2014,p_black_any_pred,,0.5954774782322192,24435,TIDES 2015,predicted
+tides_season,players,2014,p_black_or_multi_pred,,0.7003197272303398,24435,TIDES 2015,predicted
+tides_season,players,2014,p_black_any_preddoc,,0.6403446995862904,24435,TIDES 2015,predicted
+tides_season,players,2014,p_black_bifsg,,0.3017953978994223,24435,TIDES 2015,predicted
+tides_season,players,2014,prior_black_pred,,0.5962947548920353,24435,TIDES 2015,predicted
+tides_season,players,2014,p_multi_pred,,0.10484224899813993,24435,TIDES 2015,predicted
 tides_season,players,2014,Tides_black,,0.687,24435,TIDES 2015,predicted
 tides_season,players,2014,Tides_black_2plus,,,24435,TIDES 2015,predicted
 tides_season,players,2014,Tides_not_disclosed,,,24435,TIDES 2015,predicted
 tides_season,players,2014,Tides_upper_disclosed,,,24435,TIDES 2015,predicted
-tides_season,players,2015,p_black_any_pred,,0.5950933351743821,24087,TIDES 2016,predicted
-tides_season,players,2015,p_black_or_multi_pred,,0.7031715222183458,24087,TIDES 2016,predicted
-tides_season,players,2015,p_black_any_preddoc,,0.6385130219171465,24087,TIDES 2016,predicted
-tides_season,players,2015,p_black_bifsg,,0.3032503993595922,24087,TIDES 2016,predicted
-tides_season,players,2015,prior_black_pred,,0.5957654587430664,24087,TIDES 2016,predicted
-tides_season,players,2015,p_multi_pred,,0.1080781870439711,24087,TIDES 2016,predicted
+tides_season,players,2015,p_black_any_pred,,0.5950933351743862,24087,TIDES 2016,predicted
+tides_season,players,2015,p_black_or_multi_pred,,0.7031715222183479,24087,TIDES 2016,predicted
+tides_season,players,2015,p_black_any_preddoc,,0.6385130219171453,24087,TIDES 2016,predicted
+tides_season,players,2015,p_black_bifsg,,0.3032503993595925,24087,TIDES 2016,predicted
+tides_season,players,2015,prior_black_pred,,0.5957654587430683,24087,TIDES 2016,predicted
+tides_season,players,2015,p_multi_pred,,0.10807818704397212,24087,TIDES 2016,predicted
 tides_season,players,2015,Tides_black,,0.6920000000000001,24087,TIDES 2016,predicted
 tides_season,players,2015,Tides_black_2plus,,,24087,TIDES 2016,predicted
 tides_season,players,2015,Tides_not_disclosed,,,24087,TIDES 2016,predicted
 tides_season,players,2015,Tides_upper_disclosed,,,24087,TIDES 2016,predicted
 tides_season,players,2016,p_black_any_pred,,0.609900363823656,28235,TIDES 2016,predicted
-tides_season,players,2016,p_black_or_multi_pred,,0.7171643906327274,28235,TIDES 2016,predicted
-tides_season,players,2016,p_black_any_preddoc,,0.6485319278867518,28235,TIDES 2016,predicted
-tides_season,players,2016,p_black_bifsg,,0.30530659152448075,28235,TIDES 2016,predicted
-tides_season,players,2016,prior_black_pred,,0.6105434772438113,28235,TIDES 2016,predicted
-tides_season,players,2016,p_multi_pred,,0.10726402680907673,28235,TIDES 2016,predicted
+tides_season,players,2016,p_black_or_multi_pred,,0.7171643906327307,28235,TIDES 2016,predicted
+tides_season,players,2016,p_black_any_preddoc,,0.6485319278867508,28235,TIDES 2016,predicted
+tides_season,players,2016,p_black_bifsg,,0.3053065915244802,28235,TIDES 2016,predicted
+tides_season,players,2016,prior_black_pred,,0.6105434772438089,28235,TIDES 2016,predicted
+tides_season,players,2016,p_multi_pred,,0.10726402680907791,28235,TIDES 2016,predicted
 tides_season,players,2016,Tides_black,,0.6970000000000001,28235,TIDES 2016,predicted
 tides_season,players,2016,Tides_black_2plus,,,28235,TIDES 2016,predicted
 tides_season,players,2016,Tides_not_disclosed,,,28235,TIDES 2016,predicted
 tides_season,players,2016,Tides_upper_disclosed,,,28235,TIDES 2016,predicted
-tides_season,players,2017,p_black_any_pred,,0.6155779314450838,27221,,predicted
-tides_season,players,2017,p_black_or_multi_pred,,0.7232148461438622,27221,,predicted
-tides_season,players,2017,p_black_any_preddoc,,0.6489349574451884,27221,,predicted
-tides_season,players,2017,p_black_bifsg,,0.30979241517030925,27221,,predicted
-tides_season,players,2017,prior_black_pred,,0.6181610652181081,27221,,predicted
-tides_season,players,2017,p_multi_pred,,0.10763691469877655,27221,,predicted
+tides_season,players,2017,p_black_any_pred,,0.6155779314450829,27221,,predicted
+tides_season,players,2017,p_black_or_multi_pred,,0.7232148461438616,27221,,predicted
+tides_season,players,2017,p_black_any_preddoc,,0.6489349574451895,27221,,predicted
+tides_season,players,2017,p_black_bifsg,,0.3097924151703087,27221,,predicted
+tides_season,players,2017,prior_black_pred,,0.6181610652181083,27221,,predicted
+tides_season,players,2017,p_multi_pred,,0.10763691469877684,27221,,predicted
 tides_season,players,2017,Tides_black,,,27221,,predicted
 tides_season,players,2017,Tides_black_2plus,,,27221,,predicted
 tides_season,players,2017,Tides_not_disclosed,,,27221,,predicted
 tides_season,players,2017,Tides_upper_disclosed,,,27221,,predicted
-tides_season,players,2018,p_black_any_pred,,0.6274764402542152,27155,,predicted
-tides_season,players,2018,p_black_or_multi_pred,,0.7297652371449111,27155,,predicted
-tides_season,players,2018,p_black_any_preddoc,,0.6593227430825896,27155,,predicted
-tides_season,players,2018,p_black_bifsg,,0.3190350739592979,27155,,predicted
-tides_season,players,2018,prior_black_pred,,0.6234688253958082,27155,,predicted
-tides_season,players,2018,p_multi_pred,,0.1022887968907031,27155,,predicted
+tides_season,players,2018,p_black_any_pred,,0.6274764402542136,27155,,predicted
+tides_season,players,2018,p_black_or_multi_pred,,0.7297652371449115,27155,,predicted
+tides_season,players,2018,p_black_any_preddoc,,0.6593227430825893,27155,,predicted
+tides_season,players,2018,p_black_bifsg,,0.31903507395929875,27155,,predicted
+tides_season,players,2018,prior_black_pred,,0.6234688253958074,27155,,predicted
+tides_season,players,2018,p_multi_pred,,0.10228879689070342,27155,,predicted
 tides_season,players,2018,Tides_black,,,27155,,predicted
 tides_season,players,2018,Tides_black_2plus,,,27155,,predicted
 tides_season,players,2018,Tides_not_disclosed,,,27155,,predicted
 tides_season,players,2018,Tides_upper_disclosed,,,27155,,predicted
-tides_season,players,2019,p_black_any_pred,,0.6317775183137686,27145,TIDES 2019,predicted
-tides_season,players,2019,p_black_or_multi_pred,,0.7344823938538673,27145,TIDES 2019,predicted
-tides_season,players,2019,p_black_any_preddoc,,0.6595635002496455,27145,TIDES 2019,predicted
-tides_season,players,2019,p_black_bifsg,,0.31924754845329073,27145,TIDES 2019,predicted
-tides_season,players,2019,prior_black_pred,,0.6300172177431109,27145,TIDES 2019,predicted
-tides_season,players,2019,p_multi_pred,,0.10270487554010799,27145,TIDES 2019,predicted
+tides_season,players,2019,p_black_any_pred,,0.6317775183137685,27145,TIDES 2019,predicted
+tides_season,players,2019,p_black_or_multi_pred,,0.7344823938538668,27145,TIDES 2019,predicted
+tides_season,players,2019,p_black_any_preddoc,,0.6595635002496475,27145,TIDES 2019,predicted
+tides_season,players,2019,p_black_bifsg,,0.31924754845328873,27145,TIDES 2019,predicted
+tides_season,players,2019,prior_black_pred,,0.6300172177431115,27145,TIDES 2019,predicted
+tides_season,players,2019,p_multi_pred,,0.10270487554010735,27145,TIDES 2019,predicted
 tides_season,players,2019,Tides_black,,0.589,27145,TIDES 2019,predicted
 tides_season,players,2019,Tides_black_2plus,,0.6799999999999999,27145,TIDES 2019,predicted
 tides_season,players,2019,Tides_not_disclosed,,0.031,27145,TIDES 2019,predicted
 tides_season,players,2019,Tides_upper_disclosed,,0.7017543859649122,27145,TIDES 2019,predicted
-tides_season,players,2020,p_black_any_pred,,0.6284127311334505,27657,TIDES 2020,predicted
-tides_season,players,2020,p_black_or_multi_pred,,0.7328829184899923,27657,TIDES 2020,predicted
-tides_season,players,2020,p_black_any_preddoc,,0.655463250939667,27657,TIDES 2020,predicted
-tides_season,players,2020,p_black_bifsg,,0.3190190401434459,27657,TIDES 2020,predicted
-tides_season,players,2020,prior_black_pred,,0.6315385755569622,27657,TIDES 2020,predicted
-tides_season,players,2020,p_multi_pred,,0.10447018735654652,27657,TIDES 2020,predicted
+tides_season,players,2020,p_black_any_pred,,0.6284127311334481,27657,TIDES 2020,predicted
+tides_season,players,2020,p_black_or_multi_pred,,0.7328829184899905,27657,TIDES 2020,predicted
+tides_season,players,2020,p_black_any_preddoc,,0.6554632509396711,27657,TIDES 2020,predicted
+tides_season,players,2020,p_black_bifsg,,0.31901904014344695,27657,TIDES 2020,predicted
+tides_season,players,2020,prior_black_pred,,0.6315385755569598,27657,TIDES 2020,predicted
+tides_season,players,2020,p_multi_pred,,0.10447018735654505,27657,TIDES 2020,predicted
 tides_season,players,2020,Tides_black,,0.575,27657,TIDES 2020,predicted
 tides_season,players,2020,Tides_black_2plus,,0.6689999999999999,27657,TIDES 2020,predicted
 tides_season,players,2020,Tides_not_disclosed,,0.057,27657,TIDES 2020,predicted
 tides_season,players,2020,Tides_upper_disclosed,,0.7094379639448568,27657,TIDES 2020,predicted
-tides_season,players,2021,p_black_any_pred,,0.633990287249277,29256,TIDES 2021,predicted
-tides_season,players,2021,p_black_or_multi_pred,,0.734610928929384,29256,TIDES 2021,predicted
-tides_season,players,2021,p_black_any_preddoc,,0.6589107513339002,29256,TIDES 2021,predicted
-tides_season,players,2021,p_black_bifsg,,0.3230997206108567,29256,TIDES 2021,predicted
-tides_season,players,2021,prior_black_pred,,0.6381196329187909,29256,TIDES 2021,predicted
-tides_season,players,2021,p_multi_pred,,0.10062064168009485,29256,TIDES 2021,predicted
+tides_season,players,2021,p_black_any_pred,,0.6339902872492781,29256,TIDES 2021,predicted
+tides_season,players,2021,p_black_or_multi_pred,,0.734610928929379,29256,TIDES 2021,predicted
+tides_season,players,2021,p_black_any_preddoc,,0.6589107513339041,29256,TIDES 2021,predicted
+tides_season,players,2021,p_black_bifsg,,0.32309972061085523,29256,TIDES 2021,predicted
+tides_season,players,2021,prior_black_pred,,0.6381196329187877,29256,TIDES 2021,predicted
+tides_season,players,2021,p_multi_pred,,0.10062064168009471,29256,TIDES 2021,predicted
 tides_season,players,2021,Tides_black,,0.58,29256,TIDES 2021,predicted
 tides_season,players,2021,Tides_black_2plus,,0.6779999999999999,29256,TIDES 2021,predicted
 tides_season,players,2021,Tides_not_disclosed,,0.042,29256,TIDES 2021,predicted
 tides_season,players,2021,Tides_upper_disclosed,,0.7077244258872651,29256,TIDES 2021,predicted
-tides_season,players,2022,p_black_any_pred,,0.6300543233119121,29422,TIDES 2022,predicted
-tides_season,players,2022,p_black_or_multi_pred,,0.729949059502224,29422,TIDES 2022,predicted
-tides_season,players,2022,p_black_any_preddoc,,0.6516287736992671,29422,TIDES 2022,predicted
-tides_season,players,2022,p_black_bifsg,,0.3202144696794208,29422,TIDES 2022,predicted
-tides_season,players,2022,prior_black_pred,,0.640080841785748,29422,TIDES 2022,predicted
+tides_season,players,2022,p_black_any_pred,,0.6300543233119098,29422,TIDES 2022,predicted
+tides_season,players,2022,p_black_or_multi_pred,,0.7299490595022198,29422,TIDES 2022,predicted
+tides_season,players,2022,p_black_any_preddoc,,0.6516287736992696,29422,TIDES 2022,predicted
+tides_season,players,2022,p_black_bifsg,,0.3202144696794174,29422,TIDES 2022,predicted
+tides_season,players,2022,prior_black_pred,,0.6400808417857514,29422,TIDES 2022,predicted
 tides_season,players,2022,p_multi_pred,,0.09989473619029705,29422,TIDES 2022,predicted
 tides_season,players,2022,Tides_black,,0.564,29422,TIDES 2022,predicted
 tides_season,players,2022,Tides_black_2plus,,0.6689999999999999,29422,TIDES 2022,predicted
 tides_season,players,2022,Tides_not_disclosed,,0.057,29422,TIDES 2022,predicted
 tides_season,players,2022,Tides_upper_disclosed,,0.7094379639448568,29422,TIDES 2022,predicted
-tides_season,players,2023,p_black_any_pred,,0.6332000332564505,29507,TIDES 2023,predicted
-tides_season,players,2023,p_black_or_multi_pred,,0.7348656545864654,29507,TIDES 2023,predicted
-tides_season,players,2023,p_black_any_preddoc,,0.6582069540258154,29507,TIDES 2023,predicted
-tides_season,players,2023,p_black_bifsg,,0.32419708030403716,29507,TIDES 2023,predicted
-tides_season,players,2023,prior_black_pred,,0.6403736182097098,29507,TIDES 2023,predicted
-tides_season,players,2023,p_multi_pred,,0.10166562133001995,29507,TIDES 2023,predicted
+tides_season,players,2023,p_black_any_pred,,0.6332000332564504,29507,TIDES 2023,predicted
+tides_season,players,2023,p_black_or_multi_pred,,0.7348656545864691,29507,TIDES 2023,predicted
+tides_season,players,2023,p_black_any_preddoc,,0.6582069540258282,29507,TIDES 2023,predicted
+tides_season,players,2023,p_black_bifsg,,0.3241970803040382,29507,TIDES 2023,predicted
+tides_season,players,2023,prior_black_pred,,0.6403736182097058,29507,TIDES 2023,predicted
+tides_season,players,2023,p_multi_pred,,0.10166562133001959,29507,TIDES 2023,predicted
 tides_season,players,2023,Tides_black,,0.535,29507,TIDES 2023,predicted
 tides_season,players,2023,Tides_black_2plus,,0.644,29507,TIDES 2023,predicted
 tides_season,players,2023,Tides_not_disclosed,,0.08900000000000001,29507,TIDES 2023,predicted
 tides_season,players,2023,Tides_upper_disclosed,,0.7069154774972558,29507,TIDES 2023,predicted
-tides_season,players,2024,p_black_any_pred,,0.6325360992158411,29559,,predicted
-tides_season,players,2024,p_black_or_multi_pred,,0.7322772914855915,29559,,predicted
-tides_season,players,2024,p_black_any_preddoc,,0.6581464096322035,29559,,predicted
-tides_season,players,2024,p_black_bifsg,,0.33043789449368066,29559,,predicted
-tides_season,players,2024,prior_black_pred,,0.6399561415424145,29559,,predicted
-tides_season,players,2024,p_multi_pred,,0.09974119226974973,29559,,predicted
+tides_season,players,2024,p_black_any_pred,,0.6325360992158406,29559,,predicted
+tides_season,players,2024,p_black_or_multi_pred,,0.7322772914855964,29559,,predicted
+tides_season,players,2024,p_black_any_preddoc,,0.6581464096322073,29559,,predicted
+tides_season,players,2024,p_black_bifsg,,0.3304378944936798,29559,,predicted
+tides_season,players,2024,prior_black_pred,,0.639956141542409,29559,,predicted
+tides_season,players,2024,p_multi_pred,,0.09974119226975,29559,,predicted
 tides_season,players,2024,Tides_black,,,29559,,predicted
 tides_season,players,2024,Tides_black_2plus,,,29559,,predicted
 tides_season,players,2024,Tides_not_disclosed,,,29559,,predicted
 tides_season,players,2024,Tides_upper_disclosed,,,29559,,predicted
-tides_season,players,2025,p_black_any_pred,,0.6322378073537317,29548,,predicted
-tides_season,players,2025,p_black_or_multi_pred,,0.733398845128115,29548,,predicted
-tides_season,players,2025,p_black_any_preddoc,,0.6596226001622542,29548,,predicted
-tides_season,players,2025,p_black_bifsg,,0.3327851591528521,29548,,predicted
-tides_season,players,2025,prior_black_pred,,0.6406007203103512,29548,,predicted
-tides_season,players,2025,p_multi_pred,,0.10116103777438819,29548,,predicted
+tides_season,players,2025,p_black_any_pred,,0.6322378073537295,29548,,predicted
+tides_season,players,2025,p_black_or_multi_pred,,0.7333988451281154,29548,,predicted
+tides_season,players,2025,p_black_any_preddoc,,0.6596226001622543,29548,,predicted
+tides_season,players,2025,p_black_bifsg,,0.33278515915285195,29548,,predicted
+tides_season,players,2025,prior_black_pred,,0.6406007203103533,29548,,predicted
+tides_season,players,2025,p_multi_pred,,0.10116103777438737,29548,,predicted
 tides_season,players,2025,Tides_black,,,29548,,predicted
 tides_season,players,2025,Tides_black_2plus,,,29548,,predicted
 tides_season,players,2025,Tides_not_disclosed,,,29548,,predicted
@@ -244,14 +244,14 @@ tides_season,players_headcount,2002,p_black_or_multi_pred,,0.5841393296115365,16
 tides_season,players_headcount,2002,p_black_any_preddoc,,0.5967092868189396,1688,,predicted
 tides_season,players_headcount,2002,p_black_bifsg,,0.2978945342178364,1688,,predicted
 tides_season,players_headcount,2002,prior_black_pred,,0.5209106590176961,1688,,predicted
-tides_season,players_headcount,2002,p_multi_pred,,0.024520810269632598,1688,,predicted
+tides_season,players_headcount,2002,p_multi_pred,,0.02452081026963259,1688,,predicted
 tides_season,players_headcount,2002,Tides_black,,,1688,,predicted
 tides_season,players_headcount,2002,Tides_black_2plus,,,1688,,predicted
 tides_season,players_headcount,2002,Tides_not_disclosed,,,1688,,predicted
 tides_season,players_headcount,2002,Tides_upper_disclosed,,,1688,,predicted
 tides_season,players_headcount,2003,p_black_any_pred,,0.5603535033186673,1692,TIDES 2004,predicted
 tides_season,players_headcount,2003,p_black_or_multi_pred,,0.5847672470459657,1692,TIDES 2004,predicted
-tides_season,players_headcount,2003,p_black_any_preddoc,,0.5988746791717666,1692,TIDES 2004,predicted
+tides_season,players_headcount,2003,p_black_any_preddoc,,0.5988746791717667,1692,TIDES 2004,predicted
 tides_season,players_headcount,2003,p_black_bifsg,,0.29774445459949644,1692,TIDES 2004,predicted
 tides_season,players_headcount,2003,prior_black_pred,,0.5222380014463153,1692,TIDES 2004,predicted
 tides_season,players_headcount,2003,p_multi_pred,,0.024413743727297283,1692,TIDES 2004,predicted
@@ -264,7 +264,7 @@ tides_season,players_headcount,2004,p_black_or_multi_pred,,0.5799330953434433,16
 tides_season,players_headcount,2004,p_black_any_preddoc,,0.5893761034703454,1691,,predicted
 tides_season,players_headcount,2004,p_black_bifsg,,0.29588991855590197,1691,,predicted
 tides_season,players_headcount,2004,prior_black_pred,,0.5206953848384954,1691,,predicted
-tides_season,players_headcount,2004,p_multi_pred,,0.027035462550758015,1691,,predicted
+tides_season,players_headcount,2004,p_multi_pred,,0.027035462550758012,1691,,predicted
 tides_season,players_headcount,2004,Tides_black,,,1691,,predicted
 tides_season,players_headcount,2004,Tides_black_2plus,,,1691,,predicted
 tides_season,players_headcount,2004,Tides_not_disclosed,,,1691,,predicted
@@ -274,7 +274,7 @@ tides_season,players_headcount,2005,p_black_or_multi_pred,,0.5830882097111048,16
 tides_season,players_headcount,2005,p_black_any_preddoc,,0.5918270177863071,1687,TIDES 2005,predicted
 tides_season,players_headcount,2005,p_black_bifsg,,0.2963935772333847,1687,TIDES 2005,predicted
 tides_season,players_headcount,2005,prior_black_pred,,0.52415420059066,1687,TIDES 2005,predicted
-tides_season,players_headcount,2005,p_multi_pred,,0.02702360853620278,1687,TIDES 2005,predicted
+tides_season,players_headcount,2005,p_multi_pred,,0.027023608536202753,1687,TIDES 2005,predicted
 tides_season,players_headcount,2005,Tides_black,,0.655,1687,TIDES 2005,predicted
 tides_season,players_headcount,2005,Tides_black_2plus,,,1687,TIDES 2005,predicted
 tides_season,players_headcount,2005,Tides_not_disclosed,,,1687,TIDES 2005,predicted
@@ -290,58 +290,58 @@ tides_season,players_headcount,2006,Tides_black_2plus,,,1689,TIDES 2006,predicte
 tides_season,players_headcount,2006,Tides_not_disclosed,,,1689,TIDES 2006,predicted
 tides_season,players_headcount,2006,Tides_upper_disclosed,,,1689,TIDES 2006,predicted
 tides_season,players_headcount,2007,p_black_any_pred,,0.5611813602407503,1689,TIDES 2008,predicted
-tides_season,players_headcount,2007,p_black_or_multi_pred,,0.6033348803381938,1689,TIDES 2008,predicted
+tides_season,players_headcount,2007,p_black_or_multi_pred,,0.6033348803381937,1689,TIDES 2008,predicted
 tides_season,players_headcount,2007,p_black_any_preddoc,,0.597241487079086,1689,TIDES 2008,predicted
 tides_season,players_headcount,2007,p_black_bifsg,,0.29076544212012195,1689,TIDES 2008,predicted
 tides_season,players_headcount,2007,prior_black_pred,,0.5398066361533278,1689,TIDES 2008,predicted
-tides_season,players_headcount,2007,p_multi_pred,,0.04215352009744284,1689,TIDES 2008,predicted
+tides_season,players_headcount,2007,p_multi_pred,,0.04215352009744285,1689,TIDES 2008,predicted
 tides_season,players_headcount,2007,Tides_black,,0.66,1689,TIDES 2008,predicted
 tides_season,players_headcount,2007,Tides_black_2plus,,,1689,TIDES 2008,predicted
 tides_season,players_headcount,2007,Tides_not_disclosed,,,1689,TIDES 2008,predicted
 tides_season,players_headcount,2007,Tides_upper_disclosed,,,1689,TIDES 2008,predicted
 tides_season,players_headcount,2008,p_black_any_pred,,0.5722706345609356,1692,TIDES 2009,predicted
-tides_season,players_headcount,2008,p_black_or_multi_pred,,0.6224154128901167,1692,TIDES 2009,predicted
-tides_season,players_headcount,2008,p_black_any_preddoc,,0.6137933980946657,1692,TIDES 2009,predicted
+tides_season,players_headcount,2008,p_black_or_multi_pred,,0.6224154128901165,1692,TIDES 2009,predicted
+tides_season,players_headcount,2008,p_black_any_preddoc,,0.6137933980946658,1692,TIDES 2009,predicted
 tides_season,players_headcount,2008,p_black_bifsg,,0.29391974653770025,1692,TIDES 2009,predicted
 tides_season,players_headcount,2008,prior_black_pred,,0.5536271425531022,1692,TIDES 2009,predicted
-tides_season,players_headcount,2008,p_multi_pred,,0.05014477832918039,1692,TIDES 2009,predicted
+tides_season,players_headcount,2008,p_multi_pred,,0.050144778329180385,1692,TIDES 2009,predicted
 tides_season,players_headcount,2008,Tides_black,,0.67,1692,TIDES 2009,predicted
 tides_season,players_headcount,2008,Tides_black_2plus,,,1692,TIDES 2009,predicted
 tides_season,players_headcount,2008,Tides_not_disclosed,,,1692,TIDES 2009,predicted
 tides_season,players_headcount,2008,Tides_upper_disclosed,,,1692,TIDES 2009,predicted
 tides_season,players_headcount,2009,p_black_any_pred,,0.5637611584110196,1689,TIDES 2010,predicted
-tides_season,players_headcount,2009,p_black_or_multi_pred,,0.6211900863168757,1689,TIDES 2010,predicted
-tides_season,players_headcount,2009,p_black_any_preddoc,,0.6082145804120267,1689,TIDES 2010,predicted
+tides_season,players_headcount,2009,p_black_or_multi_pred,,0.6211900863168753,1689,TIDES 2010,predicted
+tides_season,players_headcount,2009,p_black_any_preddoc,,0.6082145804120266,1689,TIDES 2010,predicted
 tides_season,players_headcount,2009,p_black_bifsg,,0.2835438617265514,1689,TIDES 2010,predicted
 tides_season,players_headcount,2009,prior_black_pred,,0.5575859123136547,1689,TIDES 2010,predicted
-tides_season,players_headcount,2009,p_multi_pred,,0.057428927905854896,1689,TIDES 2010,predicted
+tides_season,players_headcount,2009,p_multi_pred,,0.057428927905854917,1689,TIDES 2010,predicted
 tides_season,players_headcount,2009,Tides_black,,0.67,1689,TIDES 2010,predicted
 tides_season,players_headcount,2009,Tides_black_2plus,,,1689,TIDES 2010,predicted
 tides_season,players_headcount,2009,Tides_not_disclosed,,,1689,TIDES 2010,predicted
 tides_season,players_headcount,2009,Tides_upper_disclosed,,,1689,TIDES 2010,predicted
 tides_season,players_headcount,2010,p_black_any_pred,,0.5771057875692938,1692,TIDES 2011,predicted
-tides_season,players_headcount,2010,p_black_or_multi_pred,,0.6490048151586653,1692,TIDES 2011,predicted
-tides_season,players_headcount,2010,p_black_any_preddoc,,0.6242197143065797,1692,TIDES 2011,predicted
-tides_season,players_headcount,2010,p_black_bifsg,,0.29218477645460805,1692,TIDES 2011,predicted
+tides_season,players_headcount,2010,p_black_or_multi_pred,,0.6490048151586659,1692,TIDES 2011,predicted
+tides_season,players_headcount,2010,p_black_any_preddoc,,0.6242197143065801,1692,TIDES 2011,predicted
+tides_season,players_headcount,2010,p_black_bifsg,,0.292184776454608,1692,TIDES 2011,predicted
 tides_season,players_headcount,2010,prior_black_pred,,0.5674382638458757,1692,TIDES 2011,predicted
-tides_season,players_headcount,2010,p_multi_pred,,0.07189902758937225,1692,TIDES 2011,predicted
+tides_season,players_headcount,2010,p_multi_pred,,0.07189902758937226,1692,TIDES 2011,predicted
 tides_season,players_headcount,2010,Tides_black,,0.67,1692,TIDES 2011,predicted
 tides_season,players_headcount,2010,Tides_black_2plus,,,1692,TIDES 2011,predicted
 tides_season,players_headcount,2010,Tides_not_disclosed,,,1692,TIDES 2011,predicted
 tides_season,players_headcount,2010,Tides_upper_disclosed,,,1692,TIDES 2011,predicted
 tides_season,players_headcount,2011,p_black_any_pred,,0.5724705958963063,1688,TIDES 2012,predicted
-tides_season,players_headcount,2011,p_black_or_multi_pred,,0.656249914308205,1688,TIDES 2012,predicted
+tides_season,players_headcount,2011,p_black_or_multi_pred,,0.6562499143082046,1688,TIDES 2012,predicted
 tides_season,players_headcount,2011,p_black_any_preddoc,,0.6167907384405833,1688,TIDES 2012,predicted
 tides_season,players_headcount,2011,p_black_bifsg,,0.28927867416044245,1688,TIDES 2012,predicted
 tides_season,players_headcount,2011,prior_black_pred,,0.5769582235229742,1688,TIDES 2012,predicted
-tides_season,players_headcount,2011,p_multi_pred,,0.08377931841189791,1688,TIDES 2012,predicted
+tides_season,players_headcount,2011,p_multi_pred,,0.08377931841189794,1688,TIDES 2012,predicted
 tides_season,players_headcount,2011,Tides_black,,0.67,1688,TIDES 2012,predicted
 tides_season,players_headcount,2011,Tides_black_2plus,,,1688,TIDES 2012,predicted
 tides_season,players_headcount,2011,Tides_not_disclosed,,,1688,TIDES 2012,predicted
 tides_season,players_headcount,2011,Tides_upper_disclosed,,,1688,TIDES 2012,predicted
-tides_season,players_headcount,2012,p_black_any_pred,,0.5837912542316807,1690,TIDES 2013,predicted
-tides_season,players_headcount,2012,p_black_or_multi_pred,,0.6816091871907027,1690,TIDES 2013,predicted
-tides_season,players_headcount,2012,p_black_any_preddoc,,0.6252219230800385,1690,TIDES 2013,predicted
+tides_season,players_headcount,2012,p_black_any_pred,,0.5837912542316808,1690,TIDES 2013,predicted
+tides_season,players_headcount,2012,p_black_or_multi_pred,,0.6816091871907032,1690,TIDES 2013,predicted
+tides_season,players_headcount,2012,p_black_any_preddoc,,0.6252219230800389,1690,TIDES 2013,predicted
 tides_season,players_headcount,2012,p_black_bifsg,,0.2904436057957478,1690,TIDES 2013,predicted
 tides_season,players_headcount,2012,prior_black_pred,,0.5873013964285706,1690,TIDES 2013,predicted
 tides_season,players_headcount,2012,p_multi_pred,,0.0978179329590232,1690,TIDES 2013,predicted
@@ -351,649 +351,652 @@ tides_season,players_headcount,2012,Tides_not_disclosed,,,1690,TIDES 2013,predic
 tides_season,players_headcount,2012,Tides_upper_disclosed,,,1690,TIDES 2013,predicted
 tides_season,players_headcount,2013,p_black_any_pred,,0.585684159939714,1691,TIDES 2014,predicted
 tides_season,players_headcount,2013,p_black_or_multi_pred,,0.6884924264433827,1691,TIDES 2014,predicted
-tides_season,players_headcount,2013,p_black_any_preddoc,,0.626100393944839,1691,TIDES 2014,predicted
+tides_season,players_headcount,2013,p_black_any_preddoc,,0.6261003939448386,1691,TIDES 2014,predicted
 tides_season,players_headcount,2013,p_black_bifsg,,0.29646396325496754,1691,TIDES 2014,predicted
 tides_season,players_headcount,2013,prior_black_pred,,0.5910559335157736,1691,TIDES 2014,predicted
-tides_season,players_headcount,2013,p_multi_pred,,0.10280826650366892,1691,TIDES 2014,predicted
+tides_season,players_headcount,2013,p_multi_pred,,0.10280826650366887,1691,TIDES 2014,predicted
 tides_season,players_headcount,2013,Tides_black,,0.6729999999999999,1691,TIDES 2014,predicted
 tides_season,players_headcount,2013,Tides_black_2plus,,,1691,TIDES 2014,predicted
 tides_season,players_headcount,2013,Tides_not_disclosed,,,1691,TIDES 2014,predicted
 tides_season,players_headcount,2013,Tides_upper_disclosed,,,1691,TIDES 2014,predicted
 tides_season,players_headcount,2014,p_black_any_pred,,0.5983406844964738,1689,TIDES 2015,predicted
-tides_season,players_headcount,2014,p_black_or_multi_pred,,0.7031492690919345,1689,TIDES 2015,predicted
-tides_season,players_headcount,2014,p_black_any_preddoc,,0.6433102784165898,1689,TIDES 2015,predicted
+tides_season,players_headcount,2014,p_black_or_multi_pred,,0.7031492690919349,1689,TIDES 2015,predicted
+tides_season,players_headcount,2014,p_black_any_preddoc,,0.64331027841659,1689,TIDES 2015,predicted
 tides_season,players_headcount,2014,p_black_bifsg,,0.30315984802731577,1689,TIDES 2015,predicted
 tides_season,players_headcount,2014,prior_black_pred,,0.5960778927967667,1689,TIDES 2015,predicted
-tides_season,players_headcount,2014,p_multi_pred,,0.1048085845954612,1689,TIDES 2015,predicted
+tides_season,players_headcount,2014,p_multi_pred,,0.10480858459546133,1689,TIDES 2015,predicted
 tides_season,players_headcount,2014,Tides_black,,0.687,1689,TIDES 2015,predicted
 tides_season,players_headcount,2014,Tides_black_2plus,,,1689,TIDES 2015,predicted
 tides_season,players_headcount,2014,Tides_not_disclosed,,,1689,TIDES 2015,predicted
 tides_season,players_headcount,2014,Tides_upper_disclosed,,,1689,TIDES 2015,predicted
-tides_season,players_headcount,2015,p_black_any_pred,,0.5980868789909142,1687,TIDES 2016,predicted
-tides_season,players_headcount,2015,p_black_or_multi_pred,,0.706848330181768,1687,TIDES 2016,predicted
-tides_season,players_headcount,2015,p_black_any_preddoc,,0.6408058105245966,1687,TIDES 2016,predicted
-tides_season,players_headcount,2015,p_black_bifsg,,0.30453928546723796,1687,TIDES 2016,predicted
+tides_season,players_headcount,2015,p_black_any_pred,,0.5980868789909143,1687,TIDES 2016,predicted
+tides_season,players_headcount,2015,p_black_or_multi_pred,,0.7068483301817684,1687,TIDES 2016,predicted
+tides_season,players_headcount,2015,p_black_any_preddoc,,0.6408058105245971,1687,TIDES 2016,predicted
+tides_season,players_headcount,2015,p_black_bifsg,,0.3045392854672379,1687,TIDES 2016,predicted
 tides_season,players_headcount,2015,prior_black_pred,,0.5980232229300874,1687,TIDES 2016,predicted
 tides_season,players_headcount,2015,p_multi_pred,,0.10876145119085265,1687,TIDES 2016,predicted
 tides_season,players_headcount,2015,Tides_black,,0.6920000000000001,1687,TIDES 2016,predicted
 tides_season,players_headcount,2015,Tides_black_2plus,,,1687,TIDES 2016,predicted
 tides_season,players_headcount,2015,Tides_not_disclosed,,,1687,TIDES 2016,predicted
 tides_season,players_headcount,2015,Tides_upper_disclosed,,,1687,TIDES 2016,predicted
-tides_season,players_headcount,2016,p_black_any_pred,,0.6151319021852817,2648,TIDES 2016,predicted
-tides_season,players_headcount,2016,p_black_or_multi_pred,,0.7230075700077078,2648,TIDES 2016,predicted
+tides_season,players_headcount,2016,p_black_any_pred,,0.6151319021852812,2648,TIDES 2016,predicted
+tides_season,players_headcount,2016,p_black_or_multi_pred,,0.7230075700077077,2648,TIDES 2016,predicted
 tides_season,players_headcount,2016,p_black_any_preddoc,,0.6535381356948275,2648,TIDES 2016,predicted
-tides_season,players_headcount,2016,p_black_bifsg,,0.3150713952969336,2648,TIDES 2016,predicted
+tides_season,players_headcount,2016,p_black_bifsg,,0.31507139529693357,2648,TIDES 2016,predicted
 tides_season,players_headcount,2016,prior_black_pred,,0.6143565044087258,2648,TIDES 2016,predicted
-tides_season,players_headcount,2016,p_multi_pred,,0.10787566782242729,2648,TIDES 2016,predicted
+tides_season,players_headcount,2016,p_multi_pred,,0.10787566782242732,2648,TIDES 2016,predicted
 tides_season,players_headcount,2016,Tides_black,,0.6970000000000001,2648,TIDES 2016,predicted
 tides_season,players_headcount,2016,Tides_black_2plus,,,2648,TIDES 2016,predicted
 tides_season,players_headcount,2016,Tides_not_disclosed,,,2648,TIDES 2016,predicted
 tides_season,players_headcount,2016,Tides_upper_disclosed,,,2648,TIDES 2016,predicted
-tides_season,players_headcount,2017,p_black_any_pred,,0.6141147722643365,2113,,predicted
-tides_season,players_headcount,2017,p_black_or_multi_pred,,0.7231146833394791,2113,,predicted
-tides_season,players_headcount,2017,p_black_any_preddoc,,0.6474198417253905,2113,,predicted
-tides_season,players_headcount,2017,p_black_bifsg,,0.31061986271030195,2113,,predicted
-tides_season,players_headcount,2017,prior_black_pred,,0.6187791139030003,2113,,predicted
-tides_season,players_headcount,2017,p_multi_pred,,0.10899991107514347,2113,,predicted
+tides_season,players_headcount,2017,p_black_any_pred,,0.6141147722643372,2113,,predicted
+tides_season,players_headcount,2017,p_black_or_multi_pred,,0.723114683339479,2113,,predicted
+tides_season,players_headcount,2017,p_black_any_preddoc,,0.6474198417253902,2113,,predicted
+tides_season,players_headcount,2017,p_black_bifsg,,0.31061986271030145,2113,,predicted
+tides_season,players_headcount,2017,prior_black_pred,,0.6187791139030022,2113,,predicted
+tides_season,players_headcount,2017,p_multi_pred,,0.10899991107514348,2113,,predicted
 tides_season,players_headcount,2017,Tides_black,,,2113,,predicted
 tides_season,players_headcount,2017,Tides_black_2plus,,,2113,,predicted
 tides_season,players_headcount,2017,Tides_not_disclosed,,,2113,,predicted
 tides_season,players_headcount,2017,Tides_upper_disclosed,,,2113,,predicted
-tides_season,players_headcount,2018,p_black_any_pred,,0.631294424934511,2110,,predicted
-tides_season,players_headcount,2018,p_black_or_multi_pred,,0.7345826132012596,2110,,predicted
-tides_season,players_headcount,2018,p_black_any_preddoc,,0.6616671311976509,2110,,predicted
-tides_season,players_headcount,2018,p_black_bifsg,,0.3201021573613951,2110,,predicted
-tides_season,players_headcount,2018,prior_black_pred,,0.6281797903833314,2110,,predicted
-tides_season,players_headcount,2018,p_multi_pred,,0.10328818826674926,2110,,predicted
+tides_season,players_headcount,2018,p_black_any_pred,,0.6312944249345116,2110,,predicted
+tides_season,players_headcount,2018,p_black_or_multi_pred,,0.73458261320126,2110,,predicted
+tides_season,players_headcount,2018,p_black_any_preddoc,,0.661667131197651,2110,,predicted
+tides_season,players_headcount,2018,p_black_bifsg,,0.3201021573613955,2110,,predicted
+tides_season,players_headcount,2018,prior_black_pred,,0.6281797903833309,2110,,predicted
+tides_season,players_headcount,2018,p_multi_pred,,0.10328818826674922,2110,,predicted
 tides_season,players_headcount,2018,Tides_black,,,2110,,predicted
 tides_season,players_headcount,2018,Tides_black_2plus,,,2110,,predicted
 tides_season,players_headcount,2018,Tides_not_disclosed,,,2110,,predicted
 tides_season,players_headcount,2018,Tides_upper_disclosed,,,2110,,predicted
-tides_season,players_headcount,2019,p_black_any_pred,,0.6262134345939876,2115,TIDES 2019,predicted
-tides_season,players_headcount,2019,p_black_or_multi_pred,,0.7298756079810489,2115,TIDES 2019,predicted
-tides_season,players_headcount,2019,p_black_any_preddoc,,0.6533062648055121,2115,TIDES 2019,predicted
-tides_season,players_headcount,2019,p_black_bifsg,,0.313826307957138,2115,TIDES 2019,predicted
-tides_season,players_headcount,2019,prior_black_pred,,0.6292775719226957,2115,TIDES 2019,predicted
-tides_season,players_headcount,2019,p_multi_pred,,0.10366217338706267,2115,TIDES 2019,predicted
+tides_season,players_headcount,2019,p_black_any_pred,,0.6262134345939877,2115,TIDES 2019,predicted
+tides_season,players_headcount,2019,p_black_or_multi_pred,,0.7298756079810493,2115,TIDES 2019,predicted
+tides_season,players_headcount,2019,p_black_any_preddoc,,0.6533062648055125,2115,TIDES 2019,predicted
+tides_season,players_headcount,2019,p_black_bifsg,,0.31382630795713756,2115,TIDES 2019,predicted
+tides_season,players_headcount,2019,prior_black_pred,,0.6292775719226956,2115,TIDES 2019,predicted
+tides_season,players_headcount,2019,p_multi_pred,,0.10366217338706271,2115,TIDES 2019,predicted
 tides_season,players_headcount,2019,Tides_black,,0.589,2115,TIDES 2019,predicted
 tides_season,players_headcount,2019,Tides_black_2plus,,0.6799999999999999,2115,TIDES 2019,predicted
 tides_season,players_headcount,2019,Tides_not_disclosed,,0.031,2115,TIDES 2019,predicted
 tides_season,players_headcount,2019,Tides_upper_disclosed,,0.7017543859649122,2115,TIDES 2019,predicted
-tides_season,players_headcount,2020,p_black_any_pred,,0.6288294958574061,2289,TIDES 2020,predicted
-tides_season,players_headcount,2020,p_black_or_multi_pred,,0.7341068049982193,2289,TIDES 2020,predicted
+tides_season,players_headcount,2020,p_black_any_pred,,0.6288294958574049,2289,TIDES 2020,predicted
+tides_season,players_headcount,2020,p_black_or_multi_pred,,0.7341068049982189,2289,TIDES 2020,predicted
 tides_season,players_headcount,2020,p_black_any_preddoc,,0.6548481441830409,2289,TIDES 2020,predicted
-tides_season,players_headcount,2020,p_black_bifsg,,0.31960309081538946,2289,TIDES 2020,predicted
-tides_season,players_headcount,2020,prior_black_pred,,0.632027366881019,2289,TIDES 2020,predicted
-tides_season,players_headcount,2020,p_multi_pred,,0.105277309140813,2289,TIDES 2020,predicted
+tides_season,players_headcount,2020,p_black_bifsg,,0.3196030908153888,2289,TIDES 2020,predicted
+tides_season,players_headcount,2020,prior_black_pred,,0.6320273668810195,2289,TIDES 2020,predicted
+tides_season,players_headcount,2020,p_multi_pred,,0.10527730914081299,2289,TIDES 2020,predicted
 tides_season,players_headcount,2020,Tides_black,,0.575,2289,TIDES 2020,predicted
 tides_season,players_headcount,2020,Tides_black_2plus,,0.6689999999999999,2289,TIDES 2020,predicted
 tides_season,players_headcount,2020,Tides_not_disclosed,,0.057,2289,TIDES 2020,predicted
 tides_season,players_headcount,2020,Tides_upper_disclosed,,0.7094379639448568,2289,TIDES 2020,predicted
-tides_season,players_headcount,2021,p_black_any_pred,,0.6318086117895821,2373,TIDES 2021,predicted
-tides_season,players_headcount,2021,p_black_or_multi_pred,,0.7353493299743135,2373,TIDES 2021,predicted
-tides_season,players_headcount,2021,p_black_any_preddoc,,0.6556815338312123,2373,TIDES 2021,predicted
-tides_season,players_headcount,2021,p_black_bifsg,,0.3206761798529272,2373,TIDES 2021,predicted
-tides_season,players_headcount,2021,prior_black_pred,,0.6380797112910557,2373,TIDES 2021,predicted
+tides_season,players_headcount,2021,p_black_any_pred,,0.631808611789583,2373,TIDES 2021,predicted
+tides_season,players_headcount,2021,p_black_or_multi_pred,,0.7353493299743132,2373,TIDES 2021,predicted
+tides_season,players_headcount,2021,p_black_any_preddoc,,0.6556815338312125,2373,TIDES 2021,predicted
+tides_season,players_headcount,2021,p_black_bifsg,,0.32067617985292746,2373,TIDES 2021,predicted
+tides_season,players_headcount,2021,prior_black_pred,,0.6380797112910565,2373,TIDES 2021,predicted
 tides_season,players_headcount,2021,p_multi_pred,,0.10354071818473241,2373,TIDES 2021,predicted
 tides_season,players_headcount,2021,Tides_black,,0.58,2373,TIDES 2021,predicted
 tides_season,players_headcount,2021,Tides_black_2plus,,0.6779999999999999,2373,TIDES 2021,predicted
 tides_season,players_headcount,2021,Tides_not_disclosed,,0.042,2373,TIDES 2021,predicted
 tides_season,players_headcount,2021,Tides_upper_disclosed,,0.7077244258872651,2373,TIDES 2021,predicted
-tides_season,players_headcount,2022,p_black_any_pred,,0.6347453384917754,2267,TIDES 2022,predicted
-tides_season,players_headcount,2022,p_black_or_multi_pred,,0.7340982352225949,2267,TIDES 2022,predicted
-tides_season,players_headcount,2022,p_black_any_preddoc,,0.6574080928789892,2267,TIDES 2022,predicted
-tides_season,players_headcount,2022,p_black_bifsg,,0.3229466045989745,2267,TIDES 2022,predicted
-tides_season,players_headcount,2022,prior_black_pred,,0.6434534867212943,2267,TIDES 2022,predicted
-tides_season,players_headcount,2022,p_multi_pred,,0.09935289673081933,2267,TIDES 2022,predicted
+tides_season,players_headcount,2022,p_black_any_pred,,0.6347453384917751,2267,TIDES 2022,predicted
+tides_season,players_headcount,2022,p_black_or_multi_pred,,0.7340982352225945,2267,TIDES 2022,predicted
+tides_season,players_headcount,2022,p_black_any_preddoc,,0.6574080928789883,2267,TIDES 2022,predicted
+tides_season,players_headcount,2022,p_black_bifsg,,0.3229466045989743,2267,TIDES 2022,predicted
+tides_season,players_headcount,2022,prior_black_pred,,0.6434534867212941,2267,TIDES 2022,predicted
+tides_season,players_headcount,2022,p_multi_pred,,0.09935289673081932,2267,TIDES 2022,predicted
 tides_season,players_headcount,2022,Tides_black,,0.564,2267,TIDES 2022,predicted
 tides_season,players_headcount,2022,Tides_black_2plus,,0.6689999999999999,2267,TIDES 2022,predicted
 tides_season,players_headcount,2022,Tides_not_disclosed,,0.057,2267,TIDES 2022,predicted
 tides_season,players_headcount,2022,Tides_upper_disclosed,,0.7094379639448568,2267,TIDES 2022,predicted
-tides_season,players_headcount,2023,p_black_any_pred,,0.6336796854085245,2218,TIDES 2023,predicted
-tides_season,players_headcount,2023,p_black_or_multi_pred,,0.7359850276224353,2218,TIDES 2023,predicted
-tides_season,players_headcount,2023,p_black_any_preddoc,,0.6584727493400248,2218,TIDES 2023,predicted
-tides_season,players_headcount,2023,p_black_bifsg,,0.3250018781481453,2218,TIDES 2023,predicted
-tides_season,players_headcount,2023,prior_black_pred,,0.6417006182005643,2218,TIDES 2023,predicted
-tides_season,players_headcount,2023,p_multi_pred,,0.1023053422139124,2218,TIDES 2023,predicted
+tides_season,players_headcount,2023,p_black_any_pred,,0.633679685408524,2218,TIDES 2023,predicted
+tides_season,players_headcount,2023,p_black_or_multi_pred,,0.7359850276224361,2218,TIDES 2023,predicted
+tides_season,players_headcount,2023,p_black_any_preddoc,,0.6584727493400244,2218,TIDES 2023,predicted
+tides_season,players_headcount,2023,p_black_bifsg,,0.32500187814814474,2218,TIDES 2023,predicted
+tides_season,players_headcount,2023,prior_black_pred,,0.6417006182005639,2218,TIDES 2023,predicted
+tides_season,players_headcount,2023,p_multi_pred,,0.10230534221391241,2218,TIDES 2023,predicted
 tides_season,players_headcount,2023,Tides_black,,0.535,2218,TIDES 2023,predicted
 tides_season,players_headcount,2023,Tides_black_2plus,,0.644,2218,TIDES 2023,predicted
 tides_season,players_headcount,2023,Tides_not_disclosed,,0.08900000000000001,2218,TIDES 2023,predicted
 tides_season,players_headcount,2023,Tides_upper_disclosed,,0.7069154774972558,2218,TIDES 2023,predicted
-tides_season,players_headcount,2024,p_black_any_pred,,0.6360415505350662,2263,,predicted
-tides_season,players_headcount,2024,p_black_or_multi_pred,,0.736548837527136,2263,,predicted
-tides_season,players_headcount,2024,p_black_any_preddoc,,0.6609962477085394,2263,,predicted
-tides_season,players_headcount,2024,p_black_bifsg,,0.3301597277282858,2263,,predicted
-tides_season,players_headcount,2024,prior_black_pred,,0.6415996635355852,2263,,predicted
-tides_season,players_headcount,2024,p_multi_pred,,0.10050728699206936,2263,,predicted
+tides_season,players_headcount,2024,p_black_any_pred,,0.6360415505350664,2263,,predicted
+tides_season,players_headcount,2024,p_black_or_multi_pred,,0.7365488375271362,2263,,predicted
+tides_season,players_headcount,2024,p_black_any_preddoc,,0.6609962477085397,2263,,predicted
+tides_season,players_headcount,2024,p_black_bifsg,,0.33015972772828567,2263,,predicted
+tides_season,players_headcount,2024,prior_black_pred,,0.6415996635355857,2263,,predicted
+tides_season,players_headcount,2024,p_multi_pred,,0.10050728699206939,2263,,predicted
 tides_season,players_headcount,2024,Tides_black,,,2263,,predicted
 tides_season,players_headcount,2024,Tides_black_2plus,,,2263,,predicted
 tides_season,players_headcount,2024,Tides_not_disclosed,,,2263,,predicted
 tides_season,players_headcount,2024,Tides_upper_disclosed,,,2263,,predicted
-tides_season,players_headcount,2025,p_black_any_pred,,0.6361361483682482,2257,,predicted
-tides_season,players_headcount,2025,p_black_or_multi_pred,,0.7361714592164499,2257,,predicted
-tides_season,players_headcount,2025,p_black_any_preddoc,,0.6615037314826859,2257,,predicted
-tides_season,players_headcount,2025,p_black_bifsg,,0.3345326052859969,2257,,predicted
-tides_season,players_headcount,2025,prior_black_pred,,0.6427179522450527,2257,,predicted
-tides_season,players_headcount,2025,p_multi_pred,,0.10003531084820019,2257,,predicted
+tides_season,players_headcount,2025,p_black_any_pred,,0.6361361483682487,2257,,predicted
+tides_season,players_headcount,2025,p_black_or_multi_pred,,0.7361714592164498,2257,,predicted
+tides_season,players_headcount,2025,p_black_any_preddoc,,0.6615037314826863,2257,,predicted
+tides_season,players_headcount,2025,p_black_bifsg,,0.33453260528599676,2257,,predicted
+tides_season,players_headcount,2025,prior_black_pred,,0.6427179522450521,2257,,predicted
+tides_season,players_headcount,2025,p_multi_pred,,0.1000353108482002,2257,,predicted
 tides_season,players_headcount,2025,Tides_black,,,2257,,predicted
 tides_season,players_headcount,2025,Tides_black_2plus,,,2257,,predicted
 tides_season,players_headcount,2025,Tides_not_disclosed,,,2257,,predicted
 tides_season,players_headcount,2025,Tides_upper_disclosed,,,2257,,predicted
-tides_season,head_coaches,2002,p_black_any_pred,,0.11253256654873509,32,TIDES 2003,predicted
-tides_season,head_coaches,2002,p_black_or_multi_pred,,0.13236598716241288,32,TIDES 2003,predicted
-tides_season,head_coaches,2002,p_black_any_preddoc,,0.09321903423705816,32,TIDES 2003,predicted
+tides_season,head_coaches,2002,p_black_any_pred,,0.11251530954221077,32,TIDES 2003,predicted
+tides_season,head_coaches,2002,p_black_or_multi_pred,,0.13229442879657766,32,TIDES 2003,predicted
+tides_season,head_coaches,2002,p_black_any_preddoc,,0.09328171907392323,32,TIDES 2003,predicted
 tides_season,head_coaches,2002,p_black_bifsg,,0.12165202558962142,32,TIDES 2003,predicted
-tides_season,head_coaches,2002,prior_black_pred,,0.11880243764873549,32,TIDES 2003,predicted
-tides_season,head_coaches,2002,p_multi_pred,,0.01983342061367771,32,TIDES 2003,predicted
+tides_season,head_coaches,2002,prior_black_pred,,0.11876711046534949,32,TIDES 2003,predicted
+tides_season,head_coaches,2002,p_multi_pred,,0.019779119254366945,32,TIDES 2003,predicted
 tides_season,head_coaches,2002,Tides_black,,0.06,32,TIDES 2003,predicted
 tides_season,head_coaches,2002,Tides_black_2plus,,,32,TIDES 2003,predicted
 tides_season,head_coaches,2002,Tides_not_disclosed,,,32,TIDES 2003,predicted
 tides_season,head_coaches,2002,Tides_upper_disclosed,,,32,TIDES 2003,predicted
-tides_season,head_coaches,2003,p_black_any_pred,,0.13402819563767016,32,TIDES 2004,predicted
-tides_season,head_coaches,2003,p_black_or_multi_pred,,0.15041946247724236,32,TIDES 2004,predicted
-tides_season,head_coaches,2003,p_black_any_preddoc,,0.12418810243362606,32,TIDES 2004,predicted
+tides_season,head_coaches,2003,p_black_any_pred,,0.13401483233444367,32,TIDES 2004,predicted
+tides_season,head_coaches,2003,p_black_or_multi_pred,,0.15036182400647866,32,TIDES 2004,predicted
+tides_season,head_coaches,2003,p_black_any_preddoc,,0.12424981634197468,32,TIDES 2004,predicted
 tides_season,head_coaches,2003,p_black_bifsg,,0.14050637117017414,32,TIDES 2004,predicted
-tides_season,head_coaches,2003,prior_black_pred,,0.12246741691906173,32,TIDES 2004,predicted
-tides_season,head_coaches,2003,p_multi_pred,,0.016391266839572184,32,TIDES 2004,predicted
+tides_season,head_coaches,2003,prior_black_pred,,0.1224353992786617,32,TIDES 2004,predicted
+tides_season,head_coaches,2003,p_multi_pred,,0.016346991672035002,32,TIDES 2004,predicted
 tides_season,head_coaches,2003,Tides_black,,0.09,32,TIDES 2004,predicted
 tides_season,head_coaches,2003,Tides_black_2plus,,,32,TIDES 2004,predicted
 tides_season,head_coaches,2003,Tides_not_disclosed,,,32,TIDES 2004,predicted
 tides_season,head_coaches,2003,Tides_upper_disclosed,,,32,TIDES 2004,predicted
-tides_season,head_coaches,2004,p_black_any_pred,,0.18138888995096045,32,TIDES 2004,predicted
-tides_season,head_coaches,2004,p_black_or_multi_pred,,0.19527807976671185,32,TIDES 2004,predicted
-tides_season,head_coaches,2004,p_black_any_preddoc,,0.1899462690257282,32,TIDES 2004,predicted
+tides_season,head_coaches,2004,p_black_any_pred,,0.1813525940218636,32,TIDES 2004,predicted
+tides_season,head_coaches,2004,p_black_or_multi_pred,,0.19520833093570983,32,TIDES 2004,predicted
+tides_season,head_coaches,2004,p_black_any_preddoc,,0.19001595719603598,32,TIDES 2004,predicted
 tides_season,head_coaches,2004,p_black_bifsg,,0.18580807082214232,32,TIDES 2004,predicted
-tides_season,head_coaches,2004,prior_black_pred,,0.13223796137606036,32,TIDES 2004,predicted
-tides_season,head_coaches,2004,p_multi_pred,,0.01388918981575145,32,TIDES 2004,predicted
+tides_season,head_coaches,2004,prior_black_pred,,0.1322064844337248,32,TIDES 2004,predicted
+tides_season,head_coaches,2004,p_multi_pred,,0.013855736913846305,32,TIDES 2004,predicted
 tides_season,head_coaches,2004,Tides_black,,0.16,32,TIDES 2004,predicted
 tides_season,head_coaches,2004,Tides_black_2plus,,,32,TIDES 2004,predicted
 tides_season,head_coaches,2004,Tides_not_disclosed,,,32,TIDES 2004,predicted
 tides_season,head_coaches,2004,Tides_upper_disclosed,,,32,TIDES 2004,predicted
-tides_season,head_coaches,2005,p_black_any_pred,,0.17206819899250758,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2005,p_black_or_multi_pred,,0.1935790753411192,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2005,p_black_any_preddoc,,0.21860682184388483,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2005,p_black_any_pred,,0.17204635860485082,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2005,p_black_or_multi_pred,,0.19350190135663417,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2005,p_black_any_preddoc,,0.2186550612039041,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2005,p_black_bifsg,,0.16446487389202225,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2005,prior_black_pred,,0.14035613239977798,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2005,p_multi_pred,,0.02151087634861166,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2005,prior_black_pred,,0.14033253850589725,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2005,p_multi_pred,,0.021455542751783442,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2005,Tides_black,,0.188,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2005,Tides_black_2plus,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2005,Tides_not_disclosed,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2005,Tides_upper_disclosed,,,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2006,p_black_any_pred,,0.13766851772130817,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2006,p_black_or_multi_pred,,0.15809638475348634,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2006,p_black_any_preddoc,,0.2242892266026152,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2006,p_black_any_pred,,0.13765876265505791,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2006,p_black_or_multi_pred,,0.15803484064737897,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2006,p_black_any_preddoc,,0.22429094863781257,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2006,p_black_bifsg,,0.13008771627493113,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2006,prior_black_pred,,0.1545323799265386,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2006,p_multi_pred,,0.020427867032178134,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2006,prior_black_pred,,0.15452463709156186,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2006,p_multi_pred,,0.020376077992321093,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2006,Tides_black,,0.22,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2006,Tides_black_2plus,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2006,Tides_not_disclosed,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2006,Tides_upper_disclosed,,,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2007,p_black_any_pred,,0.16976278491010677,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2007,p_black_or_multi_pred,,0.19184659755608222,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2007,p_black_any_preddoc,,0.2033947512662227,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2007,p_black_any_pred,,0.16974418864960336,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2007,p_black_or_multi_pred,,0.19177252032510547,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2007,p_black_any_preddoc,,0.20343284157025435,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2007,p_black_bifsg,,0.15666955650817163,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2007,prior_black_pred,,0.168567996453756,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2007,p_multi_pred,,0.02208381264597551,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2007,prior_black_pred,,0.16856707271423402,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2007,p_multi_pred,,0.022028331675502187,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2007,Tides_black,,0.19,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2007,Tides_black_2plus,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2007,Tides_not_disclosed,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2007,Tides_upper_disclosed,,,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2008,p_black_any_pred,,0.16759610842032485,33,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2008,p_black_or_multi_pred,,0.1878895351460883,33,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2008,p_black_any_preddoc,,0.20376856507681887,33,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2008,p_black_any_pred,,0.16758775104494059,33,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2008,p_black_or_multi_pred,,0.18782911789531925,33,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2008,p_black_any_preddoc,,0.20379743535332714,33,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2008,p_black_bifsg,,0.14537986598074693,33,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2008,prior_black_pred,,0.18069760244180685,33,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2008,p_multi_pred,,0.020293426725763505,33,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2008,prior_black_pred,,0.1807091184848954,33,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2008,p_multi_pred,,0.02024136685037877,33,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2008,Tides_black,,0.19,33,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2008,Tides_black_2plus,,,33,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2008,Tides_not_disclosed,,,33,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2008,Tides_upper_disclosed,,,33,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2009,p_black_any_pred,,0.1503990954689804,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2009,p_black_or_multi_pred,,0.16664452692007145,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2009,p_black_any_preddoc,,0.1967724523177284,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2009,p_black_any_pred,,0.15039666852108208,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2009,p_black_or_multi_pred,,0.16660677607896912,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2009,p_black_any_preddoc,,0.19677711888709346,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2009,p_black_bifsg,,0.11373942867877304,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2009,prior_black_pred,,0.20559763353681704,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2009,p_multi_pred,,0.016245431451091034,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2009,prior_black_pred,,0.20561306676919208,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2009,p_multi_pred,,0.01621010755788704,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2009,Tides_black,,0.19,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2009,Tides_black_2plus,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2009,Tides_not_disclosed,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2009,Tides_upper_disclosed,,,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2010,p_black_any_pred,,0.14908004821932005,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2010,p_black_or_multi_pred,,0.16339159862165023,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2010,p_black_any_preddoc,,0.19641123608488045,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2010,p_black_any_pred,,0.14907593020861717,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2010,p_black_or_multi_pred,,0.16335615831598832,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2010,p_black_any_preddoc,,0.1964166356968459,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2010,p_black_bifsg,,0.11416297239781037,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2010,prior_black_pred,,0.1970237513921357,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2010,p_multi_pred,,0.014311550402330191,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2010,prior_black_pred,,0.1970328384870731,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2010,p_multi_pred,,0.014280228107371095,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2010,Tides_black,,0.19,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2010,Tides_black_2plus,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2010,Tides_not_disclosed,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2010,Tides_upper_disclosed,,,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2011,p_black_any_pred,,0.17697910992830831,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2011,p_black_or_multi_pred,,0.19120899109541872,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2011,p_black_any_preddoc,,0.22837972578294388,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2011,p_black_any_pred,,0.17698305577173803,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2011,p_black_or_multi_pred,,0.1911843694604388,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2011,p_black_any_preddoc,,0.2283740561315669,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2011,p_black_bifsg,,0.12357808217285651,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2011,prior_black_pred,,0.20576396735333247,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2011,p_multi_pred,,0.014229881167110473,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2011,prior_black_pred,,0.20578710824196353,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2011,p_multi_pred,,0.014201313688700734,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2011,Tides_black,,0.22,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2011,Tides_black_2plus,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2011,Tides_not_disclosed,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2011,Tides_upper_disclosed,,,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2012,p_black_any_pred,,0.14739800768858746,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2012,p_black_or_multi_pred,,0.16787123681691665,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2012,p_black_any_preddoc,,0.16712791861987178,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2012,p_black_any_pred,,0.14740332058042444,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2012,p_black_or_multi_pred,,0.1678281681462972,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2012,p_black_any_preddoc,,0.1671231498796309,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2012,p_black_bifsg,,0.10138703449207694,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2012,prior_black_pred,,0.19572251778969657,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2012,p_multi_pred,,0.020473229128329207,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2012,prior_black_pred,,0.1957382443962831,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2012,p_multi_pred,,0.020424847565872782,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2012,Tides_black,,0.16,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2012,Tides_black_2plus,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2012,Tides_not_disclosed,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2012,Tides_upper_disclosed,,,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2013,p_black_any_pred,,0.11478720362005852,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2013,p_black_or_multi_pred,,0.13336008521042075,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2013,p_black_any_preddoc,,0.10307884750580999,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2013,p_black_any_pred,,0.11478378752773992,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2013,p_black_or_multi_pred,,0.13330135771865856,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2013,p_black_any_preddoc,,0.1030751685348465,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2013,p_black_bifsg,,0.08612519440844549,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2013,prior_black_pred,,0.1926520478433175,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2013,p_multi_pred,,0.018572881590362234,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2013,prior_black_pred,,0.19265839580385544,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2013,p_multi_pred,,0.018517570190918622,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2013,Tides_black,,0.09,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2013,Tides_black_2plus,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2013,Tides_not_disclosed,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2013,Tides_upper_disclosed,,,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2014,p_black_any_pred,,0.12560622519515122,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2014,p_black_or_multi_pred,,0.14517872527102532,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2014,p_black_any_preddoc,,0.13400560035054668,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2014,p_black_any_pred,,0.12560045669813638,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2014,p_black_or_multi_pred,,0.14510996814540256,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2014,p_black_any_preddoc,,0.1340035056886752,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2014,p_black_bifsg,,0.09702408746083552,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2014,prior_black_pred,,0.19425545497077418,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2014,p_multi_pred,,0.019572500075874077,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2014,prior_black_pred,,0.19426406388070216,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2014,p_multi_pred,,0.0195095114472662,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2014,Tides_black,,0.125,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2014,Tides_black_2plus,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2014,Tides_not_disclosed,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2014,Tides_upper_disclosed,,,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2015,p_black_any_pred,,0.12284441708642517,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2015,p_black_or_multi_pred,,0.14119066695623028,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2015,p_black_any_preddoc,,0.1645625374656237,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2015,p_black_any_pred,,0.1228340359659659,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2015,p_black_or_multi_pred,,0.14111853924466503,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2015,p_black_any_preddoc,,0.16455659510054968,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2015,p_black_bifsg,,0.09239636607392143,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2015,prior_black_pred,,0.20597296166290643,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2015,p_multi_pred,,0.018346249869805105,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2015,prior_black_pred,,0.2059827640826204,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2015,p_multi_pred,,0.018284503278699103,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2015,Tides_black,,0.156,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2015,Tides_black_2plus,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2015,Tides_not_disclosed,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2015,Tides_upper_disclosed,,,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2016,p_black_any_pred,,0.12109735603059077,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2016,p_black_or_multi_pred,,0.14344002637426123,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2016,p_black_any_preddoc,,0.1656617005348239,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2016,p_black_any_pred,,0.12108300682500941,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2016,p_black_or_multi_pred,,0.14335330547606487,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2016,p_black_any_preddoc,,0.16565633968690383,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2016,p_black_bifsg,,0.09240673294026412,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2016,prior_black_pred,,0.2010587293738428,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2016,p_multi_pred,,0.022342670343670434,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2016,prior_black_pred,,0.2010542011864631,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2016,p_multi_pred,,0.022270298651055485,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2016,Tides_black,,0.156,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2016,Tides_black_2plus,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2016,Tides_not_disclosed,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2016,Tides_upper_disclosed,,,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2017,p_black_any_pred,,0.12661044698188526,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2017,p_black_or_multi_pred,,0.14802978607657993,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2017,p_black_any_preddoc,,0.2256225590864137,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2017,p_black_any_pred,,0.12661572705294527,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2017,p_black_or_multi_pred,,0.14797200171969135,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2017,p_black_any_preddoc,,0.22561087312807487,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2017,p_black_bifsg,,0.09398960028470356,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2017,prior_black_pred,,0.19727244945506492,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2017,p_multi_pred,,0.021419339094694637,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2017,prior_black_pred,,0.19726793868048423,32,TIDES 2023 (retrospective),predicted
+tides_season,head_coaches,2017,p_multi_pred,,0.021356274666746052,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2017,Tides_black,,0.21899999999999997,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2017,Tides_black_2plus,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2017,Tides_not_disclosed,,,32,TIDES 2023 (retrospective),predicted
 tides_season,head_coaches,2017,Tides_upper_disclosed,,,32,TIDES 2023 (retrospective),predicted
-tides_season,head_coaches,2018,p_black_any_pred,,0.12276446011491253,32,TIDES 2019,predicted
-tides_season,head_coaches,2018,p_black_or_multi_pred,,0.14200989690745255,32,TIDES 2019,predicted
-tides_season,head_coaches,2018,p_black_any_preddoc,,0.22418084591704945,32,TIDES 2019,predicted
+tides_season,head_coaches,2018,p_black_any_pred,,0.12276450220494398,32,TIDES 2019,predicted
+tides_season,head_coaches,2018,p_black_or_multi_pred,,0.14195138621594822,32,TIDES 2019,predicted
+tides_season,head_coaches,2018,p_black_any_preddoc,,0.224168820580716,32,TIDES 2019,predicted
 tides_season,head_coaches,2018,p_black_bifsg,,0.08605868830627263,32,TIDES 2019,predicted
-tides_season,head_coaches,2018,prior_black_pred,,0.1931147267568887,32,TIDES 2019,predicted
-tides_season,head_coaches,2018,p_multi_pred,,0.019245436792540038,32,TIDES 2019,predicted
+tides_season,head_coaches,2018,prior_black_pred,,0.1930610960640286,32,TIDES 2019,predicted
+tides_season,head_coaches,2018,p_multi_pred,,0.01918688401100426,32,TIDES 2019,predicted
 tides_season,head_coaches,2018,Tides_black,,0.21899999999999997,32,TIDES 2019,predicted
 tides_season,head_coaches,2018,Tides_black_2plus,,,32,TIDES 2019,predicted
 tides_season,head_coaches,2018,Tides_not_disclosed,,,32,TIDES 2019,predicted
 tides_season,head_coaches,2018,Tides_upper_disclosed,,,32,TIDES 2019,predicted
-tides_season,head_coaches,2019,p_black_any_pred,,0.10415557587216391,32,TIDES 2019,predicted
-tides_season,head_coaches,2019,p_black_or_multi_pred,,0.12518866953495722,32,TIDES 2019,predicted
-tides_season,head_coaches,2019,p_black_any_preddoc,,0.07725871440214985,32,TIDES 2019,predicted
+tides_season,head_coaches,2019,p_black_any_pred,,0.10412824143625746,32,TIDES 2019,predicted
+tides_season,head_coaches,2019,p_black_or_multi_pred,,0.1250842575074239,32,TIDES 2019,predicted
+tides_season,head_coaches,2019,p_black_any_preddoc,,0.0772600864351558,32,TIDES 2019,predicted
 tides_season,head_coaches,2019,p_black_bifsg,,0.08004341486294125,32,TIDES 2019,predicted
-tides_season,head_coaches,2019,prior_black_pred,,0.17564475746490427,32,TIDES 2019,predicted
-tides_season,head_coaches,2019,p_multi_pred,,0.021033093662793326,32,TIDES 2019,predicted
+tides_season,head_coaches,2019,prior_black_pred,,0.17556454991348183,32,TIDES 2019,predicted
+tides_season,head_coaches,2019,p_multi_pred,,0.02095601607116642,32,TIDES 2019,predicted
 tides_season,head_coaches,2019,Tides_black,,0.094,32,TIDES 2019,predicted
 tides_season,head_coaches,2019,Tides_black_2plus,,,32,TIDES 2019,predicted
 tides_season,head_coaches,2019,Tides_not_disclosed,,,32,TIDES 2019,predicted
 tides_season,head_coaches,2019,Tides_upper_disclosed,,,32,TIDES 2019,predicted
-tides_season,head_coaches,2020,p_black_any_pred,,0.08075924531934899,32,TIDES 2020,predicted
-tides_season,head_coaches,2020,p_black_or_multi_pred,,0.10225061427110142,32,TIDES 2020,predicted
-tides_season,head_coaches,2020,p_black_any_preddoc,,0.0732612570528431,32,TIDES 2020,predicted
+tides_season,head_coaches,2020,p_black_any_pred,,0.08073133539904691,32,TIDES 2020,predicted
+tides_season,head_coaches,2020,p_black_or_multi_pred,,0.10214686740886587,32,TIDES 2020,predicted
+tides_season,head_coaches,2020,p_black_any_preddoc,,0.07326457866055071,32,TIDES 2020,predicted
 tides_season,head_coaches,2020,p_black_bifsg,,0.06386054129590599,32,TIDES 2020,predicted
-tides_season,head_coaches,2020,prior_black_pred,,0.16953947325205024,32,TIDES 2020,predicted
-tides_season,head_coaches,2020,p_multi_pred,,0.02149136895175248,32,TIDES 2020,predicted
+tides_season,head_coaches,2020,prior_black_pred,,0.16945275465464502,32,TIDES 2020,predicted
+tides_season,head_coaches,2020,p_multi_pred,,0.02141553200981896,32,TIDES 2020,predicted
 tides_season,head_coaches,2020,Tides_black,,0.094,32,TIDES 2020,predicted
 tides_season,head_coaches,2020,Tides_black_2plus,,,32,TIDES 2020,predicted
 tides_season,head_coaches,2020,Tides_not_disclosed,,,32,TIDES 2020,predicted
 tides_season,head_coaches,2020,Tides_upper_disclosed,,,32,TIDES 2020,predicted
-tides_season,head_coaches,2021,p_black_any_pred,,0.10884854867990386,32,TIDES 2021,predicted
-tides_season,head_coaches,2021,p_black_or_multi_pred,,0.13958490022069722,32,TIDES 2021,predicted
-tides_season,head_coaches,2021,p_black_any_preddoc,,0.07526187806359465,32,TIDES 2021,predicted
+tides_season,head_coaches,2021,p_black_any_pred,,0.10882462077049888,32,TIDES 2021,predicted
+tides_season,head_coaches,2021,p_black_or_multi_pred,,0.13945754845687977,32,TIDES 2021,predicted
+tides_season,head_coaches,2021,p_black_any_preddoc,,0.07526671100542194,32,TIDES 2021,predicted
 tides_season,head_coaches,2021,p_black_bifsg,,0.07656390475903466,32,TIDES 2021,predicted
-tides_season,head_coaches,2021,prior_black_pred,,0.18630165604914853,32,TIDES 2021,predicted
-tides_season,head_coaches,2021,p_multi_pred,,0.0307363515407933,32,TIDES 2021,predicted
+tides_season,head_coaches,2021,prior_black_pred,,0.1862212045482735,32,TIDES 2021,predicted
+tides_season,head_coaches,2021,p_multi_pred,,0.030632927686380863,32,TIDES 2021,predicted
 tides_season,head_coaches,2021,Tides_black,,0.094,32,TIDES 2021,predicted
 tides_season,head_coaches,2021,Tides_black_2plus,,0.125,32,TIDES 2021,predicted
 tides_season,head_coaches,2021,Tides_not_disclosed,,,32,TIDES 2021,predicted
 tides_season,head_coaches,2021,Tides_upper_disclosed,,,32,TIDES 2021,predicted
-tides_season,head_coaches,2022,p_black_any_pred,,0.1357908467269708,32,TIDES 2022,predicted
-tides_season,head_coaches,2022,p_black_or_multi_pred,,0.16969310203579277,32,TIDES 2022,predicted
-tides_season,head_coaches,2022,p_black_any_preddoc,,0.134819148355643,32,TIDES 2022,predicted
+tides_season,head_coaches,2022,p_black_any_pred,,0.13576678300758416,32,TIDES 2022,predicted
+tides_season,head_coaches,2022,p_black_or_multi_pred,,0.1695655660889454,32,TIDES 2022,predicted
+tides_season,head_coaches,2022,p_black_any_preddoc,,0.13483227175347764,32,TIDES 2022,predicted
 tides_season,head_coaches,2022,p_black_bifsg,,0.09759607918489971,32,TIDES 2022,predicted
-tides_season,head_coaches,2022,prior_black_pred,,0.20824532097115167,32,TIDES 2022,predicted
-tides_season,head_coaches,2022,p_multi_pred,,0.033902255308821884,32,TIDES 2022,predicted
+tides_season,head_coaches,2022,prior_black_pred,,0.20816038961237052,32,TIDES 2022,predicted
+tides_season,head_coaches,2022,p_multi_pred,,0.03379878308136122,32,TIDES 2022,predicted
 tides_season,head_coaches,2022,Tides_black,,0.094,32,TIDES 2022,predicted
 tides_season,head_coaches,2022,Tides_black_2plus,,0.125,32,TIDES 2022,predicted
 tides_season,head_coaches,2022,Tides_not_disclosed,,,32,TIDES 2022,predicted
 tides_season,head_coaches,2022,Tides_upper_disclosed,,,32,TIDES 2022,predicted
-tides_season,head_coaches,2023,p_black_any_pred,,0.12639212136452171,32,TIDES 2023,predicted
-tides_season,head_coaches,2023,p_black_or_multi_pred,,0.1631310579108585,32,TIDES 2023,predicted
-tides_season,head_coaches,2023,p_black_any_preddoc,,0.134747796129744,32,TIDES 2023,predicted
+tides_season,head_coaches,2023,p_black_any_pred,,0.126379785363583,32,TIDES 2023,predicted
+tides_season,head_coaches,2023,p_black_or_multi_pred,,0.16299884949752783,32,TIDES 2023,predicted
+tides_season,head_coaches,2023,p_black_any_preddoc,,0.13474993170765975,32,TIDES 2023,predicted
 tides_season,head_coaches,2023,p_black_bifsg,,0.09496466931839379,32,TIDES 2023,predicted
-tides_season,head_coaches,2023,prior_black_pred,,0.2145349355762874,32,TIDES 2023,predicted
-tides_season,head_coaches,2023,p_multi_pred,,0.036738936546336726,32,TIDES 2023,predicted
+tides_season,head_coaches,2023,prior_black_pred,,0.21445690019828165,32,TIDES 2023,predicted
+tides_season,head_coaches,2023,p_multi_pred,,0.03661906413394484,32,TIDES 2023,predicted
 tides_season,head_coaches,2023,Tides_black,,0.094,32,TIDES 2023,predicted
 tides_season,head_coaches,2023,Tides_black_2plus,,0.157,32,TIDES 2023,predicted
 tides_season,head_coaches,2023,Tides_not_disclosed,,0.031,32,TIDES 2023,predicted
 tides_season,head_coaches,2023,Tides_upper_disclosed,,0.16202270381836945,32,TIDES 2023,predicted
-tides_season,head_coaches,2024,p_black_any_pred,,0.13634480871498167,32,,predicted
-tides_season,head_coaches,2024,p_black_or_multi_pred,,0.17499835776208614,32,,predicted
-tides_season,head_coaches,2024,p_black_any_preddoc,,0.2266405341831544,32,,predicted
+tides_season,head_coaches,2024,p_black_any_pred,,0.13632336005173937,32,,predicted
+tides_season,head_coaches,2024,p_black_or_multi_pred,,0.1748503782632468,32,,predicted
+tides_season,head_coaches,2024,p_black_any_preddoc,,0.2266361375468805,32,,predicted
 tides_season,head_coaches,2024,p_black_bifsg,,0.09941347607445883,32,,predicted
-tides_season,head_coaches,2024,prior_black_pred,,0.21984421549351454,32,,predicted
-tides_season,head_coaches,2024,p_multi_pred,,0.0386535490471045,32,,predicted
+tides_season,head_coaches,2024,prior_black_pred,,0.21976793014269688,32,,predicted
+tides_season,head_coaches,2024,p_multi_pred,,0.03852701821150741,32,,predicted
 tides_season,head_coaches,2024,Tides_black,,,32,,predicted
 tides_season,head_coaches,2024,Tides_black_2plus,,,32,,predicted
 tides_season,head_coaches,2024,Tides_not_disclosed,,,32,,predicted
 tides_season,head_coaches,2024,Tides_upper_disclosed,,,32,,predicted
-tides_season,head_coaches,2025,p_black_any_pred,,0.13455675845432644,32,,predicted
-tides_season,head_coaches,2025,p_black_or_multi_pred,,0.16364062497765833,32,,predicted
-tides_season,head_coaches,2025,p_black_any_preddoc,,0.1971060565302578,32,,predicted
+tides_season,head_coaches,2025,p_black_any_pred,,0.1344944116685543,32,,predicted
+tides_season,head_coaches,2025,p_black_or_multi_pred,,0.1634859472412236,32,,predicted
+tides_season,head_coaches,2025,p_black_any_preddoc,,0.1970937848459054,32,,predicted
 tides_season,head_coaches,2025,p_black_bifsg,,0.12474016722888438,32,,predicted
-tides_season,head_coaches,2025,prior_black_pred,,0.19959951038789545,32,,predicted
-tides_season,head_coaches,2025,p_multi_pred,,0.029083866523331916,32,,predicted
+tides_season,head_coaches,2025,prior_black_pred,,0.19949015802678463,32,,predicted
+tides_season,head_coaches,2025,p_multi_pred,,0.028991535572669286,32,,predicted
 tides_season,head_coaches,2025,Tides_black,,,32,,predicted
 tides_season,head_coaches,2025,Tides_black_2plus,,,32,,predicted
 tides_season,head_coaches,2025,Tides_not_disclosed,,,32,,predicted
 tides_season,head_coaches,2025,Tides_upper_disclosed,,,32,,predicted
-tides_season,assistant_coaches,2002,p_black_any_pred,,0.1981573715407632,499,TIDES 2003,predicted
-tides_season,assistant_coaches,2002,p_black_or_multi_pred,,0.21432242018677833,499,TIDES 2003,predicted
-tides_season,assistant_coaches,2002,p_black_any_preddoc,,0.24515784261949272,499,TIDES 2003,predicted
+tides_season,assistant_coaches,2002,p_black_any_pred,,0.19818088195409334,499,TIDES 2003,predicted
+tides_season,assistant_coaches,2002,p_black_or_multi_pred,,0.21431065611204445,499,TIDES 2003,predicted
+tides_season,assistant_coaches,2002,p_black_any_preddoc,,0.24521001483743293,499,TIDES 2003,predicted
 tides_season,assistant_coaches,2002,p_black_bifsg,,0.15419246199397718,499,TIDES 2003,predicted
-tides_season,assistant_coaches,2002,prior_black_pred,,0.20687908066101818,499,TIDES 2003,predicted
-tides_season,assistant_coaches,2002,p_multi_pred,,0.01616504864601516,499,TIDES 2003,predicted
+tides_season,assistant_coaches,2002,prior_black_pred,,0.20691634140315052,499,TIDES 2003,predicted
+tides_season,assistant_coaches,2002,p_multi_pred,,0.016129774157951124,499,TIDES 2003,predicted
 tides_season,assistant_coaches,2002,Tides_black,,0.28,499,TIDES 2003,predicted
 tides_season,assistant_coaches,2002,Tides_black_2plus,,,499,TIDES 2003,predicted
 tides_season,assistant_coaches,2002,Tides_not_disclosed,,,499,TIDES 2003,predicted
 tides_season,assistant_coaches,2002,Tides_upper_disclosed,,,499,TIDES 2003,predicted
-tides_season,assistant_coaches,2003,p_black_any_pred,,0.19864912718771738,423,TIDES 2004,predicted
-tides_season,assistant_coaches,2003,p_black_or_multi_pred,,0.21634249216489265,423,TIDES 2004,predicted
-tides_season,assistant_coaches,2003,p_black_any_preddoc,,0.24531666100859148,423,TIDES 2004,predicted
+tides_season,assistant_coaches,2003,p_black_any_pred,,0.19867297784240506,423,TIDES 2004,predicted
+tides_season,assistant_coaches,2003,p_black_or_multi_pred,,0.2163268022788381,423,TIDES 2004,predicted
+tides_season,assistant_coaches,2003,p_black_any_preddoc,,0.24535791684790598,423,TIDES 2004,predicted
 tides_season,assistant_coaches,2003,p_black_bifsg,,0.15437191068390185,423,TIDES 2004,predicted
-tides_season,assistant_coaches,2003,prior_black_pred,,0.20440962603465843,423,TIDES 2004,predicted
-tides_season,assistant_coaches,2003,p_multi_pred,,0.017693364977175434,423,TIDES 2004,predicted
+tides_season,assistant_coaches,2003,prior_black_pred,,0.20444485839583879,423,TIDES 2004,predicted
+tides_season,assistant_coaches,2003,p_multi_pred,,0.017653824436432763,423,TIDES 2004,predicted
 tides_season,assistant_coaches,2003,Tides_black,,0.3,423,TIDES 2004,predicted
 tides_season,assistant_coaches,2003,Tides_black_2plus,,,423,TIDES 2004,predicted
 tides_season,assistant_coaches,2003,Tides_not_disclosed,,,423,TIDES 2004,predicted
 tides_season,assistant_coaches,2003,Tides_upper_disclosed,,,423,TIDES 2004,predicted
-tides_season,assistant_coaches,2004,p_black_any_pred,,0.1930409789419959,435,,predicted
-tides_season,assistant_coaches,2004,p_black_or_multi_pred,,0.2107522357804173,435,,predicted
-tides_season,assistant_coaches,2004,p_black_any_preddoc,,0.22729262519144577,435,,predicted
+tides_season,assistant_coaches,2004,p_black_any_pred,,0.1930633899905218,435,,predicted
+tides_season,assistant_coaches,2004,p_black_or_multi_pred,,0.2107355260708967,435,,predicted
+tides_season,assistant_coaches,2004,p_black_any_preddoc,,0.22732052665183172,435,,predicted
 tides_season,assistant_coaches,2004,p_black_bifsg,,0.14975334007229033,435,,predicted
-tides_season,assistant_coaches,2004,prior_black_pred,,0.20073788844794352,435,,predicted
-tides_season,assistant_coaches,2004,p_multi_pred,,0.017711256838421622,435,,predicted
+tides_season,assistant_coaches,2004,prior_black_pred,,0.20077012327097063,435,,predicted
+tides_season,assistant_coaches,2004,p_multi_pred,,0.017672136080374736,435,,predicted
 tides_season,assistant_coaches,2004,Tides_black,,,435,,predicted
 tides_season,assistant_coaches,2004,Tides_black_2plus,,,435,,predicted
 tides_season,assistant_coaches,2004,Tides_not_disclosed,,,435,,predicted
 tides_season,assistant_coaches,2004,Tides_upper_disclosed,,,435,,predicted
-tides_season,assistant_coaches,2005,p_black_any_pred,,0.19878228453240776,493,TIDES 2023 (retrospective),predicted
-tides_season,assistant_coaches,2005,p_black_or_multi_pred,,0.21771789941024897,493,TIDES 2023 (retrospective),predicted
-tides_season,assistant_coaches,2005,p_black_any_preddoc,,0.2377333148441585,493,TIDES 2023 (retrospective),predicted
+tides_season,assistant_coaches,2005,p_black_any_pred,,0.19880419851305076,493,TIDES 2023 (retrospective),predicted
+tides_season,assistant_coaches,2005,p_black_or_multi_pred,,0.21770040878464827,493,TIDES 2023 (retrospective),predicted
+tides_season,assistant_coaches,2005,p_black_any_preddoc,,0.2377819728840523,493,TIDES 2023 (retrospective),predicted
 tides_season,assistant_coaches,2005,p_black_bifsg,,0.15592284241093998,493,TIDES 2023 (retrospective),predicted
-tides_season,assistant_coaches,2005,prior_black_pred,,0.20149524799921822,493,TIDES 2023 (retrospective),predicted
-tides_season,assistant_coaches,2005,p_multi_pred,,0.018935614877841296,493,TIDES 2023 (retrospective),predicted
+tides_season,assistant_coaches,2005,prior_black_pred,,0.20152701640190035,493,TIDES 2023 (retrospective),predicted
+tides_season,assistant_coaches,2005,p_multi_pred,,0.01889621027159738,493,TIDES 2023 (retrospective),predicted
 tides_season,assistant_coaches,2005,Tides_black,,0.32,493,TIDES 2023 (retrospective),predicted
 tides_season,assistant_coaches,2005,Tides_black_2plus,,,493,TIDES 2023 (retrospective),predicted
 tides_season,assistant_coaches,2005,Tides_not_disclosed,,,493,TIDES 2023 (retrospective),predicted
 tides_season,assistant_coaches,2005,Tides_upper_disclosed,,,493,TIDES 2023 (retrospective),predicted
-tides_season,assistant_coaches,2006,p_black_any_pred,,0.20010243378582168,545,TIDES 2006,predicted
-tides_season,assistant_coaches,2006,p_black_or_multi_pred,,0.22595529487904872,545,TIDES 2006,predicted
-tides_season,assistant_coaches,2006,p_black_any_preddoc,,0.231943882254953,545,TIDES 2006,predicted
+tides_season,assistant_coaches,2006,p_black_any_pred,,0.20011316863209996,545,TIDES 2006,predicted
+tides_season,assistant_coaches,2006,p_black_or_multi_pred,,0.2258894316414259,545,TIDES 2006,predicted
+tides_season,assistant_coaches,2006,p_black_any_preddoc,,0.23199092005865624,545,TIDES 2006,predicted
 tides_season,assistant_coaches,2006,p_black_bifsg,,0.15696876154863634,545,TIDES 2006,predicted
-tides_season,assistant_coaches,2006,prior_black_pred,,0.20216555065272462,545,TIDES 2006,predicted
-tides_season,assistant_coaches,2006,p_multi_pred,,0.025852861093227174,545,TIDES 2006,predicted
+tides_season,assistant_coaches,2006,prior_black_pred,,0.2021680448773699,545,TIDES 2006,predicted
+tides_season,assistant_coaches,2006,p_multi_pred,,0.02577626300932586,545,TIDES 2006,predicted
 tides_season,assistant_coaches,2006,Tides_black,,0.35,545,TIDES 2006,predicted
 tides_season,assistant_coaches,2006,Tides_black_2plus,,,545,TIDES 2006,predicted
 tides_season,assistant_coaches,2006,Tides_not_disclosed,,,545,TIDES 2006,predicted
 tides_season,assistant_coaches,2006,Tides_upper_disclosed,,,545,TIDES 2006,predicted
-tides_season,assistant_coaches,2007,p_black_any_pred,,0.18918100802512008,576,TIDES 2008,predicted
-tides_season,assistant_coaches,2007,p_black_or_multi_pred,,0.2170295716639178,576,TIDES 2008,predicted
-tides_season,assistant_coaches,2007,p_black_any_preddoc,,0.22621957079090318,576,TIDES 2008,predicted
+tides_season,assistant_coaches,2007,p_black_any_pred,,0.1891797956072135,576,TIDES 2008,predicted
+tides_season,assistant_coaches,2007,p_black_or_multi_pred,,0.2169178731789606,576,TIDES 2008,predicted
+tides_season,assistant_coaches,2007,p_black_any_preddoc,,0.22625138137166662,576,TIDES 2008,predicted
 tides_season,assistant_coaches,2007,p_black_bifsg,,0.14987654126597144,576,TIDES 2008,predicted
-tides_season,assistant_coaches,2007,prior_black_pred,,0.19989156456472548,576,TIDES 2008,predicted
-tides_season,assistant_coaches,2007,p_multi_pred,,0.027848563638797934,576,TIDES 2008,predicted
+tides_season,assistant_coaches,2007,prior_black_pred,,0.19987294045010315,576,TIDES 2008,predicted
+tides_season,assistant_coaches,2007,p_multi_pred,,0.027738077571747136,576,TIDES 2008,predicted
 tides_season,assistant_coaches,2007,Tides_black,,0.36,576,TIDES 2008,predicted
 tides_season,assistant_coaches,2007,Tides_black_2plus,,,576,TIDES 2008,predicted
 tides_season,assistant_coaches,2007,Tides_not_disclosed,,,576,TIDES 2008,predicted
 tides_season,assistant_coaches,2007,Tides_upper_disclosed,,,576,TIDES 2008,predicted
-tides_season,assistant_coaches,2008,p_black_any_pred,,0.18952296104146824,566,TIDES 2009,predicted
-tides_season,assistant_coaches,2008,p_black_or_multi_pred,,0.21785699858386823,566,TIDES 2009,predicted
-tides_season,assistant_coaches,2008,p_black_any_preddoc,,0.2289022674954517,566,TIDES 2009,predicted
+tides_season,assistant_coaches,2008,p_black_any_pred,,0.18951853345439124,566,TIDES 2009,predicted
+tides_season,assistant_coaches,2008,p_black_or_multi_pred,,0.21773298157096962,566,TIDES 2009,predicted
+tides_season,assistant_coaches,2008,p_black_any_preddoc,,0.22893332773881855,566,TIDES 2009,predicted
 tides_season,assistant_coaches,2008,p_black_bifsg,,0.15138857028535688,566,TIDES 2009,predicted
-tides_season,assistant_coaches,2008,prior_black_pred,,0.1965911615708077,566,TIDES 2009,predicted
-tides_season,assistant_coaches,2008,p_multi_pred,,0.028334037542400162,566,TIDES 2009,predicted
+tides_season,assistant_coaches,2008,prior_black_pred,,0.1965641044907519,566,TIDES 2009,predicted
+tides_season,assistant_coaches,2008,p_multi_pred,,0.028214448116578448,566,TIDES 2009,predicted
 tides_season,assistant_coaches,2008,Tides_black,,0.34,566,TIDES 2009,predicted
 tides_season,assistant_coaches,2008,Tides_black_2plus,,,566,TIDES 2009,predicted
 tides_season,assistant_coaches,2008,Tides_not_disclosed,,,566,TIDES 2009,predicted
 tides_season,assistant_coaches,2008,Tides_upper_disclosed,,,566,TIDES 2009,predicted
-tides_season,assistant_coaches,2009,p_black_any_pred,,0.18614570008441703,556,TIDES 2010,predicted
-tides_season,assistant_coaches,2009,p_black_or_multi_pred,,0.21585794024127392,556,TIDES 2010,predicted
-tides_season,assistant_coaches,2009,p_black_any_preddoc,,0.22145106351208016,556,TIDES 2010,predicted
+tides_season,assistant_coaches,2009,p_black_any_pred,,0.18613331705741248,556,TIDES 2010,predicted
+tides_season,assistant_coaches,2009,p_black_or_multi_pred,,0.21571202864010464,556,TIDES 2010,predicted
+tides_season,assistant_coaches,2009,p_black_any_preddoc,,0.2214786874059614,556,TIDES 2010,predicted
 tides_season,assistant_coaches,2009,p_black_bifsg,,0.1511684955883056,556,TIDES 2010,predicted
-tides_season,assistant_coaches,2009,prior_black_pred,,0.19503825928841928,556,TIDES 2010,predicted
-tides_season,assistant_coaches,2009,p_multi_pred,,0.029712240156857035,556,TIDES 2010,predicted
+tides_season,assistant_coaches,2009,prior_black_pred,,0.19499725868650375,556,TIDES 2010,predicted
+tides_season,assistant_coaches,2009,p_multi_pred,,0.029578711582692322,556,TIDES 2010,predicted
 tides_season,assistant_coaches,2009,Tides_black,,0.34,556,TIDES 2010,predicted
 tides_season,assistant_coaches,2009,Tides_black_2plus,,,556,TIDES 2010,predicted
 tides_season,assistant_coaches,2009,Tides_not_disclosed,,,556,TIDES 2010,predicted
 tides_season,assistant_coaches,2009,Tides_upper_disclosed,,,556,TIDES 2010,predicted
-tides_season,assistant_coaches,2010,p_black_any_pred,,0.18608485250521586,574,TIDES 2011,predicted
-tides_season,assistant_coaches,2010,p_black_or_multi_pred,,0.21827309540862253,574,TIDES 2011,predicted
-tides_season,assistant_coaches,2010,p_black_any_preddoc,,0.2291871426761424,574,TIDES 2011,predicted
+tides_season,assistant_coaches,2010,p_black_any_pred,,0.186069203471069,574,TIDES 2011,predicted
+tides_season,assistant_coaches,2010,p_black_or_multi_pred,,0.2181116525222132,574,TIDES 2011,predicted
+tides_season,assistant_coaches,2010,p_black_any_preddoc,,0.22919940373560374,574,TIDES 2011,predicted
 tides_season,assistant_coaches,2010,p_black_bifsg,,0.1520641538296062,574,TIDES 2011,predicted
-tides_season,assistant_coaches,2010,prior_black_pred,,0.19087491518973787,574,TIDES 2011,predicted
-tides_season,assistant_coaches,2010,p_multi_pred,,0.03218824290340687,574,TIDES 2011,predicted
+tides_season,assistant_coaches,2010,prior_black_pred,,0.1908226954308525,574,TIDES 2011,predicted
+tides_season,assistant_coaches,2010,p_multi_pred,,0.03204244905114424,574,TIDES 2011,predicted
 tides_season,assistant_coaches,2010,Tides_black,,0.31,574,TIDES 2011,predicted
 tides_season,assistant_coaches,2010,Tides_black_2plus,,,574,TIDES 2011,predicted
 tides_season,assistant_coaches,2010,Tides_not_disclosed,,,574,TIDES 2011,predicted
 tides_season,assistant_coaches,2010,Tides_upper_disclosed,,,574,TIDES 2011,predicted
-tides_season,assistant_coaches,2011,p_black_any_pred,,0.18558224026296724,585,TIDES 2012,predicted
-tides_season,assistant_coaches,2011,p_black_or_multi_pred,,0.21650781058896357,585,TIDES 2012,predicted
-tides_season,assistant_coaches,2011,p_black_any_preddoc,,0.22410432429412744,585,TIDES 2012,predicted
+tides_season,assistant_coaches,2011,p_black_any_pred,,0.18555861964761203,585,TIDES 2012,predicted
+tides_season,assistant_coaches,2011,p_black_or_multi_pred,,0.21635179951597144,585,TIDES 2012,predicted
+tides_season,assistant_coaches,2011,p_black_any_preddoc,,0.22408282299729676,585,TIDES 2012,predicted
 tides_season,assistant_coaches,2011,p_black_bifsg,,0.15076465379816623,585,TIDES 2012,predicted
-tides_season,assistant_coaches,2011,prior_black_pred,,0.19001508224328253,585,TIDES 2012,predicted
-tides_season,assistant_coaches,2011,p_multi_pred,,0.030925570325996347,585,TIDES 2012,predicted
+tides_season,assistant_coaches,2011,prior_black_pred,,0.18995057300327398,585,TIDES 2012,predicted
+tides_season,assistant_coaches,2011,p_multi_pred,,0.03079317986835952,585,TIDES 2012,predicted
 tides_season,assistant_coaches,2011,Tides_black,,0.32,585,TIDES 2012,predicted
 tides_season,assistant_coaches,2011,Tides_black_2plus,,,585,TIDES 2012,predicted
 tides_season,assistant_coaches,2011,Tides_not_disclosed,,,585,TIDES 2012,predicted
 tides_season,assistant_coaches,2011,Tides_upper_disclosed,,,585,TIDES 2012,predicted
-tides_season,assistant_coaches,2012,p_black_any_pred,,0.1952920688378816,603,TIDES 2013,predicted
-tides_season,assistant_coaches,2012,p_black_or_multi_pred,,0.22436011395065328,603,TIDES 2013,predicted
-tides_season,assistant_coaches,2012,p_black_any_preddoc,,0.24046408363318647,603,TIDES 2013,predicted
+tides_season,assistant_coaches,2012,p_black_any_pred,,0.1952604846511524,603,TIDES 2013,predicted
+tides_season,assistant_coaches,2012,p_black_or_multi_pred,,0.22421262253566288,603,TIDES 2013,predicted
+tides_season,assistant_coaches,2012,p_black_any_preddoc,,0.24045557576504473,603,TIDES 2013,predicted
 tides_season,assistant_coaches,2012,p_black_bifsg,,0.15683568889375726,603,TIDES 2013,predicted
-tides_season,assistant_coaches,2012,prior_black_pred,,0.19294594168186824,603,TIDES 2013,predicted
-tides_season,assistant_coaches,2012,p_multi_pred,,0.02906804511277188,603,TIDES 2013,predicted
+tides_season,assistant_coaches,2012,prior_black_pred,,0.192869473085278,603,TIDES 2013,predicted
+tides_season,assistant_coaches,2012,p_multi_pred,,0.02895213788451061,603,TIDES 2013,predicted
 tides_season,assistant_coaches,2012,Tides_black,,0.31,603,TIDES 2013,predicted
 tides_season,assistant_coaches,2012,Tides_black_2plus,,,603,TIDES 2013,predicted
 tides_season,assistant_coaches,2012,Tides_not_disclosed,,,603,TIDES 2013,predicted
 tides_season,assistant_coaches,2012,Tides_upper_disclosed,,,603,TIDES 2013,predicted
-tides_season,assistant_coaches,2013,p_black_any_pred,,0.18430193686916035,623,TIDES 2014,predicted
-tides_season,assistant_coaches,2013,p_black_or_multi_pred,,0.21272136636558708,623,TIDES 2014,predicted
-tides_season,assistant_coaches,2013,p_black_any_preddoc,,0.21931068805264362,623,TIDES 2014,predicted
+tides_season,assistant_coaches,2013,p_black_any_pred,,0.1842644484453283,623,TIDES 2014,predicted
+tides_season,assistant_coaches,2013,p_black_or_multi_pred,,0.21258755996265202,623,TIDES 2014,predicted
+tides_season,assistant_coaches,2013,p_black_any_preddoc,,0.2193214023593854,623,TIDES 2014,predicted
 tides_season,assistant_coaches,2013,p_black_bifsg,,0.1470460476862617,623,TIDES 2014,predicted
-tides_season,assistant_coaches,2013,prior_black_pred,,0.19591828059669592,623,TIDES 2014,predicted
-tides_season,assistant_coaches,2013,p_multi_pred,,0.02841942949642685,623,TIDES 2014,predicted
+tides_season,assistant_coaches,2013,prior_black_pred,,0.19582957147200802,623,TIDES 2014,predicted
+tides_season,assistant_coaches,2013,p_multi_pred,,0.02832311151732367,623,TIDES 2014,predicted
 tides_season,assistant_coaches,2013,Tides_black,,0.29,623,TIDES 2014,predicted
 tides_season,assistant_coaches,2013,Tides_black_2plus,,,623,TIDES 2014,predicted
 tides_season,assistant_coaches,2013,Tides_not_disclosed,,,623,TIDES 2014,predicted
 tides_season,assistant_coaches,2013,Tides_upper_disclosed,,,623,TIDES 2014,predicted
-tides_season,assistant_coaches,2014,p_black_any_pred,,0.1879450379742833,648,TIDES 2023 (retrospective),predicted
-tides_season,assistant_coaches,2014,p_black_or_multi_pred,,0.2161016721697382,648,TIDES 2023 (retrospective),predicted
-tides_season,assistant_coaches,2014,p_black_any_preddoc,,0.2287169234184869,648,TIDES 2023 (retrospective),predicted
+tides_season,assistant_coaches,2014,p_black_any_pred,,0.18789870438860018,648,TIDES 2023 (retrospective),predicted
+tides_season,assistant_coaches,2014,p_black_or_multi_pred,,0.2159631592255971,648,TIDES 2023 (retrospective),predicted
+tides_season,assistant_coaches,2014,p_black_any_preddoc,,0.22870383130368097,648,TIDES 2023 (retrospective),predicted
 tides_season,assistant_coaches,2014,p_black_bifsg,,0.1501213339377649,648,TIDES 2023 (retrospective),predicted
-tides_season,assistant_coaches,2014,prior_black_pred,,0.1948593291779247,648,TIDES 2023 (retrospective),predicted
-tides_season,assistant_coaches,2014,p_multi_pred,,0.02815663419545507,648,TIDES 2023 (retrospective),predicted
+tides_season,assistant_coaches,2014,prior_black_pred,,0.19475850291813165,648,TIDES 2023 (retrospective),predicted
+tides_season,assistant_coaches,2014,p_multi_pred,,0.028064454836996846,648,TIDES 2023 (retrospective),predicted
 tides_season,assistant_coaches,2014,Tides_black,,0.29600000000000004,648,TIDES 2023 (retrospective),predicted
 tides_season,assistant_coaches,2014,Tides_black_2plus,,,648,TIDES 2023 (retrospective),predicted
 tides_season,assistant_coaches,2014,Tides_not_disclosed,,,648,TIDES 2023 (retrospective),predicted
 tides_season,assistant_coaches,2014,Tides_upper_disclosed,,,648,TIDES 2023 (retrospective),predicted
-tides_season,assistant_coaches,2015,p_black_any_pred,,0.19347190255642152,666,TIDES 2015,predicted
-tides_season,assistant_coaches,2015,p_black_or_multi_pred,,0.22187210316479822,666,TIDES 2015,predicted
-tides_season,assistant_coaches,2015,p_black_any_preddoc,,0.2338903021249157,666,TIDES 2015,predicted
-tides_season,assistant_coaches,2015,p_black_bifsg,,0.15275140980981014,666,TIDES 2015,predicted
-tides_season,assistant_coaches,2015,prior_black_pred,,0.19588941133862003,666,TIDES 2015,predicted
-tides_season,assistant_coaches,2015,p_multi_pred,,0.02840020060837679,666,TIDES 2015,predicted
-tides_season,assistant_coaches,2015,Tides_black,,0.34700000000000003,666,TIDES 2015,predicted
-tides_season,assistant_coaches,2015,Tides_black_2plus,,,666,TIDES 2015,predicted
-tides_season,assistant_coaches,2015,Tides_not_disclosed,,,666,TIDES 2015,predicted
-tides_season,assistant_coaches,2015,Tides_upper_disclosed,,,666,TIDES 2015,predicted
-tides_season,assistant_coaches,2016,p_black_any_pred,,0.1961287380947001,681,TIDES 2016,predicted
-tides_season,assistant_coaches,2016,p_black_or_multi_pred,,0.2265242028770475,681,TIDES 2016,predicted
-tides_season,assistant_coaches,2016,p_black_any_preddoc,,0.23356976731939166,681,TIDES 2016,predicted
+tides_season,assistant_coaches,2015,p_black_any_pred,,0.1937020984469938,665,TIDES 2015,predicted
+tides_season,assistant_coaches,2015,p_black_or_multi_pred,,0.22205636632897077,665,TIDES 2015,predicted
+tides_season,assistant_coaches,2015,p_black_any_preddoc,,0.23422815525316412,665,TIDES 2015,predicted
+tides_season,assistant_coaches,2015,p_black_bifsg,,0.1529638849490191,665,TIDES 2015,predicted
+tides_season,assistant_coaches,2015,prior_black_pred,,0.1959341605173928,665,TIDES 2015,predicted
+tides_season,assistant_coaches,2015,p_multi_pred,,0.02835426788197698,665,TIDES 2015,predicted
+tides_season,assistant_coaches,2015,Tides_black,,0.34700000000000003,665,TIDES 2015,predicted
+tides_season,assistant_coaches,2015,Tides_black_2plus,,,665,TIDES 2015,predicted
+tides_season,assistant_coaches,2015,Tides_not_disclosed,,,665,TIDES 2015,predicted
+tides_season,assistant_coaches,2015,Tides_upper_disclosed,,,665,TIDES 2015,predicted
+tides_season,assistant_coaches,2016,p_black_any_pred,,0.19609422814514135,681,TIDES 2016,predicted
+tides_season,assistant_coaches,2016,p_black_or_multi_pred,,0.22639911459333875,681,TIDES 2016,predicted
+tides_season,assistant_coaches,2016,p_black_any_preddoc,,0.23359758778615056,681,TIDES 2016,predicted
 tides_season,assistant_coaches,2016,p_black_bifsg,,0.15107150298444127,681,TIDES 2016,predicted
-tides_season,assistant_coaches,2016,prior_black_pred,,0.20261505147414832,681,TIDES 2016,predicted
-tides_season,assistant_coaches,2016,p_multi_pred,,0.03039546478234744,681,TIDES 2016,predicted
+tides_season,assistant_coaches,2016,prior_black_pred,,0.20253534418666386,681,TIDES 2016,predicted
+tides_season,assistant_coaches,2016,p_multi_pred,,0.030304886448197583,681,TIDES 2016,predicted
 tides_season,assistant_coaches,2016,Tides_black,,0.27699999999999997,681,TIDES 2016,predicted
 tides_season,assistant_coaches,2016,Tides_black_2plus,,,681,TIDES 2016,predicted
 tides_season,assistant_coaches,2016,Tides_not_disclosed,,,681,TIDES 2016,predicted
 tides_season,assistant_coaches,2016,Tides_upper_disclosed,,,681,TIDES 2016,predicted
-tides_season,assistant_coaches,2017,p_black_any_pred,,0.20602809520824336,688,TIDES 2017,predicted
-tides_season,assistant_coaches,2017,p_black_or_multi_pred,,0.23423201340138364,688,TIDES 2017,predicted
-tides_season,assistant_coaches,2017,p_black_any_preddoc,,0.23817799485272692,688,TIDES 2017,predicted
+tides_season,assistant_coaches,2017,p_black_any_pred,,0.2060045039376183,688,TIDES 2017,predicted
+tides_season,assistant_coaches,2017,p_black_or_multi_pred,,0.23413127420027574,688,TIDES 2017,predicted
+tides_season,assistant_coaches,2017,p_black_any_preddoc,,0.23820319977487692,688,TIDES 2017,predicted
 tides_season,assistant_coaches,2017,p_black_bifsg,,0.15502993526082043,688,TIDES 2017,predicted
-tides_season,assistant_coaches,2017,prior_black_pred,,0.21289217238211172,688,TIDES 2017,predicted
-tides_season,assistant_coaches,2017,p_multi_pred,,0.02820391819314047,688,TIDES 2017,predicted
+tides_season,assistant_coaches,2017,prior_black_pred,,0.21283046877591483,688,TIDES 2017,predicted
+tides_season,assistant_coaches,2017,p_multi_pred,,0.028126770262657298,688,TIDES 2017,predicted
 tides_season,assistant_coaches,2017,Tides_black,,0.282,688,TIDES 2017,predicted
 tides_season,assistant_coaches,2017,Tides_black_2plus,,,688,TIDES 2017,predicted
 tides_season,assistant_coaches,2017,Tides_not_disclosed,,,688,TIDES 2017,predicted
 tides_season,assistant_coaches,2017,Tides_upper_disclosed,,,688,TIDES 2017,predicted
-tides_season,assistant_coaches,2018,p_black_any_pred,,0.20512821774848988,703,TIDES 2018,predicted
-tides_season,assistant_coaches,2018,p_black_or_multi_pred,,0.23467850615142147,703,TIDES 2018,predicted
-tides_season,assistant_coaches,2018,p_black_any_preddoc,,0.2327725651669399,703,TIDES 2018,predicted
+tides_season,assistant_coaches,2018,p_black_any_pred,,0.20511122285830885,703,TIDES 2018,predicted
+tides_season,assistant_coaches,2018,p_black_or_multi_pred,,0.2345786201471757,703,TIDES 2018,predicted
+tides_season,assistant_coaches,2018,p_black_any_preddoc,,0.23271916503043533,703,TIDES 2018,predicted
 tides_season,assistant_coaches,2018,p_black_bifsg,,0.154443437950352,703,TIDES 2018,predicted
-tides_season,assistant_coaches,2018,prior_black_pred,,0.21822842922467048,703,TIDES 2018,predicted
-tides_season,assistant_coaches,2018,p_multi_pred,,0.0295502884029318,703,TIDES 2018,predicted
+tides_season,assistant_coaches,2018,prior_black_pred,,0.21818750090661657,703,TIDES 2018,predicted
+tides_season,assistant_coaches,2018,p_multi_pred,,0.029467397288866902,703,TIDES 2018,predicted
 tides_season,assistant_coaches,2018,Tides_black,,0.309,703,TIDES 2018,predicted
 tides_season,assistant_coaches,2018,Tides_black_2plus,,0.322,703,TIDES 2018,predicted
 tides_season,assistant_coaches,2018,Tides_not_disclosed,,0.019,703,TIDES 2018,predicted
 tides_season,assistant_coaches,2018,Tides_upper_disclosed,,0.32823649337410804,703,TIDES 2018,predicted
-tides_season,assistant_coaches,2019,p_black_any_pred,,0.20498854840742944,725,TIDES 2019,predicted
-tides_season,assistant_coaches,2019,p_black_or_multi_pred,,0.23219920497615867,725,TIDES 2019,predicted
-tides_season,assistant_coaches,2019,p_black_any_preddoc,,0.23182562837041662,725,TIDES 2019,predicted
+tides_season,assistant_coaches,2019,p_black_any_pred,,0.2049747740595837,725,TIDES 2019,predicted
+tides_season,assistant_coaches,2019,p_black_or_multi_pred,,0.23210952421017056,725,TIDES 2019,predicted
+tides_season,assistant_coaches,2019,p_black_any_preddoc,,0.23183125292782358,725,TIDES 2019,predicted
 tides_season,assistant_coaches,2019,p_black_bifsg,,0.15196285955512814,725,TIDES 2019,predicted
-tides_season,assistant_coaches,2019,prior_black_pred,,0.22386803305294142,725,TIDES 2019,predicted
-tides_season,assistant_coaches,2019,p_multi_pred,,0.027210656568729445,725,TIDES 2019,predicted
+tides_season,assistant_coaches,2019,prior_black_pred,,0.22383329867233992,725,TIDES 2019,predicted
+tides_season,assistant_coaches,2019,p_multi_pred,,0.027134750150586587,725,TIDES 2019,predicted
 tides_season,assistant_coaches,2019,Tides_black,,0.29600000000000004,725,TIDES 2019,predicted
 tides_season,assistant_coaches,2019,Tides_black_2plus,,0.31100000000000005,725,TIDES 2019,predicted
 tides_season,assistant_coaches,2019,Tides_not_disclosed,,0.040999999999999995,725,TIDES 2019,predicted
 tides_season,assistant_coaches,2019,Tides_upper_disclosed,,0.32429614181439004,725,TIDES 2019,predicted
-tides_season,assistant_coaches,2020,p_black_any_pred,,0.22416655942843472,755,TIDES 2020,predicted
-tides_season,assistant_coaches,2020,p_black_or_multi_pred,,0.25241863669557074,755,TIDES 2020,predicted
-tides_season,assistant_coaches,2020,p_black_any_preddoc,,0.2475734896233783,755,TIDES 2020,predicted
+tides_season,assistant_coaches,2020,p_black_any_pred,,0.2241617365147104,755,TIDES 2020,predicted
+tides_season,assistant_coaches,2020,p_black_or_multi_pred,,0.25234020378010164,755,TIDES 2020,predicted
+tides_season,assistant_coaches,2020,p_black_any_preddoc,,0.24756464311165113,755,TIDES 2020,predicted
 tides_season,assistant_coaches,2020,p_black_bifsg,,0.16463136511791257,755,TIDES 2020,predicted
-tides_season,assistant_coaches,2020,prior_black_pred,,0.22720829706554718,755,TIDES 2020,predicted
-tides_season,assistant_coaches,2020,p_multi_pred,,0.028252077267135824,755,TIDES 2020,predicted
+tides_season,assistant_coaches,2020,prior_black_pred,,0.22718500393069999,755,TIDES 2020,predicted
+tides_season,assistant_coaches,2020,p_multi_pred,,0.028178467265391124,755,TIDES 2020,predicted
 tides_season,assistant_coaches,2020,Tides_black,,0.305,755,TIDES 2020,predicted
 tides_season,assistant_coaches,2020,Tides_black_2plus,,0.323,755,TIDES 2020,predicted
 tides_season,assistant_coaches,2020,Tides_not_disclosed,,0.006,755,TIDES 2020,predicted
 tides_season,assistant_coaches,2020,Tides_upper_disclosed,,0.32494969818913483,755,TIDES 2020,predicted
-tides_season,assistant_coaches,2021,p_black_any_pred,,0.2469753967911692,746,TIDES 2021,predicted
-tides_season,assistant_coaches,2021,p_black_or_multi_pred,,0.27900069385618115,746,TIDES 2021,predicted
-tides_season,assistant_coaches,2021,p_black_any_preddoc,,0.2750391483610623,746,TIDES 2021,predicted
+tides_season,assistant_coaches,2021,p_black_any_pred,,0.24696438899268644,746,TIDES 2021,predicted
+tides_season,assistant_coaches,2021,p_black_or_multi_pred,,0.2789400235595504,746,TIDES 2021,predicted
+tides_season,assistant_coaches,2021,p_black_any_preddoc,,0.2750335216238154,746,TIDES 2021,predicted
 tides_season,assistant_coaches,2021,p_black_bifsg,,0.17434953316831517,746,TIDES 2021,predicted
-tides_season,assistant_coaches,2021,prior_black_pred,,0.2473525156595175,746,TIDES 2021,predicted
-tides_season,assistant_coaches,2021,p_multi_pred,,0.032025297065011546,746,TIDES 2021,predicted
+tides_season,assistant_coaches,2021,prior_black_pred,,0.24732231664366797,746,TIDES 2021,predicted
+tides_season,assistant_coaches,2021,p_multi_pred,,0.03197563456686354,746,TIDES 2021,predicted
 tides_season,assistant_coaches,2021,Tides_black,,0.345,746,TIDES 2021,predicted
 tides_season,assistant_coaches,2021,Tides_black_2plus,,0.372,746,TIDES 2021,predicted
 tides_season,assistant_coaches,2021,Tides_not_disclosed,,0.013999999999999999,746,TIDES 2021,predicted
 tides_season,assistant_coaches,2021,Tides_upper_disclosed,,0.3772819472616633,746,TIDES 2021,predicted
-tides_season,assistant_coaches,2022,p_black_any_pred,,0.2578601241618045,800,TIDES 2022,predicted
-tides_season,assistant_coaches,2022,p_black_or_multi_pred,,0.29581820433321854,800,TIDES 2022,predicted
-tides_season,assistant_coaches,2022,p_black_any_preddoc,,0.280109813198362,800,TIDES 2022,predicted
-tides_season,assistant_coaches,2022,p_black_bifsg,,0.1784885510191914,800,TIDES 2022,predicted
-tides_season,assistant_coaches,2022,prior_black_pred,,0.25678396275381865,800,TIDES 2022,predicted
-tides_season,assistant_coaches,2022,p_multi_pred,,0.037958080171413715,800,TIDES 2022,predicted
+tides_season,assistant_coaches,2022,p_black_any_pred,,0.25829057895694657,800,TIDES 2022,predicted
+tides_season,assistant_coaches,2022,p_black_or_multi_pred,,0.2961922504962859,800,TIDES 2022,predicted
+tides_season,assistant_coaches,2022,p_black_any_preddoc,,0.28051705594435633,800,TIDES 2022,predicted
+tides_season,assistant_coaches,2022,p_black_bifsg,,0.17884908704968772,800,TIDES 2022,predicted
+tides_season,assistant_coaches,2022,prior_black_pred,,0.25674152835784025,800,TIDES 2022,predicted
+tides_season,assistant_coaches,2022,p_multi_pred,,0.03790167153933894,800,TIDES 2022,predicted
 tides_season,assistant_coaches,2022,Tides_black,,0.363,800,TIDES 2022,predicted
 tides_season,assistant_coaches,2022,Tides_black_2plus,,0.39,800,TIDES 2022,predicted
 tides_season,assistant_coaches,2022,Tides_not_disclosed,,0.021,800,TIDES 2022,predicted
 tides_season,assistant_coaches,2022,Tides_upper_disclosed,,0.3983656792645557,800,TIDES 2022,predicted
-tides_season,assistant_coaches,2023,p_black_any_pred,,0.26809727537185996,824,TIDES 2023,predicted
-tides_season,assistant_coaches,2023,p_black_or_multi_pred,,0.3071745872731936,824,TIDES 2023,predicted
-tides_season,assistant_coaches,2023,p_black_any_preddoc,,0.2884996190127408,824,TIDES 2023,predicted
+tides_season,assistant_coaches,2023,p_black_any_pred,,0.2680781348589672,824,TIDES 2023,predicted
+tides_season,assistant_coaches,2023,p_black_or_multi_pred,,0.3071271508211621,824,TIDES 2023,predicted
+tides_season,assistant_coaches,2023,p_black_any_preddoc,,0.288445604837489,824,TIDES 2023,predicted
 tides_season,assistant_coaches,2023,p_black_bifsg,,0.18420071730800144,824,TIDES 2023,predicted
-tides_season,assistant_coaches,2023,prior_black_pred,,0.2647549388341886,824,TIDES 2023,predicted
-tides_season,assistant_coaches,2023,p_multi_pred,,0.039077311901333046,824,TIDES 2023,predicted
+tides_season,assistant_coaches,2023,prior_black_pred,,0.26471049771673916,824,TIDES 2023,predicted
+tides_season,assistant_coaches,2023,p_multi_pred,,0.039049015962194636,824,TIDES 2023,predicted
 tides_season,assistant_coaches,2023,Tides_black,,0.366,824,TIDES 2023,predicted
 tides_season,assistant_coaches,2023,Tides_black_2plus,,0.391,824,TIDES 2023,predicted
 tides_season,assistant_coaches,2023,Tides_not_disclosed,,0.034,824,TIDES 2023,predicted
 tides_season,assistant_coaches,2023,Tides_upper_disclosed,,0.40476190476190477,824,TIDES 2023,predicted
-tides_season,assistant_coaches,2024,p_black_any_pred,,0.26324843557351074,853,,predicted
-tides_season,assistant_coaches,2024,p_black_or_multi_pred,,0.30255902069807133,853,,predicted
-tides_season,assistant_coaches,2024,p_black_any_preddoc,,0.279445448878897,853,,predicted
+tides_season,assistant_coaches,2024,p_black_any_pred,,0.2632292861167077,853,,predicted
+tides_season,assistant_coaches,2024,p_black_or_multi_pred,,0.3025165985324715,853,,predicted
+tides_season,assistant_coaches,2024,p_black_any_preddoc,,0.2794021163669611,853,,predicted
 tides_season,assistant_coaches,2024,p_black_bifsg,,0.18201361409149042,853,,predicted
-tides_season,assistant_coaches,2024,prior_black_pred,,0.2691734042037115,853,,predicted
-tides_season,assistant_coaches,2024,p_multi_pred,,0.03931058512456021,853,,predicted
+tides_season,assistant_coaches,2024,prior_black_pred,,0.2691246444722405,853,,predicted
+tides_season,assistant_coaches,2024,p_multi_pred,,0.03928731241576371,853,,predicted
 tides_season,assistant_coaches,2024,Tides_black,,,853,,predicted
 tides_season,assistant_coaches,2024,Tides_black_2plus,,,853,,predicted
 tides_season,assistant_coaches,2024,Tides_not_disclosed,,,853,,predicted
 tides_season,assistant_coaches,2024,Tides_upper_disclosed,,,853,,predicted
-tides_season,assistant_coaches,2025,p_black_any_pred,,0.2703790895171489,878,,predicted
-tides_season,assistant_coaches,2025,p_black_or_multi_pred,,0.31170312397990463,878,,predicted
-tides_season,assistant_coaches,2025,p_black_any_preddoc,,0.288807538360467,878,,predicted
-tides_season,assistant_coaches,2025,p_black_bifsg,,0.18394698734113793,878,,predicted
-tides_season,assistant_coaches,2025,prior_black_pred,,0.2741003032794581,878,,predicted
-tides_season,assistant_coaches,2025,p_multi_pred,,0.04132403446275539,878,,predicted
-tides_season,assistant_coaches,2025,Tides_black,,,878,,predicted
-tides_season,assistant_coaches,2025,Tides_black_2plus,,,878,,predicted
-tides_season,assistant_coaches,2025,Tides_not_disclosed,,,878,,predicted
-tides_season,assistant_coaches,2025,Tides_upper_disclosed,,,878,,predicted
+tides_season,assistant_coaches,2025,p_black_any_pred,,0.2702086674624895,880,,predicted
+tides_season,assistant_coaches,2025,p_black_or_multi_pred,,0.311544289265056,880,,predicted
+tides_season,assistant_coaches,2025,p_black_any_preddoc,,0.289354047693511,880,,predicted
+tides_season,assistant_coaches,2025,p_black_bifsg,,0.18367210649266333,880,,predicted
+tides_season,assistant_coaches,2025,prior_black_pred,,0.2742750021928403,880,,predicted
+tides_season,assistant_coaches,2025,p_multi_pred,,0.04133562180256655,880,,predicted
+tides_season,assistant_coaches,2025,Tides_black,,,880,,predicted
+tides_season,assistant_coaches,2025,Tides_black_2plus,,,880,,predicted
+tides_season,assistant_coaches,2025,Tides_not_disclosed,,,880,,predicted
+tides_season,assistant_coaches,2025,Tides_upper_disclosed,,,880,,predicted
 documented,players,,auc_bw,Pred,0.9351137584220292,,,predicted
 documented,players,,auc_bw_lo,Pred,0.8962703837515867,,,predicted
 documented,players,,auc_bw_hi,Pred,0.9704408749145592,,,predicted
 documented,players,,auc_bnb,Pred,0.8914880445307498,,,predicted
 documented,players,,auc_bnb_lo,Pred,0.8720002857248681,,,predicted
 documented,players,,auc_bnb_hi,Pred,0.9101326504156239,,,predicted
-documented,players,,auc_alone,Pred,0.8982519719801391,,,predicted
+documented,players,,auc_alone,Pred,0.8542965130319045,,,predicted
+documented,players,,auc_alone_lo,Pred,0.8335060063011406,,,predicted
+documented,players,,auc_alone_hi,Pred,0.874183126196908,,,predicted
 documented,players,,auc_nohisp,Pred,0.89601764664026,,,predicted
 documented,players,,auc_ball,Pred,,,,predicted
 documented,players,,auc_ball_lo,Pred,,,,predicted
 documented,players,,auc_ball_hi,Pred,,,,predicted
-documented,players,,cal_slope,Pred,0.6431134076686748,,,predicted
-documented,players,,cal_slope_se,Pred,0.032566553749714164,,,predicted
+documented,players,,cal_slope,Pred,0.5761634994776329,,,predicted
+documented,players,,cal_slope_se,Pred,0.027806036856126325,,,predicted
 documented,players,,cal_slope_n,Pred,2268,,,predicted
-documented,players,,cal_slope_fe,Pred,0.6584067801864453,,,predicted
-documented,players,,cal_slope_fe_se,Pred,0.03990367162627123,,,predicted
-documented,players,,cal_slope_fe_n,Pred,2207,,,predicted
+documented,players,,cal_slope_fe,Pred,0.6129132829346545,,,predicted
+documented,players,,cal_slope_fe_se,Pred,0.032963895817965695,,,predicted
+documented,players,,cal_slope_fe_n,Pred,2268,,,predicted
 documented,players,,reliability,Pred,0.6322743474084933,,,predicted
 documented,players,,mean_black,Pred,0.7972643092251056,,,predicted
 documented,players,,mean_black_alone,Pred,0.8078036712593828,,,predicted
+documented,players,,mean_black_comb,Pred,0.6095784984530785,,,predicted
 documented,players,,mean_white,Pred,0.14867582451291889,,,predicted
 documented,players,,mean_other,Pred,0.26710872901975835,,,predicted
 documented,players,,mean_undoc,Pred,0.5972565696635714,,,predicted
 documented,players,,mean_all,Pred,0.6177516265021034,,,predicted
 documented,players,,implied_black,Pred,0.8594161038534616,,,predicted
-documented,players,,dec1_share,Pred,0.16299559471365638,,,predicted
-documented,players,,dec2_share,Pred,0.5682819383259912,,,predicted
-documented,players,,dec3_share,Pred,0.8370044052863436,,,predicted
-documented,players,,dec4_share,Pred,0.8634361233480177,,,predicted
-documented,players,,dec5_share,Pred,0.911504424778761,,,predicted
-documented,players,,dec6_share,Pred,0.9691629955947136,,,predicted
-documented,players,,dec7_share,Pred,0.947136563876652,,,predicted
-documented,players,,dec8_share,Pred,0.9691629955947136,,,predicted
-documented,players,,dec9_share,Pred,0.9911894273127754,,,predicted
-documented,players,,dec10_share,Pred,0.9911504424778761,,,predicted
+documented,players,,dec1_share,Pred,0.1013215859030837,,,predicted
+documented,players,,dec2_share,Pred,0.5066079295154186,,,predicted
+documented,players,,dec3_share,Pred,0.788546255506608,,,predicted
+documented,players,,dec4_share,Pred,0.8193832599118943,,,predicted
+documented,players,,dec5_share,Pred,0.831858407079646,,,predicted
+documented,players,,dec6_share,Pred,0.947136563876652,,,predicted
+documented,players,,dec7_share,Pred,0.9074889867841409,,,predicted
+documented,players,,dec8_share,Pred,0.947136563876652,,,predicted
+documented,players,,dec9_share,Pred,0.960352422907489,,,predicted
+documented,players,,dec10_share,Pred,0.9646017699115044,,,predicted
 documented,players,,dec1_mean,Pred,0.014677064542384216,,,predicted
 documented,players,,dec2_mean,Pred,0.18101587975901262,,,predicted
 documented,players,,dec3_mean,Pred,0.4705074869648424,,,predicted
@@ -1016,9 +1019,11 @@ documented,players,,dec9_n,Pred,227,,,predicted
 documented,players,,dec10_n,Pred,226,,,predicted
 documented,players,,n_black,Pred,1862,,,predicted
 documented,players,,n_black_alone,Pred,1763,,,predicted
+documented,players,,n_black_comb,Pred,99,,,predicted
 documented,players,,n_white,Pred,55,,,predicted
 documented,players,,n_other,Pred,351,,,predicted
 documented,players,,n_hisp_norace,Pred,89,,,predicted
+documented,players,,n_conflict,Pred,0,,,predicted
 documented,players,,n_undoc,Pred,9045,,,predicted
 documented,players,,auc_bw,Bifsg,0.9131383653940045,,,predicted
 documented,players,,auc_bw_lo,Bifsg,0.8719556195684015,,,predicted
@@ -1026,13 +1031,15 @@ documented,players,,auc_bw_hi,Bifsg,0.9506222536861634,,,predicted
 documented,players,,auc_bnb,Bifsg,0.8350077780658542,,,predicted
 documented,players,,auc_bnb_lo,Bifsg,0.813195792965877,,,predicted
 documented,players,,auc_bnb_hi,Bifsg,0.8573307939976613,,,predicted
-documented,players,,auc_alone,Bifsg,0.8426006387455328,,,predicted
+documented,players,,auc_alone,Bifsg,0.7998152339340571,,,predicted
+documented,players,,auc_alone_lo,Bifsg,0.7763514037166621,,,predicted
+documented,players,,auc_alone_hi,Bifsg,0.8223817974537102,,,predicted
 documented,players,,auc_nohisp,Bifsg,0.8228762532740143,,,predicted
 documented,players,,auc_ball,Bifsg,,,,predicted
 documented,players,,auc_ball_lo,Bifsg,,,,predicted
 documented,players,,auc_ball_hi,Bifsg,,,,predicted
-documented,players,,cal_slope,Bifsg,0.676967724718207,,,predicted
-documented,players,,cal_slope_se,Bifsg,0.03839548307949029,,,predicted
+documented,players,,cal_slope,Bifsg,0.6165873991918367,,,predicted
+documented,players,,cal_slope_se,Bifsg,0.03375795776201502,,,predicted
 documented,players,,cal_slope_n,Bifsg,2268,,,predicted
 documented,players,,cal_slope_fe,Bifsg,,,,predicted
 documented,players,,cal_slope_fe_se,Bifsg,,,,predicted
@@ -1040,21 +1047,22 @@ documented,players,,cal_slope_fe_n,Bifsg,,,,predicted
 documented,players,,reliability,Bifsg,0.3981331269194649,,,predicted
 documented,players,,mean_black,Bifsg,0.4180503722545716,,,predicted
 documented,players,,mean_black_alone,Bifsg,0.4233607737926772,,,predicted
+documented,players,,mean_black_comb,Bifsg,0.32348231254063,,,predicted
 documented,players,,mean_white,Bifsg,0.058872265850382445,,,predicted
 documented,players,,mean_other,Bifsg,0.13055197662390888,,,predicted
 documented,players,,mean_undoc,Bifsg,0.30788200472932137,,,predicted
 documented,players,,mean_all,Bifsg,0.31930206349610957,,,predicted
 documented,players,,implied_black,Bifsg,0.590286505959358,,,predicted
-documented,players,,dec1_share,Bifsg,0.2422907488986784,,,predicted
-documented,players,,dec2_share,Bifsg,0.6343612334801763,,,predicted
-documented,players,,dec3_share,Bifsg,0.8377192982456141,,,predicted
-documented,players,,dec4_share,Bifsg,0.8282828282828283,,,predicted
-documented,players,,dec5_share,Bifsg,0.9290322580645162,,,predicted
-documented,players,,dec6_share,Bifsg,0.9691629955947136,,,predicted
-documented,players,,dec7_share,Bifsg,0.920704845814978,,,predicted
-documented,players,,dec8_share,Bifsg,0.9385964912280702,,,predicted
-documented,players,,dec9_share,Bifsg,0.9557522123893806,,,predicted
-documented,players,,dec10_share,Bifsg,0.9867256637168141,,,predicted
+documented,players,,dec1_share,Bifsg,0.15418502202643172,,,predicted
+documented,players,,dec2_share,Bifsg,0.5859030837004405,,,predicted
+documented,players,,dec3_share,Bifsg,0.7807017543859649,,,predicted
+documented,players,,dec4_share,Bifsg,0.7946127946127947,,,predicted
+documented,players,,dec5_share,Bifsg,0.9161290322580645,,,predicted
+documented,players,,dec6_share,Bifsg,0.947136563876652,,,predicted
+documented,players,,dec7_share,Bifsg,0.8722466960352423,,,predicted
+documented,players,,dec8_share,Bifsg,0.9078947368421053,,,predicted
+documented,players,,dec9_share,Bifsg,0.915929203539823,,,predicted
+documented,players,,dec10_share,Bifsg,0.9380530973451328,,,predicted
 documented,players,,dec1_mean,Bifsg,0.005628828848357413,,,predicted
 documented,players,,dec2_mean,Bifsg,0.03636511779768417,,,predicted
 documented,players,,dec3_mean,Bifsg,0.09391265508103903,,,predicted
@@ -1077,9 +1085,11 @@ documented,players,,dec9_n,Bifsg,226,,,predicted
 documented,players,,dec10_n,Bifsg,226,,,predicted
 documented,players,,n_black,Bifsg,1862,,,predicted
 documented,players,,n_black_alone,Bifsg,1763,,,predicted
+documented,players,,n_black_comb,Bifsg,99,,,predicted
 documented,players,,n_white,Bifsg,55,,,predicted
 documented,players,,n_other,Bifsg,351,,,predicted
 documented,players,,n_hisp_norace,Bifsg,89,,,predicted
+documented,players,,n_conflict,Bifsg,0,,,predicted
 documented,players,,n_undoc,Bifsg,9045,,,predicted
 documented,players,,auc_bw,Prior,0.7747241480324187,,,predicted
 documented,players,,auc_bw_lo,Prior,0.7053478664192949,,,predicted
@@ -1087,13 +1097,15 @@ documented,players,,auc_bw_hi,Prior,0.8368711551606288,,,predicted
 documented,players,,auc_bnb,Prior,0.7263575899636494,,,predicted
 documented,players,,auc_bnb_lo,Prior,0.700938460683729,,,predicted
 documented,players,,auc_bnb_hi,Prior,0.7536026797288788,,,predicted
-documented,players,,auc_alone,Prior,0.7292428658047607,,,predicted
+documented,players,,auc_alone,Prior,0.6953718627676722,,,predicted
+documented,players,,auc_alone_lo,Prior,0.6706784958132797,,,predicted
+documented,players,,auc_alone_hi,Prior,0.7209233529705779,,,predicted
 documented,players,,auc_nohisp,Prior,0.7160773158674062,,,predicted
 documented,players,,auc_ball,Prior,,,,predicted
 documented,players,,auc_ball_lo,Prior,,,,predicted
 documented,players,,auc_ball_hi,Prior,,,,predicted
-documented,players,,cal_slope,Prior,0.605006222161645,,,predicted
-documented,players,,cal_slope_se,Prior,0.03802860080474378,,,predicted
+documented,players,,cal_slope,Prior,0.5323575755306654,,,predicted
+documented,players,,cal_slope_se,Prior,0.03731254896648854,,,predicted
 documented,players,,cal_slope_n,Prior,2268,,,predicted
 documented,players,,cal_slope_fe,Prior,,,,predicted
 documented,players,,cal_slope_fe_se,Prior,,,,predicted
@@ -1101,21 +1113,22 @@ documented,players,,cal_slope_fe_n,Prior,,,,predicted
 documented,players,,reliability,Prior,0.298793300939425,,,predicted
 documented,players,,mean_black,Prior,0.6978190140277788,,,predicted
 documented,players,,mean_black_alone,Prior,0.7007297467490711,,,predicted
+documented,players,,mean_black_comb,Prior,0.6459844505162812,,,predicted
 documented,players,,mean_white,Prior,0.4070192809100445,,,predicted
 documented,players,,mean_other,Prior,0.5117949949071735,,,predicted
 documented,players,,mean_undoc,Prior,0.5920715104707696,,,predicted
 documented,players,,mean_all,Prior,0.6060860885698139,,,predicted
 documented,players,,implied_black,Prior,0.723774522594681,,,predicted
-documented,players,,dec1_share,Prior,0.5217391304347826,,,predicted
-documented,players,,dec2_share,Prior,0.7456140350877193,,,predicted
-documented,players,,dec3_share,Prior,0.78125,,,predicted
-documented,players,,dec4_share,Prior,0.7662337662337663,,,predicted
-documented,players,,dec5_share,Prior,0.8280542986425339,,,predicted
-documented,players,,dec6_share,Prior,0.8289473684210527,,,predicted
-documented,players,,dec7_share,Prior,0.9122807017543859,,,predicted
-documented,players,,dec8_share,Prior,0.9240506329113924,,,predicted
-documented,players,,dec9_share,Prior,0.9302325581395349,,,predicted
-documented,players,,dec10_share,Prior,0.9778761061946902,,,predicted
+documented,players,,dec1_share,Prior,0.4826086956521739,,,predicted
+documented,players,,dec2_share,Prior,0.6754385964912281,,,predicted
+documented,players,,dec3_share,Prior,0.75,,,predicted
+documented,players,,dec4_share,Prior,0.7229437229437229,,,predicted
+documented,players,,dec5_share,Prior,0.8054298642533937,,,predicted
+documented,players,,dec6_share,Prior,0.7894736842105263,,,predicted
+documented,players,,dec7_share,Prior,0.8508771929824561,,,predicted
+documented,players,,dec8_share,Prior,0.8860759493670886,,,predicted
+documented,players,,dec9_share,Prior,0.8697674418604651,,,predicted
+documented,players,,dec10_share,Prior,0.9469026548672567,,,predicted
 documented,players,,dec1_mean,Prior,0.1405717662340974,,,predicted
 documented,players,,dec2_mean,Prior,0.3756063502448277,,,predicted
 documented,players,,dec3_mean,Prior,0.5486866768211445,,,predicted
@@ -1138,55 +1151,60 @@ documented,players,,dec9_n,Prior,215,,,predicted
 documented,players,,dec10_n,Prior,226,,,predicted
 documented,players,,n_black,Prior,1862,,,predicted
 documented,players,,n_black_alone,Prior,1763,,,predicted
+documented,players,,n_black_comb,Prior,99,,,predicted
 documented,players,,n_white,Prior,55,,,predicted
 documented,players,,n_other,Prior,351,,,predicted
 documented,players,,n_hisp_norace,Prior,89,,,predicted
+documented,players,,n_conflict,Prior,0,,,predicted
 documented,players,,n_undoc,Prior,9045,,,predicted
-documented,staff,,auc_bw,Pred,0.9689285714285715,,,predicted
-documented,staff,,auc_bw_lo,Pred,0.9380223214285714,,,predicted
-documented,staff,,auc_bw_hi,Pred,0.9914285714285714,,,predicted
+documented,staff,,auc_bw,Pred,0.9691071428571428,,,predicted
+documented,staff,,auc_bw_lo,Pred,0.9381205357142857,,,predicted
+documented,staff,,auc_bw_hi,Pred,0.9916116071428572,,,predicted
 documented,staff,,auc_bnb,Pred,0.9124339788732394,,,predicted
-documented,staff,,auc_bnb_lo,Pred,0.8689997799295773,,,predicted
-documented,staff,,auc_bnb_hi,Pred,0.949694102112676,,,predicted
-documented,staff,,auc_alone,Pred,0.9138452509931383,,,predicted
+documented,staff,,auc_bnb_lo,Pred,0.868997579225352,,,predicted
+documented,staff,,auc_bnb_hi,Pred,0.9496082746478873,,,predicted
+documented,staff,,auc_alone,Pred,0.8856093800714054,,,predicted
+documented,staff,,auc_alone_lo,Pred,0.8376744563453424,,,predicted
+documented,staff,,auc_alone_hi,Pred,0.9260893378773125,,,predicted
 documented,staff,,auc_nohisp,Pred,0.916305443548387,,,predicted
 documented,staff,,auc_ball,Pred,,,,predicted
 documented,staff,,auc_ball_lo,Pred,,,,predicted
 documented,staff,,auc_ball_hi,Pred,,,,predicted
-documented,staff,,cal_slope,Pred,0.9625757974694796,,,predicted
-documented,staff,,cal_slope_se,Pred,0.12106402511352977,,,predicted
+documented,staff,,cal_slope,Pred,0.8272726067559053,,,predicted
+documented,staff,,cal_slope_se,Pred,0.10704781732225556,,,predicted
 documented,staff,,cal_slope_n,Pred,391,,,predicted
-documented,staff,,cal_slope_fe,Pred,1.109333106953149,,,predicted
-documented,staff,,cal_slope_fe_se,Pred,0.1471479197621841,,,predicted
+documented,staff,,cal_slope_fe,Pred,0.9425024109955131,,,predicted
+documented,staff,,cal_slope_fe_se,Pred,0.1312020694981963,,,predicted
 documented,staff,,cal_slope_fe_n,Pred,391,,,predicted
-documented,staff,,reliability,Pred,0.48381516095367516,,,predicted
-documented,staff,,mean_black,Pred,0.48609115740793146,,,predicted
-documented,staff,,mean_black_alone,Pred,0.48948232572469047,,,predicted
-documented,staff,,mean_white,Pred,0.029042239860169402,,,predicted
-documented,staff,,mean_other,Pred,0.13214373819427616,,,predicted
-documented,staff,,mean_undoc,Pred,0.17277889722105583,,,predicted
-documented,staff,,mean_all,Pred,0.19994965193771921,,,predicted
-documented,staff,,implied_black,Pred,0.5869139762842394,,,predicted
+documented,staff,,reliability,Pred,0.48423050098399145,,,predicted
+documented,staff,,mean_black,Pred,0.48589422753803113,,,predicted
+documented,staff,,mean_black_alone,Pred,0.4893093544965674,,,predicted
+documented,staff,,mean_black_comb,Pred,0.3527042761551183,,,predicted
+documented,staff,,mean_white,Pred,0.02890754494741672,,,predicted
+documented,staff,,mean_other,Pred,0.13201147651704306,,,predicted
+documented,staff,,mean_undoc,Pred,0.17246050242545238,,,predicted
+documented,staff,,mean_all,Pred,0.1996305787624322,,,predicted
+documented,staff,,implied_black,Pred,0.587081624995911,,,predicted
 documented,staff,,dec1_share,Pred,0.1,,,predicted
-documented,staff,,dec2_share,Pred,0.5128205128205128,,,predicted
-documented,staff,,dec3_share,Pred,0.8717948717948718,,,predicted
-documented,staff,,dec4_share,Pred,0.9230769230769231,,,predicted
+documented,staff,,dec2_share,Pred,0.46153846153846156,,,predicted
+documented,staff,,dec3_share,Pred,0.8461538461538461,,,predicted
+documented,staff,,dec4_share,Pred,0.8974358974358975,,,predicted
 documented,staff,,dec5_share,Pred,0.9487179487179487,,,predicted
-documented,staff,,dec6_share,Pred,0.9230769230769231,,,predicted
-documented,staff,,dec7_share,Pred,0.9487179487179487,,,predicted
+documented,staff,,dec6_share,Pred,0.8717948717948718,,,predicted
+documented,staff,,dec7_share,Pred,0.9230769230769231,,,predicted
 documented,staff,,dec8_share,Pred,1,,,predicted
 documented,staff,,dec9_share,Pred,0.9743589743589743,,,predicted
-documented,staff,,dec10_share,Pred,1,,,predicted
-documented,staff,,dec1_mean,Pred,0.0034458811893674705,,,predicted
-documented,staff,,dec2_mean,Pred,0.040988741966605374,,,predicted
-documented,staff,,dec3_mean,Pred,0.09821905935949882,,,predicted
-documented,staff,,dec4_mean,Pred,0.19248116312122088,,,predicted
-documented,staff,,dec5_mean,Pred,0.2933501619099066,,,predicted
-documented,staff,,dec6_mean,Pred,0.41782436661732486,,,predicted
-documented,staff,,dec7_mean,Pred,0.5783495699252125,,,predicted
-documented,staff,,dec8_mean,Pred,0.7117494023605156,,,predicted
-documented,staff,,dec9_mean,Pred,0.8389120114055558,,,predicted
-documented,staff,,dec10_mean,Pred,0.9610739359768068,,,predicted
+documented,staff,,dec10_share,Pred,0.9743589743589743,,,predicted
+documented,staff,,dec1_mean,Pred,0.003425895698077779,,,predicted
+documented,staff,,dec2_mean,Pred,0.040823256843811995,,,predicted
+documented,staff,,dec3_mean,Pred,0.09803649724010638,,,predicted
+documented,staff,,dec4_mean,Pred,0.19209803572877882,,,predicted
+documented,staff,,dec5_mean,Pred,0.29304654348941206,,,predicted
+documented,staff,,dec6_mean,Pred,0.41755765195377287,,,predicted
+documented,staff,,dec7_mean,Pred,0.5779009058467158,,,predicted
+documented,staff,,dec8_mean,Pred,0.7116579195601775,,,predicted
+documented,staff,,dec9_mean,Pred,0.8389187700116886,,,predicted
+documented,staff,,dec10_mean,Pred,0.9610705273260484,,,predicted
 documented,staff,,dec1_n,Pred,40,,,predicted
 documented,staff,,dec2_n,Pred,39,,,predicted
 documented,staff,,dec3_n,Pred,39,,,predicted
@@ -1199,42 +1217,47 @@ documented,staff,,dec9_n,Pred,39,,,predicted
 documented,staff,,dec10_n,Pred,39,,,predicted
 documented,staff,,n_black,Pred,320,,,predicted
 documented,staff,,n_black_alone,Pred,312,,,predicted
+documented,staff,,n_black_comb,Pred,8,,,predicted
 documented,staff,,n_white,Pred,35,,,predicted
 documented,staff,,n_other,Pred,36,,,predicted
 documented,staff,,n_hisp_norace,Pred,9,,,predicted
-documented,staff,,n_undoc,Pred,3060,,,predicted
+documented,staff,,n_conflict,Pred,0,,,predicted
+documented,staff,,n_undoc,Pred,3062,,,predicted
 documented,staff,,auc_bw,Bifsg,0.9497321428571428,,,predicted
 documented,staff,,auc_bw_lo,Bifsg,0.91178125,,,predicted
 documented,staff,,auc_bw_hi,Bifsg,0.9801875000000001,,,predicted
 documented,staff,,auc_bnb,Bifsg,0.9315580985915493,,,predicted
 documented,staff,,auc_bnb_lo,Bifsg,0.9010772447183097,,,predicted
 documented,staff,,auc_bnb_hi,Bifsg,0.9593772007042254,,,predicted
-documented,staff,,auc_alone,Bifsg,0.9316540267244493,,,predicted
+documented,staff,,auc_alone,Bifsg,0.8992210321324245,,,predicted
+documented,staff,,auc_alone_lo,Bifsg,0.857746064589419,,,predicted
+documented,staff,,auc_alone_hi,Bifsg,0.9336954316780266,,,predicted
 documented,staff,,auc_nohisp,Bifsg,0.9242439516129032,,,predicted
 documented,staff,,auc_ball,Bifsg,,,,predicted
 documented,staff,,auc_ball_lo,Bifsg,,,,predicted
 documented,staff,,auc_ball_hi,Bifsg,,,,predicted
-documented,staff,,cal_slope,Bifsg,1.1811298242387664,,,predicted
-documented,staff,,cal_slope_se,Bifsg,0.12065505140373985,,,predicted
+documented,staff,,cal_slope,Bifsg,0.9896900436576531,,,predicted
+documented,staff,,cal_slope_se,Bifsg,0.10061285329693821,,,predicted
 documented,staff,,cal_slope_n,Bifsg,391,,,predicted
 documented,staff,,cal_slope_fe,Bifsg,,,,predicted
 documented,staff,,cal_slope_fe_se,Bifsg,,,,predicted
 documented,staff,,cal_slope_fe_n,Bifsg,,,,predicted
-documented,staff,,reliability,Bifsg,0.3982307310419543,,,predicted
+documented,staff,,reliability,Bifsg,0.3982991135343682,,,predicted
 documented,staff,,mean_black,Bifsg,0.3744416865279253,,,predicted
 documented,staff,,mean_black_alone,Bifsg,0.37775252227720363,,,predicted
+documented,staff,,mean_black_comb,Bifsg,0.2453190923060702,,,predicted
 documented,staff,,mean_white,Bifsg,0.0276101129154972,,,predicted
 documented,staff,,mean_other,Bifsg,0.04899041081293368,,,predicted
-documented,staff,,mean_undoc,Bifsg,0.1378246536638824,,,predicted
-documented,staff,,mean_all,Bifsg,0.15772088920362917,,,predicted
-documented,staff,,implied_black,Bifsg,0.4930451198082756,,,predicted
+documented,staff,,mean_undoc,Bifsg,0.13771911590181563,,,predicted
+documented,staff,,mean_all,Bifsg,0.15761577796744963,,,predicted
+documented,staff,,implied_black,Bifsg,0.4930394989206512,,,predicted
 documented,staff,,dec1_share,Bifsg,0.025,,,predicted
-documented,staff,,dec2_share,Bifsg,0.5897435897435898,,,predicted
-documented,staff,,dec3_share,Bifsg,0.8717948717948718,,,predicted
+documented,staff,,dec2_share,Bifsg,0.5641025641025641,,,predicted
+documented,staff,,dec3_share,Bifsg,0.8461538461538461,,,predicted
 documented,staff,,dec4_share,Bifsg,0.8717948717948718,,,predicted
-documented,staff,,dec5_share,Bifsg,0.8974358974358975,,,predicted
-documented,staff,,dec6_share,Bifsg,0.9743589743589743,,,predicted
-documented,staff,,dec7_share,Bifsg,0.9743589743589743,,,predicted
+documented,staff,,dec5_share,Bifsg,0.8717948717948718,,,predicted
+documented,staff,,dec6_share,Bifsg,0.9230769230769231,,,predicted
+documented,staff,,dec7_share,Bifsg,0.8974358974358975,,,predicted
 documented,staff,,dec8_share,Bifsg,1,,,predicted
 documented,staff,,dec9_share,Bifsg,1,,,predicted
 documented,staff,,dec10_share,Bifsg,1,,,predicted
@@ -1260,55 +1283,60 @@ documented,staff,,dec9_n,Bifsg,39,,,predicted
 documented,staff,,dec10_n,Bifsg,39,,,predicted
 documented,staff,,n_black,Bifsg,320,,,predicted
 documented,staff,,n_black_alone,Bifsg,312,,,predicted
+documented,staff,,n_black_comb,Bifsg,8,,,predicted
 documented,staff,,n_white,Bifsg,35,,,predicted
 documented,staff,,n_other,Bifsg,36,,,predicted
 documented,staff,,n_hisp_norace,Bifsg,9,,,predicted
-documented,staff,,n_undoc,Bifsg,3060,,,predicted
-documented,staff,,auc_bw,Prior,0.7233928571428572,,,predicted
+documented,staff,,n_conflict,Bifsg,0,,,predicted
+documented,staff,,n_undoc,Bifsg,3062,,,predicted
+documented,staff,,auc_bw,Prior,0.7234821428571429,,,predicted
 documented,staff,,auc_bw_lo,Prior,0.6174464285714286,,,predicted
 documented,staff,,auc_bw_hi,Prior,0.8214620535714285,,,predicted
-documented,staff,,auc_bnb,Prior,0.6366857394366198,,,predicted
-documented,staff,,auc_bnb_lo,Prior,0.5559540052816901,,,predicted
-documented,staff,,auc_bnb_hi,Prior,0.7097370158450704,,,predicted
-documented,staff,,auc_alone,Prior,0.638926507764536,,,predicted
-documented,staff,,auc_nohisp,Prior,0.6454889112903226,,,predicted
+documented,staff,,auc_bnb,Prior,0.6364656690140845,,,predicted
+documented,staff,,auc_bnb_lo,Prior,0.5557867517605632,,,predicted
+documented,staff,,auc_bnb_hi,Prior,0.7095796654929578,,,predicted
+documented,staff,,auc_alone,Prior,0.6346559558584876,,,predicted
+documented,staff,,auc_alone_lo,Prior,0.5653947581953911,,,predicted
+documented,staff,,auc_alone_hi,Prior,0.7106438656280428,,,predicted
+documented,staff,,auc_nohisp,Prior,0.645539314516129,,,predicted
 documented,staff,,auc_ball,Prior,,,,predicted
 documented,staff,,auc_ball_lo,Prior,,,,predicted
 documented,staff,,auc_ball_hi,Prior,,,,predicted
-documented,staff,,cal_slope,Prior,0.732337954861148,,,predicted
-documented,staff,,cal_slope_se,Prior,0.17339478486977952,,,predicted
+documented,staff,,cal_slope,Prior,0.7212680147407609,,,predicted
+documented,staff,,cal_slope_se,Prior,0.16239683414542783,,,predicted
 documented,staff,,cal_slope_n,Prior,391,,,predicted
 documented,staff,,cal_slope_fe,Prior,,,,predicted
 documented,staff,,cal_slope_fe_se,Prior,,,,predicted
 documented,staff,,cal_slope_fe_n,Prior,,,,predicted
-documented,staff,,reliability,Prior,0.09168466964829544,,,predicted
-documented,staff,,mean_black,Prior,0.25710785163692407,,,predicted
-documented,staff,,mean_black_alone,Prior,0.25852704746176486,,,predicted
-documented,staff,,mean_white,Prior,0.16192933207258645,,,predicted
-documented,staff,,mean_other,Prior,0.23223653873097308,,,predicted
-documented,staff,,mean_undoc,Prior,0.19382178866847388,,,predicted
-documented,staff,,mean_all,Prior,0.19976737985111603,,,predicted
-documented,staff,,implied_black,Prior,0.2731151830384447,,,predicted
+documented,staff,,reliability,Prior,0.0920662144459501,,,predicted
+documented,staff,,mean_black,Prior,0.25701643610692304,,,predicted
+documented,staff,,mean_black_alone,Prior,0.2584502036202204,,,predicted
+documented,staff,,mean_black_comb,Prior,0.20109950308832628,,,predicted
+documented,staff,,mean_white,Prior,0.16146417153850476,,,predicted
+documented,staff,,mean_other,Prior,0.23204551569857873,,,predicted
+documented,staff,,mean_undoc,Prior,0.19348386922352068,,,predicted
+documented,staff,,mean_all,Prior,0.1994491027181094,,,predicted
+documented,staff,,implied_black,Prior,0.2731314484743073,,,predicted
 documented,staff,,dec1_share,Prior,0.5714285714285714,,,predicted
-documented,staff,,dec2_share,Prior,0.7857142857142857,,,predicted
-documented,staff,,dec3_share,Prior,0.7619047619047619,,,predicted
+documented,staff,,dec2_share,Prior,0.7380952380952381,,,predicted
+documented,staff,,dec3_share,Prior,0.7142857142857143,,,predicted
 documented,staff,,dec4_share,Prior,0.8846153846153846,,,predicted
 documented,staff,,dec5_share,Prior,0.8846153846153846,,,predicted
-documented,staff,,dec6_share,Prior,0.8611111111111112,,,predicted
-documented,staff,,dec7_share,Prior,0.8536585365853658,,,predicted
+documented,staff,,dec6_share,Prior,0.8055555555555556,,,predicted
+documented,staff,,dec7_share,Prior,0.8292682926829268,,,predicted
 documented,staff,,dec8_share,Prior,0.8571428571428571,,,predicted
-documented,staff,,dec9_share,Prior,0.8913043478260869,,,predicted
+documented,staff,,dec9_share,Prior,0.8695652173913043,,,predicted
 documented,staff,,dec10_share,Prior,0.8620689655172413,,,predicted
-documented,staff,,dec1_mean,Prior,0.05798660241190968,,,predicted
-documented,staff,,dec2_mean,Prior,0.10335477846259679,,,predicted
-documented,staff,,dec3_mean,Prior,0.14829357200652382,,,predicted
-documented,staff,,dec4_mean,Prior,0.21015557417525516,,,predicted
-documented,staff,,dec5_mean,Prior,0.22985429073432018,,,predicted
-documented,staff,,dec6_mean,Prior,0.24507755061811137,,,predicted
-documented,staff,,dec7_mean,Prior,0.29837111133296423,,,predicted
-documented,staff,,dec8_mean,Prior,0.3641511622595346,,,predicted
-documented,staff,,dec9_mean,Prior,0.4022598733347118,,,predicted
-documented,staff,,dec10_mean,Prior,0.4858045815199447,,,predicted
+documented,staff,,dec1_mean,Prior,0.05742906902383852,,,predicted
+documented,staff,,dec2_mean,Prior,0.10292262794373055,,,predicted
+documented,staff,,dec3_mean,Prior,0.14812576214883386,,,predicted
+documented,staff,,dec4_mean,Prior,0.21014130265820266,,,predicted
+documented,staff,,dec5_mean,Prior,0.22973303563008685,,,predicted
+documented,staff,,dec6_mean,Prior,0.2450135769248111,,,predicted
+documented,staff,,dec7_mean,Prior,0.29822135355132545,,,predicted
+documented,staff,,dec8_mean,Prior,0.3642378547344109,,,predicted
+documented,staff,,dec9_mean,Prior,0.40229977434964803,,,predicted
+documented,staff,,dec10_mean,Prior,0.4859312198285664,,,predicted
 documented,staff,,dec1_n,Prior,42,,,predicted
 documented,staff,,dec2_n,Prior,42,,,predicted
 documented,staff,,dec3_n,Prior,42,,,predicted
@@ -1321,55 +1349,60 @@ documented,staff,,dec9_n,Prior,46,,,predicted
 documented,staff,,dec10_n,Prior,29,,,predicted
 documented,staff,,n_black,Prior,320,,,predicted
 documented,staff,,n_black_alone,Prior,312,,,predicted
+documented,staff,,n_black_comb,Prior,8,,,predicted
 documented,staff,,n_white,Prior,35,,,predicted
 documented,staff,,n_other,Prior,36,,,predicted
 documented,staff,,n_hisp_norace,Prior,9,,,predicted
-documented,staff,,n_undoc,Prior,3060,,,predicted
+documented,staff,,n_conflict,Prior,0,,,predicted
+documented,staff,,n_undoc,Prior,3062,,,predicted
 documented,head_coaches,,auc_bw,Pred,,,,predicted
 documented,head_coaches,,auc_bw_lo,Pred,,,,predicted
 documented,head_coaches,,auc_bw_hi,Pred,,,,predicted
 documented,head_coaches,,auc_bnb,Pred,0.935672514619883,,,predicted
 documented,head_coaches,,auc_bnb_lo,Pred,0.8242690058479533,,,predicted
 documented,head_coaches,,auc_bnb_hi,Pred,1,,,predicted
-documented,head_coaches,,auc_alone,Pred,0.9506172839506173,,,predicted
+documented,head_coaches,,auc_alone,Pred,0.9555555555555556,,,predicted
+documented,head_coaches,,auc_alone_lo,Pred,0.85,,,predicted
+documented,head_coaches,,auc_alone_hi,Pred,1,,,predicted
 documented,head_coaches,,auc_nohisp,Pred,0.9298245614035088,,,predicted
-documented,head_coaches,,auc_ball,Pred,0.8799526907155529,,,predicted
-documented,head_coaches,,auc_ball_lo,Pred,0.797752808988764,,,predicted
-documented,head_coaches,,auc_ball_hi,Pred,0.9432288586635127,,,predicted
-documented,head_coaches,,cal_slope,Pred,1.2090675824890496,,,predicted
-documented,head_coaches,,cal_slope_se,Pred,0.4588945288543655,,,predicted
+documented,head_coaches,,auc_ball,Pred,0.8969135802469136,,,predicted
+documented,head_coaches,,auc_ball_lo,Pred,0.8308641975308642,,,predicted
+documented,head_coaches,,auc_ball_hi,Pred,0.9543209876543209,,,predicted
+documented,head_coaches,,cal_slope,Pred,1.490101166635161,,,predicted
+documented,head_coaches,,cal_slope_se,Pred,0.6904847312264635,,,predicted
 documented,head_coaches,,cal_slope_n,Pred,28,,,predicted
 documented,head_coaches,,cal_slope_fe,Pred,,,,predicted
 documented,head_coaches,,cal_slope_fe_se,Pred,,,,predicted
 documented,head_coaches,,cal_slope_fe_n,Pred,,,,predicted
-documented,head_coaches,,reliability,Pred,0.41806403023706334,,,predicted
-documented,head_coaches,,mean_black,Pred,0.43837155587931254,,,predicted
-documented,head_coaches,,mean_black_alone,Pred,0.46065184881218524,,,predicted
-documented,head_coaches,,mean_white,Pred,0.003215247847441855,,,predicted
-documented,head_coaches,,mean_other,Pred,0.10967273856825252,,,predicted
-documented,head_coaches,,mean_undoc,Pred,0.1022503903957731,,,predicted
-documented,head_coaches,,mean_all,Pred,0.15707275913776858,,,predicted
-documented,head_coaches,,implied_black,Pred,0.5062073782833939,,,predicted
+documented,head_coaches,,reliability,Pred,0.41804225299426173,,,predicted
+documented,head_coaches,,mean_black,Pred,0.4384080109100649,,,predicted
+documented,head_coaches,,mean_black_alone,Pred,0.46069139217923144,,,predicted
+documented,head_coaches,,mean_black_comb,Pred,0.037307148065067866,,,predicted
+documented,head_coaches,,mean_white,Pred,0.003213132161569699,,,predicted
+documented,head_coaches,,mean_other,Pred,0.10965350692172418,,,predicted
+documented,head_coaches,,mean_undoc,Pred,0.10220581831162218,,,predicted
+documented,head_coaches,,mean_all,Pred,0.15704534593255326,,,predicted
+documented,head_coaches,,implied_black,Pred,0.5061731321838852,,,predicted
 documented,head_coaches,,dec1_share,Pred,0,,,predicted
 documented,head_coaches,,dec2_share,Pred,0,,,predicted
 documented,head_coaches,,dec3_share,Pred,0,,,predicted
 documented,head_coaches,,dec4_share,Pred,0,,,predicted
-documented,head_coaches,,dec5_share,Pred,0.1,,,predicted
+documented,head_coaches,,dec5_share,Pred,0,,,predicted
 documented,head_coaches,,dec6_share,Pred,0.09090909090909091,,,predicted
 documented,head_coaches,,dec7_share,Pred,0.36363636363636365,,,predicted
 documented,head_coaches,,dec8_share,Pred,0.18181818181818182,,,predicted
 documented,head_coaches,,dec9_share,Pred,0.2727272727272727,,,predicted
 documented,head_coaches,,dec10_share,Pred,0.8,,,predicted
-documented,head_coaches,,dec1_mean,Pred,3.711389303081257e-4,,,predicted
-documented,head_coaches,,dec2_mean,Pred,9.828650934895736e-4,,,predicted
-documented,head_coaches,,dec3_mean,Pred,0.004376708726674315,,,predicted
-documented,head_coaches,,dec4_mean,Pred,0.009781247627883865,,,predicted
-documented,head_coaches,,dec5_mean,Pred,0.027893452276053336,,,predicted
-documented,head_coaches,,dec6_mean,Pred,0.05622533727353859,,,predicted
-documented,head_coaches,,dec7_mean,Pred,0.10437635424212618,,,predicted
-documented,head_coaches,,dec8_mean,Pred,0.2238197853864468,,,predicted
-documented,head_coaches,,dec9_mean,Pred,0.4441598172140778,,,predicted
-documented,head_coaches,,dec10_mean,Pred,0.7399897664678474,,,predicted
+documented,head_coaches,,dec1_mean,Pred,3.706357146017121e-4,,,predicted
+documented,head_coaches,,dec2_mean,Pred,9.820139944550054e-4,,,predicted
+documented,head_coaches,,dec3_mean,Pred,0.004373898781465848,,,predicted
+documented,head_coaches,,dec4_mean,Pred,0.009773582490101339,,,predicted
+documented,head_coaches,,dec5_mean,Pred,0.02788447667257704,,,predicted
+documented,head_coaches,,dec6_mean,Pred,0.05620287395460397,,,predicted
+documented,head_coaches,,dec7_mean,Pred,0.10436730587557366,,,predicted
+documented,head_coaches,,dec8_mean,Pred,0.22378169448490123,,,predicted
+documented,head_coaches,,dec9_mean,Pred,0.4439719601389842,,,predicted
+documented,head_coaches,,dec10_mean,Pred,0.7399988974208425,,,predicted
 documented,head_coaches,,dec1_n,Pred,11,,,predicted
 documented,head_coaches,,dec2_n,Pred,11,,,predicted
 documented,head_coaches,,dec3_n,Pred,11,,,predicted
@@ -1382,9 +1415,11 @@ documented,head_coaches,,dec9_n,Pred,11,,,predicted
 documented,head_coaches,,dec10_n,Pred,10,,,predicted
 documented,head_coaches,,n_black,Pred,19,,,predicted
 documented,head_coaches,,n_black_alone,Pred,18,,,predicted
+documented,head_coaches,,n_black_comb,Pred,1,,,predicted
 documented,head_coaches,,n_white,Pred,5,,,predicted
 documented,head_coaches,,n_other,Pred,4,,,predicted
 documented,head_coaches,,n_hisp_norace,Pred,3,,,predicted
+documented,head_coaches,,n_conflict,Pred,0,,,predicted
 documented,head_coaches,,n_undoc,Pred,80,,,predicted
 documented,head_coaches,,auc_bw,Bifsg,,,,predicted
 documented,head_coaches,,auc_bw_lo,Bifsg,,,,predicted
@@ -1392,13 +1427,15 @@ documented,head_coaches,,auc_bw_hi,Bifsg,,,,predicted
 documented,head_coaches,,auc_bnb,Bifsg,0.9941520467836257,,,predicted
 documented,head_coaches,,auc_bnb_lo,Bifsg,0.9649122807017544,,,predicted
 documented,head_coaches,,auc_bnb_hi,Bifsg,1,,,predicted
-documented,head_coaches,,auc_alone,Bifsg,0.9938271604938271,,,predicted
+documented,head_coaches,,auc_alone,Bifsg,0.9722222222222222,,,predicted
+documented,head_coaches,,auc_alone_lo,Bifsg,0.8944444444444445,,,predicted
+documented,head_coaches,,auc_alone_hi,Bifsg,1,,,predicted
 documented,head_coaches,,auc_nohisp,Bifsg,0.9912280701754386,,,predicted
-documented,head_coaches,,auc_ball,Bifsg,0.8296865759905382,,,predicted
-documented,head_coaches,,auc_ball_lo,Bifsg,0.7445002956830278,,,predicted
-documented,head_coaches,,auc_ball_hi,Bifsg,0.9000887049083381,,,predicted
-documented,head_coaches,,cal_slope,Bifsg,8.977744191147158,,,predicted
-documented,head_coaches,,cal_slope_se,Bifsg,2.9170569917049485,,,predicted
+documented,head_coaches,,auc_ball,Bifsg,0.8364197530864198,,,predicted
+documented,head_coaches,,auc_ball_lo,Bifsg,0.7512345679012346,,,predicted
+documented,head_coaches,,auc_ball_hi,Bifsg,0.9129938271604938,,,predicted
+documented,head_coaches,,cal_slope,Bifsg,3.1466742373937886,,,predicted
+documented,head_coaches,,cal_slope_se,Bifsg,1.6217723614405206,,,predicted
 documented,head_coaches,,cal_slope_n,Bifsg,28,,,predicted
 documented,head_coaches,,cal_slope_fe,Bifsg,,,,predicted
 documented,head_coaches,,cal_slope_fe_se,Bifsg,,,,predicted
@@ -1406,6 +1443,7 @@ documented,head_coaches,,cal_slope_fe_n,Bifsg,,,,predicted
 documented,head_coaches,,reliability,Bifsg,0.34988233906412863,,,predicted
 documented,head_coaches,,mean_black,Bifsg,0.26518472494507317,,,predicted
 documented,head_coaches,,mean_black_alone,Bifsg,0.2776912670304953,,,predicted
+documented,head_coaches,,mean_black_comb,Bifsg,0.04006696740747514,,,predicted
 documented,head_coaches,,mean_white,Bifsg,0.0019911753850534912,,,predicted
 documented,head_coaches,,mean_other,Bifsg,0.0136689989037861,,,predicted
 documented,head_coaches,,mean_undoc,Bifsg,0.0888008202262052,,,predicted
@@ -1417,7 +1455,7 @@ documented,head_coaches,,dec3_share,Bifsg,0,,,predicted
 documented,head_coaches,,dec4_share,Bifsg,0,,,predicted
 documented,head_coaches,,dec5_share,Bifsg,0.1,,,predicted
 documented,head_coaches,,dec6_share,Bifsg,0.2727272727272727,,,predicted
-documented,head_coaches,,dec7_share,Bifsg,0.18181818181818182,,,predicted
+documented,head_coaches,,dec7_share,Bifsg,0.09090909090909091,,,predicted
 documented,head_coaches,,dec8_share,Bifsg,0.36363636363636365,,,predicted
 documented,head_coaches,,dec9_share,Bifsg,0.36363636363636365,,,predicted
 documented,head_coaches,,dec10_share,Bifsg,0.5,,,predicted
@@ -1443,9 +1481,11 @@ documented,head_coaches,,dec9_n,Bifsg,11,,,predicted
 documented,head_coaches,,dec10_n,Bifsg,10,,,predicted
 documented,head_coaches,,n_black,Bifsg,19,,,predicted
 documented,head_coaches,,n_black_alone,Bifsg,18,,,predicted
+documented,head_coaches,,n_black_comb,Bifsg,1,,,predicted
 documented,head_coaches,,n_white,Bifsg,5,,,predicted
 documented,head_coaches,,n_other,Bifsg,4,,,predicted
 documented,head_coaches,,n_hisp_norace,Bifsg,3,,,predicted
+documented,head_coaches,,n_conflict,Bifsg,0,,,predicted
 documented,head_coaches,,n_undoc,Bifsg,80,,,predicted
 documented,head_coaches,,auc_bw,Prior,,,,predicted
 documented,head_coaches,,auc_bw_lo,Prior,,,,predicted
@@ -1453,28 +1493,31 @@ documented,head_coaches,,auc_bw_hi,Prior,,,,predicted
 documented,head_coaches,,auc_bnb,Prior,0.716374269005848,,,predicted
 documented,head_coaches,,auc_bnb_lo,Prior,0.5173976608187135,,,predicted
 documented,head_coaches,,auc_bnb_hi,Prior,0.8890350877192981,,,predicted
-documented,head_coaches,,auc_alone,Prior,0.7469135802469136,,,predicted
+documented,head_coaches,,auc_alone,Prior,0.7666666666666667,,,predicted
+documented,head_coaches,,auc_alone_lo,Prior,0.5638888888888889,,,predicted
+documented,head_coaches,,auc_alone_hi,Prior,0.9277777777777778,,,predicted
 documented,head_coaches,,auc_nohisp,Prior,0.7017543859649122,,,predicted
-documented,head_coaches,,auc_ball,Prior,0.7723240685984625,,,predicted
-documented,head_coaches,,auc_ball_lo,Prior,0.646274393849793,,,predicted
-documented,head_coaches,,auc_ball_hi,Prior,0.8793908929627439,,,predicted
-documented,head_coaches,,cal_slope,Prior,1.5925852496196078,,,predicted
-documented,head_coaches,,cal_slope_se,Prior,0.8297097181912777,,,predicted
+documented,head_coaches,,auc_ball,Prior,0.7987654320987654,,,predicted
+documented,head_coaches,,auc_ball_lo,Prior,0.6925771604938271,,,predicted
+documented,head_coaches,,auc_ball_hi,Prior,0.8919907407407407,,,predicted
+documented,head_coaches,,cal_slope,Prior,2.02490376267842,,,predicted
+documented,head_coaches,,cal_slope_se,Prior,0.9450837508036791,,,predicted
 documented,head_coaches,,cal_slope_n,Prior,28,,,predicted
 documented,head_coaches,,cal_slope_fe,Prior,,,,predicted
 documented,head_coaches,,cal_slope_fe_se,Prior,,,,predicted
 documented,head_coaches,,cal_slope_fe_n,Prior,,,,predicted
-documented,head_coaches,,reliability,Prior,0.07079750371389425,,,predicted
-documented,head_coaches,,mean_black,Prior,0.3048238644930433,,,predicted
-documented,head_coaches,,mean_black_alone,Prior,0.31383858640175694,,,predicted
-documented,head_coaches,,mean_white,Prior,0.189333424016022,,,predicted
-documented,head_coaches,,mean_other,Prior,0.23862997191464058,,,predicted
-documented,head_coaches,,mean_undoc,Prior,0.18662942866443233,,,predicted
-documented,head_coaches,,mean_all,Prior,0.20947402524315817,,,predicted
-documented,head_coaches,,implied_black,Prior,0.264923075454401,,,predicted
+documented,head_coaches,,reliability,Prior,0.07091085748422515,,,predicted
+documented,head_coaches,,mean_black,Prior,0.3048925583866664,,,predicted
+documented,head_coaches,,mean_black_alone,Prior,0.3139152260193435,,,predicted
+documented,head_coaches,,mean_black_comb,Prior,0.14248454099847785,,,predicted
+documented,head_coaches,,mean_white,Prior,0.189210868441142,,,predicted
+documented,head_coaches,,mean_other,Prior,0.23862833525427923,,,predicted
+documented,head_coaches,,mean_undoc,Prior,0.18654897501842468,,,predicted
+documented,head_coaches,,mean_all,Prior,0.20942078050040244,,,predicted
+documented,head_coaches,,implied_black,Prior,0.26496235076836616,,,predicted
 documented,head_coaches,,dec1_share,Prior,0,,,predicted
 documented,head_coaches,,dec2_share,Prior,0,,,predicted
-documented,head_coaches,,dec3_share,Prior,0.14285714285714285,,,predicted
+documented,head_coaches,,dec3_share,Prior,0.07142857142857142,,,predicted
 documented,head_coaches,,dec4_share,Prior,0,,,predicted
 documented,head_coaches,,dec5_share,Prior,0.18181818181818182,,,predicted
 documented,head_coaches,,dec6_share,Prior,0.21428571428571427,,,predicted
@@ -1482,16 +1525,16 @@ documented,head_coaches,,dec7_share,Prior,0,,,predicted
 documented,head_coaches,,dec8_share,Prior,0.25,,,predicted
 documented,head_coaches,,dec9_share,Prior,0.4166666666666667,,,predicted
 documented,head_coaches,,dec10_share,Prior,0.5,,,predicted
-documented,head_coaches,,dec1_mean,Prior,0.0753682515321006,,,predicted
-documented,head_coaches,,dec2_mean,Prior,0.10571481994783997,,,predicted
-documented,head_coaches,,dec3_mean,Prior,0.14052910051004078,,,predicted
-documented,head_coaches,,dec4_mean,Prior,0.1438491288515929,,,predicted
-documented,head_coaches,,dec5_mean,Prior,0.1850593076608688,,,predicted
-documented,head_coaches,,dec6_mean,Prior,0.21699968244999124,,,predicted
-documented,head_coaches,,dec7_mean,Prior,0.2305052993415571,,,predicted
-documented,head_coaches,,dec8_mean,Prior,0.2501646073118331,,,predicted
-documented,head_coaches,,dec9_mean,Prior,0.36122977148318064,,,predicted
-documented,head_coaches,,dec10_mean,Prior,0.4469773866272357,,,predicted
+documented,head_coaches,,dec1_mean,Prior,0.07527577762498833,,,predicted
+documented,head_coaches,,dec2_mean,Prior,0.1056525422982695,,,predicted
+documented,head_coaches,,dec3_mean,Prior,0.14046120675300966,,,predicted
+documented,head_coaches,,dec4_mean,Prior,0.14360189554976693,,,predicted
+documented,head_coaches,,dec5_mean,Prior,0.1849581039966645,,,predicted
+documented,head_coaches,,dec6_mean,Prior,0.2170012193559546,,,predicted
+documented,head_coaches,,dec7_mean,Prior,0.23031357499559435,,,predicted
+documented,head_coaches,,dec8_mean,Prior,0.2500960180121397,,,predicted
+documented,head_coaches,,dec9_mean,Prior,0.36139956694323083,,,predicted
+documented,head_coaches,,dec10_mean,Prior,0.4469967670016128,,,predicted
 documented,head_coaches,,dec1_n,Prior,11,,,predicted
 documented,head_coaches,,dec2_n,Prior,11,,,predicted
 documented,head_coaches,,dec3_n,Prior,14,,,predicted
@@ -1504,9 +1547,11 @@ documented,head_coaches,,dec9_n,Prior,12,,,predicted
 documented,head_coaches,,dec10_n,Prior,8,,,predicted
 documented,head_coaches,,n_black,Prior,19,,,predicted
 documented,head_coaches,,n_black_alone,Prior,18,,,predicted
+documented,head_coaches,,n_black_comb,Prior,1,,,predicted
 documented,head_coaches,,n_white,Prior,5,,,predicted
 documented,head_coaches,,n_other,Prior,4,,,predicted
 documented,head_coaches,,n_hisp_norace,Prior,3,,,predicted
+documented,head_coaches,,n_conflict,Prior,0,,,predicted
 documented,head_coaches,,n_undoc,Prior,80,,,predicted
 prior_r2,Players,,VarPost,Pred,0.1493018213193317,11313,,predicted
 prior_r2,Players,,VarPrior,Pred,0.07133562828122651,11313,,predicted
@@ -1514,9 +1559,9 @@ prior_r2,Players,,R2Prior,Pred,0.47197192906367275,11313,,predicted
 prior_r2,Players,,R2Cells,Pred,0.5372500514904834,11313,,predicted
 prior_r2,Players,,NCells,Pred,1385,11313,,predicted
 prior_r2,Players,,MeanP,Pred,0.6177516265021034,11313,,predicted
-prior_r2,Staff,,VarPost,Pred,0.07739580903263808,3451,,predicted
-prior_r2,Staff,,VarPrior,Pred,0.014656745561571795,3451,,predicted
-prior_r2,Staff,,R2Prior,Pred,0.19161959282820534,3451,,predicted
-prior_r2,Staff,,R2Cells,Pred,0.2016491894040194,3451,,predicted
-prior_r2,Staff,,NCells,Pred,63,3451,,predicted
-prior_r2,Staff,,MeanP,Pred,0.19994965193771921,3451,,predicted
+prior_r2,Staff,,VarPost,Pred,0.07736948305494418,3453,,predicted
+prior_r2,Staff,,VarPrior,Pred,0.014700134954002405,3453,,predicted
+prior_r2,Staff,,R2Prior,Pred,0.19221997058142237,3453,,predicted
+prior_r2,Staff,,R2Cells,Pred,0.20223006590780696,3453,,predicted
+prior_r2,Staff,,NCells,Pred,63,3453,,predicted
+prior_r2,Staff,,MeanP,Pred,0.1996305787624322,3453,,predicted

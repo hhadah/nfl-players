@@ -12,7 +12,7 @@
 # measure; see save_exhibit_tex()):
 #   - table-14-roster-diversity-sumstats + figure-roster-share-black-by-season
 #   - table-15-roster-diversity-team-season: equation (2), WinPct,
-#     snap-weighted share, 2013-2025, columns (1)-(9)
+#     snap-weighted share, 2014-2025, columns (1)-(9)
 #   - table-15b-roster-diversity-team-season-headcount: the same columns for
 #     the headcount share, 2002-2025 (the plan runs both measures)
 #   - table-16-roster-diversity-outcomes (snap-weighted) and
@@ -25,10 +25,10 @@
 #     decomposition net of the mean prior (estimated before Table 15, whose
 #     notes report the results)
 #   - table-18b-roster-diversity-robustness: predetermined (opening-day)
-#     treatments, contemporaneous (possible bad) controls, no lagged outcome,
-#     trimming the largest share of each season, and the game-script channel
-#     of the snap weights (unit-balanced share, defensive snap share control,
-#     offense and defense shares jointly)
+#     treatments, contemporaneous (possible bad) controls including the
+#     annual cap share, no lagged outcome, trimming the largest share of each
+#     season, and the game-script channel of the snap weights (unit-balanced
+#     share, defensive snap share control, offense and defense shares jointly)
 #   - table-28-roster-diversity-race-measures: the headline specifications
 #     (column (4) of Tables 15 and 15b and column (1) of Table 17, without and
 #     with the calibration/composition controls) under every available race
@@ -37,10 +37,20 @@
 #     Berkson-implied SD of the true share
 # Deviations from the plan (documented in the table notes):
 #   - Controls are predetermined: opening-day (first REG game) roster quality,
-#     starting QB and head coach. The plan's in-season (snap- or
-#     roster-week-weighted) quality, season QB (most starts) and season HC
-#     (most games) respond to injuries, benching, tanking and firings that
-#     also drive results, so they enter only in a robustness column.
+#     starting QB and head coach, and the prior season's cap share
+#     (L1TeamCapShare, 09). The plan's in-season (snap- or roster-week-
+#     weighted) quality, season QB (most starts) and season HC (most games)
+#     respond to injuries, benching, tanking and firings that also drive
+#     results, so they enter only in a robustness column; so does the annual
+#     cap share of the season (TeamCapShare), which in-season signings,
+#     releases and restructures change, so it is not fixed by opening day.
+#   - The snap-weighted treatment is measured during the season (playing time
+#     responds to injuries, benching and game script), so its coefficients
+#     are descriptive conditional associations; the opening-day roster
+#     treatments of Table 18b are the ones fixed before the season's results.
+#   - The snap-weighted estimation panel is 2014-2025: snap counts start in
+#     2013 and the prior season's cap share is first observed in 2014 (the
+#     2013 cap table is the first kept). Table 14 describes 2013-2025.
 #   - Under the predicted measures the headline column (4), columns (6)-(9)
 #     and the other tables include the calibration controls: the roster
 #     group's mean prior (MeanPriorBlack<G>), the weighted shares of the
@@ -82,7 +92,8 @@
 #   13-roster-diversity[-<measure>].csv and
 #   13-roster-diversity-sumstats[-<measure>].csv.
 # Date: 2026-10-02 (predicted race, Table 28, calibration controls and
-# variants added the same day)
+# variants added the same day; lagged cap share, 2014+ snap panel and
+# Black-alone labels 2026-10-03)
 # ============================================================================
 
 T0Script13 <- Sys.time()
@@ -121,6 +132,24 @@ NeedSeason <- c("ShareBlackRoster", "ShareBlackSnapW", "ExpectedShareBlackRoster
                 "ShareBlackWeek1PriorSnapW", "QBBlack", "QBWeek1Black", "ShareBlackCoaches",
                 "ShareBlackCoachesPre", "HCBlack", "HCWeek1Black", "F1ShareBlackRoster", "F1ShareBlackSnapW",
                 "L1ShareBlackRoster", "L1ShareBlackSnapW")
+stopifnot(c("TeamCapShare", "L1TeamCapShare") %in% names(TeamSeasonAll))
+
+# Season bounds. Snap counts start in 2013 (descriptive period of Table 14
+# and the figure); the snap-weighted ESTIMATION panel starts in 2014, the
+# first season with the prior season's cap share (L1TeamCapShare, 09: the
+# 2013 cap table is the first kept). The bound is set here, rather than left
+# to listwise deletion by the controls, so that every snap-weighted column,
+# including those without controls and the contemporaneous-controls column
+# of Table 18b, is estimated on the same franchise-seasons.
+FirstSnapSeason13 <- 2013L
+FirstSnapEstSeason13 <- 2014L
+LastSeason13 <- 2025L
+SnapSeasons13 <- paste0(FirstSnapEstSeason13, "-", LastSeason13)
+L1CapCoverage13 <- range(TeamSeasonAll$season[!is.na(TeamSeasonAll$L1TeamCapShare)])
+if (L1CapCoverage13[1] != FirstSnapEstSeason13) {
+  stop("13: L1TeamCapShare is first observed in ", L1CapCoverage13[1], ", not ",
+       FirstSnapEstSeason13, "; update FirstSnapEstSeason13")
+}
 NeedGame <- c("ShareBlackActiveRoster", "ResidualShareBlackActiveRoster",
               "OppShareBlackActiveRoster", "GameQBBlack", "OppGameQBBlack")
 
@@ -155,7 +184,7 @@ prior_source <- function(df, g, m, prefix = "") {
 Variants13 <- c(nodraft = "NoDraft", multi = "OrMulti", raked = "Raked")
 
 # Estimation samples under race measure m (and, under "predicted", treatment
-# variant `variant`): list(snap = snap-weighted team-seasons 2013-2025, head =
+# variant `variant`): list(snap = snap-weighted team-seasons 2014-2025, head =
 # headcount team-seasons 2002-2025, game = REG team-games 2002-2025), with
 # generic race names (ShareBlackRoster, QBBlack, HCBlack, ...), the
 # other-race shares, the mean prior of each roster group (MeanPriorBlack<G>)
@@ -259,8 +288,8 @@ build_samples13 <- function(m, variant = "none") {
            OppGameQBPriorBlack = if_else(OppGameQBBlackMiss == 1, 0,
                                          coalesce(OppGameQBPriorBlack, 0)))
   list(all = season_df,
-       snap = filter(season_df, season >= 2013, season <= 2025),
-       head = filter(season_df, season >= 2002, season <= 2025),
+       snap = filter(season_df, season >= FirstSnapEstSeason13, season <= LastSeason13),
+       head = filter(season_df, season >= 2002, season <= LastSeason13),
        game = game_df)
 }
 
@@ -269,8 +298,10 @@ TeamSeason <- Samples13$all
 SnapData <- Samples13$snap
 HeadData <- Samples13$head
 GameData <- Samples13$game
-message(glue("13: {nrow(SnapData)} snap-weighted team-seasons, {nrow(HeadData)} ",
-             "headcount team-seasons, {nrow(GameData)} REG team-games"))
+message(glue("13: {nrow(SnapData)} snap-weighted team-seasons ({SnapSeasons13}; ",
+             "{sum(TeamSeason$season >= FirstSnapSeason13)} with snap counts from ",
+             "{FirstSnapSeason13}, {sum(is.na(SnapData$L1TeamCapShare))} without the prior-season ",
+             "cap share), {nrow(HeadData)} headcount team-seasons, {nrow(GameData)} REG team-games"))
 
 # Label of the share in exhibits under the chosen measure (a predicted share
 # is an expected share; the notes say so)
@@ -350,8 +381,7 @@ note_measure_team <- function(m) switch(m,
     "league-wide level error, such as the model's shortfall against the TIDES league share, is",
     "absorbed by the season fixed effects.", NoteCalibCheck,
     "Effect rows refer to a one-SD change in the expected share, whose SD is smaller than that of",
-    "the true share. The predicted share counts multiracial and Hispanic Black players as",
-    "non-Black."),
+    "the true share."),
   preddoc = paste(
     "For these team-level estimates documentation is more complete for famous players, and",
     "successful franchise-seasons may be documented more completely, so the measurement error",
@@ -363,7 +393,30 @@ note_measure_team <- function(m) switch(m,
     "therefore be correlated with the outcome, and the bias is of unknown sign, not",
     "attenuation. The estimates test the pipeline; they are not estimates of the effect of",
     "roster composition."))
-NoteMeasureTeam <- note_measure_team(measure)
+
+# What "Black" means under the chosen measure, for the exhibits whose notes
+# do not otherwise say so: the primary model-only predicted measure is
+# non-Hispanic Black alone; the documented, provisional and hand-coded
+# measures are Black alone or in combination (black_any)
+NoteBlackDef <- switch(measure,
+  predicted = paste(
+    "Under the model-only predicted measure a share Black is the expected share of players who",
+    "are non-Hispanic Black alone (multiracial and Hispanic Black players count as non-Black);",
+    "the documented, provisional and hand-coded sensitivity measures count Black alone or in",
+    "combination."),
+  preddoc = paste(
+    "Under the documented variant, documented players count as Black alone or in combination",
+    "and undocumented players carry the model-only probability of being non-Hispanic Black",
+    "alone, so the share mixes the two definitions; the primary model-only measure is",
+    "non-Hispanic Black alone."),
+  provisional = paste(
+    "The provisional flag (hand code where available, else the Wikipedia category) counts Black",
+    "alone or in combination; the primary model-only predicted measure is non-Hispanic Black",
+    "alone."),
+  hand = paste(
+    "Hand-coded Black is Black alone or in combination (black_any, notes/race-coding-protocol.md);",
+    "the model-only predicted measure is non-Hispanic Black alone."))
+NoteMeasureTeam <- paste(c(NoteBlackDef, note_measure_team(measure)), collapse = " ")
 
 # ---------------------------------------------------------------------------
 # Table 14: summary statistics of roster diversity, by period
@@ -429,7 +482,10 @@ Tab14 <- kbl(SumTable14, format = "latex", booktabs = TRUE, escape = FALSE,
     "This table reports summary statistics of roster racial composition across franchise-seasons.",
     paste("The headcount share is the Black share of the game-day roster, weighting each player by",
           "the regular-season weeks he was on the game-day roster (2002-2025). The snap-weighted share",
-          "weights each player by his offensive plus defensive snaps (2013-2025, when snap counts start)."),
+          "weights each player by his offensive plus defensive snaps (2013-2025, when snap counts start);",
+          glue("the snap-weighted estimation panel (Tables \\ref{{tab:roster-diversity-main}}, "),
+          glue("\\ref{{tab:roster-diversity-outcomes}} and \\ref{{tab:roster-diversity-robustness}}) "),
+          glue("is {SnapSeasons13}, from the first season with the prior season's cap share.")),
     paste("The position-mix expected share is the sum over position groups of the team's position",
           "weight times the league-season Black share at that position, computed on all other",
           "franchises; the residual share is the actual minus the position-mix expected share,",
@@ -447,7 +503,9 @@ Tab14 <- kbl(SumTable14, format = "latex", booktabs = TRUE, escape = FALSE,
           "(2014-2025). The opening-day starting QB started the first regular-season game."),
     paste("The within SD is the standard deviation of the deviation from the franchise mean within",
           "the period."),
-    race_measure_note(measure, "team"), if (!IsPredMeasure || measure == "preddoc") NoteMeasureTeam))
+    NoteBlackDef,
+    race_measure_note(measure, "team"),
+    if (!IsPredMeasure || measure == "preddoc") note_measure_team(measure)))
 save_exhibit_tex(Tab14, "table-14-roster-diversity-sumstats", measure)
 save_estimates(SumStats, "13-roster-diversity-sumstats", measure)
 
@@ -455,11 +513,14 @@ save_estimates(SumStats, "13-roster-diversity-sumstats", measure)
 # Figure: league mean share Black by season, 10th-90th percentile band
 # ---------------------------------------------------------------------------
 
+# Descriptive: the snap-weighted series runs from 2013 (snap counts), one
+# season before the estimation panel
 FigData <- bind_rows(
   HeadData |> transmute(season, franchise_id, share = ShareBlackRoster,
                         Measure = "Headcount (game-day roster weeks)"),
-  SnapData |> transmute(season, franchise_id, share = ShareBlackSnapW,
-                        Measure = "Snap-weighted (offense + defense)")) |>
+  TeamSeason |> filter(season >= FirstSnapSeason13) |>
+    transmute(season, franchise_id, share = ShareBlackSnapW,
+              Measure = "Snap-weighted (offense + defense)")) |>
   filter(!is.na(share)) |>
   group_by(Measure, season) |>
   summarise(Mean = mean(share), P10 = quantile(share, 0.1),
@@ -476,10 +537,10 @@ FigShare <- ggplot(FigData, aes(season, Mean, colour = Measure, fill = Measure))
        subtitle = "League mean across franchises; band = 10th to 90th percentile across teams",
        x = "Season", y = paste0("Share ", ShareWord), colour = NULL, fill = NULL,
        caption = switch(measure,
-         hand = NULL,
-         predicted = "Predicted race: mean over players of the predicted probability of being Black (expected share).",
-         preddoc = "Predicted race with documented race where a public source states it (expected share).",
-         provisional = "Provisional race measure: hand code where available, else the positive-only Wikipedia category flag.")) +
+         hand = "Hand-coded race: Black alone or in combination.",
+         predicted = "Predicted race: mean over players of the predicted probability of being non-Hispanic Black alone (expected share).",
+         preddoc = "Predicted race with documented race (Black alone or in combination) where a public source states it, else the model probability of non-Hispanic Black alone (expected share).",
+         provisional = "Provisional race measure: hand code where available, else the positive-only Wikipedia category flag (Black alone or in combination).")) +
   theme_customs()
 save_exhibit_figure(FigShare, "figure-roster-share-black-by-season", measure)
 
@@ -488,20 +549,28 @@ save_exhibit_figure(FigShare, "figure-roster-share-black-by-season", measure)
 # ---------------------------------------------------------------------------
 
 # Control sets. Predetermined (fixed by opening day): lagged outcomes,
-# opening-day roster quality, cap share (contracts on the books), the Black
-# share of the coaches listed in the preseason snapshot (full staff
-# observed), opening-day head coach and starting QB. Contemporaneous (set
-# during the season; possible bad controls): the snap- or roster-week-weighted
-# quality, the coaches' share over all snapshots (in-season firings and
-# interim promotions), the season QB (most starts) and the season HC (most
-# games). Under the predicted measures the calibration controls add the
-# roster group's mean prior and prior-covariate shares and the priors of the
-# persons whose race enters as a control.
+# opening-day roster quality, the prior season's cap share (L1TeamCapShare,
+# 09; snap-weighted tables only, 2014+), the Black share of the coaches
+# listed in the preseason snapshot (full staff observed), opening-day head
+# coach and starting QB. Contemporaneous (set during the season; possible bad
+# controls): the season's annual cap share (TeamCapShare: the sum of the
+# season's cap numbers, which in-season signings, releases, restructures and
+# injury settlements change, so it is not fixed by opening day), the snap- or
+# roster-week-weighted quality, the coaches' share over all snapshots
+# (in-season firings and interim promotions), the season QB (most starts) and
+# the season HC (most games). Author decision Oct 2026: no opening-day cap
+# budget is constructed from the annual contract numbers (it would still be
+# an annual measure); the lag is the predetermined cap control. Under the
+# predicted measures the calibration controls add the roster group's mean
+# prior and prior-covariate shares and the priors of the persons whose race
+# enters as a control.
 Lags <- c("LagWinPct", "LagExpectedWins")
 QualityPre <- c("MeanLogPickWeek1", "ShareFirstRoundWeek1", "MeanAgeWeek1", "MeanExperienceWeek1")
-QualitySnapPre <- c("TeamCapShare", QualityPre)
+CapPre <- "L1TeamCapShare"
+CapCont <- "TeamCapShare"
+QualitySnapPre <- c(CapPre, QualityPre)
 QualityHeadPre <- QualityPre
-QualitySnapCont <- c("TeamCapShare", "MeanLogPickSnapW", "MeanAgeSnapW", "MeanExperienceSnapW")
+QualitySnapCont <- c(CapCont, "MeanLogPickSnapW", "MeanAgeSnapW", "MeanExperienceSnapW")
 QualityHeadCont <- c("MeanLogPickRoster", "ShareFirstRoundRoster", "MeanAgeRoster",
                      "MeanExperienceRoster")
 StaffPre <- c("ShareBlackCoachesPre", "ShareBlackCoachesPreMiss", "HCWeek1Black",
@@ -671,7 +740,11 @@ NoteSnap <- paste("The snap-weighted share Black weights each player by his offe
                   "offenses play more defensive snaps, and defensive units have higher Black",
                   "shares, so losing can raise the snap-weighted share mechanically (Table",
                   "\\ref{tab:roster-diversity-robustness} reports the unit-balanced share and a",
-                  "control for the defensive snap share).")
+                  "control for the defensive snap share). The coefficients on this share are",
+                  "therefore descriptive conditional associations between in-season playing time",
+                  "by race and results, not effects of a roster fixed before the season; the",
+                  "opening-day roster treatments of Table \\ref{tab:roster-diversity-robustness},",
+                  "columns (3)-(4), are the ones fixed before the season's results arrive.")
 NoteHead <- paste("The headcount share Black weights each player by the regular-season weeks",
                   "he was on the franchise's game-day roster.")
 NoteResid <- paste("The residual share is the actual share minus the expected share given the",
@@ -695,14 +768,19 @@ NoteControls <- paste("Controls are fixed by opening day: the lagged win percent
                         "head coaches, so it is a noisy control.")
                       else paste("Race controls are zero-filled with missing indicators when a",
                                  "person is uncoded."))
-NoteCap <- "Columns with roster quality also include the cap share of the roster (sum of players' cap percent; 2013-2025)."
+NoteCap <- paste("Columns with roster quality also include the prior season's cap share (the sum of",
+                 "players' cap percent on the franchise's season $t-1$ cap table; first observed in",
+                 glue("{FirstSnapEstSeason13}, which is why the panel starts there). The season's own"),
+                 "cap share is an annual total that in-season signings, releases and restructures",
+                 "change, so it is not fixed by opening day and enters only the contemporaneous",
+                 "column of Table \\ref{tab:roster-diversity-robustness}.")
 NoteNickell <- paste("With franchise fixed effects over a short panel the lagged win percentage is",
                      "subject to Nickell bias; it is a rough control for persistent talent, which",
                      "is why lagged market expected wins enter as well.")
 
 # ---------------------------------------------------------------------------
-# Tables 15 and 15b: equation (2), WinPct, columns (1)-(8), for the
-# snap-weighted share (2013-2025) and the headcount share (2002-2025)
+# Tables 15 and 15b: equation (2), WinPct, columns (1)-(9), for the
+# snap-weighted share (2014-2025) and the headcount share (2002-2025)
 # ---------------------------------------------------------------------------
 
 # The nine columns for one share measure under race measure m. v: share,
@@ -940,8 +1018,12 @@ NotePlacebo <- paste(
     "not reject the identifying assumption."))
 message("13: ", NotePlacebo)
 
+# Common sample of Table 15 (every column on the same franchise-seasons);
+# Table 18b, column (1), reuses it so that the contemporaneous-controls
+# comparison holds the sample fixed
+Sample15 <- common_sample(SnapData, ladder_specs(VarsSnap, QualitySnapPre), "table-15 sample")
 Estimates13[["table-15"]] <- run_ladder(
-  VarsSnap, QualitySnapPre, SnapData, "snap-weighted share", "snap-weighted", "2013-2025",
+  VarsSnap, QualitySnapPre, Sample15, "snap-weighted share", "snap-weighted", SnapSeasons13,
   "table-15", "table-15-roster-diversity-team-season", "roster-diversity-main",
   paste(NoteSnap, NoteCap))
 Estimates13[["table-15b"]] <- run_ladder(
@@ -949,8 +1031,9 @@ Estimates13[["table-15b"]] <- run_ladder(
   "table-15b", "table-15b-roster-diversity-team-season-headcount", "roster-diversity-main-headcount",
   paste(NoteHead, "The headcount panel is longer than the snap-weighted panel (Table",
         "\\ref{tab:roster-diversity-main}) and offers more within-franchise variation at the cost",
-        "of a noisier exposure measure. Cap shares are not used because team cap sums are",
-        "incomplete before 2013."))
+        "of a noisier exposure measure. No cap share enters: team cap sums are incomplete",
+        "before 2013, so the prior season's cap share would cut the panel to",
+        glue("{SnapSeasons13}.")))
 
 # ---------------------------------------------------------------------------
 # Tables 16 and 16b: column-(4) specification for the other outcomes
@@ -1029,7 +1112,7 @@ run_outcomes <- function(v, quality, data, what, seasons, table_id, name, label,
 }
 
 Estimates13[["table-16"]] <- run_outcomes(
-  VarsSnap, QualitySnapPre, SnapData, "snap-weighted", "2013-2025", "table-16",
+  VarsSnap, QualitySnapPre, SnapData, "snap-weighted", SnapSeasons13, "table-16",
   "table-16-roster-diversity-outcomes", "roster-diversity-outcomes",
   paste(NoteSnap, "The unit shares weight players by their offensive or defensive snaps.", NoteCap))
 Estimates13[["table-16b"]] <- run_outcomes(
@@ -1376,7 +1459,7 @@ Specs18b <- list(
                                  rhs = c("ShareBlackSnapW", Lags, QualitySnapCont, StaffCont,
                                          calib_terms(VarsSnap, measure, StaffContPrior)),
                                  fe = FE2, key = "ShareBlackSnapW", wcb = "ShareBlackSnapW",
-                                 data = SnapData),
+                                 data = Sample15),
   "(2) No lagged outcomes" = list(y = "WinPct", rhs = c("ShareBlackSnapW", QualitySnapPre, StaffPre,
                                                         CalSnap),
                                   fe = FE2, key = "ShareBlackSnapW", wcb = "ShareBlackSnapW",
@@ -1417,6 +1500,12 @@ Specs18b <- list(
                                           wcb = c("ShareBlackOffenseSnapW", "ShareBlackDefenseSnapW"),
                                           data = SnapData))
 Data18b <- imap(Specs18b, \(s, nm) common_sample(s$data, list(s), paste("table-18b", nm)))
+# The contemporaneous-controls column must be estimated on exactly the
+# Table 15 franchise-seasons (its note says so)
+if (nrow(Data18b[["(1) Contemp. controls"]]) != nrow(Sample15)) {
+  stop("13: table-18b column (1) loses ", nrow(Sample15) - nrow(Data18b[["(1) Contemp. controls"]]),
+       " of the Table 15 franchise-seasons to the contemporaneous controls")
+}
 Models18b <- imap(Specs18b, \(s, nm) fit_one(s, Data18b[[nm]]))
 Wcb18b <- imap_dfr(Models18b, \(m, nm) wcb_specs(set_names(list(m), nm), Specs18b[nm], Data18b[[nm]]))
 
@@ -1430,7 +1519,9 @@ Rows18b <- bind_rows(
     "Season and franchise FE" = \(s) TRUE,
     "Lagged outcomes" = \(s) "LagWinPct" %in% s$rhs,
     "Opening-day quality, HC and QB" = \(s) "MeanLogPickWeek1" %in% s$rhs,
+    "Prior-season cap share" = \(s) CapPre %in% s$rhs,
     "In-season quality, season HC and QB" = \(s) "HCBlack" %in% s$rhs,
+    "Current-season cap share" = \(s) CapCont %in% s$rhs,
     "Calibration controls" = has_calib)))
 
 CoefMap18b <- c(ShareBlackSnapW = glue("Roster share {ShareWord} (snap-weighted)"),
@@ -1462,16 +1553,21 @@ write_model_table(
           "variable is the regular-season win percentage; all columns include season and franchise",
           "fixed effects."),
     paste("Column (1) replaces the opening-day controls of Table \\ref{tab:roster-diversity-main},",
-          "column (4), with contemporaneous ones: snap-weighted roster quality, the season starting",
-          "QB (most starts) and the season head coach (most games). These are set during the season",
-          "and respond to injuries, benching, tanking and firings that also drive results, so they",
-          "are possible bad controls. Column (2) drops the lagged outcomes (Nickell bias)."),
+          "column (4), with contemporaneous ones, on the same franchise-seasons: the season's own",
+          "cap share (the sum of the season's cap numbers, which in-season signings, releases and",
+          "restructures change) in place of the prior season's, snap-weighted roster quality, the",
+          "season starting QB (most starts) and the season head coach (most games). These are set",
+          "during the season and respond to injuries, benching, tanking and firings that also drive",
+          "results, so they are possible bad controls. Column (2) drops the lagged outcomes",
+          "(Nickell bias)."),
     paste("Columns (3)-(4) use predetermined treatments, fixed before the season's results arrive:",
           "the Black share of the active roster of the first regular-season game (column (3),",
-          "2002-2025), and the same players weighted by their offensive plus defensive snaps in the",
-          "previous season (column (4), 2014-2025; players without prior-season snaps get zero",
-          "weight). The snap-weighted share of Table \\ref{tab:roster-diversity-main} is measured",
-          "during the season and is partly an outcome of it."),
+          "2002-2025, without a cap share), and the same players weighted by their offensive plus",
+          glue("defensive snaps in the previous season (column (4), {SnapSeasons13}, with the prior"),
+          "season's cap share; players without prior-season snaps get zero weight). The",
+          "snap-weighted share of Table \\ref{tab:roster-diversity-main} is measured during the",
+          "season and is partly an outcome of it, so its coefficients are descriptive conditional",
+          "associations; columns (3)-(4) are the estimates for a roster fixed before the season."),
     paste("Columns (5)-(6) drop, in each season, franchise-seasons above the league-season 99th",
           "percentile of the share (in practice the season's largest share), a guard against",
           "franchise-season spikes in the measured share.",
@@ -1639,8 +1735,8 @@ Foot28 <- tibble(
            "Franchise and season FE", "Franchise $\\times$ season FE",
            "Lags, opening-day quality, staff and QB",
            "Mean prior and prior-covariate shares"),
-  "(1)" = c("Team-season", "2013-2025", "Snap-weighted", "Win pct.", "Yes", "No", "Yes", "No"),
-  "(2)" = c("Team-season", "2013-2025", "Snap-weighted", "Win pct.", "Yes", "No", "Yes", "Yes"),
+  "(1)" = c("Team-season", SnapSeasons13, "Snap-weighted", "Win pct.", "Yes", "No", "Yes", "No"),
+  "(2)" = c("Team-season", SnapSeasons13, "Snap-weighted", "Win pct.", "Yes", "No", "Yes", "Yes"),
   "(3)" = c("Team-season", "2002-2025", "Headcount", "Win pct.", "Yes", "No", "Yes", "No"),
   "(4)" = c("Team-season", "2002-2025", "Headcount", "Win pct.", "Yes", "No", "Yes", "Yes"),
   "(5)" = c("Team-game", "2002-2025", "Active roster", "ATS margin", "No", "Yes", "No", "No"),
@@ -1664,7 +1760,7 @@ Tab28 <- kbl(Table28, format = "latex", booktabs = TRUE, escape = FALSE, linesep
 Start28 <- 1L
 for (i in seq_along(PanelSizes28)) {
   Tab28 <- pack_rows(Tab28, names(PanelSizes28)[i], Start28, Start28 + PanelSizes28[[i]] - 1L,
-                     escape = FALSE)
+                     escape = FALSE, latex_gap_space = "0pt")
   Start28 <- Start28 + PanelSizes28[[i]]
 }
 Tab28 <- row_spec(Tab28, Start28 - 1L, hline_after = TRUE) |>
@@ -1673,7 +1769,8 @@ Tab28 <- row_spec(Tab28, Start28 - 1L, hline_after = TRUE) |>
           "measure and under variants of the predicted measure. Columns (1)-(4) use the",
           "specification of column (4) of Tables \\ref{tab:roster-diversity-main} and",
           "\\ref{tab:roster-diversity-main-headcount} (season and franchise fixed effects, lagged",
-          "outcomes, opening-day roster quality and the staff and quarterback controls), without",
+          "outcomes, opening-day roster quality, the prior season's cap share in the snap-weighted",
+          "columns, and the staff and quarterback controls), without",
           "(columns (1) and (3)) and with (columns (2) and (4)) the mean prior P(Black) and the",
           "weighted shares of the prior's draft-round, college-type, rookie-era and hometown-county",
           "levels; in the predicted panels the latter columns also include the priors of the",

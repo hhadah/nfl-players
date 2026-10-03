@@ -14,14 +14,30 @@
 #      estimated by EM on predetermined covariates); preddoc = documented race
 #      where a public source states it, else a prior for the undocumented
 #      (fame-dependent; sensitivity only).
+# Black definitions differ across the sources and every consumer must name
+# the one it uses:
+#   hand black_any, wiki_cat_black, documented_black_any, p_black_any_preddoc
+#     for documented persons: Black ALONE OR IN COMBINATION (Black Hispanic and
+#     multiracial Black persons included)
+#   p_black_any_pred (= p_black_pred), p_black_bifsg, prior_black_pred:
+#     NON-HISPANIC BLACK ALONE, the Census surname category; the "_any" in
+#     the column name is historical (04e keeps it for the loaders). Black
+#     Hispanic and multiracial Black persons are in p_hispanic_* / p_multi_*,
+#     i.e. in OtherRace under person_race_regressors(). p_black_or_multi_pred
+#     (read by scripts 12 and 15 from race_predicted) is the upper variant.
+# No column is renamed here: the regressions name the definition in their
+# notes (race_measure_note()) and script 15 validates the modelled event.
 # Every analysis sample takes race from load_person_race().
-# Date: 2026-09-26; predicted race added 2026-10-02
+# Date: 2026-09-26; predicted race added 2026-10-02; definitions 2026-10-03
 # ============================================================================
 
 race_levels <- c("black", "white", "asian", "pacific_islander",
                  "american_indian", "multiracial", "unknown")
 coding_cols <- c("race", "multiracial_components", "hispanic", "basis",
                  "source_url", "confidence", "notes")
+
+# Census categories emitted by 04e, not the hand-coding protocol's labels.
+documented_race_levels <- c("white", "black", "hispanic", "api", "aian", "multi")
 
 # Read one coder's sheet; keep only rows with a race code
 read_coder_sheet <- function(path, coder) {
@@ -120,6 +136,14 @@ bifsg_measures <- function(con) {
 # documented race used for validation, and the predetermined covariates of the
 # EM prior (prefixed pred_; regressions under the predicted measure control for
 # them, as regression calibration requires). NULL when the table is absent.
+# Definitions (04e): p_black_any_pred = p_black_pred = P(non-Hispanic Black
+# alone); p_black_any_preddoc = 1/0 documented Black alone or in combination
+# where documented, else p_black_preddoc; documented_race is the Census
+# category ('black' = Black stated, no second race, no Hispanic statement;
+# 'multi', 'hispanic', ...; NA when undocumented or when sources conflict),
+# documented_black_any = 1 for any Black statement, documented_hispanic =
+# 1 for a Hispanic statement (absence means none stated, not non-Hispanic
+# evidence: documentation is positive-only).
 predicted_race_measures <- function(con) {
   if (!dbExistsTable(con, "race_predicted")) return(NULL)
   tbl(con, "race_predicted") |>

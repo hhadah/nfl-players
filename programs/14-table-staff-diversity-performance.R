@@ -5,6 +5,15 @@
 # front offices perform? Equation (3), for franchise f in season t:
 #   Y_ft = beta ShareBlackCoaches_ft + theta HCBlack_ft + X_ft pi
 #          + alpha_f + gamma_t + e_ft
+# Timing: every headline staff regressor is measured at opening day, from the
+# preseason staff snapshot taken before the franchise's first regular-season
+# game (02/11 columns with the suffix Pre: group shares, role holders, their
+# model-only priors and the coaching-turnover shares). The unsuffixed
+# all-season union measures (every person listed in any snapshot, which
+# include in-season hires and interim promotions that respond to results)
+# enter only the robustness table 19d. Opening-day turnover is unknown when
+# the previous season's opening snapshot is not observed (2007): it is
+# zero-filled with the TurnoverUnknownPre indicator, never treated as zero.
 # Exhibits ([-<measure>] suffix under a non-primary race measure):
 #   - table-19-staff-diversity-team-season: main specification, columns
 #     (1)-(7), incl. franchise x head-coach-spell FE (singletons removed);
@@ -15,6 +24,9 @@
 #   - table-19c-staff-diversity-controls: predetermined (lagged) roster
 #     controls vs. opening-day and contemporaneous (potentially post-treatment)
 #     roster controls, with and without the coaching-turnover shares
+#   - table-19d-staff-diversity-union: robustness, the all-season union staff
+#     measures (composition, role holders, turnover) in the column-(4) and
+#     column-(5) specifications
 #   - table-20-staff-diversity-by-group: staff groups one at a time, jointly,
 #     and the two-group Blau index of coaches
 #   - table-21-staff-diversity-unit-stacked: offense and defense stacked,
@@ -31,27 +43,43 @@
 #     (9), table 22 column (2), table 21 column (2)) under each race measure
 #     (primary run only)
 #   - figure-staff-diversity-coefficients: staff-group coefficients (table 20)
+# Head-coach-spell FE: HCIncumbentSpellId from 02, the opening-day
+# incumbent's run of seasons with the franchise. The incumbent is the
+# non-interim head coach listed in the opening snapshot (the first-game
+# coach, or the coach an interim is acting for), else the first-game head
+# coach; a season in which the incumbent is absent while an acting coach
+# runs the team does not restart his spell (NO 2012, IND 2012).
 # Race: one measure for tables 19-23, from choose_race_measure() on the mean
-# CodedShareCoaches over FullStaffObserved team-seasons; without hand codes
-# the primary measure is predicted race, so shares are expected shares and
-# role-holder regressors (HCBlack, OCBlack, ...) are the holder's P(Black).
+# CodedShareCoachesPre over the estimation sample; without hand codes the
+# primary measure is predicted race, so shares are expected shares and
+# role-holder regressors (HCBlackPre, OCBlackPre, ...) are the holder's
+# P(Black). The primary prediction p_black_any_pred is P(non-Hispanic Black
+# alone); the documented label documented_black_any is Black alone or in
+# combination, so the validation of head-coach probabilities reports both
+# the matched Black-alone documented label and the broader one.
 # Under the model-only predicted measure every specification controls for
 # the model-only priors matched to each race regressor (regression
-# calibration; add_prior()): MeanPriorBlackPred<G> for a share,
-# <role>PriorBlackPred for a role holder.
+# calibration; add_prior()): MeanPriorBlackPred<G>Pre for a share,
+# <role>PriorBlackPredPre for a role holder.
 # Inference: clustered by franchise (32 clusters) with wild cluster
 # bootstrap-t p-values (wild_cluster_test(), Webb weights, NFL_WCB_REPS
-# replications, default 9999).
+# replications, default 9999). The hire table adds a permutation p-value
+# that is a conditional-exchangeability sensitivity, not design-based
+# randomization inference (no assignment mechanism is known).
 # Inputs: analysis/analysis_team_season.parquet,
 # analysis/analysis_team_unit_season.parquet,
 # analysis/analysis_team_game.parquet (programs/11; game head coaches and
 # opening-day starting QBs), analysis/player_season.parquet (programs/04;
 # the opening-day QB's draft pick), load_person_race() (DuckDB, read-only:
 # staff documented race and model-only P(Black), for validation).
-# Outputs: output/tables/table-19, 19b, 19c, 20 ... 23, 29 (.tex), output/figures/
-# figure-staff-diversity-coefficients (.pdf/.png),
-# output/estimates/14-staff-diversity[-provisional].csv.
-# Date: 2026-10-02 (predicted race and table 29 added the same day)
+# Outputs: output/tables/table-19, 19b, 19c, 19d, 20 ... 23, 29 (.tex),
+# output/figures/figure-staff-diversity-coefficients (.pdf/.png),
+# output/estimates/14-staff-diversity[-provisional].csv,
+# analysis/analysis_hc_hires (.parquet/.csv, primary run: the head-coach
+# hire candidates with the hire classification, the hired coach's race
+# measures and the inherited situation, for reuse by 16/17).
+# Date: 2026-10-03 (opening-day measures, incumbent spells, union
+# robustness, permutation relabelled; predicted race and table 29 2026-10-02)
 # ============================================================================
 
 T0Script <- Sys.time()
@@ -64,6 +92,37 @@ TeamSeasonAll <- read_parquet(file.path(analysis, "analysis_team_season.parquet"
 UnitSeasonAll <- read_parquet(file.path(analysis, "analysis_team_unit_season.parquet"))
 stopifnot(!anyDuplicated(TeamSeasonAll[c("franchise_id", "season")]),
           !anyDuplicated(UnitSeasonAll[c("franchise_id", "season", "Unit")]))
+# Opening-day (preseason snapshot) columns required from 02/11, under every
+# race-measure tag (Hand, Prov, Pred, PredDoc): group shares and priors,
+# role holders, turnover, the incumbent-spell key and the snapshot flag
+RaceTags <- c("Hand", "Prov", "Pred", "PredDoc")
+PreGroups <- c("Coaches", "Coordinators", "PositionCoaches", "Assistants",
+               "FrontOffice", "Personnel")
+PreRoles <- c("HC", "OC", "DC", "STC", "GM")
+PreLeadGroups <- c("Coaches", "Coordinators", "PositionCoaches", "FrontOffice")
+PreLeadRoles <- c("HC", "OC", "DC", "GM")
+PreTeamCols <- c(
+  paste0(rep(c(paste0("ShareBlack", RaceTags), "MeanPriorBlackPred", "CodedShare", "N"),
+             each = length(PreGroups)), PreGroups, "Pre"),
+  paste0(rep(PreRoles, each = length(RaceTags) + 2),
+         c(paste0("Black", RaceTags), "PriorBlackPred", "PersonId"), "Pre"),
+  paste0("F1", rep(c(paste0("ShareBlack", RaceTags), "MeanPriorBlackPred"),
+                   each = length(PreLeadGroups)), PreLeadGroups, "Pre"),
+  paste0("F1", rep(PreLeadRoles, each = length(RaceTags)), "Black", RaceTags, "Pre"),
+  "ShareCoachesNewToFranchisePre", "ShareCoachesPromotedPre",
+  "HCIncumbentSpellId", "HCIncumbentKey", "HCIncumbentSource", "OpeningStaffObserved")
+PreUnitCols <- c(paste0("ShareBlack", RaceTags, "UnitCoachesPre"), "CodedShareUnitCoachesPre",
+                 "MeanPriorBlackPredUnitCoachesPre",
+                 paste0("UnitCoordBlack", RaceTags, "Pre"), "UnitCoordPriorBlackPredPre",
+                 paste0("HCBlack", RaceTags, "Pre"), "HCPriorBlackPredPre",
+                 "HCIncumbentSpellId", "OpeningStaffObserved")
+missing_cols <- function(df, cols) setdiff(cols, names(df))
+if (length(missing_cols(TeamSeasonAll, PreTeamCols)) > 0 ||
+    length(missing_cols(UnitSeasonAll, PreUnitCols)) > 0) {
+  stop("14: opening-day columns missing from 11's outputs: ",
+       paste(c(missing_cols(TeamSeasonAll, PreTeamCols),
+               missing_cols(UnitSeasonAll, PreUnitCols)), collapse = ", "))
+}
 # REG games: game head coach (for the hire design) and starting QB (for the
 # unit design's opening-day QB)
 TeamGameReg <- read_parquet(file.path(analysis, "analysis_team_game.parquet"),
@@ -75,24 +134,34 @@ QBDraft <- read_parquet(file.path(analysis, "player_season.parquet"),
 stopifnot(!anyDuplicated(QBDraft[c("gsis_id", "season")]))
 # Staff persons' documented race (validation of the predicted measure only:
 # the calibration of head-coach probabilities and the documented-race
-# columns of table 22) and model-only P(Black), from load_person_race()
+# columns of table 22) and model-only P(Black), from load_person_race().
+# Two documented labels: DocBlack = documented_black_any (Black alone or in
+# combination, the label of Table 25) and DocBlackAlone = documented race
+# black and not Hispanic, the label that matches the primary prediction
+# p_black_any_pred = P(non-Hispanic Black alone) (as DocBlackAlone in 15).
 con <- db_connect()
 StaffDoc <- load_person_race(con, hand_coded) |>
   filter(entity == "staff") |>
   transmute(PersonId = person_id, DocBlack = documented_black_any,
+            DocBlackAlone = case_when(is.na(documented_race) ~ NA_integer_,
+                                      documented_race == "black" &
+                                        coalesce(as.integer(documented_hispanic), 0L) != 1L ~ 1L,
+                                      TRUE ~ 0L),
             PBlackPred = p_black_any_pred)
 db_disconnect(con)
-stopifnot(!anyDuplicated(StaffDoc$PersonId))
+stopifnot(!anyDuplicated(StaffDoc$PersonId),
+          all(StaffDoc$DocBlackAlone[!is.na(StaffDoc$DocBlackAlone)] <=
+                coalesce(StaffDoc$DocBlack[!is.na(StaffDoc$DocBlackAlone)], 0L)))
 
 # ---------------------------------------------------------------------------
 # Race measure (one for tables 19-23)
 # ---------------------------------------------------------------------------
 
-# Coverage = mean share of on-field coaches with a hand code over the
-# FullStaffObserved team-seasons (2007-2025)
+# Coverage = mean share of opening-day on-field coaches with a hand code over
+# the estimation sample (template era, 2007-2025, opening snapshot observed)
 HandCoverage <- TeamSeasonAll |>
-  filter(FullStaffObserved) |>
-  pull(CodedShareCoaches) |>
+  filter(FullStaffObserved, OpeningStaffObserved) |>
+  pull(CodedShareCoachesPre) |>
   mean(na.rm = TRUE)
 measure <- choose_race_measure(HandCoverage, "14 staff diversity")
 # IsPredMeasure: race regressors are probabilities (predicted or preddoc);
@@ -115,43 +184,56 @@ stopifnot("NFL_WCB_REPS must be at least 100 (fwildclusterboot minimum)" = WcbRe
 
 # Map one race measure to the generic names and build the derived variables
 # of the team-season panel (a function, so that table 29 can rebuild the
-# panel under each measure)
+# panel under each measure). After apply_race_measure() the opening-day
+# measures carry the suffix Pre (ShareBlackCoachesPre, HCBlackPre, ...) and
+# the all-season union measures are unsuffixed (ShareBlackCoaches, HCBlack).
 prep_team_season <- function(df, m) {
   df <- apply_race_measure(df, m)
 
-  # Head-coach spell: a run of consecutive seasons of one HCPersonId with a
-  # franchise (a coach who returns after a gap starts a new spell); built on
-  # the full panel so that spells starting before 2007 keep their identity
-  df <- df |>
-    arrange(franchise_id, season) |>
-    group_by(franchise_id) |>
-    mutate(NewSpell = coalesce(HCPersonId != lag(HCPersonId) |
-                                 season != lag(season) + 1L, TRUE),
-           HCSpellId = paste(franchise_id, cumsum(NewSpell), sep = "-")) |>
-    ungroup() |>
-    select(-NewSpell)
+  # Head-coach spell FE: HCIncumbentSpellId from 02, the run of seasons of
+  # the opening-day incumbent with the franchise (the non-interim head coach
+  # listed in the opening snapshot: the first-game coach, or the coach an
+  # interim is acting for; else the first-game head coach; source in
+  # HCIncumbentSource), built on the full 1999-2025 panel so that spells
+  # starting before 2007 keep their identity. A season in which the
+  # incumbent is absent while an acting coach runs the team does not restart
+  # his spell (NO 2012, IND 2012); a different coach always starts a new one.
+  stopifnot(!anyNA(df$HCIncumbentSpellId[df$FullStaffObserved]))
 
-  # Two-group Blau index of on-field coaches under the measure (under a
-  # predicted measure, the plug-in 2s(1-s) of the expected share, not the
-  # expected Blau index)
-  df <- mutate(df, BlauBlackCoaches = blau_two_group(ShareBlackCoaches))
+  # Two-group Blau index of opening-day on-field coaches under the measure
+  # (under a predicted measure, the plug-in 2s(1-s) of the expected share,
+  # not the expected Blau index)
+  df <- mutate(df, BlauBlackCoachesPre = blau_two_group(ShareBlackCoachesPre))
 
   # The other probability measure, for the horse-race column (9) of table 19:
   # the documented-race (preddoc) share and head coach under the predicted
   # measure, and the model-only predicted ones under every other measure
   alt <- if (m == "predicted") "PredDoc" else "Pred"
-  df <- mutate(df, ShareBlackAltCoaches = .data[[paste0("ShareBlack", alt, "Coaches")]],
-               HCBlackAlt = .data[[paste0("HCBlack", alt)]])
+  df <- mutate(df, ShareBlackAltCoachesPre = .data[[paste0("ShareBlack", alt, "CoachesPre")]],
+               HCBlackAltPre = .data[[paste0("HCBlack", alt, "Pre")]])
 
-  # Role holders can be missing (no GM title, no OC listed, or an uncoded
-  # holder under the hand measure): zero-fill each role regressor (an
-  # indicator, or the holder's P(Black) under a predicted measure) and add a
-  # <role>BlackMiss indicator rather than dropping the team-season. The raw
-  # values are kept as <role>BlackRaw for the hire design and the counts.
-  # (The F1* leads stay unfilled: a missing lead drops the row in the placebo.)
-  # The holders' model-only priors (prior controls) are zero-filled the same way.
-  for (v in RoleVars) df[[paste0(v, "Raw")]] <- df[[v]]
-  df <- fill_missing(df, c(RoleVars, "HCBlackAlt", RolePriors))
+  # Role holders can be missing (no GM title, no OC listed at the opening, or
+  # an uncoded holder under the hand measure): zero-fill each role regressor
+  # (an indicator, or the holder's P(Black) under a predicted measure) and
+  # add a <role>BlackPreMiss indicator rather than dropping the team-season.
+  # The raw values are kept as <role>BlackPreRaw for the counts. (The F1*
+  # leads stay unfilled: a missing lead drops the row in the placebo.) The
+  # holders' model-only priors (prior controls) are zero-filled the same way,
+  # and so are the union role holders and priors of the robustness table 19d.
+  for (v in c(RoleVars, RoleVarsUnion)) df[[paste0(v, "Raw")]] <- df[[v]]
+  df <- fill_missing(df, c(RoleVars, "HCBlackAltPre", RolePriors, RoleVarsUnion, RolePriorsUnion))
+
+  # Opening-day coaching turnover (shares of opening-day coaches new to the
+  # franchise and promoted within it) compares adjacent opening snapshots,
+  # so it is unknown when the previous season's opening snapshot is not
+  # observed (2007, the first template season). Unknown turnover is
+  # zero-filled with the explicit TurnoverUnknownPre indicator; it is not a
+  # zero. The union turnover shares (every listed coach) stay unfilled for
+  # table 19d.
+  df <- df |>
+    mutate(TurnoverUnknownPre = as.integer(is.na(ShareCoachesNewToFranchisePre) |
+                                             is.na(ShareCoachesPromotedPre))) |>
+    fill_missing(c("ShareCoachesNewToFranchisePre", "ShareCoachesPromotedPre"))
 
   # TeamCapShare is NA before 2013: zero-fill it so that 2007-2012 stay in.
   # Its missing indicator is a function of season and is absorbed by the
@@ -179,27 +261,36 @@ prep_team_season <- function(df, m) {
                      "MeanAgeWeek1", "L1MeanPriorBlackPredRoster",
                      "MeanPriorBlackPredWeek1", "MeanPriorBlackPredRoster"))
 }
-RoleVars <- c("HCBlack", "OCBlack", "DCBlack", "STCBlack", "GMBlack")
-RolePriors <- c("HCPriorBlackPred", "OCPriorBlackPred", "DCPriorBlackPred",
-                "STCPriorBlackPred", "GMPriorBlackPred")
+# Opening-day role holders and their model-only priors (headline), and the
+# all-season union versions (robustness table 19d only)
+RoleVars <- paste0(PreRoles, "BlackPre")
+RolePriors <- paste0(PreRoles, "PriorBlackPredPre")
+RoleVarsUnion <- paste0(PreRoles, "Black")
+RolePriorsUnion <- paste0(PreRoles, "PriorBlackPred")
 TeamSeasonAll <- prep_team_season(TeamSeasonRaw, measure)
 
-# Estimation sample: full staff observed (template era, 2007-2025)
-TeamSeason <- filter(TeamSeasonAll, FullStaffObserved)
+# Estimation sample: full staff observed (template era, 2007-2025) with the
+# opening-day snapshot parsed; the full 32 x 19 panel
+TeamSeason <- filter(TeamSeasonAll, FullStaffObserved, OpeningStaffObserved)
 NClusters <- n_distinct(TeamSeason$franchise_id)
-message(glue("14: {nrow(TeamSeason)} FullStaffObserved team-seasons, ",
-             "{min(TeamSeason$season)}-{max(TeamSeason$season)}, {NClusters} franchises"))
+message(glue("14: {nrow(TeamSeason)} FullStaffObserved team-seasons with the opening snapshot, ",
+             "{min(TeamSeason$season)}-{max(TeamSeason$season)}, {NClusters} franchises; ",
+             "opening-day turnover unknown for {sum(TeamSeason$TurnoverUnknownPre)} ",
+             "(seasons {paste(sort(unique(TeamSeason$season[TeamSeason$TurnoverUnknownPre == 1])), collapse = ', ')})"))
 stopifnot(NClusters == 32, all(table(TeamSeason$season) == 32), min(TeamSeason$season) == 2007)
+message(glue("14: opening-day coaches' share missing for ",
+             "{sum(is.na(TeamSeason$ShareBlackCoachesPre))} team-seasons (dropped by the models)"))
 
-# Within-franchise SD of the coaches' Black share (net of franchise means)
+# Within-franchise SD of the opening-day coaches' Black share (net of
+# franchise means)
 WithinSDCoaches <- TeamSeason |>
-  filter(!is.na(ShareBlackCoaches)) |>
+  filter(!is.na(ShareBlackCoachesPre)) |>
   group_by(franchise_id) |>
-  mutate(Dev = ShareBlackCoaches - mean(ShareBlackCoaches)) |>
+  mutate(Dev = ShareBlackCoachesPre - mean(ShareBlackCoachesPre)) |>
   ungroup() |>
   pull(Dev) |>
   sd()
-message(glue("14: within-franchise SD of ShareBlackCoaches = {round(WithinSDCoaches, 4)}"))
+message(glue("14: within-franchise SD of ShareBlackCoachesPre = {round(WithinSDCoaches, 4)}"))
 
 # ---------------------------------------------------------------------------
 # Estimation helpers
@@ -255,22 +346,25 @@ fit14 <- function(y, rhs, fe, data, cluster = "franchise_id", drop_singletons = 
 
 # Prior controls (regression calibration under the predicted measure,
 # notes/race-prediction-design.md, section 4): the model-only prior P(Black)
-# matched to each race regressor. A group share (ShareBlack<G>, its lead
-# F1ShareBlack<G> or lag L1ShareBlack<G>) gets the members' mean prior
-# MeanPriorBlackPred<G> (the team-level summary of the prior's covariates:
-# first role, unit and first-season era for staff); a role holder (HC, OC,
-# DC, GM, unit coordinator, opening-day QB and their unit interactions) gets
-# the holder's prior <role>PriorBlackPred. The Blau index and the column-(9)
-# alternative-measure regressors get the coaches' and head coach's priors.
-# The Pred-named columns are the model-only prior under every measure.
+# matched to each race regressor. A group share (ShareBlack<G>[Pre], its lead
+# F1ShareBlack<G>[Pre] or lag L1ShareBlack<G>[Pre]) gets the members' mean
+# prior MeanPriorBlackPred<G>[Pre] (the team-level summary of the prior's
+# covariates: first role, unit and first-season era for staff); a role holder
+# (HC, OC, DC, GM, unit coordinator, opening-day QB and their unit
+# interactions) gets the holder's prior <role>PriorBlackPred[Pre]. The Blau
+# index and the column-(9) alternative-measure regressors get the coaches'
+# and head coach's priors. The suffix Pre (opening-day measure) carries over
+# to the prior; unsuffixed names (union measures, table 19d) map to the
+# union priors. The Pred-named columns are the model-only prior under every
+# measure.
 prior_of <- function(v) {
   case_when(grepl("Miss$", v) ~ NA_character_,
-            v %in% c("BlauBlackCoaches", "ShareBlackAltCoaches") ~ "MeanPriorBlackPredCoaches",
-            v == "HCBlackAlt" ~ "HCPriorBlackPred",
+            v %in% c("BlauBlackCoachesPre", "ShareBlackAltCoachesPre") ~ "MeanPriorBlackPredCoachesPre",
+            v == "HCBlackAltPre" ~ "HCPriorBlackPredPre",
             grepl("^(F1|L1)?ShareBlack[A-Z]", v) ~
               sub("^(F1|L1)?ShareBlack(.*)$", "\\1MeanPriorBlackPred\\2", v),
-            grepl("^(F1)?(HC|OC|DC|STC|GM|QBWeek1|UnitCoord|OffQBWeek1|DefHC)Black$", v) ~
-              sub("Black$", "PriorBlackPred", v),
+            grepl("^(F1)?(HC|OC|DC|STC|GM|QBWeek1|UnitCoord|OffQBWeek1|DefHC)Black(Pre)?$", v) ~
+              sub("Black(Pre)?$", "PriorBlackPred\\1", v),
             TRUE ~ NA_character_)
 }
 # rhs plus the prior controls of its race regressors (and their zero-fill
@@ -299,15 +393,16 @@ add_prior <- function(rhs, data) {
 # reverses this choice for comparison
 UsePrior <- IsModelPred
 
-# SD of the coaches' Black share net of a model's fixed effects in its
-# estimation sample (the identifying variation of that column)
-resid_sd <- function(m, x = "ShareBlackCoaches") {
+# SD of the coaches' Black share (opening day by default) net of a model's
+# fixed effects in its estimation sample (the identifying variation of that
+# column)
+resid_sd <- function(m, x = "ShareBlackCoachesPre") {
   sd(resid(feols(make_fml14(x, "1", m$FeSpec), data = m$EstData, notes = FALSE)))
 }
 
 # Effect of a 1-SD within change of the coaches' share, in win percentage
 # points for WinPct and in the outcome's own units otherwise
-sd_effect <- function(m, x = "ShareBlackCoaches") {
+sd_effect <- function(m, x = "ShareBlackCoachesPre") {
   y <- as.character(m$fml[[2]])
   scale <- if (y == "WinPct") 100 else 1
   fmt14(coef(m)[[x]] * resid_sd(m, x) * scale, if (grepl("EPA", y)) 4 else 3)
@@ -381,13 +476,20 @@ NoteWcb <- glue("Wild cluster bootstrap-t $p$-values (restricted, Webb six-point
 # provisional race and the holder's P(Black) under a predicted measure
 role_note <- function(m) {
   pred <- m %in% c("predicted", "preddoc")
-  paste(if (pred) "Role-holder regressors (HC, OC, DC, GM) are the holder's predicted probability of being Black;"
-        else "Role-holder indicators (HC, OC, DC, GM)",
-        if (pred) "they are zero-filled when the role has no listed holder (e.g. teams without a GM title)"
-        else "are zero-filled when the role has no listed holder (e.g. teams without a GM title) or the holder's race is unknown",
+  paste(if (pred) "Role-holder regressors (HC, OC, DC, GM) are the opening-day holder's predicted probability of being Black;"
+        else "Role-holder indicators (HC, OC, DC, GM) refer to the opening-day holder and",
+        if (pred) "they are zero-filled when the role has no listed holder at the opening (e.g. teams without a GM title)"
+        else "are zero-filled when the role has no listed holder at the opening (e.g. teams without a GM title) or the holder's race is unknown",
         "and each enters with a missing indicator, so no team-season is dropped for a missing role holder.")
 }
 NoteRoles <- role_note(measure)
+# Timing of the staff measures (every table but 19d)
+NoteTiming <- paste(
+  "All staff regressors (shares, role holders, their priors and the coaching-turnover shares)",
+  "are measured at opening day, from the preseason staff snapshot taken before the franchise's",
+  "first regular-season game, so in-season hires, firings and interim promotions, which respond",
+  "to results, do not enter; Table 19d repeats the headline columns with the all-season union",
+  "staff as a robustness check.")
 NotePredShort <- if (IsModelPred) paste(
   "Under the predicted measure, staff shares are expected shares (mean member P(Black)),",
   "role-holder regressors are the holder's P(Black), and every specification controls for",
@@ -398,27 +500,36 @@ NotePredShort <- if (IsModelPred) paste(
   "the holder's probability (1 or 0 when documented); see the notes to Table 19 and Table 29.") else character()
 
 # Head-coach measurement diagnostics, computed from the data (model-only
-# P(Black) under every measure): among the distinct head coaches of the
-# estimation sample, the reliability Var(p)/(Var(p) + E[p(1-p)]) of P(Black)
-# (the share of its variance that is signal if p is calibrated) and the mean
-# P(Black) of documented Black head coaches
+# P(Black) under every measure): among the distinct opening-day head coaches
+# of the estimation sample, the reliability Var(p)/(Var(p) + E[p(1-p)]) of
+# P(Black) (the share of its variance that is signal if p is calibrated) and
+# the mean P(Black) of documented Black head coaches, under the matched
+# label (documented non-Hispanic Black alone, the target of p_black_any_pred)
+# and the broader one (Black alone or in combination)
 HCDiag <- TeamSeason |>
-  distinct(HCPersonId) |>
-  filter(!is.na(HCPersonId)) |>
-  left_join(StaffDoc, by = c("HCPersonId" = "PersonId"))
+  distinct(HCPersonIdPre) |>
+  filter(!is.na(HCPersonIdPre)) |>
+  left_join(StaffDoc, by = c("HCPersonIdPre" = "PersonId"))
 stopifnot(!anyNA(HCDiag$PBlackPred))
 HCReliability <- with(HCDiag, var(PBlackPred) / (var(PBlackPred) + mean(PBlackPred * (1 - PBlackPred))))
 NHCDiag <- nrow(HCDiag)
 NHCDocBlack <- sum(HCDiag$DocBlack == 1L, na.rm = TRUE)
+NHCDocBlackAlone <- sum(HCDiag$DocBlackAlone == 1L, na.rm = TRUE)
 MeanPHCDocBlack <- mean(HCDiag$PBlackPred[coalesce(HCDiag$DocBlack == 1L, FALSE)])
-message(glue("14: {NHCDiag} head coaches; reliability of P(Black) {round(HCReliability, 3)}; ",
-             "{NHCDocBlack} documented Black, mean P(Black) {round(MeanPHCDocBlack, 3)}"))
+MeanPHCDocBlackAlone <- mean(HCDiag$PBlackPred[coalesce(HCDiag$DocBlackAlone == 1L, FALSE)])
+message(glue("14: {NHCDiag} opening-day head coaches; reliability of P(Black) {round(HCReliability, 3)}; ",
+             "{NHCDocBlackAlone} documented non-Hispanic Black alone (mean P(Black) ",
+             "{round(MeanPHCDocBlackAlone, 3)}), {NHCDocBlack} documented Black alone or in ",
+             "combination (mean P(Black) {round(MeanPHCDocBlack, 3)})"))
 NoteHCDiag <- glue(
   "Validation (Tables 24 and 25): predicted assistant-coach Black shares fall below the published ",
-  "TIDES shares, and head-coach probabilities are noisy at the individual level: among the {NHCDiag} head coaches ",
-  "of these team-seasons (each counted once), the reliability Var(p)/(Var(p) + E[p(1-p)]) of the ",
-  "model-only P(Black) is {fmt14(HCReliability, 2)}, and the {NHCDocBlack} documented Black head ",
-  "coaches average P(Black) of {fmt14(MeanPHCDocBlack, 2)}.")
+  "TIDES shares, and head-coach probabilities are noisy at the individual level: among the {NHCDiag} ",
+  "opening-day head coaches of these team-seasons (each counted once), the reliability ",
+  "Var(p)/(Var(p) + E[p(1-p)]) of the model-only P(Black) is {fmt14(HCReliability, 2)}. P(Black) ",
+  "is the probability of being non-Hispanic Black alone: the {NHCDocBlackAlone} head coaches ",
+  "documented as such average P(Black) of {fmt14(MeanPHCDocBlackAlone, 2)}, and the ",
+  "{NHCDocBlack} documented as Black alone or in combination (the broader label of Table 25) ",
+  "average {fmt14(MeanPHCDocBlack, 2)}.")
 
 # Measurement of the coaches' shares and role holders, by measure
 NotePredStaff <- if (IsModelPred) paste(
@@ -459,12 +570,21 @@ NoteGlassCliff <- paste("HC race coefficients are subject to the glass-cliff thr
 # Regressor sets
 # ---------------------------------------------------------------------------
 
-RoleRhs <- c("HCBlack", "OCBlack", "DCBlack", "GMBlack",
-             "HCBlackMiss", "OCBlackMiss", "DCBlackMiss", "GMBlackMiss")
+# Opening-day role holders (headline) and their all-season union versions
+# (table 19d)
+role_rhs <- function(suffix) {
+  roles <- paste0(c("HC", "OC", "DC", "GM"), "Black", suffix)
+  c(roles, paste0(roles, "Miss"))
+}
+RoleRhs <- role_rhs("Pre")
+RoleRhsUnion <- role_rhs("")
 # Main (column 4) controls: predetermined with respect to season t. Lagged
-# outcomes, the coaching-turnover shares (staff listed at the start of the
-# season) and season t-1 roster quality, cap share and roster Black share.
-TurnoverShares <- c("ShareCoachesNewToFranchise", "ShareCoachesPromoted")
+# outcomes, the opening-day coaching-turnover shares (with the indicator of
+# unknown turnover: no previous opening snapshot, 2007) and season t-1
+# roster quality, cap share and roster Black share.
+TurnoverShares <- c("ShareCoachesNewToFranchisePre", "ShareCoachesPromotedPre",
+                    "TurnoverUnknownPre")
+TurnoverSharesUnion <- c("ShareCoachesNewToFranchise", "ShareCoachesPromoted")
 LagRoster <- c("LagTeamCapShare", "LagMeanLogPickRoster", "LagMeanAgeRoster",
                "LagMeanLogPickRosterMiss", "LagMeanAgeRosterMiss",
                "L1ShareBlackRoster", "L1ShareBlackRosterMiss")
@@ -478,25 +598,28 @@ ContempRoster <- c("TeamCapShare", "MeanLogPickRoster", "MeanAgeRoster",
                    "ShareBlackRoster", "ShareBlackRosterMiss")
 
 # Regressor labels by measure: under a probability measure, shares are
-# expected shares and role holders enter as their P(Black)
+# expected shares and role holders enter as their P(Black). The timing
+# (opening day) is stated once in the table notes (NoteTiming); the union
+# measures of table 19d are labelled there.
 share_lab <- function(group) paste0(group, if (IsPredMeasure) " expected share Black" else " share Black")
 role_lab <- function(role) if (IsPredMeasure) paste0("P(Black): ", role) else paste("Black", role)
 AltLab <- if (IsModelPred) "documented (preddoc)" else "predicted (model only)"
 CoefMapMain <- c(
-  ShareBlackCoaches = share_lab("Coaches'"),
-  HCBlack = role_lab("head coach"),
-  OCBlack = role_lab("offensive coordinator"),
-  DCBlack = role_lab("defensive coordinator"),
-  GMBlack = role_lab("general manager"),
-  ShareBlackAltCoaches = glue("Coaches' share Black, {AltLab}"),
-  HCBlackAlt = glue("P(Black): head coach, {AltLab}"),
-  MeanPriorBlackPredCoaches = "Coaches' mean prior P(Black)",
-  HCPriorBlackPred = "Head coach's prior P(Black)",
+  ShareBlackCoachesPre = share_lab("Coaches'"),
+  HCBlackPre = role_lab("head coach"),
+  OCBlackPre = role_lab("offensive coordinator"),
+  DCBlackPre = role_lab("defensive coordinator"),
+  GMBlackPre = role_lab("general manager"),
+  ShareBlackAltCoachesPre = glue("Coaches' share Black, {AltLab}"),
+  HCBlackAltPre = glue("P(Black): head coach, {AltLab}"),
+  MeanPriorBlackPredCoachesPre = "Coaches' mean prior P(Black)",
+  HCPriorBlackPredPre = "Head coach's prior P(Black)",
   L1ShareBlackRoster = "Roster share Black ($t-1$)",
   LagWinPct = "Lagged win percentage",
   LagExpectedWins = "Lagged market expected wins",
-  ShareCoachesNewToFranchise = "Share of coaches new to franchise",
-  ShareCoachesPromoted = "Share of coaches promoted")
+  ShareCoachesNewToFranchisePre = "Share of coaches new to franchise",
+  ShareCoachesPromotedPre = "Share of coaches promoted",
+  TurnoverUnknownPre = "Turnover unknown (no previous opening snapshot)")
 
 # Shared note sentences for table 19 and its companions
 NoteShareDef <- paste("The coaches' share includes the head coach and the coordinators.",
@@ -504,15 +627,22 @@ NoteShareDef <- paste("The coaches' share includes the head coach and the coordi
                       "coefficient is identified from the composition of the remaining",
                       "coaches, and the role coefficients are net of the role holder's",
                       "own contribution to the share.")
+# Seasons with unknown opening-day turnover (no previous opening snapshot)
+TurnoverUnknownSeasons <- sort(unique(TeamSeason$season[TeamSeason$TurnoverUnknownPre == 1]))
+TurnoverUnknownTxt <- if (length(TurnoverUnknownSeasons) == 0) "" else glue(
+  "; unknown in {paste(TurnoverUnknownSeasons, collapse = ', ')} ",
+  "({sum(TeamSeason$TurnoverUnknownPre)} team-seasons without a previous opening snapshot), ",
+  "where both shares are zero-filled with an explicit indicator",
+  if (isTRUE(all(TurnoverUnknownSeasons == 2007))) " that the season FE absorb" else "")
 NoteControls4 <- paste("The column-(4) controls are predetermined: lagged win percentage",
-                       "and market expected wins, the shares of coaches new to the",
-                       "franchise and promoted from within (staff listed at the start of",
-                       "the season), and the previous season's cap share (observed from",
-                       "2013, so from 2014 here, zero-filled before; its missing",
-                       "indicator is absorbed by the season FE), game-day roster mean",
-                       "log draft pick, mean age and Black share. Contemporaneous roster",
-                       "measures respond to in-season results and to the staff's own",
-                       "choices, so they appear only in Table 19c.")
+                       "and market expected wins, the shares of opening-day coaches new to",
+                       "the franchise and promoted from within (compared with the previous",
+                       glue("season's opening snapshot{TurnoverUnknownTxt}), and the previous"),
+                       "season's cap share (observed from 2013, so from 2014 here,",
+                       "zero-filled before; its missing indicator is absorbed by the season",
+                       "FE), game-day roster mean log draft pick, mean age and Black share.",
+                       "Contemporaneous roster measures respond to in-season results and to",
+                       "the staff's own choices, so they appear only in Table 19c.")
 NoteMarket <- paste("Because pre-game betting lines price staff quality and update",
                     "during the season, the wins-over-expected column estimates",
                     "performance relative to market expectations (mispricing), not the",
@@ -525,31 +655,32 @@ WcbResults <- list()
 # Table 19: main specification (equation (3))
 # ---------------------------------------------------------------------------
 
-RoleNoHC <- setdiff(RoleRhs, c("HCBlack", "HCBlackMiss"))
+RoleNoHC <- setdiff(RoleRhs, c("HCBlackPre", "HCBlackPreMiss"))
 # Columns (1)-(7) and (9) use the prior controls under the predicted measure
 # (UsePrior); column (8) is column (4) with the opposite choice (no prior
 # controls under the predicted measure, the model-only priors as ordinary
 # controls under the others). Column (9) adds the other probability measure's
 # coaches' share and head coach to column (4), always with the priors (they
 # are the calibration controls of the model-only regressors).
-AltRhs <- c("ShareBlackAltCoaches", "HCBlackAlt", "HCBlackAltMiss")
+AltRhs <- c("ShareBlackAltCoachesPre", "HCBlackAltPre", "HCBlackAltPreMiss")
+SpellFE <- "HCIncumbentSpellId + season"
 Spec19 <- list(
-  "(1)" = list(y = "WinPct", rhs = "ShareBlackCoaches", fe = "season"),
-  "(2)" = list(y = "WinPct", rhs = "ShareBlackCoaches", fe = "franchise_id + season"),
-  "(3)" = list(y = "WinPct", rhs = c("ShareBlackCoaches", RoleRhs),
+  "(1)" = list(y = "WinPct", rhs = "ShareBlackCoachesPre", fe = "season"),
+  "(2)" = list(y = "WinPct", rhs = "ShareBlackCoachesPre", fe = "franchise_id + season"),
+  "(3)" = list(y = "WinPct", rhs = c("ShareBlackCoachesPre", RoleRhs),
                fe = "franchise_id + season"),
-  "(4)" = list(y = "WinPct", rhs = c("ShareBlackCoaches", RoleRhs, Controls4),
+  "(4)" = list(y = "WinPct", rhs = c("ShareBlackCoachesPre", RoleRhs, Controls4),
                fe = "franchise_id + season"),
-  "(5)" = list(y = "WinPct", rhs = c("ShareBlackCoaches", RoleNoHC, Controls4),
-               fe = "HCSpellId + season", single = TRUE),
+  "(5)" = list(y = "WinPct", rhs = c("ShareBlackCoachesPre", RoleNoHC, Controls4),
+               fe = SpellFE, single = TRUE),
   "(6)" = list(y = "WinPct",
-               rhs = c("ShareBlackCoaches", RoleNoHC, setdiff(Controls4, "LagWinPct")),
-               fe = "HCSpellId + season", single = TRUE),
-  "(7)" = list(y = "WinsOverExpected", rhs = c("ShareBlackCoaches", RoleRhs, Controls4),
+               rhs = c("ShareBlackCoachesPre", RoleNoHC, setdiff(Controls4, "LagWinPct")),
+               fe = SpellFE, single = TRUE),
+  "(7)" = list(y = "WinsOverExpected", rhs = c("ShareBlackCoachesPre", RoleRhs, Controls4),
                fe = "franchise_id + season"),
-  "(8)" = list(y = "WinPct", rhs = c("ShareBlackCoaches", RoleRhs, Controls4),
+  "(8)" = list(y = "WinPct", rhs = c("ShareBlackCoachesPre", RoleRhs, Controls4),
                fe = "franchise_id + season", prior = !UsePrior),
-  "(9)" = list(y = "WinPct", rhs = c("ShareBlackCoaches", RoleRhs, Controls4, AltRhs),
+  "(9)" = list(y = "WinPct", rhs = c("ShareBlackCoachesPre", RoleRhs, Controls4, AltRhs),
                fe = "franchise_id + season", prior = TRUE))
 fit_spec19 <- function(s, data, use_prior) {
   fit14(s$y, s$rhs, s$fe, data, drop_singletons = isTRUE(s$single),
@@ -560,22 +691,31 @@ map_int(Models19, nobs) |> print()
 
 # Wild cluster bootstrap for the coaches' share and the head coach (and the
 # alternative-measure share in column 9, the GM in the spell-FE columns)
-Wcb19 <- bind_rows(wcb_all(Models19, c("ShareBlackCoaches", "HCBlack"), "table-19"),
-                   wcb_all(Models19["(9)"], "ShareBlackAltCoaches", "table-19"),
-                   wcb_all(Models19[c("(5)", "(6)")], "GMBlack", "table-19"))
+Wcb19 <- bind_rows(wcb_all(Models19, c("ShareBlackCoachesPre", "HCBlackPre"), "table-19"),
+                   wcb_all(Models19["(9)"], "ShareBlackAltCoachesPre", "table-19"),
+                   wcb_all(Models19[c("(5)", "(6)")], "GMBlackPre", "table-19"))
 WcbResults <- c(WcbResults, list(Wcb19))
 
-# Head-coach spells in the column (5) sample, and singleton spells removed
-SpellCounts <- TeamSeason |> filter(!is.na(WinPct)) |> count(HCSpellId)
+# Incumbent head-coach spells in the column (5) sample, singleton spells
+# removed, and spells that span a season in which the incumbent did not
+# coach the most games (an acting HC: the season HC differs from the
+# opening-day HC, e.g. IND 2012), which the incumbent key keeps intact
+SpellCounts <- TeamSeason |> filter(!is.na(WinPct)) |> count(HCIncumbentSpellId)
 NSpellsAll <- nrow(SpellCounts)
 NSingletons <- sum(SpellCounts$n == 1)
-NSpells <- n_distinct(Models19[["(5)"]]$EstData$HCSpellId)
-message(glue("14: {NSpellsAll} HC spells, {NSingletons} singletons; column (5) keeps ",
-             "{NSpells} spells, {nobs(Models19[['(5)']])} team-seasons"))
+NSpells <- n_distinct(Models19[["(5)"]]$EstData$HCIncumbentSpellId)
+# Seasons in which the season HC (most games) is not the incumbent (an
+# acting or interim coach ran most of the season), by incumbent source
+NActingSeasons <- sum(TeamSeason$HCIncumbentKey != coalesce(TeamSeason$HCPersonId, TeamSeason$HeadCoachName),
+                      na.rm = TRUE)
+message(glue("14: {NSpellsAll} incumbent HC spells, {NSingletons} singletons; column (5) keeps ",
+             "{NSpells} spells, {nobs(Models19[['(5)']])} team-seasons; {NActingSeasons} ",
+             "team-seasons in which the season HC is not the opening-day incumbent"))
+print(table(TeamSeason$HCIncumbentSource, useNA = "ifany"))
 # Spells in the column (5) sample in which the GM regressor changes (the
 # only variation that identifies the GM coefficient with spell FE)
 GMSpellVar <- Models19[["(5)"]]$EstData |>
-  summarise(Range = max(GMBlack) - min(GMBlack), .by = c(HCSpellId, franchise_id)) |>
+  summarise(Range = max(GMBlackPre) - min(GMBlackPre), .by = c(HCIncumbentSpellId, franchise_id)) |>
   filter(Range > 0.01)
 NGMSpells <- nrow(GMSpellVar)
 NGMFranchises <- n_distinct(GMSpellVar$franchise_id)
@@ -599,11 +739,11 @@ Rows19 <- bind_rows(
   model_row(Models19, glue("SD of {SdLab} net of FE"), \(m) fmt14(resid_sd(m), 3)),
   model_row(Models19, glue("Effect of 1 SD of {SdLab} (win pp; wins in col. 7)"), sd_effect),
   model_row(Models19, "Spells with a within-spell GM change",
-            \(m) if (grepl("HCSpellId", m$FeSpec)) as.character(NGMSpells) else ""),
-  wcb_rows(Wcb19, Models19, c(ShareBlackCoaches = "coaches' share Black",
-                              HCBlack = "head coach",
-                              ShareBlackAltCoaches = "coaches' share, other measure",
-                              GMBlack = "general manager")))
+            \(m) if (grepl("HCIncumbentSpellId", m$FeSpec)) as.character(NGMSpells) else ""),
+  wcb_rows(Wcb19, Models19, c(ShareBlackCoachesPre = "coaches' share Black",
+                              HCBlackPre = "head coach",
+                              ShareBlackAltCoachesPre = "coaches' share, other measure",
+                              GMBlackPre = "general manager")))
 
 write_model_table(
   Models19, CoefMapMain,
@@ -625,19 +765,24 @@ write_model_table(
           glue("Column (9) adds to column (4) the coaches' share and head-coach regressor under the ",
                "{AltLab} measure, with the priors.")),
     "Coaches are on-field coaches (head coach, coordinators, position coaches, assistants and quality control).",
-    NoteShareDef, NoteControls4,
-    glue("Columns (5) and (6) replace franchise FE with franchise $\\times$ head-coach-spell FE ",
-         "(a spell is a run of consecutive seasons of one season head coach with a franchise), so ",
-         "the head coach's race is absorbed. Of {NSpellsAll} spells, {NSingletons} last one season; ",
-         "these team-seasons are perfectly fit by their spell FE and are removed, leaving {NSpells} ",
+    NoteTiming, NoteShareDef, NoteControls4,
+    glue("Columns (5) and (6) replace franchise FE with franchise $\\times$ head-coach-spell FE: a ",
+         "spell is the run of seasons of one opening-day incumbent head coach with a franchise (the ",
+         "non-interim head coach listed in the opening snapshot, who is the first-game coach or the ",
+         "coach an interim is acting for; else the first-game head coach). A season in which the ",
+         "incumbent is absent while an acting coach runs the team does not interrupt his spell ",
+         "({NActingSeasons} team-seasons in which the season head coach, the one with the most ",
+         "games, is not the incumbent); a different coach always starts a new spell, so the head coach's ",
+         "race is absorbed. Of {NSpellsAll} spells, {NSingletons} last one season; these ",
+         "team-seasons are perfectly fit by their spell FE and are removed, leaving {NSpells} ",
          "spells. The identifying assumption is that, within a head coach's tenure, changes in the ",
-         "composition of the other coaches (assistant and coordinator turnover) are not timed to ",
-         "shocks in team quality. Spells are short, so a lagged outcome with spell FE is subject to ",
-         "Nickell bias; column (6) drops the lagged win percentage. With spell FE the GM coefficient ",
-         "is identified only from the {NGMSpells} spells (at {NGMFranchises} franchises) in which the ",
-         "GM regressor changes within the spell; with so few effective clusters neither the clustered ",
-         "standard error nor the bootstrap is reliable, and the GM coefficient in columns (5) and (6) ",
-         "is not interpreted (the GM enters as a control)."),
+         "opening-day composition of the other coaches (assistant and coordinator turnover) are not ",
+         "timed to shocks in team quality. Spells are short, so a lagged outcome with spell FE is ",
+         "subject to Nickell bias; column (6) drops the lagged win percentage. With spell FE the GM ",
+         "coefficient is identified only from the {NGMSpells} spells (at {NGMFranchises} franchises) ",
+         "in which the GM regressor changes within the spell; with so few effective clusters neither ",
+         "the clustered standard error nor the bootstrap is reliable, and the GM coefficient in ",
+         "columns (5) and (6) is not interpreted (the GM enters as a control)."),
     "Columns (2)-(4) and (7)-(9) assume that, conditional on franchise and season FE and the controls, staff composition is uncorrelated with unobserved team quality.",
     NoteMarket,
     if (IsPredMeasure) {
@@ -663,9 +808,9 @@ Outcomes19b <- c(PointDiffPerGame = "Point diff. per game", OffEPAPerPlay = "Off
 Spec19b <- list()
 for (y in names(Outcomes19b)) {
   Spec19b[[paste0(Outcomes19b[[y]], ", franchise FE")]] <-
-    list(y = y, rhs = c("ShareBlackCoaches", RoleRhs, Controls4), fe = "franchise_id + season")
+    list(y = y, rhs = c("ShareBlackCoachesPre", RoleRhs, Controls4), fe = "franchise_id + season")
   Spec19b[[paste0(Outcomes19b[[y]], ", spell FE")]] <-
-    list(y = y, rhs = c("ShareBlackCoaches", RoleNoHC, Controls4), fe = "HCSpellId + season",
+    list(y = y, rhs = c("ShareBlackCoachesPre", RoleNoHC, Controls4), fe = SpellFE,
          single = TRUE)
 }
 names(Spec19b) <- paste0("(", seq_along(Spec19b), ")")
@@ -673,24 +818,24 @@ Models19b <- map(Spec19b, \(s) fit14(s$y, s$rhs, s$fe, TeamSeason,
                                      drop_singletons = isTRUE(s$single), prior = UsePrior))
 map_int(Models19b, nobs) |> print()
 
-Wcb19b <- wcb_all(Models19b, c("ShareBlackCoaches", "HCBlack"), "table-19b")
+Wcb19b <- wcb_all(Models19b, c("ShareBlackCoachesPre", "HCBlackPre"), "table-19b")
 WcbResults <- c(WcbResults, list(Wcb19b))
 
 Rows19b <- bind_rows(
   model_row(Models19b, "Outcome", \(m) Outcomes19b[[as.character(m$fml[[2]])]]),
   model_row(Models19b, "Franchise FE", \(m) yes_no14(grepl("franchise_id", m$FeSpec))),
-  model_row(Models19b, "Franchise $\\times$ HC-spell FE", \(m) yes_no14(grepl("HCSpellId", m$FeSpec))),
+  model_row(Models19b, "Franchise $\\times$ HC-spell FE", \(m) yes_no14(grepl("HCIncumbentSpellId", m$FeSpec))),
   tibble(term = "Season FE, controls (column 4)") |>
     bind_cols(as_tibble(set_names(rep(list("Yes"), length(Models19b)), names(Models19b)))),
   model_row(Models19b, "Mean of outcome", outcome_mean),
   model_row(Models19b, glue("Effect of 1 SD of {SdLab} net of FE"), sd_effect),
   model_row(Models19b, "Model-only prior controls", \(m) yes_no14(m$PriorUsed)),
-  wcb_rows(Wcb19b, Models19b, c(ShareBlackCoaches = "coaches' share Black",
-                                HCBlack = "head coach")))
+  wcb_rows(Wcb19b, Models19b, c(ShareBlackCoachesPre = "coaches' share Black",
+                                HCBlackPre = "head coach")))
 
 write_model_table(
-  Models19b, CoefMapMain[c("ShareBlackCoaches", "HCBlack", "OCBlack", "DCBlack", "GMBlack",
-                           "L1ShareBlackRoster")],
+  Models19b, CoefMapMain[c("ShareBlackCoachesPre", "HCBlackPre", "OCBlackPre", "DCBlackPre",
+                           "GMBlackPre", "L1ShareBlackRoster")],
   title = "Coaching-staff racial composition and other team outcomes",
   label = "staff-diversity-outcomes",
   notes = c(
@@ -701,7 +846,7 @@ write_model_table(
          "the column-(5) specification (franchise $\\times$ head-coach-spell and season FE, ",
          "singleton spells removed, the head coach's race absorbed). The sample is ",
          "FullStaffObserved team-seasons, {min(TeamSeason$season)}-{max(TeamSeason$season)}."),
-    NoteShareDef, NoteControls4,
+    NoteTiming, NoteShareDef, NoteControls4,
     glue("The effect row is the coefficient times the SD of the coaches' ",
          if (IsPredMeasure) "expected " else "", "Black share net of the column's fixed effects, in the outcome's units."),
     NotePredShort, NoteRoles, NoteCluster, NoteWcb),
@@ -726,22 +871,23 @@ Spec19c <- list(
   "(4)" = c(LagOnly, Week1Roster),
   "(5)" = c(LagOnly, TurnoverShares, ContempRoster),
   "(6)" = c(LagOnly, ContempRoster))
-Models19c <- map(Spec19c, \(ctrl) fit14("WinPct", c("ShareBlackCoaches", RoleRhs, ctrl),
+Models19c <- map(Spec19c, \(ctrl) fit14("WinPct", c("ShareBlackCoachesPre", RoleRhs, ctrl),
                                          "franchise_id + season", TeamSeason, prior = UsePrior))
 map_int(Models19c, nobs) |> print()
 
-Wcb19c <- wcb_all(Models19c, c("ShareBlackCoaches", "HCBlack"), "table-19c")
+Wcb19c <- wcb_all(Models19c, c("ShareBlackCoachesPre", "HCBlackPre"), "table-19c")
 WcbResults <- c(WcbResults, list(Wcb19c))
 
-CoefMap19c <- c(CoefMapMain[c("ShareBlackCoaches", "HCBlack", "OCBlack", "DCBlack", "GMBlack")],
+CoefMap19c <- c(CoefMapMain[c("ShareBlackCoachesPre", "HCBlackPre", "OCBlackPre", "DCBlackPre",
+                              "GMBlackPre")],
                 LagMeanLogPickRoster = "Roster mean log draft pick ($t-1$)",
                 MeanLogPickWeek1 = "Opening-day mean log draft pick",
                 MeanLogPickRoster = "Roster mean log draft pick ($t$)",
                 L1ShareBlackRoster = "Roster share Black ($t-1$)",
                 ShareBlackWeek1 = "Opening-day roster share Black",
                 ShareBlackRoster = "Roster share Black ($t$)",
-                ShareCoachesNewToFranchise = "Share of coaches new to franchise",
-                ShareCoachesPromoted = "Share of coaches promoted")
+                ShareCoachesNewToFranchisePre = "Share of coaches new to franchise",
+                ShareCoachesPromotedPre = "Share of coaches promoted")
 Rows19c <- bind_rows(
   tibble(term = c("Roster controls", "Turnover shares", "Season FE, franchise FE")) |>
     bind_cols(tibble("(1)" = c("$t-1$", "Yes", "Yes"), "(2)" = c("$t-1$", "No", "Yes"),
@@ -749,8 +895,8 @@ Rows19c <- bind_rows(
                      "(5)" = c("Season $t$", "Yes", "Yes"), "(6)" = c("Season $t$", "No", "Yes"))),
   model_row(Models19c, glue("Effect of 1 SD of {SdLab} (win pp)"), sd_effect),
   model_row(Models19c, "Model-only prior controls", \(m) yes_no14(m$PriorUsed)),
-  wcb_rows(Wcb19c, Models19c, c(ShareBlackCoaches = "coaches' share Black",
-                                HCBlack = "head coach")))
+  wcb_rows(Wcb19c, Models19c, c(ShareBlackCoachesPre = "coaches' share Black",
+                                HCBlackPre = "head coach")))
 
 write_model_table(
   Models19c, CoefMap19c,
@@ -761,7 +907,8 @@ write_model_table(
          "alternative roster controls. Every column includes franchise and season FE, the ",
          "role-holder regressors and the lagged win percentage and market expected wins. Column (1) ",
          "is the baseline: the previous season's cap share, game-day roster mean log draft pick, ",
-         "mean age and Black share, and the shares of coaches new to the franchise and promoted. ",
+         "mean age and Black share, and the shares of opening-day coaches new to the franchise and ",
+         "promoted (zero-filled with an explicit indicator where the previous opening snapshot is not observed). ",
          "Columns (3)-(4) use the opening-day active roster (first regular-season game), which is ",
          "predetermined with respect to the season's results but chosen by the staff. Columns ",
          "(5)-(6) use the season-$t$ game-day-week-weighted roster and the season-$t$ cap share, ",
@@ -771,11 +918,95 @@ write_model_table(
          "changes in staff composition. Sample: FullStaffObserved team-seasons, ",
          "{min(TeamSeason$season)}-{max(TeamSeason$season)}."),
     "Cap shares are observed from 2013 and zero-filled before; their missing indicators are absorbed by the season FE.",
-    NoteShareDef, NotePredShort, NoteRoles, NoteCluster, NoteWcb),
+    NoteTiming, NoteShareDef, NotePredShort, NoteRoles, NoteCluster, NoteWcb),
   name = "table-19c-staff-diversity-controls", measure = measure, design = "team",
   add_rows = Rows19c)
 Estimates <- c(Estimates, list(tidy_terms(Models19c, names(CoefMap19c)) |>
                                  mutate(table = "table-19c")))
+
+# ---------------------------------------------------------------------------
+# Table 19d: all-season union staff measures (robustness)
+# ---------------------------------------------------------------------------
+
+# The union measures count every person listed in any of the season's
+# snapshots (preseason, midseason, late) in the coaches' share, the role
+# holders (the season's modal holder) and the turnover shares, so they
+# include in-season hires, firings and interim promotions that respond to
+# results. Columns: (1) Table 19 column (4) with the union share, role
+# holders and turnover; (2) its column (5) (incumbent-spell FE); (3) the
+# opening-day share and role holders of Table 19 column (4) with the union
+# turnover shares only (isolates the turnover-control change).
+RoleNoHCUnion <- setdiff(RoleRhsUnion, c("HCBlack", "HCBlackMiss"))
+Controls4Union <- c("LagWinPct", "LagExpectedWins", TurnoverSharesUnion, LagRoster)
+Spec19d <- list(
+  "(1)" = list(rhs = c("ShareBlackCoaches", RoleRhsUnion, Controls4Union),
+               fe = "franchise_id + season"),
+  "(2)" = list(rhs = c("ShareBlackCoaches", RoleNoHCUnion, Controls4Union), fe = SpellFE,
+               single = TRUE),
+  "(3)" = list(rhs = c("ShareBlackCoachesPre", RoleRhs, Controls4Union),
+               fe = "franchise_id + season"))
+Models19d <- map(Spec19d, \(s) fit14("WinPct", s$rhs, s$fe, TeamSeason,
+                                     drop_singletons = isTRUE(s$single), prior = UsePrior))
+map_int(Models19d, nobs) |> print()
+
+Wcb19d <- wcb_all(Models19d, c("ShareBlackCoaches", "HCBlack", "ShareBlackCoachesPre", "HCBlackPre"),
+                  "table-19d")
+WcbResults <- c(WcbResults, list(Wcb19d))
+
+# Share regressor of each column, for the SD and effect rows
+share_of19d <- function(m) if ("ShareBlackCoaches" %in% names(coef(m))) "ShareBlackCoaches" else "ShareBlackCoachesPre"
+CoefMap19d <- c(ShareBlackCoaches = paste0(share_lab("Coaches'"), ", all-season union"),
+                HCBlack = paste0(role_lab("head coach"), ", season (most games)"),
+                OCBlack = paste0(role_lab("offensive coordinator"), ", union"),
+                DCBlack = paste0(role_lab("defensive coordinator"), ", union"),
+                GMBlack = paste0(role_lab("general manager"), ", union"),
+                ShareBlackCoachesPre = paste0(share_lab("Coaches'"), ", opening day"),
+                HCBlackPre = paste0(role_lab("head coach"), ", opening day"),
+                OCBlackPre = paste0(role_lab("offensive coordinator"), ", opening day"),
+                DCBlackPre = paste0(role_lab("defensive coordinator"), ", opening day"),
+                GMBlackPre = paste0(role_lab("general manager"), ", opening day"),
+                ShareCoachesNewToFranchise = "Share of coaches new to franchise, union",
+                ShareCoachesPromoted = "Share of coaches promoted, union")
+Rows19d <- bind_rows(
+  tibble(term = c("Staff composition and role holders", "Turnover shares", "Season FE",
+                  "Franchise FE", "Franchise $\\times$ HC-spell FE",
+                  "Other controls (column 4 of Table 19)")) |>
+    bind_cols(tibble("(1)" = c("All-season union", "All-season union", "Yes", "Yes", "No", "Yes"),
+                     "(2)" = c("All-season union", "All-season union", "Yes", "No", "Yes", "Yes"),
+                     "(3)" = c("Opening day", "All-season union", "Yes", "Yes", "No", "Yes"))),
+  model_row(Models19d, "Model-only prior controls", \(m) yes_no14(m$PriorUsed)),
+  model_row(Models19d, "Mean of outcome", outcome_mean),
+  model_row(Models19d, glue("SD of {SdLab} net of FE"), \(m) fmt14(resid_sd(m, share_of19d(m)), 3)),
+  model_row(Models19d, glue("Effect of 1 SD of {SdLab} (win pp)"), \(m) sd_effect(m, share_of19d(m))),
+  wcb_rows(Wcb19d, Models19d, c(ShareBlackCoaches = "coaches' share Black, union",
+                                HCBlack = "head coach, season",
+                                ShareBlackCoachesPre = "coaches' share Black, opening day",
+                                HCBlackPre = "head coach, opening day")))
+
+write_model_table(
+  Models19d, CoefMap19d,
+  title = "Coaching-staff racial composition and win percentage: all-season union staff (robustness)",
+  label = "staff-diversity-union",
+  notes = c(
+    glue("Robustness check on the timing of the staff measures. The headline tables measure the ",
+         "staff at opening day (preseason snapshot before the first regular-season game). This ",
+         "table uses the all-season union: every coach listed in any of the season's staff ",
+         "snapshots counts in the coaches' share, the OC, DC and GM are the season's modal ",
+         "holders, the head coach is the coach of the most regular-season games, and the ",
+         "turnover shares are computed over all listed coaches. These measures include in-season ",
+         "hires, firings and interim promotions, which respond to the season's results, so the ",
+         "union coefficients are not predetermined and are reported for comparison only. Column (1) ",
+         "is the column-(4) specification of Table 19 with every staff regressor replaced by its ",
+         "union version; column (2) the column-(5) specification (franchise $\\times$ incumbent ",
+         "head-coach-spell FE, singleton spells removed); column (3) keeps the opening-day share and ",
+         "role holders and replaces only the turnover shares by their union versions, which are ",
+         "observed in every season (no 2007 gap). Sample: FullStaffObserved team-seasons, ",
+         "{min(TeamSeason$season)}-{max(TeamSeason$season)}."),
+    NoteShareDef, NotePredShort, NoteRoles, NoteCluster, NoteWcb),
+  name = "table-19d-staff-diversity-union", measure = measure, design = "team",
+  add_rows = Rows19d)
+Estimates <- c(Estimates, list(tidy_terms(Models19d, names(CoefMap19d)) |>
+                                 mutate(table = "table-19d")))
 
 # ---------------------------------------------------------------------------
 # Table 20: staff groups (column-(4) specification of table 19)
@@ -786,57 +1017,58 @@ Estimates <- c(Estimates, list(tidy_terms(Models19c, names(CoefMap19c)) |>
 # and the front-office share contains the GM, so those columns drop the
 # indicators of their own members (the personnel and scouting group does
 # not include the GM)
-GroupVars <- c(ShareBlackCoordinators = share_lab("Coordinators'"),
-               ShareBlackPositionCoaches = share_lab("Position coaches'"),
-               ShareBlackAssistants = share_lab("Assistants'"),
-               ShareBlackFrontOffice = share_lab("Front office"),
-               ShareBlackPersonnel = share_lab("Personnel and scouting"))
-CoachingGroups <- c("ShareBlackCoordinators", "ShareBlackPositionCoaches",
-                    "ShareBlackAssistants")
-RoleNoCoord <- setdiff(RoleRhs, c("OCBlack", "DCBlack", "OCBlackMiss", "DCBlackMiss"))
-RoleNoGM <- setdiff(RoleRhs, c("GMBlack", "GMBlackMiss"))
+GroupVars <- c(ShareBlackCoordinatorsPre = share_lab("Coordinators'"),
+               ShareBlackPositionCoachesPre = share_lab("Position coaches'"),
+               ShareBlackAssistantsPre = share_lab("Assistants'"),
+               ShareBlackFrontOfficePre = share_lab("Front office"),
+               ShareBlackPersonnelPre = share_lab("Personnel and scouting"))
+CoachingGroups <- c("ShareBlackCoordinatorsPre", "ShareBlackPositionCoachesPre",
+                    "ShareBlackAssistantsPre")
+RoleNoCoord <- setdiff(RoleRhs, c("OCBlackPre", "DCBlackPre", "OCBlackPreMiss", "DCBlackPreMiss"))
+RoleNoGM <- setdiff(RoleRhs, c("GMBlackPre", "GMBlackPreMiss"))
 Spec20 <- list(
-  "Coord." = c("ShareBlackCoordinators", RoleNoCoord),
-  "Position" = c("ShareBlackPositionCoaches", RoleRhs),
-  "Assistants" = c("ShareBlackAssistants", RoleRhs),
-  "Front office" = c("ShareBlackFrontOffice", RoleNoGM),
-  "Personnel" = c("ShareBlackPersonnel", RoleRhs),
+  "Coord." = c("ShareBlackCoordinatorsPre", RoleNoCoord),
+  "Position" = c("ShareBlackPositionCoachesPre", RoleRhs),
+  "Assistants" = c("ShareBlackAssistantsPre", RoleRhs),
+  "Front office" = c("ShareBlackFrontOfficePre", RoleNoGM),
+  "Personnel" = c("ShareBlackPersonnelPre", RoleRhs),
   "Coaching jointly" = c(CoachingGroups, RoleNoCoord),
-  "Blau" = c("BlauBlackCoaches", RoleRhs))
+  "Blau" = c("BlauBlackCoachesPre", RoleRhs))
 Models20 <- map(Spec20, \(g) fit14("WinPct", c(g, Controls4), "franchise_id + season", TeamSeason,
                                    prior = UsePrior))
 map_int(Models20, nobs) |> print()
 
 # Wild cluster bootstrap for every group coefficient
-Wcb20 <- wcb_all(Models20, c(names(GroupVars), "BlauBlackCoaches"), "table-20")
+Wcb20 <- wcb_all(Models20, c(names(GroupVars), "BlauBlackCoachesPre"), "table-20")
 WcbResults <- c(WcbResults, list(Wcb20))
 
 # Largest coaches' share in the sample (below 0.5, the Blau index is
 # increasing in the share)
-MaxShareCoaches <- max(Models20[["Blau"]]$EstData$ShareBlackCoaches)
+MaxShareCoaches <- max(Models20[["Blau"]]$EstData$ShareBlackCoachesPre)
 
-# Missing group shares in the sample (a group with no listed member)
+# Missing group shares in the sample (a group with no listed member at the
+# opening)
 MissGroups <- map_int(c(names(GroupVars)), \(g) sum(is.na(TeamSeason[[g]]))) |>
   set_names(names(GroupVars))
-MissPersonnelYears <- TeamSeason |> filter(is.na(ShareBlackPersonnel)) |>
+MissPersonnelYears <- TeamSeason |> filter(is.na(ShareBlackPersonnelPre)) |>
   count(season)
 print(MissGroups)
 print(MissPersonnelYears)
 
-CoefMap20 <- c(GroupVars, BlauBlackCoaches = "Blau index of coaches (Black/non-Black)",
-               CoefMapMain[c("HCBlack", "OCBlack", "DCBlack", "GMBlack")])
+CoefMap20 <- c(GroupVars, BlauBlackCoachesPre = "Blau index of coaches (Black/non-Black)",
+               CoefMapMain[c("HCBlackPre", "OCBlackPre", "DCBlackPre", "GMBlackPre")])
 Rows20 <- bind_rows(
   tibble(term = c("Season FE", "Franchise FE", "Controls (column 4 of Table 19)")) |>
     bind_cols(as_tibble(set_names(rep(list(rep("Yes", 3)), length(Models20)), names(Models20)))),
   model_row(Models20, "Role-holder regressors", \(m) case_when(
-    !"OCBlack" %in% names(coef(m)) ~ "HC, GM",
-    !"GMBlack" %in% names(coef(m)) ~ "HC, OC, DC",
+    !"OCBlackPre" %in% names(coef(m)) ~ "HC, GM",
+    !"GMBlackPre" %in% names(coef(m)) ~ "HC, OC, DC",
     TRUE ~ "HC, OC, DC, GM")),
   model_row(Models20, "Model-only prior controls", \(m) yes_no14(m$PriorUsed)),
   model_row(Models20, "Mean of outcome", outcome_mean),
   wcb_rows(Wcb20, Models20, c(set_names(c("coordinators", "position coaches", "assistants",
                                           "front office", "personnel"), names(GroupVars)),
-                              BlauBlackCoaches = "Blau index")))
+                              BlauBlackCoachesPre = "Blau index")))
 
 MissGroups <- MissGroups[MissGroups > 0]
 PersYears <- MissPersonnelYears$season[MissPersonnelYears$n >= 5]
@@ -858,16 +1090,17 @@ write_model_table(
     paste(if (IsPredMeasure) "Under this measure $s$ is the expected share, so column (7) uses $2s(1-s)$ of the expected share, not the expected Blau index $E[2S(1-S)] = 2s(1-s) - 2\\mathrm{Var}(S)$, and regression calibration does not carry over to this nonlinear function.",
           if (MaxShareCoaches < 0.5) glue("Because $s$ is below 0.5 in every team-season (maximum {fmt14(MaxShareCoaches, 3)}), the index is a monotone transform of the share, not an independent diversity measure.")),
     "Coordinators are the OC, DC and special-teams coordinator; the front office includes owners, executives, the GM and personnel and scouting staff.",
+    NoteTiming,
     glue("Every column includes franchise and season FE, the predetermined column-(4) controls of ",
-         "Table 19 (lagged win percentage and market expected wins, the shares of coaches new to ",
-         "the franchise and promoted, and the previous season's cap share, roster mean log draft ",
-         "pick, mean age and roster Black share) and the role-holder regressors of Table 19, ",
-         "except that the coordinator columns (1 and 6) omit the OC and DC regressors and the ",
-         "front-office column (4) omits the GM regressor, because those persons are members of ",
-         "the group whose share enters (row \\textit{{Role-holder regressors}})."),
-    glue("Team-seasons with no listed member of a group have a missing share and drop from that ",
-         "column, so the number of observations differs across columns. Team-seasons with a ",
-         "missing share: {MissText}{PersYearsText}."),
+         "Table 19 (lagged win percentage and market expected wins, the shares of opening-day ",
+         "coaches new to the franchise and promoted, and the previous season's cap share, roster ",
+         "mean log draft pick, mean age and roster Black share) and the role-holder regressors of ",
+         "Table 19, except that the coordinator columns (1 and 6) omit the OC and DC regressors ",
+         "and the front-office column (4) omits the GM regressor, because those persons are ",
+         "members of the group whose share enters (row \\textit{{Role-holder regressors}})."),
+    glue("Team-seasons with no listed member of a group at the opening have a missing share and ",
+         "drop from that column, so the number of observations differs across columns. ",
+         "Team-seasons with a missing share: {MissText}{PersYearsText}."),
     NotePredShort, NoteCluster, NoteWcb),
   name = "table-20-staff-diversity-by-group", measure = measure, design = "team",
   add_rows = Rows20)
@@ -897,7 +1130,7 @@ FigCoef <- ggplot(FigData, aes(x = estimate, y = Group, colour = Spec)) +
                                  "Coaching groups jointly" = "#c0392b")) +
   labs(x = "Effect on win percentage of a staff group's Black share (0 to 1)", y = NULL,
        colour = NULL,
-       title = "Staff-group racial composition and win percentage",
+       title = "Opening-day staff-group racial composition and win percentage",
        subtitle = paste0("Thin bars: 95% cluster-robust CI; shaded bars: wild cluster bootstrap CI",
                          switch(measure, hand = "",
                                 predicted = "\nPredicted race: expected shares (mean member P(Black))",
@@ -922,11 +1155,13 @@ QBWeek1 <- TeamGameReg |>
                                   log(coalesce(as.numeric(DraftPick), 300)), NA_real_)) |>
   select(franchise_id, season, QBWeek1LogPick)
 
-# Unit sample: FullStaffObserved franchise-seasons, one row per unit;
-# outcomes are signed so that higher = better for both units. Team-level
-# factors that load on one unit enter as unit interactions: the opening-day
-# QB's race and draft pick (offense rows) and the head coach's race
-# (defense rows; its offense-row level is absorbed by franchise x season FE)
+# Unit sample: FullStaffObserved franchise-seasons with the opening snapshot,
+# one row per unit; outcomes are signed so that higher = better for both
+# units. The unit coordinator, the unit coaches' share and the head coach
+# are the opening-day ones (Pre). Team-level factors that load on one unit
+# enter as unit interactions: the opening-day QB's race and draft pick
+# (offense rows) and the opening-day head coach's race (defense rows; its
+# offense-row level is absorbed by franchise x season FE).
 # Built by a function of the race measure, so that table 29 can rebuild it.
 # Unit x season FE also enter as explicit UnitDefense x season dummies, one
 # per season (franchise x season FE absorb the offense level of each season),
@@ -934,33 +1169,33 @@ QBWeek1 <- TeamGameReg |>
 # Unit^season, but avoid aliased dummies in the lm refit. The displayed
 # models use franchise_id^season + Unit^season FE, so the within R^2 is
 # meaningful; the coefficients are identical (checked below).
-UnitSeasons <- sort(unique(UnitSeasonRaw$season[UnitSeasonRaw$FullStaffObserved]))
+UnitSeasons <- sort(unique(UnitSeasonRaw$season[UnitSeasonRaw$FullStaffObserved &
+                                                  coalesce(UnitSeasonRaw$OpeningStaffObserved, FALSE)]))
 UnitSeasonDummies <- paste0("DefenseX", UnitSeasons)
 prep_unit_season <- function(unit_raw, team_all, m) {
   d <- apply_race_measure(unit_raw, m) |>
-    filter(FullStaffObserved) |>
-    left_join(team_all |> select(franchise_id, season, QBWeek1Black, QBWeek1PriorBlackPred,
-                                 HCPriorBlackPred),
+    filter(FullStaffObserved, OpeningStaffObserved) |>
+    left_join(team_all |> select(franchise_id, season, QBWeek1Black, QBWeek1PriorBlackPred),
               by = c("franchise_id", "season")) |>
     left_join(QBWeek1, by = c("franchise_id", "season")) |>
-    mutate(UnitCoordBlackRaw = UnitCoordBlack) |>
-    fill_missing(c("UnitCoordBlack", "ShareBlackUnitRoster", "ShareBlackUnitRosterSnapW",
-                   "QBWeek1Black", "QBWeek1LogPick", "HCBlack",
+    mutate(UnitCoordBlackPreRaw = UnitCoordBlackPre) |>
+    fill_missing(c("UnitCoordBlackPre", "ShareBlackUnitRoster", "ShareBlackUnitRosterSnapW",
+                   "QBWeek1Black", "QBWeek1LogPick", "HCBlackPre",
                    # model-only priors (prior controls), zero-filled the same way
-                   "UnitCoordPriorBlackPred", "MeanPriorBlackPredUnitRoster",
+                   "UnitCoordPriorBlackPredPre", "MeanPriorBlackPredUnitRoster",
                    "MeanPriorBlackPredUnitRosterSnapW", "QBWeek1PriorBlackPred",
-                   "HCPriorBlackPred")) |>
+                   "HCPriorBlackPredPre")) |>
     mutate(UnitOffense = 1L - UnitDefense,
            OffQBWeek1Black = UnitOffense * QBWeek1Black,
            OffQBWeek1BlackMiss = UnitOffense * QBWeek1BlackMiss,
            OffQBWeek1LogPick = UnitOffense * QBWeek1LogPick,
            OffQBWeek1LogPickMiss = UnitOffense * QBWeek1LogPickMiss,
-           DefHCBlack = UnitDefense * HCBlack,
-           DefHCBlackMiss = UnitDefense * HCBlackMiss,
+           DefHCBlackPre = UnitDefense * HCBlackPre,
+           DefHCBlackPreMiss = UnitDefense * HCBlackPreMiss,
            OffQBWeek1PriorBlackPred = UnitOffense * QBWeek1PriorBlackPred,
            OffQBWeek1PriorBlackPredMiss = UnitOffense * QBWeek1PriorBlackPredMiss,
-           DefHCPriorBlackPred = UnitDefense * HCPriorBlackPred,
-           DefHCPriorBlackPredMiss = UnitDefense * HCPriorBlackPredMiss)
+           DefHCPriorBlackPredPre = UnitDefense * HCPriorBlackPredPre,
+           DefHCPriorBlackPredPreMiss = UnitDefense * HCPriorBlackPredPreMiss)
   for (i in seq_along(UnitSeasonDummies)) {
     d[[UnitSeasonDummies[i]]] <- d$UnitDefense * (d$season == UnitSeasons[i])
   }
@@ -972,9 +1207,9 @@ message(glue("14: opening-day QB draft pick missing for ",
              "{sum(UnitSeason$QBWeek1LogPickMiss[UnitSeason$UnitOffense == 1])} offense unit-seasons; ",
              "QB race missing for {sum(UnitSeason$QBWeek1BlackMiss[UnitSeason$UnitOffense == 1])}"))
 
-UnitBase <- c("UnitCoordBlack", "UnitCoordBlackMiss", "ShareBlackUnitCoaches")
+UnitBase <- c("UnitCoordBlackPre", "UnitCoordBlackPreMiss", "ShareBlackUnitCoachesPre")
 UnitTeamSide <- c("OffQBWeek1Black", "OffQBWeek1BlackMiss", "OffQBWeek1LogPick",
-                  "OffQBWeek1LogPickMiss", "DefHCBlack", "DefHCBlackMiss")
+                  "OffQBWeek1LogPickMiss", "DefHCBlackPre", "DefHCBlackPreMiss")
 UnitHeadcount <- c("UnitMeanLogPickRoster", "UnitMeanAgeRoster", "ShareBlackUnitRoster",
                    "ShareBlackUnitRosterMiss", UnitTeamSide)
 UnitSnap <- c("UnitMeanLogPickSnapW", "UnitMeanAgeSnapW", "UnitCapShare",
@@ -1010,14 +1245,14 @@ for (nm in names(Models21)) {
 # the rest when a test takes more than about a minute (lm refit with ~600
 # franchise-season dummies)
 T0Unit <- Sys.time()
-Wcb21First <- wcb(Models21Wcb[["(1)"]], "UnitCoordBlack", "(1)", "table-21")
+Wcb21First <- wcb(Models21Wcb[["(1)"]], "UnitCoordBlackPre", "(1)", "table-21")
 SecsUnitTest <- as.numeric(difftime(Sys.time(), T0Unit, units = "secs"))
 message(glue("14: one unit-design WCB test took {round(SecsUnitTest, 1)}s"))
 UnitWcbRun <- SecsUnitTest <= 60
 Wcb21 <- if (UnitWcbRun) {
   bind_rows(Wcb21First,
-            wcb(Models21Wcb[["(1)"]], "ShareBlackUnitCoaches", "(1)", "table-21"),
-            wcb_all(Models21Wcb[-1], c("UnitCoordBlack", "ShareBlackUnitCoaches"), "table-21"))
+            wcb(Models21Wcb[["(1)"]], "ShareBlackUnitCoachesPre", "(1)", "table-21"),
+            wcb_all(Models21Wcb[-1], c("UnitCoordBlackPre", "ShareBlackUnitCoachesPre"), "table-21"))
 } else {
   Wcb21First
 }
@@ -1030,13 +1265,13 @@ unit_mean <- function(m, defense) {
   fmt14(mean(d[[as.character(m$fml[[2]])]][d$UnitDefense == defense]), 3)
 }
 
-CoefMap21 <- c(UnitCoordBlack = role_lab("unit coordinator"),
-               ShareBlackUnitCoaches = share_lab("Unit coaches'"),
+CoefMap21 <- c(UnitCoordBlackPre = role_lab("unit coordinator"),
+               ShareBlackUnitCoachesPre = share_lab("Unit coaches'"),
                ShareBlackUnitRoster = "Unit roster share Black (headcount)",
                ShareBlackUnitRosterSnapW = "Unit roster share Black (snap-weighted)",
                OffQBWeek1Black = paste("Offense $\\times$", role_lab("opening-day QB")),
                OffQBWeek1LogPick = "Offense $\\times$ opening-day QB log draft pick",
-               DefHCBlack = paste("Defense $\\times$", role_lab("head coach")),
+               DefHCBlackPre = paste("Defense $\\times$", role_lab("head coach")),
                UnitMeanLogPickRoster = "Unit mean log draft pick (headcount)",
                UnitMeanLogPickSnapW = "Unit mean log draft pick (snap-weighted)",
                UnitCapShare = "Unit cap share",
@@ -1054,8 +1289,8 @@ Rows21 <- bind_rows(
   model_row(Models21, "Model-only prior controls", \(m) yes_no14(m$PriorUsed)),
   model_row(Models21, "Mean of outcome, offense", \(m) unit_mean(m, 0L)),
   model_row(Models21, "Mean of outcome, defense", \(m) unit_mean(m, 1L)),
-  if (UnitWcbRun) wcb_rows(Wcb21, Models21, c(UnitCoordBlack = "unit coordinator",
-                                               ShareBlackUnitCoaches = "unit coaches' share")))
+  if (UnitWcbRun) wcb_rows(Wcb21, Models21, c(UnitCoordBlackPre = "unit coordinator",
+                                               ShareBlackUnitCoachesPre = "unit coaches' share")))
 
 NoteWcb21 <- if (UnitWcbRun) {
   glue("{NoteWcb} The bootstrap refits each model by OLS with franchise $\\times$ season dummies ",
@@ -1078,15 +1313,17 @@ write_model_table(
          "better for both units (defense: minus the opponent's EPA per play or success rate). ",
          "Because the two units' outcomes have opposite-signed levels, the outcome mean is ",
          "reported by unit."),
-    glue("The unit coordinator is the OC for the offense and the DC for the defense; it is ",
-         "zero-filled with a missing indicator when no coordinator is listed",
+    glue("The unit coordinator is the opening-day OC for the offense and DC for the defense; it is ",
+         "zero-filled with a missing indicator when no coordinator is listed at the opening",
          if (IsPredMeasure) "" else " or his race is unknown",
-         " ({sum(is.na(UnitSeason$UnitCoordBlackRaw))} unit-seasons). Unit coaches are the ",
-         "coordinator and the unit's position and assistant coaches.",
+         " ({sum(is.na(UnitSeason$UnitCoordBlackPreRaw))} unit-seasons). Unit coaches are the ",
+         "coordinator and the unit's position and assistant coaches listed in the opening-day ",
+         "snapshot; the head coach is the opening-day head coach.",
          if (UsePrior) paste(" Under the predicted measure every column controls for the model-only",
                              "priors matched to each race regressor: the unit coordinator's prior,",
                              "the unit coaches' and unit roster's mean priors, and the opening-day",
                              "QB's and head coach's priors in their unit interactions.") else ""),
+    NoteTiming,
     "The design compares a franchise-season's offense with its defense. Franchise $\\times$ season FE absorb factors that shift both units equally; unit $\\times$ season FE absorb league-wide offense-defense differences in each season. Factors that load on one unit are controlled through unit interactions in columns (2), (3), (5) and (6): the opening-day starting QB's race and log draft pick (undrafted = log 300) interacted with the offense indicator, and the head coach's race interacted with the defense indicator (each zero-filled with an interacted missing indicator). The head coach's side of the ball is not observed, and QB quality is proxied only by draft position, so the differential influence of the play-calling head coach and of in-season QB changes remains a threat. The identifying assumption is that, within a franchise-season, the racial composition of one unit's staff relative to the other's is uncorrelated with the unit's unobserved quality, conditional on these interactions and the unit's roster controls (mean log draft pick, mean age, cap share in columns 3 and 6, the roster's Black share and the unit's lagged outcome).",
     NotePredShort, NoteCluster, NoteWcb21),
   name = "table-21-staff-diversity-unit-stacked", measure = measure, design = "team",
@@ -1167,27 +1404,101 @@ CasesDropped <- HireLog |> filter(Type %in% c("return", "stand-in"))
 # (a function of the measure's team-season panel, reused by table 29).
 # Under a predicted measure HCBlack is the hired coach's P(Black), and its
 # prior control is the hired coach's model-only prior (HCWeek1PriorBlackPred,
-# stored as HCPriorBlackPred so that add_prior() finds it). HCDoc is the
-# hired coach's documented race (documented_black_any), a validation
-# regressor: documentation is mostly positive (public sources state that a
-# person is Black far more often than that he is white), so a hire without a
-# documented race counts as non-Black (0), as in Table 25; HCDocUndoc flags
-# those hires for the counts.
+# stored as HCPriorBlackPred so that add_prior() finds it; the union season
+# head coach's zero-fill indicators are dropped so that no stale indicator
+# enters). HCDoc is the hired coach's documented race (documented_black_any:
+# Black alone or in combination), a validation regressor: documentation is
+# mostly positive (public sources state that a person is Black far more
+# often than that he is white), so a hire without a documented race counts
+# as non-Black (0), as in Table 25, under that explicit ascertainment
+# assumption; HCDocUndoc flags those hires for the counts. The calibration
+# check (below) uses only hires with a known documented label: HCDocKnown
+# (Black alone or in combination) and HCDocAloneKnown (non-Hispanic Black
+# alone, the target of the primary prediction; 0 for a documented other
+# race, incl. multiracial and Hispanic Black), both NA when undocumented.
 build_hires <- function(team_all) {
   team_all |>
     inner_join(HireFlags |> filter(Hire == 1) |>
                  select(franchise_id, season, RetainedInterim, FirstHC),
                by = c("franchise_id", "season")) |>
-    left_join(select(StaffDoc, FirstHC = PersonId, HCDoc = DocBlack), by = "FirstHC") |>
+    left_join(select(StaffDoc, FirstHC = PersonId, HCDocKnown = DocBlack,
+                     HCDocAloneKnown = DocBlackAlone),
+              by = "FirstHC") |>
+    select(-any_of(c("HCBlackMiss", "HCPriorBlackPredMiss"))) |>
     mutate(HCBlack = HCWeek1Black, HCPriorBlackPred = HCWeek1PriorBlackPred,
-           HCDocUndoc = as.integer(is.na(HCDoc)),
-           HCDoc = coalesce(as.numeric(HCDoc), 0))
+           HCDocUndoc = as.integer(is.na(HCDocKnown)),
+           HCDoc = coalesce(as.numeric(HCDocKnown), 0),
+           HCDocAlone = coalesce(as.numeric(HCDocAloneKnown), 0))
 }
 Hires <- build_hires(TeamSeasonAll)
 Hires0725 <- filter(Hires, season >= 2007)
 NFirstNotSeasonHC <- sum(Hires$FirstHC != Hires$HCPersonId)
 message(glue("14: {nrow(Hires)} hires; the first-game HC is not the season HC in {NFirstNotSeasonHC}; ",
-             "no documented race for {sum(Hires$HCDocUndoc)}"))
+             "no documented race for {sum(Hires$HCDocUndoc)}; documented Black alone or in ",
+             "combination {sum(Hires$HCDoc == 1)}, non-Hispanic Black alone {sum(Hires$HCDocAlone == 1)}"))
+
+# Exported hire candidates (primary-measure run; the content does not depend
+# on the measure): every between-season change and retained interim with the
+# hire classification, the hired (first-game) coach's race measures and
+# documented labels, the inherited situation and the season outcomes, for
+# reuse by the coach-policy programs (16/17), which need not source this
+# script. Person-level race fields stay in the ignored analysis directory.
+if (is_primary_measure(measure)) {
+  HCHiresOut <- TeamSeasonRaw |>
+    inner_join(HireLog |>
+                 select(franchise_id, season, FirstHC, FirstHCName, BetweenHire, RetainedInterim,
+                        ReturnHire, StandIn, Hire, HireType = Type),
+               by = c("franchise_id", "season")) |>
+    left_join(select(StaffDoc, FirstHC = PersonId, HCDocBlackAny = DocBlack,
+                     HCDocBlackAlone = DocBlackAlone),
+              by = "FirstHC") |>
+    transmute(franchise_id, season, HeadCoachPersonId = FirstHC, HeadCoachName = FirstHCName,
+              SeasonHCPersonId = HCPersonId, FirstGameHCIsSeasonHC = as.integer(FirstHC == HCPersonId),
+              BetweenHire, RetainedInterim, ReturnHire, StandIn, Hire, HireType,
+              HCIncumbentSpellId, HCIncumbentKey, HCIncumbentSource, InSeasonHCChange,
+              HCBlackHand = HCWeek1BlackHand, HCBlackProv = HCWeek1BlackProv,
+              HCBlackPred = HCWeek1BlackPred, HCBlackPredDoc = HCWeek1BlackPredDoc,
+              HCPriorBlackPred = HCWeek1PriorBlackPred,
+              HCDocBlackAny, HCDocBlackAlone, HCDocUndocumented = as.integer(is.na(HCDocBlackAny)),
+              WinPct, LagWinPct, LagExpectedWins, WinsOverExpected, DeltaWinPct, FullStaffObserved,
+              across(any_of(c("RooneyEra", "PolicyTimingConvention")) | matches("^Rooney[A-Z]|^OffensiveAssistant|^CoordinatorMobility|^CoachingFellowship")))
+  HCHiresLabels <- c(
+    franchise_id = "Franchise", season = "Season",
+    HeadCoachPersonId = "Hired (first regular-season game) head coach: staff person_id",
+    HeadCoachName = "Hired head coach's name (nflverse)",
+    SeasonHCPersonId = "Season head coach (most REG games): staff person_id",
+    FirstGameHCIsSeasonHC = "1 if the first-game head coach is the season head coach",
+    BetweenHire = "First-game HC differs from the previous season's last-game HC",
+    RetainedInterim = "First-game HC took over during the previous season and was kept",
+    ReturnHire = "Hired coach coached the franchise in one of the two previous seasons (excluded)",
+    StandIn = "Previous HC returns the next season: stand-in season (excluded)",
+    Hire = "In the Table 22 hire sample (between-season or retained interim, not return/stand-in)",
+    HireType = "between-season, retained interim, return or stand-in",
+    HCIncumbentSpellId = "Opening-day incumbent head coach's franchise-run key (02)",
+    HCIncumbentKey = "Opening-day incumbent head coach key (02)",
+    HCIncumbentSource = "How the incumbent was identified (02: opening_snapshot_non_interim, first_reg_game, first_reg_game_opening_stale)",
+    InSeasonHCChange = "More than one head coach in the season's REG games",
+    HCBlackHand = "Hired coach: hand-coded Black (alone or in combination)",
+    HCBlackProv = "Hired coach: Wikipedia category flag (positive-only)",
+    HCBlackPred = "Hired coach: model-only P(non-Hispanic Black alone)",
+    HCBlackPredDoc = "Hired coach: documented race else model P(Black) (preddoc)",
+    HCPriorBlackPred = "Hired coach: model-only prior P(Black) (first role, unit, era)",
+    HCDocBlackAny = "Hired coach: documented Black alone or in combination (NA undocumented)",
+    HCDocBlackAlone = "Hired coach: documented non-Hispanic Black alone (NA undocumented)",
+    HCDocUndocumented = "1 if no documented race",
+    WinPct = "Regular-season win percentage", LagWinPct = "Previous season's win percentage",
+    LagExpectedWins = "Previous season's market expected wins",
+    WinsOverExpected = "Wins minus market expected wins", DeltaWinPct = "WinPct - LagWinPct",
+    FullStaffObserved = "Template era with all snapshots parsed (02)",
+    RooneyEra = "Rooney Rule era by hiring cycle (00-policy-functions)",
+    PolicyTimingConvention = "Policy flag timing convention (00-policy-functions)")
+  PolicyCols <- setdiff(grep("^Rooney[A-Z]|^OffensiveAssistant|^CoordinatorMobility|^CoachingFellowship",
+                             names(HCHiresOut), value = TRUE), names(HCHiresLabels))
+  HCHiresLabels <- c(HCHiresLabels,
+                     set_names(paste(PolicyCols, "policy indicator (00-policy-functions)"), PolicyCols))
+  write_sample(HCHiresOut, "analysis_hc_hires", key = c("franchise_id", "season"),
+               labels = HCHiresLabels)
+}
 
 # Columns (2), (3), (5), (6): outcomes with the lagged win percentage as a
 # control. Columns (1) and (4): DeltaWinPct = WinPct - LagWinPct with only
@@ -1239,22 +1550,50 @@ Select22Txt <- map_chr(Select22, \(m) glue("{fmt14(coef(m)[['HCBlack']], 3)} ",
                                            "(SE {fmt14(se(m)[['HCBlack']], 3)})"))
 print(Select22Txt)
 
-# Calibration of HCBlack among the column-(2) hires: slope of the
-# documented race (undocumented = 0) on HCBlack, season FE (a slope of one
-# means HCBlack is calibrated for documented Black race)
-Calib22 <- feols(HCDoc ~ HCBlack | season, data = Models22[["(2)"]]$EstData,
-                 vcov = ~franchise_id, notes = FALSE)
-Calib22Txt <- glue("{fmt14(coef(Calib22)[['HCBlack']], 3)} (SE {fmt14(se(Calib22)[['HCBlack']], 3)}, ",
-                   "{nobs(Calib22)} hires)")
-print(Calib22Txt)
+# Calibration of HCBlack among the documented hires of column (2): slope of
+# the known documented label on HCBlack, season FE, on hires with a
+# documented race only (undocumented hires are excluded, not coded 0; a
+# slope of one means HCBlack is calibrated for the label within that
+# sample). Two labels: the matched one (documented non-Hispanic Black alone,
+# the target of the primary prediction; a documented other race, incl.
+# multiracial and Hispanic Black, is 0) and the broader one of Table 25
+# (Black alone or in combination), under which the slope need not be one.
+# Documentation depends on fame, so the documented hires are a selected
+# sample. The statistic is not reported when fewer than MinCalibClass hires
+# fall in either class of the label.
+MinCalibClass <- 5L
+calib22 <- function(doc) {
+  d <- Models22[["(2)"]]$EstData |> filter(!is.na(.data[[doc]]))
+  n1 <- sum(d[[doc]] == 1)
+  n0 <- sum(d[[doc]] == 0)
+  if (min(n1, n0) < MinCalibClass) {
+    return(glue("not estimated ({nobs_txt(nrow(d), n1)}: too few hires in one class)"))
+  }
+  m <- feols(as.formula(paste(doc, "~ HCBlack | season")), data = d,
+             vcov = ~franchise_id, notes = FALSE)
+  glue("{fmt14(coef(m)[['HCBlack']], 3)} (SE {fmt14(se(m)[['HCBlack']], 3)}; {nobs_txt(nobs(m), n1)})")
+}
+nobs_txt <- function(n, n1) glue("{n} documented hires, {n1} with the label")
+Calib22AloneTxt <- calib22("HCDocAloneKnown")
+Calib22Txt <- calib22("HCDocKnown")
+NDocHires22 <- sum(!is.na(Models22[["(2)"]]$EstData$HCDocKnown))
+print(c(alone = Calib22AloneTxt, any = Calib22Txt))
 
-# Randomization inference: permute the race regressor (HCBlack, or HCDoc in
-# column 7) across hires within season and re-estimate (Frisch-Waugh:
-# residualize on the other regressors and the season dummies once, then only
-# the permuted treatment). Two-sided p-value on the coefficient, counting the
-# observed assignment.
-RiReps <- 9999
-ri_pvalue <- function(m, param = "HCBlack", reps = RiReps, seed = 20261002) {
+# Permutation p-value, a conditional-exchangeability sensitivity (NOT
+# design-based randomization inference: the race of a hire is chosen by the
+# franchise, no assignment mechanism is known, and the permutation
+# distribution is valid only under the assumption that, within a season,
+# the race regressor is exchangeable across hires given the other
+# regressors). It is reported because the wild cluster bootstrap can be
+# mis-sized with few effectively treated clusters, and it ignores the
+# franchise clustering (hires of one franchise in different seasons are
+# permuted independently). Mechanics: permute the race regressor (HCBlack,
+# or HCDoc in column 7) across hires within season and re-estimate
+# (Frisch-Waugh: residualize on the other regressors and the season dummies
+# once, then only the permuted regressor). Two-sided p-value on the
+# coefficient, counting the observed assignment.
+PermReps <- 9999
+perm_pvalue <- function(m, param = "HCBlack", reps = PermReps, seed = 20261002) {
   d <- m$EstData
   y <- d[[as.character(m$fml[[2]])]]
   others <- setdiff(names(coef(m)), param)
@@ -1273,9 +1612,9 @@ ri_pvalue <- function(m, param = "HCBlack", reps = RiReps, seed = 20261002) {
   })
   (1 + sum(abs(bperm) >= abs(b0) - 1e-12)) / (reps + 1)
 }
-RiParam22 <- map_chr(Models22, \(m) if ("HCBlack" %in% names(coef(m))) "HCBlack" else "HCDoc")
-RiP22 <- map2_dbl(Models22, RiParam22, \(m, p) ri_pvalue(m, p))
-print(round(RiP22, 3))
+PermParam22 <- map_chr(Models22, \(m) if ("HCBlack" %in% names(coef(m))) "HCBlack" else "HCDoc")
+PermP22 <- map2_dbl(Models22, PermParam22, \(m, p) perm_pvalue(m, p))
+print(round(PermP22, 3))
 
 # Black hires, franchises with a Black hire and residual degrees of freedom.
 # Under a predicted measure HCBlack is a probability: the expected number of
@@ -1286,7 +1625,9 @@ ExpBlackHires <- map_dbl(Models22, \(m) sum(m$EstData$HCBlack, na.rm = TRUE))
 NBlackHires <- map_int(Models22, \(m) sum(m$EstData$HCBlack >= 0.5, na.rm = TRUE))
 NBlackFranchises <- map_int(Models22, \(m) n_distinct(m$EstData$franchise_id[coalesce(m$EstData$HCBlack >= 0.5, FALSE)]))
 NDocBlackHires <- map_int(Models22, \(m) sum(m$EstData$HCDoc == 1))
-print(rbind(expected = round(ExpBlackHires, 1), p_ge_half = NBlackHires, documented = NDocBlackHires))
+NDocBlackAloneHires <- map_int(Models22, \(m) sum(m$EstData$HCDocAlone == 1))
+print(rbind(expected = round(ExpBlackHires, 1), p_ge_half = NBlackHires,
+            documented_any = NDocBlackHires, documented_alone = NDocBlackAloneHires))
 BlackHireRows <- if (IsPredMeasure) {
   bind_rows(
     model_row(Models22, "Expected Black hires (sum of P(Black))", \(m) fmt14(sum(m$EstData$HCBlack, na.rm = TRUE), 1)),
@@ -1308,7 +1649,8 @@ Rows22 <- bind_rows(
   model_row(Models22, "Hires", \(m) as.character(nobs(m))),
   model_row(Models22, "Retained interim hires", \(m) as.character(sum(m$EstData$RetainedInterim))),
   BlackHireRows,
-  model_row(Models22, "Documented Black hires", \(m) as.character(sum(m$EstData$HCDoc == 1))),
+  model_row(Models22, "Documented Black hires (alone or in combination)", \(m) as.character(sum(m$EstData$HCDoc == 1))),
+  model_row(Models22, "Documented non-Hispanic Black alone", \(m) as.character(sum(m$EstData$HCDocAlone == 1))),
   model_row(Models22, "Model-only prior control", \(m) yes_no14(m$PriorUsed && "HCBlack" %in% names(coef(m)))),
   model_row(Models22, "Mean of outcome", outcome_mean),
   model_row(Models22, "Residual degrees of freedom",
@@ -1316,14 +1658,14 @@ Rows22 <- bind_rows(
   tibble(term = "$p$-value, lagged win \\% coefficient = 1") |>
     bind_cols(as_tibble(as.list(set_names(fmt_p14(LagOneP), Cols22)))),
   wcb_rows(Wcb22, Models22, c(HCBlack = "new head coach", HCDoc = "documented race")),
-  tibble(term = "Randomization inference $p$-value") |>
-    bind_cols(as_tibble(as.list(set_names(fmt_p(RiP22), Cols22)))))
+  tibble(term = "Permutation $p$-value (exchangeability sensitivity)") |>
+    bind_cols(as_tibble(as.list(set_names(fmt_p(PermP22), Cols22)))))
 # First hire season actually used (LagWinPct is NA in 1999)
 FirstHire22 <- as.character(min(Models22[["(2)"]]$EstData$season))
 for (cl in setdiff(Cols22, c("(4)", "(5)", "(6)"))) Rows22[[cl]][1] <- FirstHire22
 
 CoefMap22 <- c(HCBlack = role_lab("new head coach"),
-               HCDoc = "Documented Black new head coach",
+               HCDoc = "Documented Black new head coach (alone or in combination)",
                HCPriorBlackPred = "New head coach's prior P(Black)",
                RetainedInterim = "Retained interim coach",
                LagWinPct = "Lagged win percentage",
@@ -1347,7 +1689,9 @@ write_model_table(
     glue("The new head coach's race is that of the first-game head coach (the hired coach), not ",
          "of the coach with the most games (they differ for {NFirstNotSeasonHC} of the hires); it is not ",
          "zero-filled, so hires with unknown race are excluded",
-         if (IsPredMeasure) " (under the predicted measure every hire has a prediction)." else "."),
+         if (IsPredMeasure) " (under the predicted measure every hire has a prediction)." else ".",
+         " No other staff measure enters, so the design does not depend on the timing of the ",
+         "staff snapshots."),
     glue("The outcomes are the win percentage (columns 2, 5, 7 and 8), wins minus market expected ",
          "wins (3 and 6) and the change in win percentage from the previous season (1 and 4). ",
          "Columns (1) and (4) control only for lagged market expected wins, which restricts the ",
@@ -1358,43 +1702,65 @@ write_model_table(
          else "Columns (2) and (5), which leave the coefficient free, are the headline specifications."),
     "Pre-game betting lines price the new hire, so columns (3) and (6) test whether the market misprices Black hires, not the total effect of the hire's race.",
     "Season FE are used rather than Rooney Rule era FE because the residual degrees of freedom remain ample (bottom panel). The identifying assumption is that, conditional on the inherited situation (lagged win percentage and market expected wins) and the season, the new head coach's race is unrelated to unobserved determinants of the team's subsequent performance.",
-    glue("Columns (7) and (8) use the hired coach's documented race (1 when a public source states ",
-         "that he is Black; documentation is mostly positive, so the ",
+    glue("Columns (7) and (8) use the hired coach's documented race, 1 when a public source states ",
+         "that he is Black, alone or in combination with another race (the label of Table 25); ",
+         "under the explicit ascertainment assumption that documentation is positive-only (a Black ",
+         "head coach is documented as such), the ",
          "{sum(Models22[['(7)']]$EstData$HCDocUndoc)} hires without a documented race count as ",
-         "non-Black, as in Table 25), alone and jointly with the column-(2) regressor, as a check on ",
-         "the race measure."),
+         "non-Black, as in Table 25; this is a documented-positive versus all-other comparison, not ",
+         "Black versus white. The bottom panel also counts the hires documented as ",
+         "non-Hispanic Black alone, the label that matches the predicted measure. The documented ",
+         "regressor enters alone and jointly with the column-(2) regressor, as a check on the race ",
+         "measure."),
     if (IsModelPred) {
       glue("Under the predicted measure the new head coach's race is his model-only probability of ",
-           "being Black, and every column with it controls for his model-only prior (first role, unit and ",
-           "first-season era). Regression calibration reads the coefficient as a race effect only if ",
-           "the information behind the prediction (names, hometown county and the prior's ",
-           "covariates) is unrelated to performance given race and the controls. Among the ",
-           "hires of column (2), the slope of documented race on P(Black) (season FE) is ",
-           "{Calib22Txt}. If the P(Black) coefficient survives conditioning on documented race ",
-           "(column 8) while the documented-race coefficient does not, it rests on variation in names ",
-           "and hometowns unrelated to race, and it is not a race effect. The hire sample contains an expected ",
-           "{fmt14(ExpBlackHires[['(2)']], 1)} Black hires in columns (1)-(3) and ",
+           "being non-Hispanic Black alone, and every column with it controls for his model-only prior ",
+           "(first role, unit and first-season era). Regression calibration reads the coefficient as ",
+           "a race effect only if the information behind the prediction (names, hometown county and ",
+           "the prior's covariates) is unrelated to performance given race and the controls. ",
+           "Calibration check on the {NDocHires22} column-(2) hires with a documented race (the ",
+           "undocumented are excluded here, not coded 0): the slope of the matched documented label ",
+           "(non-Hispanic Black alone; a documented other race, incl. multiracial, is 0) on P(Black) ",
+           "with season FE is {Calib22AloneTxt}, and the slope of the broader label (Black alone or ",
+           "in combination) is {Calib22Txt}; a slope of one under the matched label is the ",
+           "calibration benchmark, and the broad label need not reach it. Because documentation ",
+           "depends on fame, the documented hires are a selected sample and this check does not ",
+           "transfer to the undocumented hires; it is a different sample and target from the ",
+           "columns (7)-(8) regressor. ",
+           "If the P(Black) coefficient survives conditioning on documented race (column 8) ",
+           "while the documented-race coefficient does not, it rests on variation in names and ",
+           "hometowns unrelated to race, and it is not a race effect. The hire sample contains an ",
+           "expected {fmt14(ExpBlackHires[['(2)']], 1)} Black hires in columns (1)-(3) and ",
            "{fmt14(ExpBlackHires[['(5)']], 1)} in columns (4)-(6) (sum of P(Black)), and ",
            "{NBlackHires[['(2)']]} and {NBlackHires[['(5)']]} hires with P(Black) $\\geq$ 0.5 at ",
            "{NBlackFranchises[['(2)']]} and {NBlackFranchises[['(5)']]} franchises (descriptive); ",
-           "{NDocBlackHires[['(2)']]} hires in columns (1)-(3) are documented as Black. Table 29 repeats ",
-           "column (2) under the other race measures. ", NoteHCDiag)
+           "{NDocBlackHires[['(2)']]} hires in columns (1)-(3) are documented as Black alone or in ",
+           "combination and {NDocBlackAloneHires[['(2)']]} as non-Hispanic Black alone. Table 29 ",
+           "repeats column (2) under the other race measures. ", NoteHCDiag)
     } else if (IsPredMeasure) {
-      glue("Under the preddoc measure the new head coach's race is 1 or 0 when documented and a model ",
-           "probability otherwise. The hire sample contains an expected ",
-           "{fmt14(ExpBlackHires[['(2)']], 1)} Black hires in columns (1)-(3) and ",
+      glue("Under the preddoc measure the new head coach's race is 1 or 0 when documented (Black ",
+           "alone or in combination) and a model probability otherwise. The hire sample contains an ",
+           "expected {fmt14(ExpBlackHires[['(2)']], 1)} Black hires in columns (1)-(3) and ",
            "{fmt14(ExpBlackHires[['(5)']], 1)} in columns (4)-(6) (sum of the probabilities). ",
-           "Among the hires of column (2), the slope of documented race on the ",
-           "regressor (season FE) is {Calib22Txt}.")
+           "Among the {NDocHires22} column-(2) hires with a documented race (undocumented excluded, ",
+           "a selected sample because documentation depends on fame), the slope of the documented ",
+           "label (Black alone or in combination) on the regressor (season FE) is {Calib22Txt}.")
     } else {
       glue("Power is low: the coefficient is identified from {NBlackHires[['(2)']]} Black hires at ",
            "{NBlackFranchises[['(2)']]} franchises in columns (1)-(3) and {NBlackHires[['(5)']]} at ",
-           "{NBlackFranchises[['(5)']]} franchises in columns (4)-(6) under this race measure.")
+           "{NBlackFranchises[['(5)']]} franchises in columns (4)-(6) under this race measure",
+           if (measure == "hand") " (hand-coded Black alone or in combination)." else " (Wikipedia category flag, positive-only).")
     },
-    glue("With few effectively treated clusters the wild cluster bootstrap can be mis-sized, so the ",
-         "bottom row adds a randomization-inference $p$-value that permutes the race regressor ",
-         "(column 7: documented race) across hires within season, holding the other regressors fixed ",
-         "({format(RiReps, big.mark = ',')} permutations, two-sided, on the coefficient)."),
+    glue("The bottom row is a permutation $p$-value reported as a sensitivity check, not as ",
+         "randomization inference: the race of a hire is chosen by the franchise and no assignment ",
+         "mechanism is known, so the permutation distribution (the race regressor, column 7 the ",
+         "documented race, permuted across hires within season with the other regressors held fixed; ",
+         "{format(PermReps, big.mark = ',')} permutations, two-sided, on the coefficient) is valid ",
+         "only under the assumption that, within a season, the race regressor is exchangeable across ",
+         "hires conditional on the other regressors. It is shown because the wild cluster bootstrap ",
+         "can be mis-sized with few effectively treated clusters; it ignores franchise clustering ",
+         "(a franchise's hires in different seasons are permuted independently) and carries no ",
+         "design-based interpretation."),
     glue("The glass-cliff threat has opposite signs by outcome. If Black head coaches are hired into ",
          "persistently worse situations than the controls capture, the level coefficients are biased ",
          "downward; if the inherited record is transiently good or bad, the change in win percentage ",
@@ -1411,62 +1777,65 @@ write_model_table(
   add_rows = Rows22)
 Estimates <- c(Estimates, list(tidy_terms(Models22, names(CoefMap22)) |>
                                  mutate(table = "table-22") |>
-                                 left_join(tibble(model = names(RiP22), term = RiParam22,
-                                                  p_ri = unname(RiP22)),
+                                 left_join(tibble(model = names(PermP22), term = PermParam22,
+                                                  p_perm_exch = unname(PermP22)),
                                            by = c("model", "term"))))
 
 # ---------------------------------------------------------------------------
 # Table 23: placebo leads and selection on past performance
 # ---------------------------------------------------------------------------
 
-# Columns (1)-(3): current win percentage on current and next-season staff
-# composition (lead shares are not zero-filled; 2025 has no lead). The
-# next-season OC/DC/GM indicators are zero-filled with missing indicators
-# (no listed holder, e.g. no GM title), like the current ones. Columns
-# (4)-(5): lagged win percentage on current composition (selection)
+# Columns (1)-(3): current win percentage on current and next-season
+# opening-day staff composition (lead shares are not zero-filled; 2025 has
+# no lead). The next-season OC/DC/GM regressors are zero-filled with
+# missing indicators (no listed holder at the opening, e.g. no GM title),
+# like the current ones. Columns (4)-(5): lagged win percentage on current
+# composition (selection)
 TeamSeason <- TeamSeason |>
-  mutate(across(c(F1OCBlack, F1DCBlack, F1GMBlack), \(x) x, .names = "{.col}Raw")) |>
-  fill_missing(c("F1OCBlack", "F1DCBlack", "F1GMBlack"))
+  mutate(across(c(F1OCBlackPre, F1DCBlackPre, F1GMBlackPre), \(x) x, .names = "{.col}Raw")) |>
+  fill_missing(c("F1OCBlackPre", "F1DCBlackPre", "F1GMBlackPre"))
 TeamSeason <- TeamSeason |>
-  mutate(across(c(F1OCBlackMiss, F1DCBlackMiss, F1GMBlackMiss),
-                \(x) if_else(is.na(F1ShareBlackCoaches), NA_integer_, x)))
-F1Roles <- c("F1OCBlack", "F1DCBlack", "F1GMBlack", "F1OCBlackMiss", "F1DCBlackMiss",
-             "F1GMBlackMiss")
-F1Groups <- c("F1ShareBlackCoordinators", "F1ShareBlackPositionCoaches", "F1ShareBlackFrontOffice")
+  mutate(across(c(F1OCBlackPreMiss, F1DCBlackPreMiss, F1GMBlackPreMiss),
+                \(x) if_else(is.na(F1ShareBlackCoachesPre), NA_integer_, x)))
+F1Roles <- c("F1OCBlackPre", "F1DCBlackPre", "F1GMBlackPre", "F1OCBlackPreMiss",
+             "F1DCBlackPreMiss", "F1GMBlackPreMiss")
+F1Groups <- c("F1ShareBlackCoordinatorsPre", "F1ShareBlackPositionCoachesPre",
+              "F1ShareBlackFrontOfficePre")
 SelectionRoster <- c("TeamCapShare", "MeanLogPickRoster", "MeanAgeRoster",
                      "ShareBlackRoster", "ShareBlackRosterMiss")
 Spec23 <- list(
-  "(1)" = list(y = "WinPct", rhs = c("ShareBlackCoaches", "F1ShareBlackCoaches",
+  "(1)" = list(y = "WinPct", rhs = c("ShareBlackCoachesPre", "F1ShareBlackCoachesPre",
                                      RoleRhs, Controls4)),
-  "(2)" = list(y = "WinPct", rhs = c("ShareBlackCoaches", "F1ShareBlackCoaches", "F1HCBlack",
+  "(2)" = list(y = "WinPct", rhs = c("ShareBlackCoachesPre", "F1ShareBlackCoachesPre", "F1HCBlackPre",
                                      RoleRhs, Controls4)),
-  "(3)" = list(y = "WinPct", rhs = c("ShareBlackCoaches", "F1ShareBlackCoaches", "F1HCBlack",
+  "(3)" = list(y = "WinPct", rhs = c("ShareBlackCoachesPre", "F1ShareBlackCoachesPre", "F1HCBlackPre",
                                      F1Roles, F1Groups, RoleRhs, Controls4)),
-  "(4)" = list(y = "LagWinPct", rhs = c("ShareBlackCoaches", "HCBlack", "HCBlackMiss")),
-  "(5)" = list(y = "LagWinPct", rhs = c("ShareBlackCoaches", RoleRhs, SelectionRoster)))
+  "(4)" = list(y = "LagWinPct", rhs = c("ShareBlackCoachesPre", "HCBlackPre", "HCBlackPreMiss")),
+  "(5)" = list(y = "LagWinPct", rhs = c("ShareBlackCoachesPre", RoleRhs, SelectionRoster)))
 Models23 <- map(Spec23, \(s) fit14(s$y, s$rhs, "franchise_id + season", TeamSeason,
                                    prior = UsePrior))
 map_int(Models23, nobs) |> print()
 
-Wcb23 <- wcb_all(Models23, c("ShareBlackCoaches", "F1ShareBlackCoaches", "HCBlack", "F1HCBlack"),
-                 "table-23")
+Wcb23 <- wcb_all(Models23, c("ShareBlackCoachesPre", "F1ShareBlackCoachesPre", "HCBlackPre",
+                             "F1HCBlackPre"), "table-23")
 # Joint test of all leads in column (3) (cluster-robust Wald)
-Wald23 <- wald(Models23[["(3)"]], keep = "^F1(ShareBlack|HCBlack$|OCBlack$|DCBlack$|GMBlack$)",
+Wald23 <- wald(Models23[["(3)"]],
+               keep = "^F1(ShareBlack|HCBlackPre$|OCBlackPre$|DCBlackPre$|GMBlackPre$)",
                print = FALSE)
 print(Wald23)
 WcbResults <- c(WcbResults, list(Wcb23))
 
-CoefMap23 <- c(ShareBlackCoaches = share_lab("Coaches'"),
-               F1ShareBlackCoaches = paste0(share_lab("Coaches'"), ", season $t+1$"),
-               HCBlack = role_lab("head coach"),
-               F1HCBlack = paste0(role_lab("head coach"), ", season $t+1$"),
-               F1OCBlack = paste0(role_lab("OC"), ", season $t+1$"),
-               F1DCBlack = paste0(role_lab("DC"), ", season $t+1$"),
-               F1GMBlack = paste0(role_lab("GM"), ", season $t+1$"),
-               F1ShareBlackCoordinators = paste0(share_lab("Coordinators'"), ", $t+1$"),
-               F1ShareBlackPositionCoaches = paste0(share_lab("Position coaches'"), ", $t+1$"),
-               F1ShareBlackFrontOffice = paste0(share_lab("Front office"), ", $t+1$"),
-               CoefMapMain[c("OCBlack", "DCBlack", "GMBlack")])
+CoefMap23 <- c(ShareBlackCoachesPre = share_lab("Coaches'"),
+               F1ShareBlackCoachesPre = paste0(share_lab("Coaches'"), ", season $t+1$"),
+               HCBlackPre = role_lab("head coach"),
+               F1HCBlackPre = paste0(role_lab("head coach"), ", season $t+1$"),
+               F1OCBlackPre = paste0(role_lab("OC"), ", season $t+1$"),
+               F1DCBlackPre = paste0(role_lab("DC"), ", season $t+1$"),
+               F1GMBlackPre = paste0(role_lab("GM"), ", season $t+1$"),
+               F1ShareBlackCoordinatorsPre = paste0(share_lab("Coordinators'"), ", $t+1$"),
+               F1ShareBlackPositionCoachesPre = paste0(share_lab("Position coaches'"), ", $t+1$"),
+               F1ShareBlackFrontOfficePre = paste0(share_lab("Front office"), ", $t+1$"),
+               CoefMapMain[c("OCBlackPre", "DCBlackPre", "GMBlackPre")])
 Rows23 <- bind_rows(
   tibble(term = c("Season FE", "Franchise FE", "Controls (column 4 of Table 19)",
                   "Roster controls")) |>
@@ -1479,9 +1848,9 @@ Rows23 <- bind_rows(
   model_row(Models23, "Mean of outcome", outcome_mean),
   model_row(Models23, "Joint test of all leads, $p$-value",
             \(m) if (identical(m, Models23[["(3)"]])) fmt_p(Wald23$p) else ""),
-  wcb_rows(Wcb23, Models23, c(ShareBlackCoaches = "coaches' share", 
-                              F1ShareBlackCoaches = "coaches' share, $t+1$",
-                              HCBlack = "head coach", F1HCBlack = "head coach, $t+1$")))
+  wcb_rows(Wcb23, Models23, c(ShareBlackCoachesPre = "coaches' share",
+                              F1ShareBlackCoachesPre = "coaches' share, $t+1$",
+                              HCBlackPre = "head coach", F1HCBlackPre = "head coach, $t+1$")))
 
 write_model_table(
   Models23, CoefMap23,
@@ -1490,22 +1859,23 @@ write_model_table(
   notes = c(
     glue("This table includes placebo and selection versions of equation (3) on FullStaffObserved ",
          "team-seasons ({min(TeamSeason$season)}-{max(TeamSeason$season)}). Columns (1)-(3) add ",
-         "next-season staff composition to the column-(4) specification of Table 19: the coaches' ",
-         "Black share (column 1), the head coach's race (column 2), and the OC, DC and GM ",
-         "regressors and the coordinators', position coaches' and front-office shares (column 3; ",
+         "next season's opening-day staff composition to the column-(4) specification of Table 19: ",
+         "the coaches' Black share (column 1), the head coach's race (column 2), and the OC, DC and ",
+         "GM regressors and the coordinators', position coaches' and front-office shares (column 3; ",
          "role regressors zero-filled with missing indicators, group shares not filled). The ",
          "{max(TeamSeason$season)} season and seasons without an observed next season drop out. ",
          "Conditional on current composition, next season's composition should not predict this ",
          "season's performance unless unobserved franchise trends drive both. A nonzero lead is ",
          "also expected if staff are replaced in response to season-$t$ results (firings after bad ",
          "seasons, poaching after good ones) even when current composition has a causal effect, so ",
-         "the test is informative mainly when the leads are small. The joint test of all leads in ",
-         "column (3) is a cluster-robust Wald test."),
-    "Columns (4) and (5) regress the previous season's win percentage on current composition: a nonzero coefficient means that past performance predicts current staff composition (selection), the threat that the lagged-outcome controls address. Column (5) adds the role-holder regressors and season-$t$ roster controls (cap share, mean log draft pick, mean age, roster Black share).",
+         "the test is informative mainly when the leads are small; the next season's opening-day ",
+         "staff is the first one chosen after the season-$t$ results. The joint test of all leads ",
+         "in column (3) is a cluster-robust Wald test."),
+    "Columns (4) and (5) regress the previous season's win percentage on current opening-day composition: a nonzero coefficient means that past performance predicts current staff composition (selection), the threat that the lagged-outcome controls address. Column (5) adds the role-holder regressors and season-$t$ roster controls (cap share, mean log draft pick, mean age, roster Black share).",
     if (UsePrior) glue("Under the predicted measure the next-season shares are controlled by the ",
                        "next-season mean priors; no prior exists for the next-season role holders ",
                        "(HC, OC, DC, GM), so those leads enter without one.") else character(),
-    NotePredShort, NoteRoles, NoteCluster, NoteWcb, NoteGlassCliff),
+    NoteTiming, NotePredShort, NoteRoles, NoteCluster, NoteWcb, NoteGlassCliff),
   name = "table-23-staff-diversity-placebo", measure = measure, design = "team",
   add_rows = Rows23)
 Estimates <- c(Estimates, list(tidy_terms(Models23, names(CoefMap23)) |>
@@ -1533,19 +1903,19 @@ Estimates <- c(Estimates, list(tidy_terms(Models23, names(CoefMap23)) |>
 RunTable29 <- is_primary_measure(measure)
 Cols29 <- tribble(
   ~col,  ~params,
-  "(1)", c("ShareBlackCoaches", "HCBlack"),
-  "(2)", c("ShareBlackCoaches", "HCBlack"),
-  "(3)", "ShareBlackCoaches",
+  "(1)", c("ShareBlackCoachesPre", "HCBlackPre"),
+  "(2)", c("ShareBlackCoachesPre", "HCBlackPre"),
+  "(3)", "ShareBlackCoachesPre",
   "(4)", "HCBlack",
-  "(5)", c("UnitCoordBlack", "ShareBlackUnitCoaches"),
-  "(6)", c("ShareBlackCoaches", "ShareBlackAltCoaches"))
+  "(5)", c("UnitCoordBlackPre", "ShareBlackUnitCoachesPre"),
+  "(6)", c("ShareBlackCoachesPre", "ShareBlackAltCoachesPre"))
 
 # Models (displayed and, for the unit design, the dummy version for the
 # bootstrap) and WCB results of one measure
 fit_measure29 <- function(m) {
   pr <- m == "predicted"
   ts_all <- prep_team_season(TeamSeasonRaw, m)
-  ts <- filter(ts_all, FullStaffObserved)
+  ts <- filter(ts_all, FullStaffObserved, OpeningStaffObserved)
   us <- prep_unit_season(UnitSeasonRaw, ts_all, m)
   hires <- build_hires(ts_all)
   s4 <- Spec19[["(4)"]]
@@ -1580,21 +1950,30 @@ if (RunTable29) {
   Fits29 <- map(set_names(Measures29), fit_measure29)
 
   # Coefficient cells: estimate with stars from the clustered p-value, the
-  # clustered SE in parentheses and the WCB p-value in brackets
+  # clustered SE in parentheses and the WCB p-value in brackets. The hire
+  # column's regressor (HCBlack, the first-game head coach) shares the
+  # head-coach row with the opening-day HCBlackPre of the other columns.
   star29 <- function(p) case_when(p < 0.01 ~ "***", p < 0.05 ~ "**", p < 0.1 ~ "*", TRUE ~ "")
-  Terms29 <- c(ShareBlackCoaches = "Coaches' share Black", HCBlack = "Head coach (new head coach in col. 4)",
-               UnitCoordBlack = "Unit coordinator",
-               ShareBlackUnitCoaches = "Unit coaches' share Black",
-               ShareBlackAltCoaches = "Coaches' share Black, other measure$^a$")
-  Est29 <- imap_dfr(Fits29, \(f, m) tidy_terms(f$models, names(Terms29)) |>
+  Terms29 <- c(ShareBlackCoachesPre = "Coaches' share Black", HCBlackPre = "Head coach (new head coach in col. 4)",
+               UnitCoordBlackPre = "Unit coordinator",
+               ShareBlackUnitCoachesPre = "Unit coaches' share Black",
+               ShareBlackAltCoachesPre = "Coaches' share Black, other measure$^a$")
+  hire_term29 <- function(df) mutate(df, term = if_else(col == "(4)" & term == "HCBlack", "HCBlackPre", term))
+  Est29 <- imap_dfr(Fits29, \(f, m) tidy_terms(f$models, c(names(Terms29), "HCBlack")) |>
                       rename(col = model) |>
+                      hire_term29() |>
                       left_join(select(f$wcb, col, term, p_wcb, wcb_ci_low = ci_low,
-                                       wcb_ci_high = ci_high),
+                                       wcb_ci_high = ci_high) |> hire_term29(),
                                 by = c("col", "term")) |>
                       mutate(measure29 = m))
-  # Keep each column's headline terms
+  # Keep each column's headline terms (the hire column's HCBlack is recoded
+  # to the head-coach row)
+  headline29 <- function(cl) {
+    p <- Cols29$params[[match(cl, Cols29$col)]]
+    if (cl == "(4)") sub("^HCBlack$", "HCBlackPre", p) else p
+  }
   Est29 <- Est29 |>
-    filter(map2_lgl(col, term, \(cl, tm) tm %in% Cols29$params[[match(cl, Cols29$col)]]))
+    filter(map2_lgl(col, term, \(cl, tm) tm %in% headline29(cl)))
   cell29 <- function(m, tm, cl, what) {
     r <- filter(Est29, measure29 == m, term == tm, col == cl)
     if (nrow(r) == 0) return("")
@@ -1639,11 +2018,11 @@ if (RunTable29) {
   # otherwise) and the horse race of column (6)
   get29 <- function(m, cl, tm) filter(Est29, measure29 == m, col == cl, term == tm)
   Share29 <- map_dfr(Measures29, \(m) get29(m, if (m == "predicted") "(2)" else "(1)",
-                                            "ShareBlackCoaches"))
+                                            "ShareBlackCoachesPre"))
   Share29Txt <- paste(glue("{Share29$measure29} {fmt14(Share29$estimate, 3)} ",
                            "(WCB $p$ = {fmt_p(Share29$p_wcb)})"), collapse = "; ")
-  Horse29 <- get29("predicted", "(6)", "ShareBlackCoaches")
-  HorseAlt29 <- get29("predicted", "(6)", "ShareBlackAltCoaches")
+  Horse29 <- get29("predicted", "(6)", "ShareBlackCoachesPre")
+  HorseAlt29 <- get29("predicted", "(6)", "ShareBlackAltCoachesPre")
   Horse29Txt <- glue("In the predicted panel, column (6) gives {fmt14(Horse29$estimate, 3)} ",
                      "(SE {fmt14(Horse29$std_error, 3)}, WCB $p$ = {fmt_p(Horse29$p_wcb)}) for the ",
                      "predicted share and {fmt14(HorseAlt29$estimate, 3)} (SE ",
@@ -1679,7 +2058,9 @@ if (RunTable29) {
          "controls in the predicted panel only, where they are the regression-calibration controls; ",
          "elsewhere the model-only prior is an ordinary predetermined control (under preddoc a ",
          "documented person's probability does not depend on it). Each panel rebuilds the samples ",
-         "and every race regressor (shares, role holders, roster share controls) under its measure."),
+         "and every race regressor (shares, role holders, roster share controls) under its measure. ",
+         "Staff measures are the opening-day ones (preseason snapshot), as in Tables 19-23; the ",
+         "hire column uses the first-game head coach."),
     paste("$^a$ Column (6) adds to column (2) the coaches' share and head-coach regressor of another",
           "probability measure: the documented-race (preddoc) measure in the predicted panel and the",
           "model-only predicted measure in the other panels."),
@@ -1719,19 +2100,29 @@ if (length(PriorMissingLog) > 0) {
 # Tidy estimates (clustered and WCB) and run summary
 # ---------------------------------------------------------------------------
 
-# One row per table x model x term, with the WCB p-value and CI where run
+# One row per table x model x term, with the WCB p-value and CI where run.
+# staff_timing records the timing of the staff regressors: opening_day for
+# the headline tables (Pre names), union for the union columns of table 19d,
+# first_game_hc for the hire design (table 22).
 EstimatesAll <- bind_rows(Estimates) |>
   left_join(bind_rows(WcbResults) |>
               select(table, model, term, p_wcb, wcb_ci_low = ci_low, wcb_ci_high = ci_high,
                      wcb_reps = B),
             by = c("table", "model", "term")) |>
-  mutate(within_sd_coaches = WithinSDCoaches, hand_coverage = HandCoverage)
+  mutate(staff_timing = case_when(
+    table == "table-22" ~ "first_game_hc",
+    grepl("Pre$", term) ~ "opening_day",
+    grepl("^(ShareBlack(Coaches|Coordinators|PositionCoaches|Assistants|FrontOffice|Personnel)$|(HC|OC|DC|GM)Black$|ShareCoaches)", term) ~ "union",
+    grepl("Roster|Week1", term) ~ "roster",
+    TRUE ~ "not_staff"),
+         within_sd_coaches = WithinSDCoaches, hand_coverage = HandCoverage)
 save_estimates(EstimatesAll, "14-staff-diversity", measure)
 
 # Main coefficients and bootstrap timing
 EstimatesAll |>
-  filter(term %in% c("ShareBlackCoaches", "HCBlack", "UnitCoordBlack", "ShareBlackUnitCoaches",
-                     "F1ShareBlackCoaches", names(GroupVars), "BlauBlackCoaches")) |>
+  filter(term %in% c("ShareBlackCoachesPre", "HCBlackPre", "UnitCoordBlackPre",
+                     "ShareBlackUnitCoachesPre", "F1ShareBlackCoachesPre", names(GroupVars),
+                     "BlauBlackCoachesPre", "ShareBlackCoaches", "HCBlack")) |>
   select(table, model, term, estimate, std_error, p_wcb, nobs) |>
   mutate(across(c(estimate, std_error, p_wcb), \(x) round(x, 4))) |>
   print(n = Inf)

@@ -1,0 +1,31 @@
+\begin{table}[H]
+\centering
+\caption{Racial composition of NFL coaching and football operations by policy era: TIDES series \label{tab:rooney-diversity-trends}}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+ & \multicolumn{3}{c}{Pre-rule (1990--2002)} & \multicolumn{3}{c}{Rule (2003--2020)} & \multicolumn{3}{c}{Amended (2021--2024; own panel 2021--2025)} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10}
+Series & Mean & Seasons & Range & Mean & Seasons & Range & Mean & Seasons & Range \\
+\midrule
+Head coaches, Black (\% of teams; count-derived or printed) & 7.7 & 9/13 & 6.0--10.0 & 16.0 & 18/18 & 9.4--21.9 & 11.7 & 4/4 & 9.4--18.8 \\
+Head coaches, people of color (\% of teams; count-derived or printed) & -- & 0/13 & -- & 18.4 & 10/18 & 12.5--25.0 & 20.3 & 4/4 & 15.6--28.1 \\
+Assistant coaches, Black (printed \%) & 26.1 & 8/13 & 23.0--28.0 & 31.5 & 17/18 & 27.7--36.0 & 35.8 & 3/4 & 34.5--36.6 \\
+Assistant coaches, people of color (printed \%) & -- & 0/13 & -- & 34.4 & 16/18 & 31.0--38.0 & 42.5 & 3/4 & 40.9--43.6 \\
+Coordinators, Black (printed count; no total) & 12.0 & 1/13 & 12.0--12.0 & 10.4 & 14/18 & 5.0--15.0 & -- & 0/4 & -- \\
+General managers, Black (printed \%; people of color from 2014 report) & 12.6 & 7/13 & 6.0--17.0 & 15.1 & 17/18 & 6.0--24.1 & 21.4 & 3/4 & 15.6--26.7 \\
+Players, Black (printed \%; reference) & 65.6 & 12/13 & 61.0--68.0 & 66.2 & 15/18 & 57.5--69.7 & 56.0 & 3/4 & 53.5--58.0 \\
+\midrule
+Own opening-day coaches, documented Black (\%, lower bound) & -- & 0/0 & -- & 16.0 & 14/14 & 15.2--17.3 & 14.9 & 5/5 & 13.6--17.7 \\
+Own opening-day coaches, predicted P(Black) mean (\%) & -- & 0/0 & -- & 22.2 & 14/14 & 21.0--25.5 & 29.1 & 5/5 & 27.3--30.5 \\
+\bottomrule
+\end{tabular}
+}
+\par\smallskip
+\begin{minipage}{\textwidth}
+\footnotesize
+\textit{Notes:} Published TIDES Racial and Gender Report Card values (\texttt{data/reference/tides\_nfl\_race\_shares.csv}), one value per group, category, unit and season: the primary TIDES report closest in time to the season, excluding values dated at publication (in-season interim hires); seasons before 2000 come only from the retrospective Appendix II of the 2023 report, whose 1999 and 2000 labels conflict with the contemporaneous 2001 report. Counts and percentages are never mixed within a series: head-coach rows are shares of teams, the printed count over the number of teams (28, 30, 31, 32) where TIDES prints a count and the printed percentage otherwise (2020--2023 and the pre-2003 appendix rows; the tidy series file records the basis of every value); assistant-coach, GM and player rows are printed percentages (TIDES prints no assistant-coach total for most years; GM figures are people of color from the 2014 report); coordinator rows are printed counts without a total (the list broadens from the 2013 season). Mean is the unweighted mean over the seasons with a value; Seasons is values available over seasons in the era; Range is the minimum and maximum. Head-coach figures are start-of-season counts (as-of dates August--September; 2018 is a December count). Assistant-coach seasons are the season the report assigns. Player shares break in 2019 (self-identification, separate multiracial and not-disclosed categories). No TIDES NFL report exists for 2024 or 2025; the 2024 head-coach values are an AP count (secondary). The last two rows are this project's opening-day offense and defense coaches (2007--2025; programs/16): the documented-Black lower bound treats every undocumented coach as not documented Black, and the predicted share is the mean model P(Black), a measurement with error that the validation exhibit benchmarks against TIDES. Descriptive. Era means compare calendar cohorts; they are not policy effects.
+\end{minipage}
+\end{table}

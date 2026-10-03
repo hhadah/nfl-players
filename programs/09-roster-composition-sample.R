@@ -10,10 +10,12 @@
 #     ShareBlackPred<G>, ShareBlackPredDoc<G>, MeanPriorBlackPred<G>;
 #     expected Black shares given the position mix (leave-one-franchise-out
 #     league shares) and residual shares; the season starting QB's race; and
-#     roster-quality controls (cap share, draft capital, age, experience);
-#     predetermined opening-day versions (Week1: first-REG-game active roster;
-#     Week1PriorSnapW: the same players weighted by prior-season snaps; the
-#     opening-day starting QB and Week1 roster quality); and Other-race and
+#     roster-quality controls (draft capital, age, experience; the annual cap
+#     share, which is set partly in season); predetermined opening-day
+#     versions (Week1: first-REG-game active roster; Week1PriorSnapW: the
+#     same players weighted by prior-season snaps; the opening-day starting
+#     QB and Week1 roster quality; L1TeamCapShare: the prior season's cap
+#     share, 2014+, the predetermined cap control); and Other-race and
 #     Wikipedia-article shares (three-group Blau index, provisional coverage).
 #   - analysis/roster_composition_team_game: one row per franchise_id x
 #     game_id, REG games 2002-2025: the same shares for the week's game-day
@@ -24,23 +26,27 @@
 #   load_person_race() (00-race-measures.R).
 # Outputs: analysis/roster_composition_team_season.{parquet,csv},
 #   analysis/roster_composition_team_game.{parquet,csv} and their codebooks.
-# Race measures are kept separate (Hand = hand-coded black_any, among coded
-# members; Prov = share flagged by black_provisional among ALL members, the
-# positive-only lower bound used in 02; Bifsg = mean BIFSG P(Black); Pred =
-# mean model-only predicted P(non-Hispanic Black alone) (p_black_any_pred
-# equals p_black_pred despite its name), i.e. the expected Black share, the
-# primary measure while hand codes are absent;
-# PredDoc = the documented-race sensitivity variant; MeanPriorBlackPred = mean
-# EM prior P(Black), the group summary of the prior's predetermined
-# covariates along the prior index). For the main groups (Roster, SnapW,
-# Week1, Week1PriorSnapW, ActiveRoster) also: variant expected shares
-# (ShareBlackNoDraft, ShareBlackOrMulti, ShareBlackRaked), the nodraft and
-# preddoc mean priors, Berkson variances, a documented-race calibration check
-# and the weighted shares of the prior's non-position covariate levels
-# (regression-calibration controls; notes/race-prediction-design.md); and the
-# defensive share of the snap weight (DefenseSnapWeightShare). The variants
-# and county availability are read from race_predicted directly.
-# Date: 2026-10-02 (predicted race added the same day)
+# Race measures are kept separate (Hand = hand-coded black_any, Black alone
+# or in combination, among coded members; Prov = share flagged by
+# black_provisional among ALL members, the positive-only lower bound used in
+# 02; Bifsg = mean BIFSG P(Black); Pred = mean model-only predicted
+# P(non-Hispanic Black alone) (p_black_any_pred equals p_black_pred despite
+# its name: multiracial and Hispanic Black players count as non-Black), i.e.
+# the expected Black-alone share, the primary measure while hand codes are
+# absent; PredDoc = the documented-race sensitivity variant, which counts
+# documented players as Black alone or in combination and so mixes the two
+# definitions; MeanPriorBlackPred = mean EM prior P(Black), the group summary
+# of the prior's predetermined covariates along the prior index). For the
+# main groups (Roster, SnapW, Week1, Week1PriorSnapW, ActiveRoster) also:
+# variant expected shares (ShareBlackNoDraft, ShareBlackOrMulti,
+# ShareBlackRaked), the nodraft and preddoc mean priors, Berkson variances, a
+# documented-race calibration check and the weighted shares of the prior's
+# non-position covariate levels (regression-calibration controls;
+# notes/race-prediction-design.md); and the defensive share of the snap
+# weight (DefenseSnapWeightShare). The variants and county availability are
+# read from race_predicted directly.
+# Date: 2026-10-02 (predicted race added the same day; prior-season cap
+# share and Black-alone labels 2026-10-03)
 # ============================================================================
 
 con <- db_connect()
@@ -176,15 +182,17 @@ stopifnot(!anyDuplicated(RosterWeeks[c("gsis_id", "franchise_id", "season", "wee
 # Weighted composition of a group. `df` has one row per member x key x
 # position group with Weight > 0 and the race columns. Returns, by key:
 #   N (distinct members), W (total weight), CodedShare (weight share with a
-#   hand code), ShareBlackHand (weighted Black share among hand-coded
-#   members; NA if none coded), ShareBlackProv (weighted share flagged by
-#   black_provisional among ALL members; NA flags count as not flagged),
-#   MeanPBlackBifsg (weighted mean BIFSG P(Black) over members with one),
-#   ShareBlackPred / ShareBlackPredDoc (weighted mean predicted P(Black any)
-#   over members with a prediction: the expected Black share; every player
-#   has one), MeanPriorBlackPred (weighted mean EM prior P(Black)), and the
-#   Other-race analogues (ShareOtherPred/PredDoc: weighted mean of
-#   1 - P(Black any) - P(white)).
+#   hand code), ShareBlackHand (weighted Black share, alone or in
+#   combination, among hand-coded members; NA if none coded), ShareBlackProv
+#   (weighted share flagged by black_provisional among ALL members; NA flags
+#   count as not flagged), MeanPBlackBifsg (weighted mean BIFSG P(Black) over
+#   members with one), ShareBlackPred (weighted mean model-only predicted
+#   P(non-Hispanic Black alone) over members with a prediction: the expected
+#   Black-alone share; every player has one), ShareBlackPredDoc (the same
+#   with documented race, Black alone or in combination, where documented),
+#   MeanPriorBlackPred (weighted mean EM prior P(Black)), and the Other-race
+#   analogues (ShareOtherPred/PredDoc: weighted mean of 1 - P(Black) -
+#   P(white) under the same variant).
 roster_compose <- function(df, keys, suffix) {
   df |>
     filter(Weight > 0) |>
@@ -232,8 +240,9 @@ roster_compose <- function(df, keys, suffix) {
 # residual compares coded members with coded members); Prov: the team's full
 # weight mix and the league share flagged among all weight; Pred / PredDoc:
 # the team's mix among weight with a prediction and the league mean predicted
-# P(Black any) in the position group. `keys` must contain franchise_id and
-# season. Returns ExpectedShareBlack{Hand,Prov,Pred,PredDoc}<G> by key.
+# P(Black) in the position group under the same variant. `keys` must contain
+# franchise_id and season. Returns ExpectedShareBlack{Hand,Prov,Pred,PredDoc}<G>
+# by key.
 roster_expected <- function(df, keys, suffix) {
   ByPos <- df |>
     filter(Weight > 0) |>
@@ -574,7 +583,10 @@ SeasonQuality <- list(
 # PayFranchise is the franchise; unit versions by the player's position
 # group. OTC cap tables are sparse before 2011 and 2010 had no cap
 # (CapPercent = 0), so the team sums are kept from 2013 on only (see the
-# distribution reported below).
+# distribution reported below). The sum is the season's annual cap table:
+# in-season signings, releases, restructures and injury settlements change
+# cap numbers after opening day, so TeamCapShare is NOT fixed by opening day
+# and is a contemporaneous control only.
 FirstCapSeason <- 2013L
 CapByPlayer <- PlayerSeason |>
   filter(!is.na(PayFranchise), !is.na(CapPercent)) |>
@@ -595,6 +607,20 @@ CapAll |>
             Max = max(TeamCapShare), .groups = "drop") |>
   print(n = Inf)
 CapShares <- CapAll |> filter(season >= FirstCapSeason)
+
+# Prior-season cap share (season - 1, same franchise_id), the predetermined
+# cap control. Author decision Oct 2026: OTC gives no opening-day cap table,
+# and summing the annual numbers of contracts in force at opening day would
+# still be the season's annual measure (it also drops the same players whose
+# cap numbers later change), so the genuine lag is used instead of a
+# constructed opening-day budget. Coverage 2014+ (the first kept cap table is
+# 2013); franchise_id is stable across relocations, so no lag is lost there.
+LagCapShares <- CapShares |>
+  transmute(franchise_id, season = season + 1L, L1TeamCapShare = TeamCapShare) |>
+  filter(season <= LastSeason)
+message("L1TeamCapShare (prior-season TeamCapShare) covers seasons ",
+        min(LagCapShares$season), "-", max(LagCapShares$season), " (",
+        nrow(LagCapShares), " franchise-seasons)")
 
 # ---------------------------------------------------------------------------
 # Team-game composition (REG games): the week's game-day roster
@@ -655,6 +681,7 @@ RosterTeamSeason <- TeamSeasonKeys |>
   left_join(Week1QB, by = SeasonKeys) |>
   left_join(SeasonQuality, by = SeasonKeys) |>
   left_join(CapShares, by = SeasonKeys) |>
+  left_join(LagCapShares, by = SeasonKeys) |>
   # Snap groups are unobserved (NA, not 0) before 2013; headcount groups are
   # observed from 2002, so an empty group has N = 0
   mutate(across(c(starts_with("N") & where(is.integer)),
@@ -694,8 +721,8 @@ roster_group_labels <- function(group, desc) {
   c(N = glue("Number of distinct players in {desc}"),
     W = glue("Total weight of {desc}"),
     CodedShare = glue("Weighted share of {desc} with a hand-coded black_any"),
-    ShareBlackHand = glue("Weighted Black share among hand-coded members of {desc} (NA when none coded; use with CodedShare)"),
-    ShareBlackProv = glue("Weighted share of {desc} flagged Black by black_provisional among ALL members (unflagged count as 0); positive-only lower bound"),
+    ShareBlackHand = glue("Weighted Black share (alone or in combination, black_any) among hand-coded members of {desc} (NA when none coded; use with CodedShare)"),
+    ShareBlackProv = glue("Weighted share of {desc} flagged Black (alone or in combination) by black_provisional among ALL members (unflagged count as 0); positive-only lower bound"),
     MeanPBlackBifsg = glue("Weighted mean BIFSG P(Black) of {desc} (secondary; understates Black share)"),
     ShareOtherHand = glue("Weighted share of hand-coded members of {desc} who are neither Black nor white (person_race_group() 'Other', e.g. Hispanic, Asian, Pacific Islander); NA when none coded; not coverage-gated"),
     ShareOtherProv = glue("Weighted share of {desc} not flagged Black and flagged other (hand 'Other' where coded, else a Wikipedia Hispanic/Asian/Pacific Islander/Native American category) among ALL members; positive-only"),
@@ -744,17 +771,17 @@ RosterTeamSeasonLabels <- c(
   DefenseSnapWeightShare = "Defensive share of the snap weight: REG defense snaps / (offense + defense snaps) of the franchise's players (2013+; responds to game script)",
   StartingQBId = "Season starting QB (gsis_id): most REG starts in nfl_team_games (ties: more offense snaps with the franchise, then the later start)",
   QBStartShare = "Share of the franchise's REG games started by StartingQBId",
-  QBBlackHand = "Season starting QB hand-coded Black (NA until coded)",
+  QBBlackHand = "Season starting QB hand-coded Black, alone or in combination (black_any; NA until coded)",
   QBBlackProv = "Season starting QB flagged Black by black_provisional (1) or not flagged (0); lower bound",
   QBPBlackBifsg = "Season starting QB BIFSG P(Black)",
   QBBlackPred = "Season starting QB model-only predicted P(non-Hispanic Black alone) (p_black_any_pred)",
-  QBBlackPredDoc = "Season starting QB P(Black any), documented-race variant (p_black_any_preddoc; sensitivity)",
+  QBBlackPredDoc = "Season starting QB P(Black), documented-race variant (p_black_any_preddoc: documented Black alone or in combination where documented, else model P(non-Hispanic Black alone); sensitivity)",
   QBPriorBlackPred = "Season starting QB EM prior P(Black) (prior_black_pred; regression-calibration control for QBBlackPred)",
-  QBWeek1BlackHand = "Opening-day starting QB (starter of the franchise's first REG game; predetermined) hand-coded Black (NA until coded)",
+  QBWeek1BlackHand = "Opening-day starting QB (starter of the franchise's first REG game; predetermined) hand-coded Black, alone or in combination (black_any; NA until coded)",
   QBWeek1BlackProv = "Opening-day starting QB flagged Black by black_provisional (1) or not flagged (0); lower bound",
   QBWeek1PBlackBifsg = "Opening-day starting QB BIFSG P(Black)",
   QBWeek1BlackPred = "Opening-day starting QB model-only predicted P(non-Hispanic Black alone) (p_black_any_pred)",
-  QBWeek1BlackPredDoc = "Opening-day starting QB P(Black any), documented-race variant (sensitivity)",
+  QBWeek1BlackPredDoc = "Opening-day starting QB P(Black), documented-race variant (documented Black alone or in combination where documented, else model P(non-Hispanic Black alone); sensitivity)",
   QBWeek1PriorBlackPred = "Opening-day starting QB EM prior P(Black) (regression-calibration control)",
   MeanLogPickWeek1 = "Mean log overall draft pick of the opening-day active roster (undrafted = log 300; predetermined)",
   ShareFirstRoundWeek1 = "Share of first-round picks on the opening-day active roster (predetermined)",
@@ -776,9 +803,10 @@ RosterTeamSeasonLabels <- c(
   DefenseMeanLogPickSnapW = "Mean log draft pick weighted by defense snaps (2013+; undrafted = log 300)",
   OffenseMeanAgeSnapW = "Mean age weighted by offense snaps (2013+)",
   DefenseMeanAgeSnapW = "Mean age weighted by defense snaps (2013+)",
-  TeamCapShare = "Sum of CapPercent (share of the team cap, OTC) over player-seasons whose PayFranchise is the franchise (2013+; NA before because OTC cap tables are sparse before 2011 and 2010 was uncapped). Below 1 because dead money and unmatched players are missing",
-  OffenseCapShare = "TeamCapShare over players in offensive position groups (QB-OL; player_season PositionGroup; 2013+)",
-  DefenseCapShare = "TeamCapShare over players in defensive position groups (DL-DB; 2013+)"
+  TeamCapShare = "Sum of CapPercent (share of the team cap, OTC) over player-seasons whose PayFranchise is the franchise in the season (2013+; NA before because OTC cap tables are sparse before 2011 and 2010 was uncapped). Below 1 because dead money and unmatched players are missing. An annual total that in-season signings, releases and restructures change, so NOT fixed by opening day: contemporaneous control only",
+  OffenseCapShare = "TeamCapShare over players in offensive position groups (QB-OL; player_season PositionGroup; 2013+; contemporaneous)",
+  DefenseCapShare = "TeamCapShare over players in defensive position groups (DL-DB; 2013+; contemporaneous)",
+  L1TeamCapShare = "TeamCapShare of the same franchise in season - 1 (2014+; NA before because the 2013 cap table is the first kept): the predetermined cap control, fixed before the season's results arrive"
 )
 
 RosterTeamGameLabels <- c(
@@ -788,11 +816,11 @@ RosterTeamGameLabels <- c(
   unlist(unname(imap(GameGroupDescriptions, \(d, g) roster_group_labels(g, d)))),
   expected_labels("ActiveRoster", "the game-day active roster (league position-group shares computed per season over all other franchises' active team-game rosters)"),
   extra_labels("ActiveRoster", GameGroupDescriptions[["ActiveRoster"]]),
-  GameQBBlackHand = "Game starting QB hand-coded Black (NA until coded)",
+  GameQBBlackHand = "Game starting QB hand-coded Black, alone or in combination (black_any; NA until coded)",
   GameQBBlackProv = "Game starting QB flagged Black by black_provisional (1) or not flagged (0); lower bound",
   GameQBPBlackBifsg = "Game starting QB BIFSG P(Black)",
   GameQBBlackPred = "Game starting QB model-only predicted P(non-Hispanic Black alone) (p_black_any_pred)",
-  GameQBBlackPredDoc = "Game starting QB P(Black any), documented-race variant (sensitivity)",
+  GameQBBlackPredDoc = "Game starting QB P(Black), documented-race variant (documented Black alone or in combination where documented, else model P(non-Hispanic Black alone); sensitivity)",
   GameQBPriorBlackPred = "Game starting QB EM prior P(Black) (regression-calibration control)"
 )
 
@@ -878,6 +906,7 @@ RosterTeamSeason |>
             HasShareProvSnapW = mean(!is.na(ShareBlackProvSnapW)),
             HasQBRace = mean(!is.na(QBBlackProv)),
             HasCapShare = mean(!is.na(TeamCapShare)),
+            HasL1CapShare = mean(!is.na(L1TeamCapShare)),
             .groups = "drop") |>
   print()
 RosterTeamSeason |>

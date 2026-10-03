@@ -1,7 +1,7 @@
 # Analysis plan: race, pay and team performance
 
-Date: 2026-10-02. This file specifies the estimation samples and
-specifications for three questions:
+Revised 2026-10-03. This file specifies the estimation samples and
+specifications for five questions:
 
 1. **Pay.** Conditional on every quality signal in the data, are Black NFL
    players paid more or less than white players at the same position?
@@ -9,25 +9,33 @@ specifications for three questions:
    perform?
 3. **Staff diversity.** How do teams with more racially diverse coaching
    staffs and front offices perform?
+4. **Coaching policies.** How did hiring, inherited situations, relative
+   performance, retention and promotion change across policy eras?
+5. **Player employment.** Conditional on measured quality, who remains under
+   contract and who reaches a first observed UFA or extension contract?
 
-The code is in `programs/09`-`14` and runs from `programs/95-make-all.R`.
+The code is in `programs/09`-`19` and runs from `programs/95-make-all.R`.
+`94-verify-analysis.R` checks temporal and risk-set invariants; `20` generates
+the results memo from coefficient manifests.
 
-## Race measure (all three questions)
+## Race measures
 
 Revised 2026-10-02: the PI decided not to hand-code race. The **primary
 measure is predicted race**, documented in `notes/race-prediction-design.md`.
 
-**How it is built.** Each person's probability of being Black combines two
-pieces:
+**How it is built.** The model-only probability of non-Hispanic Black alone
+combines:
 
 - **Likelihood:** first name, surname and hometown county (BIFSG).
 - **Prior:** an NFL-specific prior estimated by EM on predetermined
   characteristics, from `scripts/04e_predict_race.py` (table `race_predicted`).
-  - Players: position group, era, draft round, college type.
-  - Staff: first role, unit, era, former player.
+  - Players: position at entry, rookie era, draft bucket, college type and
+    county availability.
+  - Staff: first role, unit and first-season era.
 
-Documented race statements are not inputs to the primary measure. They are
-used for validation, and for the sensitivity measure `preddoc`.
+Documented statements are excluded from the primary prediction model. They
+support event-matched validation, `preddoc` sensitivity and separately
+labeled documented-positive coaching-policy comparisons.
 
 **Measure switch.** `choose_race_measure()` in
 `programs/00-analysis-functions.R` picks the measure:
@@ -44,16 +52,20 @@ used for validation, and for the sensitivity measure `preddoc`.
 
 **Person level.** `person_race_regressors()` builds the race regressors:
 
-- **Black:** P(Black alone or in combination).
-- **OtherRace:** 1 - P(Black) - P(white).
-- **Hand and provisional measures:** both are indicators instead.
+- **Black, model-only:** P(non-Hispanic Black alone), despite the legacy
+  `p_black_any_pred` name.
+- **OtherRace:** 1 - P(Black) - P(non-Hispanic white alone).
+- **Hand/documented Black-any:** Black alone-or-in-combination. `preddoc`
+  mixes this documented event with the model event for undocumented people.
+- **Provisional:** a positive-only documented flag, not observed race for
+  everybody without a positive flag.
 
-The coefficient on Black is the Black-white gap under regression
-calibration, if two conditions hold:
-
-- names and hometown are unrelated to the outcome given race and the
-  controls;
-- the regression controls for the prior's covariates (`race_prior_controls()`).
+The coefficient is a latent Black-white gap only under a linear, common-gap
+outcome model, exclusion of names/hometown from the outcome conditional on
+race and controls, and calibration given **all** controls. Including the
+prior's covariates is not sufficient. Table 8 reports residual score SD
+(overlap) and one documented-label control-index check. Controls predicting
+the score do not establish miscalibration or mechanical attenuation.
 
 **Team level.** `apply_race_measure()` maps the measure's columns to generic
 names:
@@ -108,7 +120,7 @@ Source: `player_season`, with `HasPay == 1`, seasons 2014-2025,
 
 The rookie margin uses `draft_prospects` directly (classes 2011-2022).
 
-### Quality blocks (all predetermined at signing)
+### Quality blocks (lagged by signing year)
 
 Production enters with **position-specific slopes**. Each variable is
 interacted with position group (QB, RB, WR, TE, OL, DL, LB, DB, K, P, LS),
@@ -122,6 +134,11 @@ but only for the groups where it measures performance:
 | D. Pre-NFL signals | log draft pick and `Undrafted`; draft round FE; 247 rating and stars; combine (forty, vertical, bench, broad, cone, shuttle, height, weight) with position-group slopes; `FinalCollegePower`, `FinalCollegeSRS`, `FinalCollegeHBCU`; missing indicators |
 | E. Usage (coach-chosen; a possible bad control) | prior offensive, defensive and ST snaps; prior games started (snaps); career offense + defense snaps |
 | F. Scout grade (may embed bias) | `PreDraftGrade` |
+
+OTC gives signing years, not exact dates. A prior NFL season can extend into
+January of the signing year; without dates, these controls cannot be
+certified to precede every early-January signing. Usage and market signals
+can also encode earlier selection.
 
 ### Changes made during implementation (2026-10-02 review)
 
@@ -142,8 +159,8 @@ Equation (1), for contract c of player i at position p, signed in year t:
 
     Y_ipt = beta_1 Black_i + beta_2 Other_i + X_ipt pi + delta_{p,t} + e_ipt
 
-- Main outcome: `LogAPYCapPct`, the log of APY as a share of the league
-  salary cap.
+- Main outcome: `LogAPY`, the log of APY in millions of dollars. Position
+  by signing-year FE absorb the league cap without rounding its share.
 - delta_{p,t}: OTC position x year-signed FE (18 market positions).
 - Standard errors are clustered by player.
 
@@ -179,12 +196,68 @@ with position group.
 **Table: player-season panel and employer learning** (Altonji and Pierret
 2001):
 
-- Outcome: `LogCapPct`; position-group x season FE.
+- Outcome: `LogCapNumber`; position-group x season FE.
 - Black x experience-bin interactions, with and without lagged and career
   production.
 - Pre-NFL signals interacted with experience.
-- Sample: seasons on a non-rookie contract, plus a version with all seasons.
+- Main sample: UFA/extension-governed seasons; broader non-rookie and
+  all-contract samples are separate specifications.
 - Standard errors are clustered by player.
+
+**Career-profile and employer extensions, 2026-10-03.**
+
+Table 12b compares position-group-by-season FE against player plus
+position-group-by-season FE on the same repeat-observed veteran-pay players.
+Single-season players are excluded from both fits. Interact both Black and
+other-race scores with experience bins, using 4-6 as the common reference.
+The player-FE specifications omit the static race main terms because those
+are absorbed, not because their levels are zero. Each model pair requests
+the same controls: A, A-C, A+D with signal-by-experience terms, or A-D with
+those terms. Time-invariant covariates are absorbed; position-specific slopes
+are retained when position changes make them vary within player. Report
+cross-bin player support, player-clustered pointwise CIs and joint tests.
+The difference between profiles is not a causal decomposition or a bound on
+survivor selection, and experience also advances with calendar time.
+
+Table 12c compares position-group-by-season FE with and without
+`PayFranchise`-by-season FE on identical known-employer rows. Outcomes are
+log cap number and, on its positive-cash sample, log cash paid. The paying
+franchise comes from the selected OTC cap-table row, not necessarily the
+primary roster team. Both outcomes remain annual accounting amounts.
+
+Table 12d uses distinct signed veteran deals. Order is defined by signing
+year; sequences stop before their first ambiguous same-year signing.
+Never bridge that omitted year or call the first observed eligible deal the
+first career contract. Compare the second and third-or-later deals with the
+first, interacting stage with both race scores and absorbing player and
+OTC-position-by-signing-year FE. Add career-stage and prior/career-production
+controls on a common repeat-signer sample. Adjacent-deal change models
+instead absorb separate position-by-year effects for both deals and compare
+changes with and without differenced controls. These are per-deal changes,
+not annual growth rates, and not algebraically identical first differences
+of the level specifications. Exact signing dates are unavailable, so
+prior-season statistics can overlap an early-January signing.
+
+**Annual raw and adjusted figures (`programs/12a-pay-gap-by-year.R`).**
+
+Use the same freely bargained veteran contracts and the same race scores
+in both models. Drop position-year singleton cells from both. The raw model
+includes signing-year FE and year-specific Black and other-race score
+coefficients, with no position, quality or prior-covariate controls.
+The adjusted model includes OTC-position-by-signing-year FE and Table 8
+column 5 controls, including the race-prior covariates. Race coefficients
+vary by year; quality-control slopes are pooled across years.
+
+Reverse the Black coefficient and both CI endpoints to report
+White-minus-Black log APY. Plot `100 * (exp(gap) - 1)`, relative to Black
+geometric pay, with pointwise player-clustered 95 percent intervals.
+Positive values mean higher White APY. This is not the percent difference
+in arithmetic means. Under predicted race, both series are model-implied
+contrasts; the raw series is not an observed-race group mean. Conditioning
+changes calibration requirements as well as residual score variation.
+Mark the partial 2026 signing window and use the same vertical axis in
+both figures. Export annual sample counts and probability sums with the
+estimates as CSV and DTA.
 
 **Table: rookie margin.**
 
@@ -232,7 +305,7 @@ with position group.
     starts).
 
   It also builds roster-quality controls from `player_season`:
-  - total cap share (sum of `CapPercent`);
+  - annual total cap share and its consecutive-season lag, `L1TeamCapShare`;
   - snap-weighted mean of log draft pick (undrafted = log 300);
   - snap-weighted share of first-round picks;
   - mean age and experience;
@@ -267,10 +340,13 @@ Columns:
 5. diversity net of position mix (actual minus expected share);
 6. two-group Blau index.
 
-Run the columns for the snap-weighted measure (2013-2025) and the headcount
-measure (2002-2025). Standard errors are clustered by franchise (32 clusters),
-with wild cluster bootstrap p-values (Webb weights, 9,999 replications) for
-the diversity coefficient.
+The snap-weighted estimation panel is 2014-2025 because `L1TeamCapShare`
+first exists in 2014. All columns use that common window. Predetermined
+controls use opening-roster quality and lagged cap totals; current annual
+cap totals appear only in an explicitly contemporaneous sensitivity.
+Opening-roster/headcount comparisons are separate. Franchise-clustered
+SEs and wild-cluster bootstrap inference (Webb weights, 9,999 replications)
+are reported. Snap weights remain same-season, not predetermined.
 
 Placebo tests:
 
@@ -278,45 +354,44 @@ Placebo tests:
   composition;
 - the opponent's roster composition in the game-level design.
 
-Within-season, game-level design. Outcome: `margin`. The regression controls
-for the market expectation `team_spread_line` (positive = team favored; the
-slope of margin on it is about 1.04). It includes franchise x season FE and
-opponent x season FE. The treatment is the game-day active-roster Black share.
-Identification comes from week-to-week roster changes (injuries, inactives,
-signings) within a team-season, net of what the betting market prices. The ATS
-residual `margin - team_spread_line` is an alternative outcome. Standard
-errors are clustered by franchise.
+The game-level outcome is `margin`, with a freely estimated coefficient on
+the market spread, franchise-by-season and opponent-by-season FE. The
+game-day active-roster share varies with injuries, inactives and signings.
+This is descriptive within-team-season variation, not random assignment.
+The ATS residual is a sensitivity outcome. SEs cluster by franchise.
 
 ### Threats
 
 - **Positional composition.** Black shares differ sharply by position, which
   is why the regressions include expected shares and position-mix controls.
-- **Talent.** Diverse rosters may simply be more talented. Roster-quality
-  controls, LagWinPct and the market spread address this.
-- **Reverse causality.** Winning teams may retain and acquire different
-  players. The lead placebo and the within-season design address this.
+- **Talent and selection.** Quality controls, lagged outcomes, leads and
+  market spreads diagnose or condition on observed differences; they do not
+  eliminate unobserved quality, reverse causality or selection into play.
 - **Quarterback.** The QB's race enters separately.
 
 ## 3. Staff diversity and team performance
 
 ### Specifications (`programs/14-table-staff-diversity-performance.R`)
 
-Equation (3) on `analysis_team_season`, with `FullStaffObserved` (2007-2025,
-608 team-seasons):
+Equation (3) uses `OpeningStaffObserved` team-seasons, 2007-2025. Opening
+roles and composition are rebuilt from raw opening-snapshot entries, not
+filtered season-union roles:
 
-    Y_ft = beta ShareBlackCoaches_ft + theta HCBlack_ft + X_ft pi + alpha_f + gamma_t + e_ft
+    Y_ft = beta ShareBlackCoachesPre_ft + theta HCBlackPre_ft + X_ft pi + alpha_f + gamma_t + e_ft
 
 Controls X:
 
 - `LagWinPct` and `LagExpectedWins`;
-- `ShareCoachesNewToFranchise` and `ShareCoachesPromoted`;
-- roster quality and roster Black share (from 09).
+- opening turnover, `ShareCoachesNewToFranchisePre` and
+  `ShareCoachesPromotedPre`, with unknown first-period turnover flagged;
+- lagged roster quality/composition, or opening-roster controls in the
+  designated comparison. Current annual cap totals are not predetermined.
 
 Tables:
 
-1. **Main.** Coaches' share Black, HC, OC, DC and GM race; FE as above; then
-   franchise x HC-spell FE, so that identification comes from assistant
-   turnover within a head coach's tenure.
+1. **Main.** Opening coaches' share and role-holder race. Column 5 uses
+   `HCIncumbentSpellId`, preserving incumbent tenure through temporary
+   absences (including New Orleans 2012 and Indianapolis 2012).
 2. **By staff group.** Coordinators, position coaches, assistants, front
    office, personnel and scouting; Blau indices.
 3. **Unit stacked design** (A3). Stack offense and defense:
@@ -328,6 +403,12 @@ Tables:
 4. **Head-coach hires.** Among `HCChange == 1` team-seasons, the change in
    outcomes on the race of the new head coach, controlling for `LagWinPct` and
    `LagExpectedWins`. Power is low.
+5. **Timing sensitivity.** Table 19d substitutes season-union exposure. It
+   is explicitly contemporaneous, since later hires and firings affect it.
+6. **Permutation sensitivity.** Hire-race labels are permuted within season
+   only under conditional exchangeability. There is no design-based
+   randomization mechanism, and this permutation does not preserve
+   franchise clustering.
 
 Placebo: the one-season lead of staff composition. Standard errors are
 clustered by franchise, with wild cluster bootstrap p-values for the key
@@ -339,6 +420,127 @@ coefficients.
   and replaced in bulk, so the regressions control for lagged outcomes and
   turnover, and test leads.
 - **Staff coverage.** Staff boxes before 2007 are partial.
-- **The glass cliff.** Minority coaches may be hired into worse situations,
-  which biases naive comparisons downward. LagExpectedWins conditions on the
-  situation they inherit.
+- **The glass cliff.** Lagged performance and expected wins describe the
+  inherited situation but do not remove selection on owners' information.
+  Hire-season market probabilities are measured after the hire, not before.
+
+## 4. Coaching policies (`programs/16` and `17`)
+
+### Institutional timing and samples
+
+`data/reference/nfl_staff_policies.csv` records sources and timing.
+`add_rooney_policies()` distinguishes opening-staff timing from the first
+full offseason hiring cycle. Do not apply the March 2022 changes to earlier
+2022 HC appointments.
+
+The registry separates the 2003 HC interview rule, front-office expansion,
+2020 interview and mobility changes, fellowships, compensatory draft-pick
+incentives, 2021 in-person requirements, 2022 interview eligibility, the
+2022-2024 offensive-assistant mandate and subsidy, and the voluntary
+post-termination program from 2025. Ending the mandate does not end the
+interview rules or compensatory-pick policy.
+
+The coach panels contain opening roles, source-backed job-listing intervals,
+verified appointment dates where available, policy eligibility,
+participation, and one-/two-year transitions. NFL eligibility is a
+documented woman or minority under league rules, not a score threshold.
+Unknowns remain unknown. No public source acquired here identifies all
+32 clubs' designated assistants or reimbursements. Published Accelerator
+cohorts and individually sourced mandate participants are distinct.
+
+`analysis_rooney_hires` extends the opening-HC panel to 1990 using archived
+1989-1998 PFR records cross-checked against team-season sources. It separates
+opening and in-season coaches, permanent versus interim appointments, and
+expansion/re-entry censoring. A retained permanent in-season appointment is
+not counted again the following year. A retained appointee with undocumented
+permanent/interim status has unknown hire status, not an imputed offseason hire.
+
+### Exhibits and estimands
+
+- **Table 30:** source-selected TIDES series. Keep counts versus percentages,
+  Black versus people-of-color categories, denominators and timing changes
+  explicit; do not splice them into one homogeneous series.
+- **Table 31:** documented-positive HC hires by policy era, hiring-cycle
+  regressions, inherited performance/expectations, and a TIDES stock-count
+  benchmark. Undocumented is not known white; any zero coding is an explicit
+  ascertainment assumption.
+- **Table 32:** hire-season performance on documented Black status,
+  race-by-era interactions, freely estimated lagged-performance coefficients,
+  and season/franchise controls. Wins-over-expected coverage starts later.
+  Report prior-gap trends, placebo breaks, clustered intervals, baselines and
+  approximate 80%-power MDEs. A change in the relative coaching-performance
+  gap is not a change in aggregate league quality.
+- **Table 33:** offense versus defense with franchise-by-unit and season FE,
+  mandate and 2025 interactions, event-time coefficients, linear pretrends
+  and joint leads. The regressions use the full observed panel; displayed
+  baseline means use 2019-2021. Outcomes are opening counts, entries,
+  eligibility bounds, next-opening retention and promotion. The
+  Census-white-man upper-bound sensitivity adds an assumption not contained
+  in the documented lower bound. Cohort-year transitions have later outcomes;
+  the final cohorts are right-censored.
+
+All clubs face the same dates; defense can have spillovers; interview,
+mobility and incentive rules changed concurrently. Existing assistants could
+satisfy the mandate. A rejected pretrend rules out a treatment-effect reading;
+nonrejection is not identification. The one observed post-termination season
+does not support a termination event study. Small HC-hire samples need
+confidence intervals and MDEs, not a binary declaration that a rule worked.
+
+## 5. Player employment (`programs/18` and `19`)
+
+### Population and timing
+
+The person-season panel preserves the full weekly-roster universe, including
+players without pay records. Deduplicate franchise listings to person-weeks.
+Separate active/inactive, reserve, suspended/exempt, practice-squad,
+non-employed and ambiguous statuses. Game-week counts exclude byes.
+Unverified 2016 preseason spillover is flagged rather than treated as
+verified employment or exit. Roster weeks are not paid weeks; no wage rate
+is constructed by dividing annual cap or cash totals by roster weeks.
+
+Retention risk sets include under-contract players in seasons 2002-2024,
+experience 0-15. The outcome is under-contract employment in the next NFL
+season. Game-day, same-franchise, final-week and practice-squad-inclusive
+definitions are separate; the latter starts in 2016. Incomplete future
+seasons are censored.
+The primary retention sample excludes t=2015 because the 2016 next-year
+source has preseason spillover. Including that transition and additionally
+excluding t=2016 are separate sensitivities. Ambiguous-only future evidence
+remains unknown rather than establishing exit.
+
+Contract access uses rookie cohorts 2011 onward and seasons 2013-2024 before
+the first observed UFA/extension contract. It does not require an observed
+salary. Missing historical coverage is not proof that no earlier contract
+existed. Veteran-market and any-non-rookie definitions, retained-player
+conditioning and experience 2-4 use their own risk sets. A 2026 signing
+window is incomplete; signing years do not give exact dates.
+
+### Models and interpretation
+
+Tables 34-35 are linear-probability models with position-group-by-season FE,
+prior covariates for predicted race, and progressively richer controls:
+career stage, season-t and earlier production, pre-NFL signals, then usage
+and employment. Cluster by player; report baselines, CIs, sample flow,
+unknown-outcome exclusions and approximate MDEs. Table 34b changes race
+measures. Logit score-plug-in AMEs are functional-form sensitivities, not
+identified latent-race effects.
+
+Table 34c adds employer-by-season FE to the Table 34 column 4 specification.
+Employer is the last verified under-contract franchise during season t,
+not necessarily the final-week employer and never a t+1 assignment.
+Two-franchise under-contract listings in that final observed week leave the
+employer unknown. Drop unknown employers and singleton employer-season cells
+from both comparison columns, keeping the original full-sample model as a
+separate column. Assert identical estimation rows. The outcome is retention
+anywhere in the NFL, not retention by the same franchise. Report exclusions,
+baselines, player-clustered CIs and MDEs. This is specification sensitivity
+among selected employed players, not an employer treatment effect.
+
+Employment and observed contract access are extensive-margin outcomes.
+Conditional APY is a price conditional on reaching the bargained market;
+annual cap and cash totals are accounting outcomes. The retention analysis
+does not turn either into a wage rate. Survival to the risk set, voluntary
+exit, injury, measurement error and unobserved quality remain selection
+problems. Season-t statistics may overlap an early-January contract signing
+in year t+1, so they are not certified pre-signing covariates.
+

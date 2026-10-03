@@ -15,10 +15,13 @@
 #     coaches, with period means, mean absolute differences and correlations
 #     of model vs TIDES
 #   - table-25-race-prediction-documented (tab:race-prediction-documented):
-#     AUC (bootstrap intervals), calibration slope, reliability, mean
-#     P(Black) by documented group and calibration by decile among persons
-#     with documented race (game-day players and staff of 2002-2025, head
-#     coaches 2010-2025)
+#     AUC (bootstrap intervals) for the broad documented Black group (alone
+#     or in combination) and for the modelled event, calibration slope and
+#     deciles on the modelled event only (documented non-Hispanic Black
+#     alone; Black Hispanic and multiracial Black persons are non-target
+#     zeros, conflicting documentation excluded), reliability and mean
+#     P(Black alone) by documented group, among persons with documented race
+#     (game-day players and staff of 2002-2025, head coaches 2010-2025)
 #   - figure-race-prediction-tides: season series, predicted vs TIDES
 #   - figure-race-prediction-distribution: P(Black) by entry position group
 #     (players) and first role group (staff), posterior vs prior
@@ -82,10 +85,21 @@ ExtraRace15 <- tbl(con, "race_predicted") |>
 
 # Documented groups (validation only; never used by the primary posterior):
 # Black = documented Black alone or in combination, including Black Hispanic
-# and multiracial Black persons; White = documented white, not Black; Other =
-# any other documented race or Hispanic (a Hispanic person whose race no
-# source states is Other). BlackAlone = documented Black, not Hispanic, not
-# multiracial: the target of p_black_any_pred.
+# and multiracial Black persons (discrimination rows); White = documented
+# white, not Black; Other = any other documented race or Hispanic (a Hispanic
+# person whose race no source states is Other).
+# The scores model one event, NON-HISPANIC BLACK ALONE (p_black_any_pred =
+# p_black_pred; the BIFSG and prior Black categories are the same Census
+# category), so calibration is validated against that event:
+#   DocAloneY = 1  documented_race == "black" (04e: Black stated, no second
+#                  race and no Hispanic statement from any source)
+#             = 0  any other documented race, including documented Hispanic
+#                  persons of any or unstated race and multiracial persons
+#                  with a Black component (known non-target)
+#             = NA undocumented, or conflicting sources (documented_race NA)
+# Measurement assumption (positive-only documentation, 04e): a documented
+# Black person with no Hispanic or second-race statement counts as Black
+# alone; an unstated Hispanic origin or second race is not detectable.
 PersonRace <- load_person_race(con, hand_coded) |>
   select(person_uid, entity, person_id, p_black_any_pred, p_white_pred,
          p_multi_pred, prior_black_pred, p_black_any_preddoc, p_black_bifsg,
@@ -94,21 +108,31 @@ PersonRace <- load_person_race(con, hand_coded) |>
          pred_college_type, pred_role_group_first, pred_unit_first,
          pred_first_era) |>
   left_join(ExtraRace15, by = "person_uid") |>
-  mutate(DocGroup = case_when(documented_black_any == 1L ~ "Black",
+  mutate(DocGroup = case_when(is.na(documented_race) ~ NA_character_,
+                              documented_black_any == 1L ~ "Black",
                               documented_race == "white" ~ "White",
                               !is.na(documented_race) ~ "Other",
                               TRUE ~ NA_character_),
-         DocBlackAlone = coalesce(DocGroup == "Black" & documented_race == "black" &
-                                    coalesce(as.integer(documented_hispanic), 0L) != 1L,
-                                  FALSE),
-         # Hispanic with no race stated: Black or not is unknown
+         DocBlackAlone = coalesce(documented_race == "black", FALSE),
+         DocAloneY = case_when(documented_race == "black" ~ 1L,
+                               documented_race %in% documented_race_levels ~ 0L,
+                               TRUE ~ NA_integer_),
+         # Sources state different single races: documented but unusable
+         DocConflict = is.na(documented_race) & !is.na(documented_sources),
+         # Hispanic with no race stated: Black alone or in combination unknown
          DocHispNoRace = coalesce(documented_race == "hispanic" &
                                     coalesce(documented_races_stated, "") == "", FALSE),
          # One id per human: linked staff and player records share it
          HumanId = coalesce(pmin(person_uid, linked_uid), person_uid))
-stopifnot(!anyDuplicated(PersonRace$person_uid))
+stopifnot(!anyDuplicated(PersonRace$person_uid),
+          all(is.na(PersonRace$documented_race) |
+                PersonRace$documented_race %in% documented_race_levels),
+          # Every documented person has a determinate Black-alone label
+          all(is.na(PersonRace$DocGroup) == is.na(PersonRace$DocAloneY)))
 message("15: persons with P(Black): ", sum(!is.na(PersonRace$p_black_any_pred)),
-        " of ", nrow(PersonRace), "; documented: ", sum(!is.na(PersonRace$DocGroup)))
+        " of ", nrow(PersonRace), "; documented: ", sum(!is.na(PersonRace$DocGroup)),
+        " (Black alone, non-Hispanic: ", sum(PersonRace$DocAloneY %in% 1L),
+        "; conflicting sources: ", sum(PersonRace$DocConflict), ")")
 
 # Players and staff race columns, keyed by gsis_id / staff person_id
 RaceCols <- c("p_black_any_pred", "p_black_or_multi_pred", "p_black_any_preddoc",
@@ -564,21 +588,30 @@ auc_ci <- function(score, y, B = 999, seed = 20261003) {
   })
   unname(quantile(draws, c(0.025, 0.975)))
 }
-# Calibration slope: logit of documented Black on logit(score) among
-# documented persons, optionally with prior-covariate fixed effects
-# (fixest::feglm, heteroskedasticity-robust SE). Returns slope, SE, N.
-cal_slope <- function(doc, col, fe = character()) {
+# Calibration slope: logit of the modelled event (DocAloneY: documented
+# non-Hispanic Black alone; documented Black Hispanic and multiracial Black
+# persons are non-target zeros) on logit(score) among persons with a
+# determinate label, optionally with prior-covariate fixed effects
+# (fixest::feglm, heteroskedasticity-robust SE). Returns slope, SE, N. A
+# label without variation returns NA explicitly (reported in the notes);
+# any estimation failure is fatal
+cal_slope <- function(doc, col, fe = character(), label = "") {
   d <- doc |>
-    filter(!is.na(.data[[col]])) |>
-    mutate(BlackY = as.integer(DocGroup == "Black"),
-           LogitP = qlogis(pmin(pmax(.data[[col]], 1e-4), 1 - 1e-4)))
-  if (n_distinct(d$BlackY) < 2) return(c(NA_real_, NA_real_, NA_real_))
-  fml <- if (length(fe) == 0) BlackY ~ LogitP else
-    as.formula(paste("BlackY ~ LogitP |", paste(fe, collapse = " + ")))
+    filter(!is.na(.data[[col]]), !is.na(DocAloneY)) |>
+    mutate(LogitP = qlogis(pmin(pmax(.data[[col]], 1e-4), 1 - 1e-4)))
+  if (n_distinct(d$DocAloneY) < 2) {
+    message(glue("15: calibration slope {label}: no variation in the Black-alone label; NA"))
+    return(c(NA_real_, NA_real_, NA_real_))
+  }
+  fml <- if (length(fe) == 0) DocAloneY ~ LogitP else
+    as.formula(paste("DocAloneY ~ LogitP |", paste(fe, collapse = " + ")))
   m <- tryCatch(feglm(fml, data = d, family = "logit", vcov = "hetero",
                       notes = FALSE, warn = FALSE),
-                error = \(e) NULL)
-  if (is.null(m) || !"LogitP" %in% names(coef(m))) return(c(NA_real_, NA_real_, NA_real_))
+                error = \(e) stop(glue("15: calibration slope {label} failed: {conditionMessage(e)}"),
+                                  call. = FALSE))
+  if (!"LogitP" %in% names(coef(m))) {
+    stop(glue("15: calibration slope {label}: logit(score) dropped from the fit"), call. = FALSE)
+  }
   c(unname(coef(m)["LogitP"]), unname(se(m)["LogitP"]), nobs(m))
 }
 
@@ -611,31 +644,40 @@ MinWhiteAUC <- 10L
 tie_decile <- function(x) pmin(10L, 1L + floor(10 * (rank(x, ties.method = "min") - 1) / length(x)))
 
 # One column per entity x score: AUCs with bootstrap intervals (documented
-# Black vs white; vs non-Black; Black alone non-Hispanic vs non-Black;
-# excluding Hispanic persons of unstated race; head coaches: vs all others),
-# calibration slopes, the reliability Var(p)/[E(p)(1 - E(p))] over all
-# persons (under calibration the R^2 of race on p), mean score by documented
-# group, the calibration-implied mean for Black persons E[p^2]/E[p] (under
-# calibration E[p | Black] = E[p^2] / E[p]), and the share documented Black
-# by decile of the score among documented persons (head coaches: among all
-# head coaches, undocumented counted non-Black)
+# Black alone or in combination vs white and vs non-Black: discrimination of
+# the broad Black group; the modelled event, non-Hispanic Black alone, vs
+# every other documented person; Black vs non-Black excluding Hispanic
+# persons of unstated race; head coaches: Black alone vs all others),
+# calibration slopes on the modelled event, the reliability
+# Var(p)/[E(p)(1 - E(p))] over all persons (under calibration the R^2 of the
+# event on p), mean score by documented group, the calibration-implied mean
+# for the event E[p^2]/E[p] (under calibration E[p | event] = E[p^2] / E[p]),
+# and the share documented Black alone by decile of the score among persons
+# with a determinate label (head coaches: among all head coaches with
+# undocumented coded 0, so the decile shares are documented-positive LOWER
+# BOUNDS on the true Black-alone share, not observed calibration;
+# conflicting documentation dropped)
 DocStats <- imap_dfr(ValSamples, \(d, ent) {
   doc <- filter(d, !is.na(DocGroup))
   if (ent == "head_coaches") {
-    dec_base <- mutate(d, BlackY = as.integer(coalesce(DocGroup, "") == "Black"))
+    dec_base <- d |>
+      mutate(AloneY = case_when(!is.na(DocAloneY) ~ DocAloneY,
+                                DocConflict ~ NA_integer_,
+                                TRUE ~ 0L)) |>
+      filter(!is.na(AloneY))
   } else {
-    dec_base <- mutate(doc, BlackY = as.integer(DocGroup == "Black"))
+    dec_base <- mutate(doc, AloneY = DocAloneY)
   }
   bw <- filter(doc, DocGroup %in% c("Black", "White"))
   y_bw <- as.integer(bw$DocGroup == "Black")
   y_bnb <- as.integer(doc$DocGroup == "Black")
-  # Black alone non-Hispanic vs non-Black (other documented Black dropped)
-  alone <- filter(doc, DocBlackAlone | DocGroup != "Black")
-  y_alone <- as.integer(alone$DocGroup == "Black")
+  # Modelled event vs every other documented person (Black Hispanic and
+  # multiracial Black persons in the comparison group)
+  y_alone <- doc$DocAloneY
   # Hispanic persons with no race stated dropped from the comparison group
   nohisp <- filter(doc, !DocHispNoRace)
   y_nohisp <- as.integer(nohisp$DocGroup == "Black")
-  y_all <- as.integer(coalesce(d$DocGroup, "") == "Black")
+  y_all <- dec_base$AloneY
   enough_white <- sum(doc$DocGroup == "White") >= MinWhiteAUC
   imap_dfr(ScoreCols, \(col, sc) {
     s <- d[[col]]
@@ -643,45 +685,50 @@ DocStats <- imap_dfr(ValSamples, \(d, ent) {
       filter(!is.na(.data[[col]])) |>
       mutate(Decile = tie_decile(.data[[col]])) |>
       group_by(Decile) |>
-      summarise(ShareBlack = mean(BlackY), MeanScore = mean(.data[[col]]),
+      summarise(ShareBlack = mean(AloneY), MeanScore = mean(.data[[col]]),
                 N = n(), .groups = "drop")
     a_bw <- if (enough_white) c(auc(bw[[col]], y_bw), auc_ci(bw[[col]], y_bw)) else rep(NA_real_, 3)
     a_bnb <- c(auc(doc[[col]], y_bnb), auc_ci(doc[[col]], y_bnb))
-    a_all <- if (ent == "head_coaches") c(auc(s, y_all), auc_ci(s, y_all)) else rep(NA_real_, 3)
-    slope <- cal_slope(doc, col)
+    a_alone <- c(auc(doc[[col]], y_alone), auc_ci(doc[[col]], y_alone))
+    a_all <- if (ent == "head_coaches") {
+      c(auc(dec_base[[col]], y_all), auc_ci(dec_base[[col]], y_all))
+    } else rep(NA_real_, 3)
+    slope <- cal_slope(doc, col, label = glue("{ent}/{sc}"))
     slope_fe <- if (sc == "Pred" && length(PriorFE[[ent]]) > 0)
-      cal_slope(doc, col, PriorFE[[ent]]) else rep(NA_real_, 3)
+      cal_slope(doc, col, PriorFE[[ent]], label = glue("{ent}/{sc} with prior FE")) else rep(NA_real_, 3)
     m <- mean(s, na.rm = TRUE)
+    black_comb <- doc$DocGroup == "Black" & !doc$DocBlackAlone
     tibble(entity = ent, score = sc,
            stat = c("auc_bw", "auc_bw_lo", "auc_bw_hi",
                     "auc_bnb", "auc_bnb_lo", "auc_bnb_hi",
-                    "auc_alone", "auc_nohisp",
+                    "auc_alone", "auc_alone_lo", "auc_alone_hi",
+                    "auc_nohisp",
                     "auc_ball", "auc_ball_lo", "auc_ball_hi",
                     "cal_slope", "cal_slope_se", "cal_slope_n",
                     "cal_slope_fe", "cal_slope_fe_se", "cal_slope_fe_n",
                     "reliability",
-                    "mean_black", "mean_black_alone", "mean_white", "mean_other",
-                    "mean_undoc", "mean_all", "implied_black",
+                    "mean_black", "mean_black_alone", "mean_black_comb", "mean_white",
+                    "mean_other", "mean_undoc", "mean_all", "implied_black",
                     paste0("dec", dec$Decile, "_share"),
                     paste0("dec", dec$Decile, "_mean"),
                     paste0("dec", dec$Decile, "_n"),
-                    "n_black", "n_black_alone", "n_white", "n_other",
-                    "n_hisp_norace", "n_undoc"),
-           value = c(a_bw, a_bnb,
-                     auc(alone[[col]], y_alone), auc(nohisp[[col]], y_nohisp),
+                    "n_black", "n_black_alone", "n_black_comb", "n_white", "n_other",
+                    "n_hisp_norace", "n_conflict", "n_undoc"),
+           value = c(a_bw, a_bnb, a_alone, auc(nohisp[[col]], y_nohisp),
                      a_all, slope, slope_fe,
                      var(s, na.rm = TRUE) / (m * (1 - m)),
                      mean(doc[[col]][doc$DocGroup == "Black"], na.rm = TRUE),
                      mean(doc[[col]][doc$DocBlackAlone], na.rm = TRUE),
+                     mean(doc[[col]][black_comb], na.rm = TRUE),
                      mean(doc[[col]][doc$DocGroup == "White"], na.rm = TRUE),
                      mean(doc[[col]][doc$DocGroup == "Other"], na.rm = TRUE),
                      mean(s[is.na(d$DocGroup)], na.rm = TRUE),
                      m,
                      sum(s^2, na.rm = TRUE) / sum(s, na.rm = TRUE),
                      dec$ShareBlack, dec$MeanScore, dec$N,
-                     sum(doc$DocGroup == "Black"), sum(doc$DocBlackAlone),
+                     sum(doc$DocGroup == "Black"), sum(doc$DocBlackAlone), sum(black_comb),
                      sum(doc$DocGroup == "White"), sum(doc$DocGroup == "Other"),
-                     sum(doc$DocHispNoRace), sum(is.na(d$DocGroup))))
+                     sum(doc$DocHispNoRace), sum(d$DocConflict), sum(is.na(d$DocGroup))))
   })
 })
 print(DocStats |> filter(!str_starts(stat, "dec")) |>
@@ -724,31 +771,35 @@ decile_row <- function(k) {
 
 Table25Groups <- list(
   "Panel A. AUC (documented race; bootstrap 95\\% interval)" = bind_rows(
-    stat_row("Black vs.\\ white", "auc_bw"), ci_row("auc_bw"),
-    stat_row("Black vs.\\ non-Black", "auc_bnb"), ci_row("auc_bnb"),
-    stat_row("Black alone, non-Hispanic vs.\\ non-Black", "auc_alone"),
-    stat_row("Black vs.\\ non-Black, excl.\\ Hispanic of unstated race", "auc_nohisp"),
-    stat_row("Black vs.\\ all other head coaches", "auc_ball"), ci_row("auc_ball")),
-  "Panel B. Calibration slope and reliability" = bind_rows(
+    stat_row("Black (alone or in comb.) vs.\\ white", "auc_bw"), ci_row("auc_bw"),
+    stat_row("Black (alone or in comb.) vs.\\ non-Black", "auc_bnb"), ci_row("auc_bnb"),
+    stat_row("Black alone, non-Hispanic (modelled event) vs.\\ all other documented", "auc_alone"),
+    ci_row("auc_alone"),
+    stat_row("Black (alone or in comb.) vs.\\ non-Black, excl.\\ Hispanic of unstated race", "auc_nohisp"),
+    stat_row("Black alone, non-Hispanic vs.\\ all other head coaches", "auc_ball"), ci_row("auc_ball")),
+  "Panel B. Calibration slope (documented Black alone, non-Hispanic) and reliability" = bind_rows(
     stat_row("Calibration slope, logit on logit($p$)", "cal_slope"), se_row("cal_slope"),
     stat_row("Calibration slope, prior-covariate FE", "cal_slope_fe"), se_row("cal_slope_fe"),
     stat_row("Reliability: Var($p$)/[E($p$)(1 $-$ E($p$))]", "reliability")),
-  "Panel C. Mean P(Black)" = bind_rows(
-    stat_row("Documented Black", "mean_black"),
-    stat_row("Documented Black alone, non-Hispanic", "mean_black_alone"),
+  "Panel C. Mean P(Black alone, non-Hispanic)" = bind_rows(
+    stat_row("Documented Black, alone or in combination", "mean_black"),
+    stat_row("Documented Black alone, non-Hispanic (modelled event)", "mean_black_alone"),
+    stat_row("Documented Black Hispanic or multiracial Black (non-target)", "mean_black_comb"),
     stat_row("Documented white", "mean_white"),
     stat_row("Documented other race or Hispanic", "mean_other"),
     stat_row("Undocumented", "mean_undoc"),
     stat_row("All persons", "mean_all"),
-    stat_row("Calibration-implied, Black: E[$p^2$]/E[$p$]", "implied_black")),
-  "Panel D. Share documented Black [mean P(Black)] by decile of P(Black)" =
+    stat_row("Calibration-implied, modelled event: E[$p^2$]/E[$p$]", "implied_black")),
+  "Panel D. Share documented Black alone, non-Hispanic [mean $p$] by decile of $p$ (head coaches: documented-positive lower bounds)" =
     map_dfr(1:10, decile_row),
   "Panel E. Persons" = bind_rows(
-    stat_row("Documented Black", "n_black", fn, TRUE),
-    stat_row("of which Black alone, non-Hispanic", "n_black_alone", fn, TRUE),
+    stat_row("Documented Black, alone or in combination", "n_black", fn, TRUE),
+    stat_row("of which Black alone, non-Hispanic (modelled event)", "n_black_alone", fn, TRUE),
+    stat_row("of which Black Hispanic or multiracial Black", "n_black_comb", fn, TRUE),
     stat_row("Documented white", "n_white", fn, TRUE),
     stat_row("Documented other race or Hispanic", "n_other", fn, TRUE),
     stat_row("of which Hispanic, race unstated", "n_hisp_norace", fn, TRUE),
+    stat_row("Conflicting sources (excluded)", "n_conflict", fn, TRUE),
     stat_row("Undocumented", "n_undoc", fn, TRUE)))
 Table25 <- bind_rows(Table25Groups)
 
@@ -785,40 +836,51 @@ Table25Notes <- c(
   "of article sentences). Documented race is used here only: the primary posterior (Pred.)",
   "does not use it. Names is the names-and-county BIFSG posterior with Census population priors;",
   "Prior is the NFL prior alone (players: entry position, rookie era, draft round, college type,",
-  "county availability; staff: first role group, unit and era), before the name update.",
+  "county availability; staff: first role group, unit and era), before the name update. All three",
+  "scores model the same event, non-Hispanic Black alone (the Census category of the surname tables).",
   glue("Populations: players on a 2002--2025 game-day roster ({scales::comma(NPop[['players']])}),"),
   glue("staff persons of 2002--2025 ({scales::comma(NPop[['staff']])}), and the non-interim head coaches"),
   glue("of 2010--2025, each counted once ({NPop[['head_coaches']]}). Players and staff are separate"),
   "person records (a staff member who played has both, each with its own prior).",
-  "Documented Black is Black alone or in combination, including Black Hispanic and multiracial",
-  glue("Black persons (head coaches: {NHCBlackComb} of {hc_stat('n_black')}; TIDES counts head coaches"),
-  "of two or more races separately); the score targets non-Hispanic Black alone, so the",
-  "Black-alone rows restrict documented Black to non-Hispanic Black alone. Documented other race",
+  "Two documented labels are used. Black (alone or in combination) is any documented Black statement,",
+  glue("including Black Hispanic and multiracial Black persons (head coaches: {NHCBlackComb} of {hc_stat('n_black')};"),
+  "TIDES counts head coaches of two or more races separately); it measures discrimination of the broad",
+  "Black group. The modelled event, Black alone and non-Hispanic, is a documented Black statement with",
+  "no second race and no Hispanic statement from any source; documented Black Hispanic and multiracial",
+  "Black persons, and every other documented race, are non-target (coded zero); persons whose sources",
+  "state different single races are excluded. Documentation is positive-only, so a documented Black person",
+  "whose Hispanic origin or second race no source states counts as Black alone; this is a measurement",
+  "assumption of the label, not an observation. Documented other race",
   "includes Hispanic, Asian, Pacific Islander, American Indian and non-Black multiracial persons;",
   "a Hispanic person whose race no source states counts as other",
-  glue("(head coaches: {NHCHispNoRace}); whether such a person is Black is unknown, so the row"),
-  "excluding Hispanic persons of unstated race drops them. All head coaches have",
-  "a Wikipedia article, so documentation is positive-only, and the last AUC row treats",
-  "undocumented head coaches as non-Black. Panel A: the AUC is the probability that a randomly",
-  "drawn documented Black person has a higher score than a randomly drawn comparison person;",
+  glue("(head coaches: {NHCHispNoRace}); whether such a person is Black in combination is unknown, so the"),
+  "broad-group row excluding Hispanic persons of unstated race drops them (for the modelled event a",
+  "documented Hispanic person is non-target whatever his race). All head coaches have",
+  "a Wikipedia article, so documentation is positive-only; the last AUC row and the head-coach",
+  "deciles code undocumented head coaches as zero, so the head-coach decile shares are",
+  "documented-positive lower bounds on the share Black alone, not observed calibration.",
+  "Panel A: the AUC is the probability that a randomly",
+  "drawn person with the label has a higher score than a randomly drawn comparison person;",
   glue("intervals resample persons within each group (999 draws); the Black-white AUC is left blank"),
   glue("with fewer than {MinWhiteAUC} documented whites (head coaches: {NHCWhite})."),
-  "Panel B: the calibration slope is the coefficient of a logit of documented Black on logit($p$)",
-  "among documented persons (heteroskedasticity-robust standard errors in parentheses); the second",
-  "row adds the prior covariates as fixed effects (cells without variation in documented race drop",
-  "out). A slope of one means calibrated relative odds, below one overconfident predictions.",
-  "Selection of documented persons on race shifts only the intercept, so the slope is robust to it,",
+  "Panel B: the calibration slope is the coefficient of a logit of the modelled event (documented",
+  "Black alone, non-Hispanic) on logit($p$) among documented persons (heteroskedasticity-robust",
+  "standard errors in parentheses); the second row adds the prior covariates as fixed effects (cells",
+  "without variation in the label drop out). A slope of one means calibrated relative odds, below one",
+  "overconfident predictions.",
+  "Selection of documented persons on the event shifts only the intercept, so the slope is robust to it,",
   "but not to fame-based selection within race. Reliability is Var($p$)/[E($p$)(1 $-$ E($p$))]",
-  "over all persons of the population: under calibration, the $R^2$ of the race indicator on $p$,",
+  "over all persons of the population: under calibration, the $R^2$ of the event indicator on $p$,",
   "which governs the precision of regressions on $p$.",
-  "Panel C: under calibration, the mean P(Black) of Black persons equals E[$p^2$]/E[$p$] over all",
-  "persons of the population; documented Black persons below that value indicate miscalibration or the",
+  "Panel C: under calibration, the mean $p$ of persons with the event equals E[$p^2$]/E[$p$] over all",
+  "persons of the population; documented Black-alone persons below that value indicate miscalibration or the",
   "selection of documented persons. Panel D: deciles of each score among documented persons",
-  "(head coaches: among all head coaches), with tied scores kept in one decile, so the Prior",
-  "deciles are unequal; a calibrated score has a share documented Black close to",
+  "(head coaches: among all head coaches, undocumented coded zero), with tied scores kept in one decile,",
+  "so the Prior deciles are unequal; a calibrated score has a share documented Black alone close to",
   "the mean score in brackets. Documentation is itself selected on race (Wikipedia race categories",
   "are mostly African-American categories), so documented persons are mostly Black and the share",
-  "documented Black exceeds the mean score in the low deciles; Panel D therefore checks ranking",
+  "documented Black alone exceeds the mean score in the low deciles for players and staff, while the",
+  "head-coach shares are lower bounds; Panel D therefore checks ranking",
   "within the documented sample, not calibration in the population.",
   "Limitations: documented persons are famous (documentation requires an article), so these",
   "statistics may not carry over to the undocumented majority; documented whites are few",
@@ -826,7 +888,7 @@ Table25Notes <- c(
   glue("come from article sentences and {round(100 * ShareWhiteOrigin)}\\% of the white text labels rest"),
   "on European ancestry or national origin, so the Black-white AUC compares Black persons with",
   "whites of distinctive European surnames. Individual accuracy for head coaches is low:",
-  glue("documented Black head coaches have a mean predicted P(Black) of {f3c(hc_stat('mean_black'))}"),
+  glue("documented Black head coaches have a mean predicted P(Black alone) of {f3c(hc_stat('mean_black'))}"),
   glue("and the head-coach AUCs and calibration slopes rest on {hc_stat('n_black')} documented Black and"),
   glue("{hc_stat('n_white') + hc_stat('n_other')} other documented head coaches."),
   "Regression calibration with these probabilities requires, among other conditions, calibration",
