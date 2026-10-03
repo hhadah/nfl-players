@@ -1,0 +1,63 @@
+\begin{table}[!h]
+\centering\centering
+\caption{Race gap in realized pay over the career: player-season panel (provisional race measure) \label{tab:pay-gap-learning}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\fontsize{8}{10}\selectfont
+\begin{threeparttable}
+\begin{tabular}[t]{lccccccccccc}
+\toprule
+  & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8) & (9) & (10) & (11)\\
+\midrule
+Black & 0.141*** & 0.079* & -0.023 &  &  &  & 0.053* & 0.089*** & 0.041 &  & 0.031\\
+ & (0.048) & (0.047) & (0.029) &  &  &  & (0.027) & (0.028) & (0.027) &  & (0.027)\\
+Other race & -0.067 & -0.097 & 0.020 & 0.019 & -0.018 & 0.024 & 0.129*** & 0.094** & 0.091* & 0.044 & 0.122**\\
+ & (0.068) & (0.069) & (0.051) & (0.051) & (0.071) & (0.055) & (0.049) & (0.038) & (0.052) & (0.040) & (0.052)\\
+Black $\times$ experience 0-3 &  &  &  & 0.163 & -0.113 & 0.086 &  &  &  &  & \\
+ &  &  &  & (0.144) & (0.192) & (0.130) &  &  &  &  & \\
+Black $\times$ experience 4-6 &  &  &  & 0.001 & 0.079 & 0.006 &  &  &  &  & \\
+ &  &  &  & (0.033) & (0.050) & (0.036) &  &  &  &  & \\
+Black $\times$ experience 7+ &  &  &  & -0.066 & 0.040 & -0.060 &  &  &  &  & \\
+ &  &  &  & (0.044) & (0.057) & (0.043) &  &  &  &  & \\
+Rookie contract &  &  &  &  &  &  &  & 1.117*** &  &  & \\
+ &  &  &  &  &  &  &  & (0.019) &  &  & \\
+Black $\times$ rookie contract &  &  &  &  &  &  &  & -0.033 &  &  & \\
+ &  &  &  &  &  &  &  & (0.038) &  &  & \\
+Log draft pick $\times$ experience &  &  &  &  & 0.003 & 0.010** &  &  &  &  & \\
+ &  &  &  &  & (0.005) & (0.005) &  &  &  &  & \\
+Undrafted $\times$ experience &  &  &  &  & 0.030 & 0.094*** &  &  &  &  & \\
+ &  &  &  &  & (0.024) & (0.024) &  &  &  &  & \\
+247 rating $\times$ experience &  &  &  &  & -0.102 & 0.051 &  &  &  &  & \\
+ &  &  &  &  & (0.095) & (0.081) &  &  &  &  & \\
+Black $\times$ UFA or extension &  &  &  &  &  &  &  &  &  & -0.016 & \\
+ &  &  &  &  &  &  &  &  &  & (0.030) & \\
+Black $\times$ tender or tag &  &  &  &  &  &  &  &  &  & 0.173*** & \\
+ &  &  &  &  &  &  &  &  &  & (0.053) & \\
+Black $\times$ street free agent &  &  &  &  &  &  &  &  &  & 0.041 & \\
+ &  &  &  &  &  &  &  &  &  & (0.036) & \\
+Black $\times$ practice squad &  &  &  &  &  &  &  &  &  & 0.034 & \\
+ &  &  &  &  &  &  &  &  &  & (0.055) & \\
+Black $\times$ other &  &  &  &  &  &  &  &  &  & -0.020 & \\
+ &  &  &  &  &  &  &  &  &  & (0.089) & \\
+\midrule
+Observations & 5946 & 5946 & 5946 & 5946 & 5946 & 5946 & 16331 & 25232 & 16331 & 16331 & 13578\\
+R$^2$ & 0.135 & 0.172 & 0.564 & 0.564 & 0.362 & 0.610 & 0.660 & 0.618 & 0.671 & 0.786 & 0.647\\
+Within R$^2$ & 0.005 & 0.048 & 0.499 & 0.499 & 0.266 & 0.551 & 0.645 & 0.606 & 0.657 & 0.776 & 0.628\\
+Position group $\times$ season FE & Yes & Yes & Yes & Yes & Yes & Yes & Yes & Yes & Yes & Yes & Yes\\
+Experience bins, age (A) & No & Yes & Yes & Yes & Yes & Yes & Yes & Yes & Yes & Yes & Yes\\
+Lagged and career production (B, C) & No & No & Yes & Yes & No & Yes & Yes & Yes & Yes & Yes & Yes\\
+Pre-NFL signals (D) & No & No & No & No & Yes & Yes & No & No & Yes & No & No\\
+Signals $\times$ experience & No & No & No & No & Yes & Yes & No & No & No & No & No\\
+Contract-type dummies & No & No & No & No & No & No & No & No & No & Yes & No\\
+Seasons & UFA/ext. & UFA/ext. & UFA/ext. & UFA/ext. & UFA/ext. & UFA/ext. & Non-rookie & All & Non-rookie & Non-rookie & Non-rookie, played\\
+Mean of outcome & 1.334 & 1.334 & 1.334 & 1.334 & 1.334 & 1.334 & -0.182 & -0.080 & -0.182 & -0.182 & 0.166\\
+Implied Black gap (\%) & 15.1 & 8.2 & -2.2 &  &  &  & 5.4 & 9.3 & 4.2 &  & 3.2\\
+\bottomrule
+\multicolumn{12}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table includes the estimation results of a player-season analogue of equation (1), $Y_{igt} = \beta_1 Black_i + \beta_2 Other_i + X_{igt}\pi + \delta_{g,t} + \varepsilon_{igt}$ for player $i$ in position group $g$ and season $t$, where $\delta_{g,t}$ are position group $\times$ season fixed effects. The outcome is the log of the player's cap number in season $t$ (\$ millions); the fixed effects absorb the league salary cap, so this is the log cap number relative to the league cap. OTC's cap share is rounded to 0.1\% of the cap and is zero for low cap hits, so it is not used. The sample is player-seasons 2014-2025 with realized pay, a governing contract, experience 0-15 and a Wikipedia article (race classified by the provisional measure) (622 player-seasons of players with no Wikipedia article and 286 with a non-positive cap number are excluded). Columns (1)-(6) use seasons governed by a freely bargained veteran contract (UFA or extension). Column (7) uses all seasons on a non-rookie contract, which adds street free agent, practice-squad, ERFA, tag, tender and other deals, mostly on the experience-scaled minimum. Column (8) adds seasons on rookie (drafted or UDFA) contracts and controls for a rookie-contract indicator and its interaction with Black. Columns (9)-(11) locate the non-rookie gap of column (7). Column (9) adds the pre-NFL signals (block D). Column (10) replaces Black with its interactions with the governing contract type and adds contract-type dummies (reference: UFA or extension), so each coefficient is the gap within that contract type; Black seasons and all seasons by type: other 121 of 460, practice squad 349 of 3,359, street free agent 871 of 5,464, tender or tag 218 of 1,102, UFA or extension 1,288 of 5,946. Tenders and tags include ERFA and RFA tenders and franchise and transition tags; other includes the remaining non-rookie deal types. Column (11) is column (7) on seasons with at least one game played, which drops partial-season cap numbers of players who never played (released or practice-squad players); 2,753 seasons are dropped. Column (10) shows where the column-(7) estimate comes from: the within-type coefficients are UFA or extension -0.016 (0.030), tender or tag 0.173 (0.053), street free agent 0.041 (0.036), practice squad 0.034 (0.055), other -0.020 (0.089). Block A: experience-bin dummies, experience, age and its square. Blocks B and C: one-season lagged production and career production to date with position-group-specific slopes, defined as in Table \ref{tab:pay-gap-veteran}. Block D: pre-NFL signals as in Table \ref{tab:pay-gap-veteran}. Columns (4)-(6) replace Black with its interactions with experience-bin indicators (0-3, 4-6 and 7+ seasons; Black seasons (players) by bin: 0-3 11 (11), 4-6 726 (392), 7+ 551 (258)). Column (4) includes the controls of column (3). Column (5) is the \citet{altonji2001employer} specification: pre-NFL signals and the interactions of log draft pick, the undrafted indicator and the 247 rating (and its missing indicator) with experience, without the lagged and career production employers learn from; column (6) adds that production. The signal $\times$ experience terms are consistent with employer learning but also with selective survival (late picks and undrafted players still in the league at high experience are positively selected), and the cap number in season $t$ comes from a contract signed earlier, so lagged production can postdate the pay decision. They are not a test of employer learning on their own. Controls with incomplete coverage are set to zero with a missing indicator (interacted like the control). The identifying assumption is that, conditional on the controls and fixed effects, race is uncorrelated with unobserved productivity. Omitted quality would bias the estimate: there are no PFF-type grades, and offensive linemen have no production measure, so their quality rests on games, injury weeks and pre-NFL signals. The implied gap is $100(e^{\hat\beta_1}-1)$. Standard errors are clustered at the player level. The omitted group is players with a Wikipedia article and no race or Hispanic category flag. \textbf{Sensitivity measure.} Race is the Wikipedia category flag. The flag is positive-only and misses most Black players and staff, so the comparison group mixes white and unflagged Black persons and the estimates are attenuated.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

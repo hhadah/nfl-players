@@ -1,0 +1,30 @@
+\begin{table}[!h]
+\centering
+\caption{Race gap in veteran-contract pay: BIRDiE cross-check \label{tab:pay-gap-birdie}}
+\centering
+\begin{threeparttable}
+\begin{tabular}[t]{lrr}
+\toprule
+ & Log APY & SE\\
+\midrule
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{A. Mean log APY by race, E[Y $|$ R] (BIRDiE)}}\\
+\hspace{1em}White & 1.107 & (0.057)\\
+\hspace{1em}Black & 1.215 & (0.030)\\
+\hspace{1em}Other race & 0.947 & (0.184)\\
+\hspace{1em}Black $-$ white & 0.108 & (0.051)\\
+\hspace{1em}Black $-$ white, intercept-only BIRDiE (no X) & 0.197 & (0.048)\\
+\hspace{1em}Black $-$ white, probability-weighted means & 0.126 & (0.032)\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{B. Conditional Black-white gap}}\\
+\hspace{1em}BIRDiE conditional gap & -0.162 & (0.096)\\
+\hspace{1em}Regression calibration, same X & -0.048 & (0.048)\\
+\hspace{1em}Regression calibration, main specification (Table \ref{tab:pay-gap-veteran}, column (5)) & -0.004 & (0.051)\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table compares the regression-calibration estimates of equation (1) with BIRDiE \citep{mccartan2025birdie}, which treats race as a latent variable whose prior is the race prediction (P(white), P(Black), P(other race)) and fits a Normal linear model of log APY with race-specific coefficients by EM. The sample is the main sample of Table \ref{tab:pay-gap-veteran}: 5,062 freely bargained veteran contracts (UFA and extensions) of 2,789 players signed 2014-2026. X is parsimonious: OTC market position group, signing-year bucket (2014-16, 2017-19, 2020-22, 2023-26), experience bin, the race prior's covariates (position at NFL entry, entry era, draft-round bucket, college type, whether a home county is known), prior-season games played and games started, career games, log draft pick with missing and undrafted indicators, and the athletic score with its missing indicator. Panel A reports BIRDiE's finite-sample estimates of mean log APY by race and their difference (the raw gap, without conditioning on position or year), from the model with X and from an intercept-only model, which does not depend on the race-specific X model; and, for comparison, the difference between means weighted by P(Black) and by P(white), which mixes the groups when the probabilities are not 0 or 1 and also picks up any relation between the prior covariates and pay, so its bias has no definite sign. Panel B: the BIRDiE conditional gap is the mean over contracts, weighted by BIRDiE's posterior probability of being Black given pay, X, names and county, of $X_i'(\hat\beta_{Black} - \hat\beta_{white})$, the gap at the characteristics of Black players allowing every coefficient to differ by race. The regression-calibration rows regress log APY on P(Black), P(other race) and controls with common slopes: the same X, and the main specification (position $\times$ year-signed fixed effects, blocks A-D and the prior-covariate fixed effects). Both estimators assume that first name, surname and home county are independent of pay given race and X, and both treat the predicted probabilities as P(race $|$ names, county, X), i.e. as calibrated given X, although X includes characteristics (games, draft slot, athletic score) that are not in the prior; regression calibration in addition assumes common slopes. With correctly specified models and probabilities calibrated given X, the BIRDiE raw gaps with and without X would agree, as would the conditional BIRDiE and regression-calibration gaps up to the difference between race-specific and common slopes; where they differ, the differences point to sensitivity to the race-specific X model or to probabilities that are not calibrated given X, so the table is a diagnostic rather than an independent estimate of the gap. BIRDiE standard errors come from a player-cluster bootstrap with 199 successful replications of 199 (players resampled with replacement; BIRDiE refit by EM in each); regression-calibration standard errors are clustered at the player level. P(Black) and P(other race) enter together, so the coefficient on P(Black) compares a Black with a white player. Race is predicted, not observed: each person's probability of being non-Hispanic Black combines first name, surname and hometown county (BIFSG) with an NFL-specific prior estimated by EM on predetermined characteristics (players: position at entry, rookie era, draft round, college type, county availability; staff: role, unit and era at first appearance); documented race statements are not used (notes/race-prediction-design.md). Regressions use the probabilities (regression calibration) and control for the prior's covariates; the coefficient on P(Black) is the Black-white gap if the probabilities are calibrated given the regression's controls and names and hometown are unrelated to the outcome given race and the controls. The validation exhibit compares the predictions with published TIDES shares.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

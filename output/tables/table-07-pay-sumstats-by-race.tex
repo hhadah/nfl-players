@@ -1,0 +1,32 @@
+\begin{table}[!h]
+\centering
+\caption{Veteran contracts: means by race group \label{tab:pay-sumstats-race}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{lrrrrr}
+\toprule
+ & Black (P-weighted) & White (P-weighted) & Other (P-weighted) & Black $-$ White & SE\\
+\midrule
+APY (\$ millions) & 5.51 & 4.86 & 5.45 & 0.02 & (0.49)\\
+APY share of cap (\%) & 2.64 & 2.39 & 2.61 & -0.02 & (0.22)\\
+Guarantee share (known guarantees) & 0.436 & 0.424 & 0.435 & -0.018 & (0.020)\\
+Contract length (years) & 1.98 & 2.07 & 2.03 & -0.14 & (0.09)\\
+Age at signing & 28.42 & 29.88 & 28.71 & -0.57 & (0.14)\\
+Experience (seasons) & 5.47 & 6.16 & 5.45 & -0.04 & (0.13)\\
+Prior-season games played & 13.31 & 12.84 & 12.89 & 0.25 & (0.30)\\
+Prior-season offense + defense snaps & 485 & 382 & 449 & 14 & (25)\\
+Drafted in rounds 1-2 & 0.334 & 0.181 & 0.280 & 0.145 & (0.038)\\
+Undrafted & 0.200 & 0.356 & 0.253 & -0.090 & (0.040)\\
+247 composite rating & 0.885 & 0.862 & 0.862 & 0.027 & (0.007)\\
+40-yard dash (seconds) & 4.69 & 4.90 & 4.81 & -0.01 & (0.02)\\
+Expected N contracts & 3,090 & 1,381 & 591 &  & \\
+Expected N players & 1,733 & 731 & 325 &  & \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table reports means of freely bargained veteran contracts (unrestricted free agents, including those who re-sign with their own team, and extensions) signed 2014-2026 by race group, among players with a race prediction. Tags and tenders are excluded. Every contract in the sample has a race measure. APY is the average annual value; the cap share is OTC's APY over the league salary cap of the signing year, which OTC rounds to 0.1\% of the cap (the rounding is immaterial for these means). The guarantee share is guaranteed over total value, among contracts with nonzero recorded guarantees (OTC records unknown guarantees as zero). Prior-season games and snaps refer to year signed minus one and are zero for players not on a roster that season; snaps start in 2013. The 247 rating and the 40-yard dash are means over players with a linked recruit profile or combine time. Under the predicted race measure, the group columns are means weighted by each player's P(Black), P(white) and P(other race), and the counts are expected counts (sums of the probabilities). Weighted means are consistent for E[Y $|$ race] only if the variable is unrelated to race given names, hometown and the prior covariates; if instead names are unrelated to the variable given race, they shrink the group difference toward zero (by a factor of about 0.65 here, the variance of P(Black) over its Bernoulli maximum), and a variable related to the prior covariates (draft round, position) also moves them. They are descriptive only (Table \ref{tab:pay-gap-birdie} reports BIRDiE estimates of E[Y $|$ race]). The difference column is the coefficient on P(Black) in a regression of the variable on P(Black) and P(other race) with OTC position $\times$ year-signed fixed effects and fixed effects for the covariates of the race prior (position at NFL entry, entry era, draft-round bucket, college type, home county known), i.e. the regression-calibration estimate of the Black-white difference within position and year; it therefore need not equal the difference between the first two columns. For the two draft rows, which the draft-round bucket would absorb, the regression uses the draft-free prediction and omits the bucket from the prior fixed effects. Standard errors are clustered at the player level. P(Black) is the predicted probability of being non-Hispanic Black alone; Black Hispanic and multiracial Black players enter P(other race), and Table \ref{tab:pay-gap-race-measures} also reports estimates with P(Black) + P(multiracial) as the Black regressor. The predicted Black share is not calibrated in levels: it lies below the TIDES African-American player share through 2016 and above the self-identified Black-alone share (below the Black-or-multiracial share) from 2019 (Table \ref{tab:race-prediction-tides}); Table \ref{tab:pay-gap-race-measures} reports estimates with the TIDES-raked posterior. Standard errors treat the predicted probabilities as known; the prior is estimated by EM on the whole player population of the database, so the omitted first-stage variance is likely small. P(Black) and P(other race) enter together, so the coefficient on P(Black) compares a Black with a white player. Race is predicted, not observed: each person's probability of being non-Hispanic Black combines first name, surname and hometown county (BIFSG) with an NFL-specific prior estimated by EM on predetermined characteristics (players: position at entry, rookie era, draft round, college type, county availability; staff: role, unit and era at first appearance); documented race statements are not used (notes/race-prediction-design.md). Regressions use the probabilities (regression calibration) and control for the prior's covariates; the coefficient on P(Black) is the Black-white gap if the probabilities are calibrated given the regression's controls and names and hometown are unrelated to the outcome given race and the controls. The validation exhibit compares the predictions with published TIDES shares.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

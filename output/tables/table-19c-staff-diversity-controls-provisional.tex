@@ -1,0 +1,56 @@
+\begin{table}[!h]
+\centering\centering
+\caption{Coaching-staff racial composition and win percentage: roster controls (provisional race measure) \label{tab:staff-diversity-controls}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{lcccccc}
+\toprule
+  & (1) & (2) & (3) & (4) & (5) & (6)\\
+\midrule
+Coaches' share Black & -0.112 & -0.127 & -0.109 & -0.121 & -0.128 & -0.135\\
+ & (0.110) & (0.110) & (0.106) & (0.107) & (0.100) & (0.102)\\
+Black head coach & -0.046 & -0.046 & -0.049 & -0.049 & -0.041 & -0.042\\
+ & (0.030) & (0.030) & (0.030) & (0.031) & (0.030) & (0.030)\\
+Black offensive coordinator & 0.025 & 0.021 & 0.002 & -0.003 & 0.000 & -0.003\\
+ & (0.043) & (0.046) & (0.046) & (0.047) & (0.042) & (0.043)\\
+Black defensive coordinator & 0.033 & 0.031 & 0.038 & 0.037 & 0.043* & 0.043*\\
+ & (0.022) & (0.022) & (0.023) & (0.023) & (0.024) & (0.024)\\
+Black general manager & 0.012 & 0.011 & 0.023 & 0.021 & 0.025 & 0.025\\
+ & (0.030) & (0.030) & (0.026) & (0.025) & (0.025) & (0.025)\\
+Roster mean log draft pick ($t-1$) & -0.193*** & -0.180*** &  &  &  & \\
+ & (0.055) & (0.052) &  &  &  & \\
+Opening-day mean log draft pick &  &  & -0.192*** & -0.190*** &  & \\
+ &  &  & (0.051) & (0.052) &  & \\
+Roster mean log draft pick ($t$) &  &  &  &  & -0.308*** & -0.299***\\
+ &  &  &  &  & (0.055) & (0.053)\\
+Roster share Black ($t-1$) & 0.096 & 0.102 &  &  &  & \\
+ & (0.124) & (0.125) &  &  &  & \\
+Opening-day roster share Black &  &  & 0.103 & 0.101 &  & \\
+ &  &  & (0.114) & (0.114) &  & \\
+Roster share Black ($t$) &  &  &  &  & 0.165 & 0.164\\
+ &  &  &  &  & (0.134) & (0.133)\\
+Share of coaches new to franchise & -0.082** &  & -0.073** &  & -0.058* & \\
+ & (0.038) &  & (0.034) &  & (0.034) & \\
+Share of coaches promoted & -0.231** &  & -0.250** &  & -0.275*** & \\
+ & (0.101) &  & (0.102) &  & (0.098) & \\
+\midrule
+Observations & 607 & 608 & 607 & 608 & 607 & 608\\
+R$^2$ & 0.299 & 0.288 & 0.279 & 0.269 & 0.318 & 0.308\\
+Within R$^2$ & 0.144 & 0.129 & 0.120 & 0.105 & 0.167 & 0.153\\
+Roster controls & $t-1$ & $t-1$ & Opening day & Opening day & Season $t$ & Season $t$\\
+Turnover shares & Yes & No & Yes & No & Yes & No\\
+Season FE, franchise FE & Yes & Yes & Yes & Yes & Yes & Yes\\
+Effect of 1 SD of coaches' share (win pp) & -0.765 & -0.866 & -0.742 & -0.824 & -0.869 & -0.917\\
+Model-only prior controls & No & No & No & No & No & No\\
+WCB $p$-value: coaches' share Black & 0.329 & 0.274 & 0.326 & 0.284 & 0.228 & 0.208\\
+WCB $p$-value: head coach & 0.150 & 0.153 & 0.119 & 0.124 & 0.190 & 0.191\\
+\bottomrule
+\multicolumn{7}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table includes the estimation results of equation (3) (column 4 of Table 19) with alternative roster controls. Every column includes franchise and season FE, the role-holder regressors and the lagged win percentage and market expected wins. Column (1) is the baseline: the previous season's cap share, game-day roster mean log draft pick, mean age and Black share, and the shares of coaches new to the franchise and promoted. Columns (3)-(4) use the opening-day active roster (first regular-season game), which is predetermined with respect to the season's results but chosen by the staff. Columns (5)-(6) use the season-$t$ game-day-week-weighted roster and the season-$t$ cap share, which respond to in-season results (call-ups, benchings, signings) and to the staff's choices: these are potentially post-treatment controls that may absorb part of the staff effect. Even columns drop the turnover shares, which move mechanically with changes in staff composition. Sample: FullStaffObserved team-seasons, 2007-2025. Cap shares are observed from 2013 and zero-filled before; their missing indicators are absorbed by the season FE. The coaches' share includes the head coach and the coordinators. Conditional on the role-holder regressors (from column 3 on), its coefficient is identified from the composition of the remaining coaches, and the role coefficients are net of the role holder's own contribution to the share. Role-holder indicators (HC, OC, DC, GM) are zero-filled when the role has no listed holder (e.g. teams without a GM title) or the holder's race is unknown and each enters with a missing indicator, so no team-season is dropped for a missing role holder. Standard errors, in parentheses, are clustered at the franchise level (32 clusters). Wild cluster bootstrap-t $p$-values (restricted, Webb six-point weights, 9,999 replications, clustered by franchise) are reported in the bottom panel because 32 clusters are few. \textbf{Sensitivity measure.} Race is the Wikipedia category flag. The flag is positive-only and misses most Black players and staff, so team shares are lower bounds whose coverage varies with Wikipedia editing.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

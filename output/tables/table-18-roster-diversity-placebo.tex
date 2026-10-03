@@ -1,0 +1,44 @@
+\begin{table}[!h]
+\centering\centering
+\caption{Roster racial composition and team performance: placebo tests \label{tab:roster-diversity-placebo}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{lccccccc}
+\toprule
+  & (1) & (2) & (3) & (4) & (5) & (6) & (7)\\
+\midrule
+Roster share Black, season $t+1$ & -0.631** & -5.512** & -0.413** &  &  &  & \\
+ & (0.236) & (2.546) & (0.193) &  &  &  & \\
+Roster share Black, season $t$ & -0.170 & -0.334 & -0.178 &  &  &  & \\
+ & (0.289) & (3.329) & (0.237) &  &  &  & \\
+Roster share Black, season $t-1$ &  &  &  & 0.559*** & 0.541*** & 0.591*** & 0.588***\\
+ &  &  &  & (0.044) & (0.028) & (0.041) & (0.026)\\
+Win pct., season $t-1$ & -0.166** & -3.038*** & -0.039 & -0.021** & -0.016* & -0.021** & -0.009\\
+ & (0.077) & (0.896) & (0.061) & (0.010) & (0.008) & (0.010) & (0.007)\\
+Mean prior P(Black), season $t$ & -1.977*** & -20.763** & 1.553** &  &  & 0.763*** & 0.840***\\
+ & (0.715) & (8.792) & (0.638) &  &  & (0.136) & (0.087)\\
+Mean prior P(Black), season $t-1$ &  &  &  &  &  & -0.615*** & -0.571***\\
+ &  &  &  &  &  & (0.166) & (0.071)\\
+\midrule
+Observations & 384 & 384 & 735 & 384 & 736 & 384 & 736\\
+R$^2$ & 0.490 & 0.310 & 0.340 & 0.592 & 0.594 & 0.629 & 0.652\\
+Within R$^2$ & 0.310 & 0.204 & 0.189 & 0.347 & 0.300 & 0.407 & 0.401\\
+WCB p-value, share (t+1) & 0.013 & 0.041 & 0.044 &  &  &  & \\
+WCB p-value, share (t) & 0.565 & 0.922 & 0.459 &  &  &  & \\
+WCB p-value, lagged win pct. &  &  &  & 0.035 & 0.055 & 0.041 & 0.208\\
+Mean of outcome & 0.500 & 0.000 & 0.500 & 0.658 & 0.597 & 0.658 & 0.597\\
+Diversity measure & Snap-weighted & Snap-weighted & Headcount & Snap-weighted & Headcount & Snap-weighted & Headcount\\
+Seasons & 2013-2024 & 2013-2024 & 2002-2024 & 2014-2025 & 2003-2025 & 2014-2025 & 2003-2025\\
+Season and franchise FE & Yes & Yes & Yes & Yes & Yes & Yes & Yes\\
+Lagged outcomes, roster quality, staff and QB & Yes & Yes & Yes & No & No & No & No\\
+Calibration controls and their leads & Yes & Yes & Yes & No & No & No & No\\
+\bottomrule
+\multicolumn{8}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table includes the estimation results of placebo versions of equation (2). The unit of observation is a franchise-season; all columns include season and franchise fixed effects. Columns (1)-(3) add next season's roster share (season $t+1$) to the current share, with the column (4) controls of Table \ref{tab:roster-diversity-main}. Next season's roster cannot affect this season's results, so a lead coefficient similar to the current-share coefficient indicates that performance shapes composition (winning teams retain or acquire different players) or that a persistent franchise trait drives both. The dependent variable is the win percentage (columns (1) and (3)) or wins over the market expectation (column (2)). Under the predicted measure these columns include the calibration controls of the column (4) specification and their leads (next season's mean prior and prior-covariate shares).  The lead is missing in 2025, the last season observed. Columns (4)-(5) test reverse causality directly: the dependent variable is the current roster share, regressed on last season's win percentage conditional on last season's share, so the coefficient on the lagged win percentage is the change in composition predicted by past performance. No season-$t$ controls enter, because roster quality in season $t$ is itself an outcome of season $t-1$ results (e.g., draft position). With franchise fixed effects the coefficient on the lagged share is subject to Nickell bias. Under the predicted measure an expected share is unbiased for the true share as a dependent variable without the prior's covariates, and the draft and college mix of season $t$ is itself an outcome of season $t-1$ results, so columns (4)-(5) do not condition on them. Columns (6)-(7) decompose the reverse-causality coefficient: they add the current and lagged mean prior P(Black), so the coefficient on the lagged win percentage is the change in composition not accounted for by changes in the roster's position, draft, college and era mix (on which the prior depends). The snap-weighted share Black weights each player by his offensive plus defensive snaps for the franchise in the regular season; it is measured during season $t$ and can respond to injuries and benching. Snap weights also respond to game script: teams that trail run more offensive plays, teams with weak offenses play more defensive snaps, and defensive units have higher Black shares, so losing can raise the snap-weighted share mechanically (Table \ref{tab:roster-diversity-robustness} reports the unit-balanced share and a control for the defensive snap share). The headcount share Black weights each player by the regular-season weeks he was on the franchise's game-day roster. Controls are fixed by opening day: the lagged win percentage and lagged market expected wins; roster quality of the active roster of the first regular-season game (mean log draft pick, undrafted = log 300; share of first-round picks; mean age; mean experience); and the Black share of the on-field coaches listed in the preseason staff snapshot, used only where the full staff is observed (2007 on; a missing indicator absorbs earlier seasons), the opening-day head coach's race and the opening-day starting quarterback's race. Under the predicted measures these race controls are predicted probabilities like the treatment, and the calibration controls include their priors (the coaches' mean prior and the head coach's and quarterback's priors). The head coach's predicted probability is calibrated to the staff population, not to the selected population of head coaches, so it is a noisy control. Standard errors, in parentheses, are clustered at the franchise level (32 clusters); wild cluster bootstrap-t p-values (restricted, WCR) use Webb weights and 9,999 replications. Under regression calibration the coefficient on an expected roster share (the mean over players of the predicted probability of being non-Hispanic Black) equals the effect of the true share only if the probabilities are calibrated at the team level given the regression's controls; this requires that players' names and hometown counties be unrelated to team performance given race and the prior's covariates, and the calibration controls (the team mean of the prior and the weighted shares of its draft-round, college-type, rookie-era and hometown-county levels, plus the priors of the coaches, head coach and quarterback whose predicted race enters as a control) condition on those covariates. Shrinkage toward the prior by itself causes no attenuation (the error of an expected share is of the Berkson type), but individual-level calibration does not imply team-level calibration: if the true share rises more (less) than one-for-one with the expected share across teams, the coefficient overstates (understates) the effect, so the sign of any bias is not known. A league-wide level error, such as the model's shortfall against the TIDES league share, is absorbed by the season fixed effects. A team-level calibration check among documented players (validation only): regressing a franchise-season's documented Black share of its documented players on the same players' mean predicted probability, with franchise and season fixed effects, gives a slope of 0.79 (SE 0.06) for snap weights and  0.69 (SE 0.06) for headcount weights, against one under calibration. Documented players are a selected, mostly Black and famous subset (about 28 percent of the weight), so the check does not establish the team-level calibration of the full roster in either direction. Effect rows refer to a one-SD change in the expected share, whose SD is smaller than that of the true share. The predicted share counts multiracial and Hispanic Black players as non-Black. Race is predicted, not observed: each person's probability of being non-Hispanic Black combines first name, surname and hometown county (BIFSG) with an NFL-specific prior estimated by EM on predetermined characteristics (players: position at entry, rookie era, draft round, college type, county availability; staff: role, unit and era at first appearance); documented race statements are not used (notes/race-prediction-design.md). Team shares are expected shares (mean member probability). Their error is Berkson-type: estimates are consistent if the probabilities are calibrated given the regression's controls (the team mean of the prior is one of them), but less precise than with observed race; individual coaches' probabilities are noisy because names carry little information for many Black coaches. The validation exhibit compares the predictions with published TIDES shares.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

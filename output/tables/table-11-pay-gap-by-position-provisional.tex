@@ -1,0 +1,49 @@
+\begin{table}[!h]
+\centering\centering
+\caption{Race gap in veteran-contract pay by position group (provisional race measure) \label{tab:pay-gap-position}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{lc}
+\toprule
+  & (1)\\
+\midrule
+Black $\times$ DB & -0.064\\
+ & (0.055)\\
+Black $\times$ DL & -0.033\\
+ & (0.050)\\
+Black $\times$ LB & 0.153**\\
+ & (0.075)\\
+Black $\times$ OL & 0.082\\
+ & (0.098)\\
+Black $\times$ QB & -0.290**\\
+ & (0.141)\\
+Black $\times$ RB & 0.005\\
+ & (0.058)\\
+Black $\times$ TE & -0.008\\
+ & (0.099)\\
+Black $\times$ WR & -0.018\\
+ & (0.063)\\
+Other race & 0.028\\
+ & (0.051)\\
+\midrule
+Observations & 5058\\
+R$^2$ & 0.714\\
+Within R$^2$ & 0.681\\
+WCR bootstrap $p$, Black $\times$ DB & 0.240\\
+WCR bootstrap $p$, Black $\times$ DL & 0.509\\
+WCR bootstrap $p$, Black $\times$ LB & 0.058\\
+WCR bootstrap $p$, Black $\times$ OL & 0.422\\
+WCR bootstrap $p$, Black $\times$ QB & 0.099\\
+WCR bootstrap $p$, Black $\times$ RB & 0.941\\
+WCR bootstrap $p$, Black $\times$ TE & 0.943\\
+WCR bootstrap $p$, Black $\times$ WR & 0.784\\
+\bottomrule
+\multicolumn{2}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table includes the estimation results of equation (1) with Black interacted with position-group indicators (no main term), so each coefficient is the gap within that group. The outcome is log APY; the sample is freely bargained veteran contracts (UFA and extensions) signed 2014-2026. Controls are those of column (5) of Table \ref{tab:pay-gap-veteran} (blocks A-D) with OTC position $\times$ year-signed fixed effects. Black contracts (players) by group: DB 229 (126), DL 251 (132), LB 78 (42), OL 103 (56), P 1 (1), QB 50 (20), RB 120 (72), TE 40 (25), WR 184 (92). Groups with fewer than 10 Black players share one pooled interaction; groups without a Black contract have none. The pooled indicator for Black players in P (1 players) is included but not reported. Career stage (A): experience-bin dummies (0, 1, 2, 3, 4-6, 7+ seasons), age at signing and its square, a left-censored-experience indicator and an extension dummy (reference: unrestricted free agents). Whether a team extends a player is itself a team decision. Prior-season production (B): season-before-signing box-score and PFR measures with position-group-specific slopes (passing for QBs, rushing and receiving for RBs, receiving for WRs and TEs, tackles, sacks, QB hits, tackles for loss and pressures for DL and LB, tackles, interceptions, passes defended and coverage allowed for DBs, kicking and punting), games played and injury weeks interacted with position group, and a no-prior-season indicator. Career production (C): career games and injury weeks interacted with position group, and career sums of the block B production measures with the same position-group slopes. Pre-NFL signals (D): log draft pick, an undrafted indicator, draft-round dummies, 247 rating and stars, combine measures (40, vertical, bench, broad jump, cone, shuttle, height, weight) and athletic scores (a composite and size, speed, explosion and agility subscores built from the combine measures) interacted with position group, and the final college team's Power-conference, SRS and HBCU indicators. Controls with incomplete coverage are set to zero with a missing indicator (interacted like the control). The identifying assumption is that, conditional on the controls and fixed effects, race is uncorrelated with unobserved productivity. Omitted quality would bias the estimate: there are no PFF-type grades, and offensive linemen have no production measure, so their quality rests on games, injury weeks and pre-NFL signals. OL quality is measured only by games, injury weeks and pre-NFL signals, so the OL estimate rests on those controls. Standard errors are clustered at the player level. The WCR bootstrap $p$-values are from a wild cluster restricted bootstrap-t with player clusters, Webb weights and 9999 replications; with few Black players in a group (few treated clusters) they are more reliable than the cluster-robust standard errors. The omitted group is players with a Wikipedia article and no race or Hispanic category flag. \textbf{Sensitivity measure.} Race is the Wikipedia category flag. The flag is positive-only and misses most Black players and staff, so the comparison group mixes white and unflagged Black persons and the estimates are attenuated.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

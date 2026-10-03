@@ -1,0 +1,28 @@
+\begin{table}[!h]
+\centering
+\caption{Gelbach decomposition of the change in the Black pay gap (provisional race measure) \label{tab:pay-gap-gelbach}}
+\centering
+\begin{threeparttable}
+\begin{tabular}[t]{lrrr}
+\toprule
+ & Log points & Bootstrap SE & Share of total change\\
+\midrule
+\addlinespace[0.3em]
+\multicolumn{4}{l}{\textbf{Coefficient on Black}}\\
+\hspace{1em}Black, column (1): position $\times$ year FE only & 0.153 & (0.045) & \\
+\hspace{1em}Black, column (5): main specification & -0.011 & (0.026) & \\
+\addlinespace[0.3em]
+\multicolumn{4}{l}{\textbf{Contribution of each block to the change}}\\
+\hspace{1em}Career stage (A) & -0.009 & (0.017) & -0.057\\
+\hspace{1em}Prior-season production (B) & 0.107 & (0.024) & 0.653\\
+\hspace{1em}Career production (C) & 0.055 & (0.017) & 0.334\\
+\hspace{1em}Pre-NFL signals (D) & 0.011 & (0.019) & 0.070\\
+\hspace{1em}Total change, $\hat\beta_1^{(1)} - \hat\beta_1^{(5)}$ & 0.164 & (0.041) & 1.000\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table decomposes the change in the coefficient on Black in equation (1) between column (1) and column (5) of Table \ref{tab:pay-gap-veteran} following \citet{gelbach2016covariates}. The sample is the column-(5) estimation sample of 5,058 freely bargained veteran contracts (UFA and extensions) signed 2014-2026; the outcome is log APY. For each block $k$, the contribution is the coefficient on Black from a regression of the block's fitted contribution $X_k\hat\pi_k$ (coefficients from the column-(5) model) on Black and Other race and the fixed effects of the base regression (position $\times$ year signed); the contributions sum to the total change. A positive contribution means the block's controls account for part of a positive raw gap. Career stage (A): experience-bin dummies (0, 1, 2, 3, 4-6, 7+ seasons), age at signing and its square, a left-censored-experience indicator and an extension dummy (reference: unrestricted free agents). Whether a team extends a player is itself a team decision. Prior-season production (B): season-before-signing box-score and PFR measures with position-group-specific slopes (passing for QBs, rushing and receiving for RBs, receiving for WRs and TEs, tackles, sacks, QB hits, tackles for loss and pressures for DL and LB, tackles, interceptions, passes defended and coverage allowed for DBs, kicking and punting), games played and injury weeks interacted with position group, and a no-prior-season indicator. Career production (C): career games and injury weeks interacted with position group, and career sums of the block B production measures with the same position-group slopes. Pre-NFL signals (D): log draft pick, an undrafted indicator, draft-round dummies, 247 rating and stars, combine measures (40, vertical, bench, broad jump, cone, shuttle, height, weight) and athletic scores (a composite and size, speed, explosion and agility subscores built from the combine measures) interacted with position group, and the final college team's Power-conference, SRS and HBCU indicators. Controls with incomplete coverage are set to zero with a missing indicator (interacted like the control). Standard errors come from a player-cluster bootstrap with 199 replications: players are resampled with replacement and the whole decomposition is repeated in each replication. The omitted group is players with a Wikipedia article and no race or Hispanic category flag. \textbf{Sensitivity measure.} Race is the Wikipedia category flag. The flag is positive-only and misses most Black players and staff, so the comparison group mixes white and unflagged Black persons and the estimates are attenuated.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

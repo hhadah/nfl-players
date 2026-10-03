@@ -9,10 +9,25 @@ Data infrastructure for two questions:
    high-school, college and NFL productivity?
 
 The repository builds one DuckDB database from public sources (Python,
-`scripts/`) and then the analytical samples and data exhibits from it (R,
-`programs/`). Race is measured primarily by human hand-coding (protocol in
-[notes/race-coding-protocol.md](notes/race-coding-protocol.md)); name-based
-inference is kept only as a secondary measure.
+`scripts/`). From it, R (`programs/`) builds the analytical samples, the data
+exhibits, and the estimation exhibits for the three questions:
+
+- the pay gap at the same position;
+- roster diversity and team performance;
+- staff diversity and team performance.
+
+Race is **predicted** (see
+[notes/race-prediction-design.md](notes/race-prediction-design.md)). Each
+person's probability of being Black combines names and hometown with an
+NFL-specific prior estimated by EM, and the regressions use the probabilities
+(regression calibration). Two further measures are kept:
+
+- hand coding ([notes/race-coding-protocol.md](notes/race-coding-protocol.md)),
+  which becomes primary automatically if the sheets are ever filled;
+- the Wikipedia flag, as a sensitivity measure.
+
+The estimation specifications are in
+[notes/analysis-plan.md](notes/analysis-plan.md).
 
 ## Layout
 
@@ -23,6 +38,11 @@ data/raw/           API caches (nflverse parquet, CFBD JSON, Wikipedia JSON, Cen
 data/datasets/      nfl_research.duckdb and analysis/ samples — gitignored, regenerated
 data/hand_coded/    human inputs, tracked: race-coding sheets, school-name and
                     head-coach-date corrections
+data/derived/       LOCAL ONLY (gitignored; person-level race): race statements
+                    classified once from Wikipedia article text
+                    (race_text_labels.csv, race_text_classification.csv);
+                    used by the preddoc variant and the validation only
+data/reference/     tracked: published TIDES NFL race shares with citations
 data/archive/       backup of the 2026-05-04 build — gitignored
 output/             tables (.tex) and figures
 notes/              race-coding protocol
@@ -36,6 +56,9 @@ cp .env.example .env    # add a free CFBD key: https://collegefootballdata.com/k
 ```
 
 R packages are loaded with `pacman::p_load()` in `programs/95-make-all.R`.
+`fwildclusterboot` is not on CRAN:
+`install.packages("fwildclusterboot", repos = c("https://s3alfisc.r-universe.dev", "https://cloud.r-project.org"))`.
+`birdie` (CRAN) is used through `birdie::`.
 
 ## Build
 
@@ -67,6 +90,8 @@ ranges).
 | `04c_infer_race.py` | reference files | `race_bifsg`, `race_bifsg_geo` |
 | `05_join_players.py` | — | `player_xwalk`, `player_college_xwalk`, `player_recruit_xwalk`, `college_recruit_xwalk`, `school_xwalk` |
 | `09_race_coding_sheets.py` | Wikidata/Wikipedia | coding sheets in `data/hand_coded/race_coding/`, `player_wiki_signals` |
+| `04d_race_documented.py` | Wikidata (ethnic group, P172), Wikipedia article text | `race_wikidata_ethnicity`, `race_text_candidates`, `race_article_coverage` |
+| `04e_predict_race.py` | `race_bifsg`, documented race, `data/derived/race_text_labels.csv`, TIDES | `race_predicted` (primary model-only and documented variants, draft-free, raked and Black-or-multiracial variants), `race_predicted_priors` |
 | `06_validate_db.py` | — | cross-table checks |
 
 Every team column carries `franchise_id` (current nflverse code; relocated
@@ -92,24 +117,53 @@ every source column.
 
 ## Race and ethnicity
 
-- **Primary:** human hand-coding by two independent coders, with
-  adjudication, following [notes/race-coding-protocol.md](notes/race-coding-protocol.md).
-  `scripts/09_race_coding_sheets.py` writes tiered sheets (tier 1 = head
-  coaches, then coordinators/GMs/owners, other coaches, front office, veteran
-  contract signers, rookie signers, other players). It never overwrites
-  entered codes. `programs/08-race-coding-agreement.R` reports Cohen's kappa
-  and the adjudication list.
-- **Screening aid:** Wikipedia category flags (`staff_person_wiki_signals`,
-  `player_wiki_signals`). They are positive-only; a missing category is not
-  evidence of race.
-- **Secondary:** name-based BIFSG (`race_bifsg`; Elliott et al. 2009, Voicu
-  2018), with a hometown-county variant (`race_bifsg_geo`). Names carry
-  little information in this population, and BIFSG labels most Black coaches
-  white. Use it only for misclassification-correction exercises.
-
 All R samples take race from `load_person_race()` in
-`programs/00-race-measures.R`, which keeps the three measures in separate
-columns.
+`programs/00-race-measures.R`. The estimation scripts pick a measure with
+`choose_race_measure()` in `programs/00-analysis-functions.R`.
+
+- **Primary: predicted race** (`race_predicted`; the design is in
+  `notes/race-prediction-design.md`). P(race) combines two pieces:
+  - the BIFSG name and hometown-county likelihood;
+  - an NFL prior estimated by EM on the full population, using
+    predetermined characteristics only:
+    - players: position at entry, rookie era, draft round, college type,
+      county availability;
+    - staff: role, unit and era at first appearance.
+
+  Documented race is not an input to the primary measure.
+
+  **Pay regressions** regress on P(Black) and P(other race) and control for
+  the prior's covariates (regression calibration). A BIRDiE cross-check is
+  included (McCartan, Fisher, Goldin, Ho and Imai 2025).
+
+  **Team regressions** use expected shares, the mean member probability.
+
+  **Validation** (`programs/15`):
+  - Predicted shares are compared with published TIDES shares
+    (`data/reference/`).
+  - On persons with documented race, the AUC is about 0.94 for players and
+    0.97 for staff, Black versus white.
+  - Assistant coaches are under-predicted by about 10 pp. Individual coaches'
+    probabilities are noisy (reliability about 0.4 for head coaches).
+- **Documented race** comes from three public sources:
+  - Wikidata ethnic group;
+  - Wikipedia categories;
+  - statements in Wikipedia article text, classified by two independent
+    model passes with adjudication (`data/derived/`).
+
+  It is used for validation and for the `preddoc` sensitivity measure.
+  Documentation depends on fame, so it is never the primary treatment.
+- **Hand coding** follows
+  [notes/race-coding-protocol.md](notes/race-coding-protocol.md). The sheets
+  are empty. If hand codes cover at least 80% of a script's sample, that
+  script uses them automatically. `programs/08-race-coding-agreement.R`
+  reports agreement.
+- **Sensitivity measures:**
+  - `preddoc` (documented, else predicted);
+  - `provisional` (the positive-only Wikipedia flag).
+
+  Run either with `NFL_RACE_MEASURE=preddoc` or `NFL_RACE_MEASURE=provisional`.
+  Their exhibits get a `-<measure>` suffix and are written to `output/` only.
 
 ## Analytical samples
 
@@ -130,10 +184,36 @@ reporting signal coverage by season or class:
 `programs/07-table-summary-statistics.R` writes summary-statistics and
 coverage tables to `output/tables/` and `my_paper/tables/`.
 
+Estimation samples and exhibits (`notes/analysis-plan.md`):
+
+| Script | Output |
+|---|---|
+| `09-roster-composition-sample.R` | `roster_composition_team_season`, `roster_composition_team_game`: roster race composition by weighting scheme and unit (headcount, snaps, opening day), expected and residual shares given position mix, QB race, roster quality |
+| `10-pay-analysis-sample.R` | `analysis_pay_contracts`, `analysis_pay_player_season`, `pay_control_blocks.csv` (position-specific quality controls, blocks A-F) |
+| `11-team-analysis-sample.R` | `analysis_team_season` (with leads and lags), `analysis_team_unit_season` (offense/defense stack), `analysis_team_game` (with opponent composition) |
+| `12-table-pay-gap.R` | Tables 7-13, 26 (BIRDiE), 27 (race measures): veteran pay gap, Gelbach decomposition, terms, by position, employer learning, draft margin |
+| `13-table-roster-diversity-performance.R` | Tables 14-18b, 28: roster diversity and team performance, game-level design against the spread, placebo tests |
+| `14-table-staff-diversity-performance.R` | Tables 19-23, 29: staff diversity, head-coach-spell FE, offense/defense stack, head-coach hires, placebo tests |
+| `15-table-race-prediction-validation.R` | Tables 24-25 and figures: predicted race against TIDES and against documented race |
+
+Each estimation script also writes tidy coefficients to `output/estimates/`.
+Inference clusters by player (pay) or by franchise (teams). Team tables add
+wild cluster bootstrap p-values (fwildclusterboot, Webb weights) because there
+are only 32 clusters.
+
 ## Known limitations
 
-- Hand-coded race is empty until coding is done; every race-based variable in
-  the samples is NA or provisional until then.
+- Race is predicted, not observed:
+  - Names separate Black and white Americans imperfectly. About half of the
+    variation in a player's P(Black) comes from the prior (position, draft,
+    college).
+  - Regression calibration needs the probabilities to be calibrated given
+    each regression's controls. The pay script reports a diagnostic, and the
+    full pre-NFL control set still predicts P(Black) within prior cells.
+  - Coach-level probabilities are noisy.
+- The team-level placebo tests fail: next-season composition predicts current
+  outcomes, and past outcomes predict composition. Read the roster and staff
+  associations as descriptive, not causal.
 - Staff come from Wikipedia editors' records. Templates can lag changes (the
   median snapshot uses a revision 45-57 days old), and 1999-2006 boxes are
   retrospective. OC, DC and GM are title-based: a head coach who calls plays

@@ -1,0 +1,49 @@
+\begin{table}[!h]
+\centering\centering
+\caption{Race gap in veteran-contract pay by position group \label{tab:pay-gap-position}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{lc}
+\toprule
+  & (1)\\
+\midrule
+P(Black) $\times$ DB & -0.012\\
+ & (0.108)\\
+P(Black) $\times$ DL & 0.001\\
+ & (0.083)\\
+P(Black) $\times$ LB & -0.089\\
+ & (0.086)\\
+P(Black) $\times$ OL & -0.022\\
+ & (0.102)\\
+P(Black) $\times$ QB & -0.022\\
+ & (0.179)\\
+P(Black) $\times$ RB & -0.007\\
+ & (0.140)\\
+P(Black) $\times$ TE & 0.146\\
+ & (0.101)\\
+P(Black) $\times$ WR & 0.007\\
+ & (0.118)\\
+P(other race) & -0.049\\
+ & (0.088)\\
+\midrule
+Observations & 5062\\
+R$^2$ & 0.717\\
+Within R$^2$ & 0.685\\
+WCR bootstrap $p$, P(Black) $\times$ DB & 0.914\\
+WCR bootstrap $p$, P(Black) $\times$ DL & 0.989\\
+WCR bootstrap $p$, P(Black) $\times$ LB & 0.315\\
+WCR bootstrap $p$, P(Black) $\times$ OL & 0.837\\
+WCR bootstrap $p$, P(Black) $\times$ QB & 0.920\\
+WCR bootstrap $p$, P(Black) $\times$ RB & 0.965\\
+WCR bootstrap $p$, P(Black) $\times$ TE & 0.175\\
+WCR bootstrap $p$, P(Black) $\times$ WR & 0.957\\
+\bottomrule
+\multicolumn{2}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table includes the estimation results of equation (1) with P(Black) interacted with position-group indicators (no main term), so each coefficient is the gap within that group. The outcome is log APY; the sample is freely bargained veteran contracts (UFA and extensions) signed 2014-2026. Controls are those of column (5) of Table \ref{tab:pay-gap-veteran} (blocks A-D) with OTC position $\times$ year-signed fixed effects. Every column also includes fixed effects for the covariates of the race prediction's prior (position at NFL entry, entry era, draft-round bucket, college type and whether a home county is known), as regression calibration requires. Expected Black contracts (players), sums of P(Black), by group: DB 818 (474), DL 712 (386), K 2 (1), LB 333 (189), LS 3 (2), OL 326 (183), P 5 (3), QB 66 (27), RB 288 (178), TE 112 (65), WR 423 (238). Groups with fewer than 10 expected Black players share one pooled interaction; groups without a Black contract have none. The pooled indicator for Black players in K, LS, P (5 expected players) is included but not reported. Career stage (A): experience-bin dummies (0, 1, 2, 3, 4-6, 7+ seasons), age at signing and its square, a left-censored-experience indicator and an extension dummy (reference: unrestricted free agents). Whether a team extends a player is itself a team decision. Prior-season production (B): season-before-signing box-score and PFR measures with position-group-specific slopes (passing for QBs, rushing and receiving for RBs, receiving for WRs and TEs, tackles, sacks, QB hits, tackles for loss and pressures for DL and LB, tackles, interceptions, passes defended and coverage allowed for DBs, kicking and punting), games played and injury weeks interacted with position group, and a no-prior-season indicator. Career production (C): career games and injury weeks interacted with position group, and career sums of the block B production measures with the same position-group slopes. Pre-NFL signals (D): log draft pick, an undrafted indicator, draft-round dummies, 247 rating and stars, combine measures (40, vertical, bench, broad jump, cone, shuttle, height, weight) and athletic scores (a composite and size, speed, explosion and agility subscores built from the combine measures) interacted with position group, and the final college team's Power-conference, SRS and HBCU indicators. Controls with incomplete coverage are set to zero with a missing indicator (interacted like the control). The identifying assumption is that, conditional on the controls and fixed effects, race is uncorrelated with unobserved productivity. Omitted quality would bias the estimate: there are no PFF-type grades, and offensive linemen have no production measure, so their quality rests on games, injury weeks and pre-NFL signals. Regression calibration identifies the Black-white gap only if, in addition to names and hometown being unrelated to pay given race and the controls, (i) P(Black) is calibrated given every control in the column, not only given the prior's covariates, and (ii) the gap does not vary with the controls (otherwise the coefficient is a variance-weighted average of gaps). Controls that predict race beyond the prior violate (i) and attenuate the coefficient on P(Black) even when they do not affect pay, so part of any change in the coefficient as controls are added is mechanical. P(Black) is the predicted probability of being non-Hispanic Black alone; Black Hispanic and multiracial Black players enter P(other race), and Table \ref{tab:pay-gap-race-measures} also reports estimates with P(Black) + P(multiracial) as the Black regressor. The predicted Black share is not calibrated in levels: it lies below the TIDES African-American player share through 2016 and above the self-identified Black-alone share (below the Black-or-multiracial share) from 2019 (Table \ref{tab:race-prediction-tides}); Table \ref{tab:pay-gap-race-measures} reports estimates with the TIDES-raked posterior. Standard errors treat the predicted probabilities as known; the prior is estimated by EM on the whole player population of the database, so the omitted first-stage variance is likely small. OL quality is measured only by games, injury weeks and pre-NFL signals, so the OL estimate rests on those controls. Standard errors are clustered at the player level. The WCR bootstrap $p$-values are from a wild cluster restricted bootstrap-t with player clusters, Webb weights and 9999 replications; every player enters each interaction with his P(Black), but within some groups (e.g. K, P, LS, QB, OL) P(Black) is mostly near zero and its effective variation comes from few players, where cluster-robust standard errors can over-reject. P(Black) and P(other race) enter together, so the coefficient on P(Black) compares a Black with a white player. Race is predicted, not observed: each person's probability of being non-Hispanic Black combines first name, surname and hometown county (BIFSG) with an NFL-specific prior estimated by EM on predetermined characteristics (players: position at entry, rookie era, draft round, college type, county availability; staff: role, unit and era at first appearance); documented race statements are not used (notes/race-prediction-design.md). Regressions use the probabilities (regression calibration) and control for the prior's covariates; the coefficient on P(Black) is the Black-white gap if the probabilities are calibrated given the regression's controls and names and hometown are unrelated to the outcome given race and the controls. The validation exhibit compares the predictions with published TIDES shares.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

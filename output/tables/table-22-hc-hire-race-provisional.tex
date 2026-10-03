@@ -1,0 +1,47 @@
+\begin{table}[!h]
+\centering\centering
+\caption{Head-coach hires: team performance and the new head coach's race (provisional race measure) \label{tab:hc-hire-race}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{lcccccccc}
+\toprule
+  & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\
+\midrule
+Black new head coach & -0.100** & -0.047 & -0.547 & -0.125** & -0.070 & -0.849 &  & 0.110*\\
+ & (0.046) & (0.044) & (0.418) & (0.053) & (0.059) & (0.575) &  & (0.064)\\
+Documented Black new head coach &  &  &  &  &  &  & -0.051 & -0.156***\\
+ &  &  &  &  &  &  & (0.041) & (0.051)\\
+Retained interim coach & -0.028 & -0.021 & -0.512 & -0.044 & -0.013 & -0.510 & -0.021 & -0.021\\
+ & (0.074) & (0.060) & (0.527) & (0.087) & (0.066) & (0.624) & (0.060) & (0.060)\\
+Lagged win percentage &  & -0.130 & -3.160* &  & -0.227 & -3.104* & -0.129 & -0.138\\
+ &  & (0.140) & (1.672) &  & (0.159) & (1.824) & (0.138) & (0.141)\\
+Lagged market expected wins & -0.042*** & 0.041*** & 0.262 & -0.034*** & 0.056*** & 0.356* & 0.041*** & 0.042***\\
+ & (0.006) & (0.014) & (0.159) & (0.008) & (0.016) & (0.189) & (0.013) & (0.014)\\
+\midrule
+Observations & 179 & 179 & 179 & 132 & 132 & 132 & 179 & 179\\
+R$^2$ & 0.235 & 0.191 & 0.127 & 0.219 & 0.222 & 0.156 & 0.193 & 0.194\\
+Within R$^2$ & 0.144 & 0.091 & 0.047 & 0.124 & 0.134 & 0.069 & 0.093 & 0.094\\
+Hires from & 2000 & 2000 & 2000 & 2007 & 2007 & 2007 & 2000 & 2000\\
+Season FE & Yes & Yes & Yes & Yes & Yes & Yes & Yes & Yes\\
+Hires & 179 & 179 & 179 & 132 & 132 & 132 & 179 & 179\\
+Retained interim hires & 11 & 11 & 11 & 8 & 8 & 8 & 11 & 11\\
+Black head-coach hires & 30 & 30 & 30 & 22 & 22 & 22 & 30 & 30\\
+Franchises with a Black hire & 19 & 19 & 19 & 17 & 17 & 17 & 19 & 19\\
+Documented Black hires & 31 & 31 & 31 & 23 & 23 & 23 & 31 & 31\\
+Model-only prior control & No & No & No & No & No & No & No & No\\
+Mean of outcome & 0.090 & 0.437 & -0.014 & 0.092 & 0.432 & -0.064 & 0.437 & 0.437\\
+Residual degrees of freedom & 150 & 149 & 149 & 110 & 109 & 109 & 149 & 148\\
+$p$-value, lagged win \% coefficient = 1 &  & $<$0.001 &  &  & $<$0.001 &  & $<$0.001 & $<$0.001\\
+WCB $p$-value: new head coach & 0.045 & 0.317 & 0.214 & 0.029 & 0.287 & 0.182 &  & 0.472\\
+WCB $p$-value: documented race &  &  &  &  &  &  & 0.245 & 0.371\\
+Randomization inference $p$-value & 0.029 & 0.243 & 0.199 & 0.026 & 0.171 & 0.114 & 0.190 & 0.006\\
+\bottomrule
+\multicolumn{9}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table includes the estimation results of a version of equation (3) on head-coach hires, 2000-2025 in columns (1)-(3), (7) and (8) and 2007-2025 in columns (4)-(6). A hire is the first season of a new head coach: either the first-game head coach differs from the previous season's last-game head coach (170 franchise-seasons in 2000-2025), or an interim head coach who took over during the previous season is retained (11: ARI 2001, CIN 2001, DAL 2011, JAX 2017, KC 2012, LV 2009, LV 2024, MIN 2002, MIN 2011, SF 2009, TEN 2016). Returns of a coach who coached the franchise in one of the two previous seasons and stand-in seasons in which the previous head coach returns the next season are excluded (2: NO 2012, NO 2013). Retained interim hires are flagged by an indicator, because their lagged outcomes partly reflect their own record. The new head coach's race is that of the first-game head coach (the hired coach), not of the coach with the most games (they differ for 1 of the hires); it is not zero-filled, so hires with unknown race are excluded. The outcomes are the win percentage (columns 2, 5, 7 and 8), wins minus market expected wins (3 and 6) and the change in win percentage from the previous season (1 and 4). Columns (1) and (4) control only for lagged market expected wins, which restricts the coefficient on the lagged win percentage in the win-percentage equation to one (bottom panel: $p$-values of $<$0.001 and $<$0.001 for this restriction in columns 2 and 5). The restriction is rejected, so columns (1) and (4) can attribute part of the inherited team's mean reversion to the new coach's race; they are shown for comparison only, and columns (2) and (5) are the headline specifications. Pre-game betting lines price the new hire, so columns (3) and (6) test whether the market misprices Black hires, not the total effect of the hire's race. Season FE are used rather than Rooney Rule era FE because the residual degrees of freedom remain ample (bottom panel). The identifying assumption is that, conditional on the inherited situation (lagged win percentage and market expected wins) and the season, the new head coach's race is unrelated to unobserved determinants of the team's subsequent performance. Columns (7) and (8) use the hired coach's documented race (1 when a public source states that he is Black; documentation is mostly positive, so the 132 hires without a documented race count as non-Black, as in Table 25), alone and jointly with the column-(2) regressor, as a check on the race measure. Power is low: the coefficient is identified from 30 Black hires at 19 franchises in columns (1)-(3) and 22 at 17 franchises in columns (4)-(6) under this race measure. With few effectively treated clusters the wild cluster bootstrap can be mis-sized, so the bottom row adds a randomization-inference $p$-value that permutes the race regressor (column 7: documented race) across hires within season, holding the other regressors fixed (9,999 permutations, two-sided, on the coefficient). The glass-cliff threat has opposite signs by outcome. If Black head coaches are hired into persistently worse situations than the controls capture, the level coefficients are biased downward; if the inherited record is transiently good or bad, the change in win percentage (columns 1 and 4) mean-reverts. Regressing the lagged win percentage on the race regressor, lagged market expected wins and the retained-interim indicator (season FE) gives 0.047 (SE 0.020) for the hires from 2000 and 0.045 (SE 0.028) for those from 2007: a positive coefficient means that such hires inherit teams that beat their market expectation, which biases columns (1) and (4) downward. Standard errors, in parentheses, are clustered at the franchise level (32 clusters). Wild cluster bootstrap-t $p$-values (restricted, Webb six-point weights, 9,999 replications, clustered by franchise) are reported in the bottom panel because 32 clusters are few. \textbf{Sensitivity measure.} Race is the Wikipedia category flag. The flag is positive-only and misses most Black players and staff, so team shares are lower bounds whose coverage varies with Wikipedia editing.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

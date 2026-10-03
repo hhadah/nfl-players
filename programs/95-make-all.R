@@ -1,14 +1,18 @@
 # ============================================================================
 # 95-make-all.R
-# Master script: builds the analytical samples, summary-statistics tables and
-# race-coding agreement statistics from the DuckDB written by
-# scripts/99_run_all.py (data/datasets/nfl_research.duckdb).
+# Master script: builds the analytical samples, summary-statistics tables,
+# race-coding agreement statistics, the estimation samples and the estimation
+# exhibits (pay gap, roster diversity, staff diversity) from the DuckDB
+# written by scripts/99_run_all.py (data/datasets/nfl_research.duckdb).
 # Run from the project root:  Rscript programs/95-make-all.R
-# Date: 2026-09-26
+# fwildclusterboot is not on CRAN; install it with
+#   install.packages("fwildclusterboot",
+#                    repos = c("https://s3alfisc.r-universe.dev", "https://cloud.r-project.org"))
+# Date: 2026-09-26; estimation scripts added 2026-10-02
 # ============================================================================
 
 pacman::p_load(tidyverse, DBI, duckdb, arrow, data.table, janitor, glue,
-               fixest, modelsummary, kableExtra, here)
+               fixest, modelsummary, kableExtra, here, fwildclusterboot)
 
 set.seed(20260926)
 
@@ -31,6 +35,7 @@ for (d in c(analysis, tables_wd, figures_wd, paper_tables)) {
 # Shared helpers (DB connection, writers, ggplot theme) and race measures
 source(file.path(programs, "00-setup-functions.R"))
 source(file.path(programs, "00-race-measures.R"))
+source(file.path(programs, "00-analysis-functions.R"))
 
 # Analytical samples
 source(file.path(programs, "01-staff-person-season.R"))
@@ -43,3 +48,17 @@ source(file.path(programs, "06-draft-sample.R"))
 # Exhibits and diagnostics
 source(file.path(programs, "07-table-summary-statistics.R"))
 source(file.path(programs, "08-race-coding-agreement.R"))
+
+# Estimation samples (see notes/analysis-plan.md)
+source(file.path(programs, "09-roster-composition-sample.R"))
+source(file.path(programs, "10-pay-analysis-sample.R"))
+source(file.path(programs, "11-team-analysis-sample.R"))
+
+# Estimation exhibits. The primary race measure is hand-coded race when it
+# covers at least 80% of a script's sample, else predicted race
+# (notes/race-prediction-design.md); NFL_RACE_MEASURE=preddoc|provisional|...
+# runs a sensitivity measure (exhibits suffixed -<measure>, output/ only).
+source(file.path(programs, "12-table-pay-gap.R"))
+source(file.path(programs, "13-table-roster-diversity-performance.R"))
+source(file.path(programs, "14-table-staff-diversity-performance.R"))
+source(file.path(programs, "15-table-race-prediction-validation.R"))

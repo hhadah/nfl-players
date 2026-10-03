@@ -1,0 +1,31 @@
+period,var,label,mean,sd,within_sd,n,race_measure
+2002-2012,ShareBlackRoster,"Share Black, headcount",0.5664768207441078,0.04413974040596986,0.03509429039481869,352,predicted
+2002-2012,ExpectedShareBlackRoster,"Position-mix expected share Black, headcount",0.5663947289612188,0.014162602756152411,0.013515688256517864,352,predicted
+2002-2012,ResidualShareBlackRoster,"Residual share Black, headcount",8.209178288900064e-5,0.04499379465363095,0.03548164023611071,352,predicted
+2002-2012,MeanPriorBlackRoster,"Mean prior P(Black), headcount",0.5458985970755963,0.030124735847200598,0.028110864387311363,352,predicted
+2002-2012,ShareOtherRoster,"Share other race, headcount",0.05762657461377666,0.03157752946726924,0.030011555312732204,352,predicted
+2002-2012,Blau3Roster,"Three-group Blau index, headcount",0.5287623207367895,0.026347011826558513,0.02331573112066266,352,predicted
+2002-2012,ShareBlackWeek1,"Share Black, opening-day active roster",0.5677840220968811,0.049682241104543015,0.04042532917673502,352,predicted
+2002-2012,ShareBlackSnapW,"Share Black, snap-weighted",,,,0,predicted
+2002-2012,ExpectedShareBlackSnapW,"Position-mix expected share Black, snap-weighted",,,,0,predicted
+2002-2012,ResidualShareBlackSnapW,"Residual share Black, snap-weighted",,,,0,predicted
+2002-2012,MeanPriorBlackSnapW,"Mean prior P(Black), snap-weighted",,,,0,predicted
+2002-2012,ShareOtherSnapW,"Share other race, snap-weighted",,,,0,predicted
+2002-2012,Blau3SnapW,"Three-group Blau index, snap-weighted",,,,0,predicted
+2002-2012,ShareBlackWeek1PriorSnapW,"Share Black, opening day, prior-snap-weighted",,,,0,predicted
+2002-2012,QBWeek1Black,Opening-day starting QB P(Black),0.1302926706975219,0.22018062882877656,0.18398347039911228,352,predicted
+2013-2025,ShareBlackRoster,"Share Black, headcount",0.6192504687479724,0.046719749468939184,0.04115776265615469,416,predicted
+2013-2025,ExpectedShareBlackRoster,"Position-mix expected share Black, headcount",0.6191945656070836,0.01870498113868154,0.01834341075106701,416,predicted
+2013-2025,ResidualShareBlackRoster,"Residual share Black, headcount",5.590314088877682e-5,0.04494450323175384,0.03877921016236733,416,predicted
+2013-2025,MeanPriorBlackRoster,"Mean prior P(Black), headcount",0.6226123434093013,0.023329912566959796,0.022098944447666358,416,predicted
+2013-2025,ShareOtherRoster,"Share other race, headcount",0.11449701843774122,0.021882249747176993,0.019107010668557904,416,predicted
+2013-2025,Blau3Roster,"Three-group Blau index, headcount",0.5282696584556293,0.03700747978175544,0.032760753206488684,416,predicted
+2013-2025,ShareBlackWeek1,"Share Black, opening-day active roster",0.617513773192727,0.050804935038136816,0.044647910574063435,416,predicted
+2013-2025,ShareBlackSnapW,"Share Black, snap-weighted",0.6555548701810331,0.05555276983690924,0.04650420650136434,416,predicted
+2013-2025,ExpectedShareBlackSnapW,"Position-mix expected share Black, snap-weighted",0.6554631320686493,0.015072657658894028,0.014838781958195595,416,predicted
+2013-2025,ResidualShareBlackSnapW,"Residual share Black, snap-weighted",9.173811238374952e-5,0.05533299951538214,0.04567523947513044,416,predicted
+2013-2025,MeanPriorBlackSnapW,"Mean prior P(Black), snap-weighted",0.6580712227894233,0.02405956895160812,0.022634590789537598,416,predicted
+2013-2025,ShareOtherSnapW,"Share other race, snap-weighted",0.11471428579479806,0.02853018380827956,0.024084093153810732,416,predicted
+2013-2025,Blau3SnapW,"Three-group Blau index, snap-weighted",0.4981901938491315,0.05087130097482405,0.04302031783975399,416,predicted
+2013-2025,ShareBlackWeek1PriorSnapW,"Share Black, opening day, prior-snap-weighted",0.6529598255405499,0.06980023167144972,0.06017376851243178,384,predicted
+2013-2025,QBWeek1Black,Opening-day starting QB P(Black),0.2790127196449921,0.3279096579850126,0.27169670263779677,416,predicted

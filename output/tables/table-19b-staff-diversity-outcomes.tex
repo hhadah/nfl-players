@@ -1,0 +1,44 @@
+\begin{table}[!h]
+\centering\centering
+\caption{Coaching-staff racial composition and other team outcomes \label{tab:staff-diversity-outcomes}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{lcccccc}
+\toprule
+  & (1) & (2) & (3) & (4) & (5) & (6)\\
+\midrule
+Coaches' expected share Black & -9.752* & -4.493 & -0.034 & -0.044 & -0.142** & -0.036\\
+ & (4.892) & (7.883) & (0.075) & (0.130) & (0.064) & (0.096)\\
+P(Black): head coach & -1.512 &  & -0.048** &  & 0.015 & \\
+ & (2.078) &  & (0.022) &  & (0.026) & \\
+P(Black): offensive coordinator & 0.919 & 2.915 & 0.000 & 0.025 & 0.015 & 0.012\\
+ & (1.602) & (2.136) & (0.019) & (0.033) & (0.019) & (0.032)\\
+P(Black): defensive coordinator & 0.029 & 1.316 & -0.007 & -0.006 & 0.009 & 0.025\\
+ & (0.990) & (1.550) & (0.014) & (0.028) & (0.012) & (0.022)\\
+P(Black): general manager & -1.315 & -7.723*** & -0.033 & -0.136** & 0.005 & -0.007\\
+ & (1.210) & (1.853) & (0.026) & (0.052) & (0.014) & (0.026)\\
+Roster share Black ($t-1$) & -15.320** & -19.002*** & -0.120 & -0.126 & -0.153** & -0.285***\\
+ & (5.999) & (6.714) & (0.097) & (0.114) & (0.073) & (0.086)\\
+\midrule
+Observations & 607 & 563 & 607 & 563 & 607 & 563\\
+R$^2$ & 0.353 & 0.561 & 0.334 & 0.549 & 0.256 & 0.441\\
+Within R$^2$ & 0.163 & 0.156 & 0.118 & 0.117 & 0.107 & 0.084\\
+Outcome & Point diff. per game & Point diff. per game & Off. EPA per play & Off. EPA per play & $-$Def. EPA per play & $-$Def. EPA per play\\
+Franchise FE & Yes & No & Yes & No & Yes & No\\
+Franchise $\times$ HC-spell FE & No & Yes & No & Yes & No & Yes\\
+Season FE, controls (column 4) & Yes & Yes & Yes & Yes & Yes & Yes\\
+Mean of outcome & 0.013 & 0.515 & -0.008 & -0.002 & 0.008 & 0.011\\
+Effect of 1 SD of expected share net of FE & -0.498 & -0.139 & -0.0017 & -0.0013 & -0.0072 & -0.0011\\
+Model-only prior controls & Yes & Yes & Yes & Yes & Yes & Yes\\
+WCB $p$-value: coaches' share Black & 0.065 & 0.584 & 0.656 & 0.754 & 0.041 & 0.723\\
+WCB $p$-value: head coach & 0.503 &  & 0.051 &  & 0.625 & \\
+\bottomrule
+\multicolumn{7}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table includes the estimation results of equation (3) for three further outcomes: the regular-season point differential per game (columns 1-2), offensive EPA per play (3-4) and minus defensive EPA per play allowed (5-6; higher is better). Odd columns use the column-(4) specification of Table 19 (franchise and season FE); even columns use the column-(5) specification (franchise $\times$ head-coach-spell and season FE, singleton spells removed, the head coach's race absorbed). The sample is FullStaffObserved team-seasons, 2007-2025. The coaches' share includes the head coach and the coordinators. Conditional on the role-holder regressors (from column 3 on), its coefficient is identified from the composition of the remaining coaches, and the role coefficients are net of the role holder's own contribution to the share. The column-(4) controls are predetermined: lagged win percentage and market expected wins, the shares of coaches new to the franchise and promoted from within (staff listed at the start of the season), and the previous season's cap share (observed from 2013, so from 2014 here, zero-filled before; its missing indicator is absorbed by the season FE), game-day roster mean log draft pick, mean age and Black share. Contemporaneous roster measures respond to in-season results and to the staff's own choices, so they appear only in Table 19c. The effect row is the coefficient times the SD of the coaches' expected Black share net of the column's fixed effects, in the outcome's units. Under the predicted measure, staff shares are expected shares (mean member P(Black)), role-holder regressors are the holder's P(Black), and every specification controls for the matching model-only priors (the members' mean prior for each share, the holder's prior for each role holder); see the notes to Table 19 on their measurement and Table 29 for the other race measures. Role-holder regressors (HC, OC, DC, GM) are the holder's predicted probability of being Black; they are zero-filled when the role has no listed holder (e.g. teams without a GM title) and each enters with a missing indicator, so no team-season is dropped for a missing role holder. Standard errors, in parentheses, are clustered at the franchise level (32 clusters). Wild cluster bootstrap-t $p$-values (restricted, Webb six-point weights, 9,999 replications, clustered by franchise) are reported in the bottom panel because 32 clusters are few. Race is predicted, not observed: each person's probability of being non-Hispanic Black combines first name, surname and hometown county (BIFSG) with an NFL-specific prior estimated by EM on predetermined characteristics (players: position at entry, rookie era, draft round, college type, county availability; staff: role, unit and era at first appearance); documented race statements are not used (notes/race-prediction-design.md). Team shares are expected shares (mean member probability). Their error is Berkson-type: estimates are consistent if the probabilities are calibrated given the regression's controls (the team mean of the prior is one of them), but less precise than with observed race; individual coaches' probabilities are noisy because names carry little information for many Black coaches. The validation exhibit compares the predictions with published TIDES shares.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

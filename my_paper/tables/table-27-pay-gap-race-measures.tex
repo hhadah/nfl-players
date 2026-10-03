@@ -1,0 +1,33 @@
+\begin{table}[!h]
+\centering\centering
+\caption{Race gap in veteran-contract pay under alternative race measures \label{tab:pay-gap-race-measures}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\fontsize{8}{10}\selectfont
+\begin{threeparttable}
+\begin{tabular}[t]{lcccccccccccc}
+\toprule
+  & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8) & (9) & (10) & (11) & (12)\\
+\midrule
+Black / P(Black) & -0.023 & -0.004 & -0.023 & -0.003 & 0.098 & 0.000 & -0.006 & 0.008 & -0.050 & -0.017 & 0.153*** & -0.011\\
+ & (0.070) & (0.051) & (0.070) & (0.051) & (0.073) & (0.051) & (0.072) & (0.051) & (0.058) & (0.039) & (0.048) & (0.026)\\
+Other / P(other race) & -0.072 & -0.038 & -0.072 & -0.038 & -0.019 & -0.034 & -0.258 & -0.245 & -0.102 & -0.003 & 0.056 & 0.031\\
+ & (0.123) & (0.085) & (0.123) & (0.084) & (0.131) & (0.084) & (0.187) & (0.170) & (0.078) & (0.059) & (0.077) & (0.051)\\
+\midrule
+Observations & 5062 & 5062 & 5062 & 5062 & 5062 & 5062 & 5062 & 5062 & 5062 & 5062 & 5058 & 5058\\
+R$^2$ & 0.236 & 0.717 & 0.236 & 0.717 & 0.139 & 0.717 & 0.236 & 0.717 & 0.278 & 0.724 & 0.105 & 0.713\\
+Within R$^2$ & 0.150 & 0.685 & 0.150 & 0.685 & 0.042 & 0.685 & 0.150 & 0.685 & 0.197 & 0.693 & 0.004 & 0.680\\
+Race measure & Predicted & Predicted & Raked & Raked & No draft & No draft & Black+multi & Black+multi & PredDoc & PredDoc & Prov. & Prov.\\
+Specification & Prior FE only & Main & Prior FE only & Main & Prior FE only & Main & Prior FE only & Main & Prior FE only & Main & Raw & Main\\
+Race-prior covariate FE & Yes & Yes & Yes & Yes & No draft & No draft & Yes & Yes & Yes & Yes & No & No\\
+Mean of race regressor & 0.610 & 0.610 & 0.607 & 0.607 & 0.601 & 0.601 & 0.716 & 0.716 & 0.644 & 0.644 & 0.209 & 0.209\\
+Players & 2,789 & 2,789 & 2,789 & 2,789 & 2,789 & 2,789 & 2,789 & 2,789 & 2,789 & 2,789 & 2,787 & 2,787\\
+\bottomrule
+\multicolumn{13}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table re-estimates columns (1) and (5) of Table \ref{tab:pay-gap-veteran} (equation (1)) under each race measure. Odd columns include OTC position $\times$ year-signed fixed effects and, under the predicted measures, the fixed effects of the measure's prior covariates; even columns add the control blocks A-D of column (5). The sample is the main sample of freely bargained veteran contracts (UFA and extensions) signed 2014-2026, restricted to players with the measure. Under the predicted measures (all but Prov. and Hand) the race regressors are probabilities (regression calibration) and every column, odd columns included, conditions on the covariates of the measure's prior (position at NFL entry, entry era, draft-round bucket, college type, whether a home county is known; the No-draft prior omits the draft-round bucket). The odd columns are therefore raw gaps only for Prov. and Hand, and they differ across measures in their conditioning set as well as in the race measure: the Predicted, Raked and Black+multi odd columns condition on draft round, the No-draft odd column does not, and the Prov. odd column has no prior fixed effects. The PredDoc prior also includes whether a Wikipedia article was found and career length, which are outcomes of the career (career length is partly an outcome of pay), so both PredDoc columns condition on post-treatment variables. Predicted: P(non-Hispanic Black alone) and P(white) from the primary model-only prediction (BIFSG name and county likelihood times an NFL prior estimated by EM on predetermined characteristics). Raked: the predicted posterior with the Black log-odds shifted so that the mean matches published TIDES player shares for 2010-2015 (from race\_predicted, attached by the sample script since load\_person\_race() does not return it); it fixes the level of the prediction, not its ranking. No draft: the predicted posterior with a prior that omits the draft-round bucket; its prior fixed effects omit the bucket too. Black+multi: P(Black) + P(multiracial) as the Black regressor, since the multiracial category is weakly separated from Black by names. PredDoc: documented race where a public source states it (Black alone or in combination), else the model prediction (non-Hispanic Black alone); documentation depends on fame, and its prior adds whether a Wikipedia article exists and career length. Prov.: the Wikipedia category flag (positive-only), on players with an article; the comparison group mixes white and unflagged Black players, so the estimates are attenuated. Hand-coded race is not yet available, so no hand-coded column is reported. The mean of the race regressor is the mean P(Black) (or share flagged or coded Black) in the estimation sample. Standard errors are clustered at the player level. Race is predicted, not observed: each person's probability of being non-Hispanic Black combines first name, surname and hometown county (BIFSG) with an NFL-specific prior estimated by EM on predetermined characteristics (players: position at entry, rookie era, draft round, college type, county availability; staff: role, unit and era at first appearance); documented race statements are not used (notes/race-prediction-design.md). Regressions use the probabilities (regression calibration) and control for the prior's covariates; the coefficient on P(Black) is the Black-white gap if the probabilities are calibrated given the regression's controls and names and hometown are unrelated to the outcome given race and the controls. The validation exhibit compares the predictions with published TIDES shares.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

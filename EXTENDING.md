@@ -44,15 +44,28 @@ Two features of the market shape the designs:
 - Pay is freely bargained only at the veteran margin: second contracts,
   extensions, tags and free agency.
 
-**Status (2026-09-26):** hand coding of race has not started. Every `*Hand`
-variable and `race`, `black_any` and `nonwhite` are 0% non-missing in every
-sample, so every question below is a design until the coding in
-`notes/race-coding-protocol.md` is done.
+**Status (2026-10-03):** The PI decided not to hand-code race. Race is now
+**predicted** (`notes/race-prediction-design.md`, `scripts/04e_predict_race.py`):
 
-- `black_provisional` is a Wikipedia-category flag. It is positive-only (1 or
-  NA), so it is a lower bound.
-- In the team files, `*BlackProv = 0` means "not flagged", not "non-Black".
-- BIFSG (`p_black_bifsg`) misclassifies most Black people in this population.
+- **The measure:** P(race) from the BIFSG name and hometown likelihood times
+  an NFL prior estimated by EM on predetermined covariates.
+- **Pay regressions:** regression calibration on P(Black) and P(other race),
+  with controls for the prior's covariates, plus a BIRDiE cross-check.
+- **Team regressions:** expected shares.
+- **Validation:** `programs/15` compares the predictions with TIDES and with
+  documented race.
+
+The first estimates for B3 and A2 are in `programs/12`-`14`
+(`notes/analysis-plan.md`). The hand-coding sheets and
+`notes/race-coding-protocol.md` remain. If hand codes are ever entered, the
+scripts switch to them automatically.
+
+- `black_provisional` (Wikipedia category flag; positive-only) is a
+  sensitivity measure.
+- `*_preddoc` (documented where a public source states race, else predicted)
+  is a sensitivity measure. Documentation depends on fame.
+- Plain BIFSG (`p_black_bifsg`, national priors) misclassifies most Black
+  people in this population and is not used as the treatment.
 
 The samples are in `data/datasets/analysis/`:
 
@@ -300,16 +313,20 @@ likely to move to the NFL, conditional on their record?
 
 ### Before any of this
 
-1. **Hand-code race** per `notes/race-coding-protocol.md`:
-   - tiers 1-2 (1,051 head coaches, coordinators, GMs, executives, owners) for
-     A1-A7;
-   - tiers 3-4 (2,545 other coaches and front office) for A2, A5 and C1;
-   - tiers 5-6 (8,214 players with a 2011-26 contract) for B1-B7.
-2. **Report agreement.** Report raw agreement and Cohen's kappa by tier from
-   `programs/08-race-coding-agreement.R`, and adjudicate the flagged cases.
-3. **Keep proxies out of the treatment.** Use `p_black_bifsg`, `race_bifsg`
-   and `black_provisional` only for measurement-error work (bounds,
-   misclassification corrections), never as the treatment.
+1. **Race measure (done, 2026-10-03).** Predicted race replaces hand coding
+   (`notes/race-prediction-design.md`). It has known weaknesses:
+   - Black coaches with common surnames are under-predicted (assistant
+     coaches about 10 pp below TIDES).
+   - The full pre-NFL control set still predicts P(Black) within prior cells,
+     a calibration violation for the richest pay specification. A prior that
+     also conditions on those controls (`p_*_pred_fullx`) would address it.
+   - Even 200-300 hand-coded persons would let the misclassification be
+     measured directly.
+2. **Report the validation.** Report `programs/15` (TIDES, documented-race
+   AUC, calibration slope) in the data appendix.
+3. **Keep proxies out of the treatment.** Use `p_black_bifsg`, `race_bifsg`,
+   `black_provisional` and `*_preddoc` only as sensitivity measures, never as
+   the main treatment.
 4. **Build what the designs need** (see the gaps below):
    - an HC spell and hire file (A1, A4);
    - preseason win totals (A1);

@@ -1,0 +1,42 @@
+\begin{table}[!h]
+\centering\centering
+\caption{Roster racial composition and team performance: other outcomes, snap-weighted share, 2013-2025 \label{tab:roster-diversity-outcomes}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{lccccc}
+\toprule
+  & (1) Point diff./game & (2) Wins over exp. & (3) Off. EPA/play & (4) $-$Def. EPA/play & (5) Playoffs\\
+\midrule
+Roster share Black (snap-weighted) & -19.702** & -3.707 &  &  & -1.505**\\
+ & (7.778) & (2.731) &  &  & (0.595)\\
+Offense share Black (snap-weighted) &  &  & -0.136** & -0.157** & \\
+ &  &  & (0.067) & (0.068) & \\
+Defense share Black (snap-weighted) &  &  & -0.092 & 0.039 & \\
+ &  &  & (0.082) & (0.072) & \\
+Opening-day coaches' share Black & -7.492 & -4.804* & 0.059 & -0.119 & -0.506\\
+ & (6.067) & (2.524) & (0.086) & (0.094) & (0.459)\\
+Opening-day head coach Black & -4.915 & -1.391 & -0.075** & 0.015 & -0.262\\
+ & (3.116) & (1.168) & (0.031) & (0.034) & (0.223)\\
+Opening-day starting QB Black & -1.121 & -0.356 & 0.020 & -0.015 & -0.245***\\
+ & (1.220) & (0.333) & (0.021) & (0.015) & (0.086)\\
+\midrule
+Observations & 416 & 416 & 416 & 416 & 416\\
+R$^2$ & 0.428 & 0.212 & 0.409 & 0.372 & 0.284\\
+Within R$^2$ & 0.193 & 0.120 & 0.176 & 0.206 & 0.126\\
+WCB p-value, diversity & 0.021 & 0.191 & 0.070 & 0.623 & 0.026\\
+Mean of outcome & 0.002 & 0.000 & -0.004 & 0.004 & 0.404\\
+SD of diversity net of FE & 0.044 & 0.044 & 0.066 & 0.053 & 0.044\\
+Effect of 1-SD change in expected share & -0.876 & -0.165 & -0.009 & 0.002 & -0.067\\
+Season and franchise FE & Yes & Yes & Yes & Yes & Yes\\
+Lagged outcomes, roster quality, staff and QB & Yes & Yes & Yes & Yes & Yes\\
+Calibration controls (priors, prior-covariate shares) & Yes & Yes & Yes & Yes & Yes\\
+\bottomrule
+\multicolumn{6}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table includes the estimation results of equation (2) with the column (4) specification of Table \ref{tab:roster-diversity-main}: season and franchise fixed effects, lagged outcomes, opening-day roster quality and the staff and quarterback controls, and the calibration controls (mean prior and prior-covariate shares of the roster, priors of the race controls; the offense and defense columns add the mean prior of each unit). The unit of observation is a franchise-season, 2013-2025. The snap-weighted share Black weights each player by his offensive plus defensive snaps for the franchise in the regular season; it is measured during season $t$ and can respond to injuries and benching. Snap weights also respond to game script: teams that trail run more offensive plays, teams with weak offenses play more defensive snaps, and defensive units have higher Black shares, so losing can raise the snap-weighted share mechanically (Table \ref{tab:roster-diversity-robustness} reports the unit-balanced share and a control for the defensive snap share). The unit shares weight players by their offensive or defensive snaps. Columns with roster quality also include the cap share of the roster (sum of players' cap percent; 2013-2025). Controls are fixed by opening day: the lagged win percentage and lagged market expected wins; roster quality of the active roster of the first regular-season game (mean log draft pick, undrafted = log 300; share of first-round picks; mean age; mean experience); and the Black share of the on-field coaches listed in the preseason staff snapshot, used only where the full staff is observed (2007 on; a missing indicator absorbs earlier seasons), the opening-day head coach's race and the opening-day starting quarterback's race. Under the predicted measures these race controls are predicted probabilities like the treatment, and the calibration controls include their priors (the coaches' mean prior and the head coach's and quarterback's priors). The head coach's predicted probability is calibrated to the staff population, not to the selected population of head coaches, so it is a noisy control. The outcomes are regular-season point differential per game (column (1)), wins over expected (column (2): actual wins minus the sum of the market's pre-game win probabilities), offensive EPA per play (column (3)), minus defensive EPA per play (column (4), higher = better defense) and a playoff indicator (column (5), linear probability model). Wins over expected nets out what the betting market prices before each game, including roster composition, so its coefficient estimates only the part of any composition effect the market fails to price; it is zero under market efficiency even if composition has a causal effect on winning. Columns (3) and (4) enter the offense and defense shares jointly, so each unit's composition is separated from the other unit's; the WCB p-value, SD and effect rows refer to the unit's own share. The SD row is the SD of the diversity term net of franchise and season fixed effects; the effect row multiplies it by the coefficient, in units of the outcome. Lagged-outcome and roster-quality coefficients are not shown. Standard errors, in parentheses, are clustered at the franchise level (32 clusters); wild cluster bootstrap-t p-values (restricted, WCR) use Webb weights and 9,999 replications. Under regression calibration the coefficient on an expected roster share (the mean over players of the predicted probability of being non-Hispanic Black) equals the effect of the true share only if the probabilities are calibrated at the team level given the regression's controls; this requires that players' names and hometown counties be unrelated to team performance given race and the prior's covariates, and the calibration controls (the team mean of the prior and the weighted shares of its draft-round, college-type, rookie-era and hometown-county levels, plus the priors of the coaches, head coach and quarterback whose predicted race enters as a control) condition on those covariates. Shrinkage toward the prior by itself causes no attenuation (the error of an expected share is of the Berkson type), but individual-level calibration does not imply team-level calibration: if the true share rises more (less) than one-for-one with the expected share across teams, the coefficient overstates (understates) the effect, so the sign of any bias is not known. A league-wide level error, such as the model's shortfall against the TIDES league share, is absorbed by the season fixed effects. A team-level calibration check among documented players (validation only): regressing a franchise-season's documented Black share of its documented players on the same players' mean predicted probability, with franchise and season fixed effects, gives a slope of 0.79 (SE 0.06) for snap weights and  0.69 (SE 0.06) for headcount weights, against one under calibration. Documented players are a selected, mostly Black and famous subset (about 28 percent of the weight), so the check does not establish the team-level calibration of the full roster in either direction. Effect rows refer to a one-SD change in the expected share, whose SD is smaller than that of the true share. The predicted share counts multiracial and Hispanic Black players as non-Black. Race is predicted, not observed: each person's probability of being non-Hispanic Black combines first name, surname and hometown county (BIFSG) with an NFL-specific prior estimated by EM on predetermined characteristics (players: position at entry, rookie era, draft round, college type, county availability; staff: role, unit and era at first appearance); documented race statements are not used (notes/race-prediction-design.md). Team shares are expected shares (mean member probability). Their error is Berkson-type: estimates are consistent if the probabilities are calibrated given the regression's controls (the team mean of the prior is one of them), but less precise than with observed race; individual coaches' probabilities are noisy because names carry little information for many Black coaches. The validation exhibit compares the predictions with published TIDES shares.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

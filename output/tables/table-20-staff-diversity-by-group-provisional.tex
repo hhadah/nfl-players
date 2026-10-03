@@ -1,0 +1,55 @@
+\begin{table}[!h]
+\centering\centering
+\caption{Racial composition by staff group and team performance (provisional race measure) \label{tab:staff-diversity-groups}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{lccccccc}
+\toprule
+  & Coord. & Position & Assistants & Front office & Personnel & Coaching jointly & Blau\\
+\midrule
+Coordinators' share Black & 0.012 &  &  &  &  & 0.010 & \\
+ & (0.044) &  &  &  &  & (0.046) & \\
+Position coaches' share Black &  & 0.015 &  &  &  & 0.025 & \\
+ &  & (0.060) &  &  &  & (0.066) & \\
+Assistants' share Black &  &  & -0.077 &  &  & -0.076 & \\
+ &  &  & (0.062) &  &  & (0.063) & \\
+Front office share Black &  &  &  & -0.024 &  &  & \\
+ &  &  &  & (0.126) &  &  & \\
+Personnel and scouting share Black &  &  &  &  & -0.081 &  & \\
+ &  &  &  &  & (0.059) &  & \\
+Blau index of coaches (Black/non-Black) &  &  &  &  &  &  & -0.091\\
+ &  &  &  &  &  &  & (0.080)\\
+Black head coach & -0.047* & -0.052* & -0.055* & -0.052* & -0.061** & -0.051* & -0.046\\
+ & (0.027) & (0.029) & (0.029) & (0.028) & (0.029) & (0.028) & (0.030)\\
+Black offensive coordinator &  & 0.023 & 0.020 & 0.025 & 0.025 &  & 0.025\\
+ &  & (0.043) & (0.042) & (0.043) & (0.044) &  & (0.043)\\
+Black defensive coordinator &  & 0.025 & 0.025 & 0.026 & 0.025 &  & 0.033\\
+ &  & (0.021) & (0.021) & (0.020) & (0.021) &  & (0.022)\\
+Black general manager & 0.014 & 0.015 & 0.013 &  & 0.003 & 0.012 & 0.012\\
+ & (0.032) & (0.030) & (0.031) &  & (0.029) & (0.033) & (0.030)\\
+\midrule
+Observations & 607 & 607 & 607 & 607 & 596 & 607 & 607\\
+R$^2$ & 0.291 & 0.298 & 0.300 & 0.298 & 0.299 & 0.294 & 0.300\\
+Within R$^2$ & 0.134 & 0.143 & 0.145 & 0.142 & 0.145 & 0.137 & 0.145\\
+Season FE & Yes & Yes & Yes & Yes & Yes & Yes & Yes\\
+Franchise FE & Yes & Yes & Yes & Yes & Yes & Yes & Yes\\
+Controls (column 4 of Table 19) & Yes & Yes & Yes & Yes & Yes & Yes & Yes\\
+Role-holder regressors & HC, GM & HC, OC, DC, GM & HC, OC, DC, GM & HC, OC, DC & HC, OC, DC, GM & HC, GM & HC, OC, DC, GM\\
+Model-only prior controls & No & No & No & No & No & No & No\\
+Mean of outcome & 0.500 & 0.500 & 0.500 & 0.500 & 0.502 & 0.500 & 0.500\\
+WCB $p$-value: coordinators & 0.783 &  &  &  &  & 0.832 & \\
+WCB $p$-value: position coaches &  & 0.806 &  &  &  & 0.717 & \\
+WCB $p$-value: assistants &  &  & 0.219 &  &  & 0.238 & \\
+WCB $p$-value: front office &  &  &  & 0.854 &  &  & \\
+WCB $p$-value: personnel &  &  &  &  & 0.176 &  & \\
+WCB $p$-value: Blau index &  &  &  &  &  &  & 0.271\\
+\bottomrule
+\multicolumn{8}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table includes the estimation results of equation (3) with the coaches' Black share replaced by the Black share of one staff group at a time (columns 1-5), the three coaching groups jointly (column 6) and the two-group Blau index of on-field coaches, $2s(1-s)$ with $s$ the coaches' Black share (column 7). The outcome is the regular-season win percentage; the sample is FullStaffObserved team-seasons, 2007-2025.  Because $s$ is below 0.5 in every team-season (maximum 0.458), the index is a monotone transform of the share, not an independent diversity measure. Coordinators are the OC, DC and special-teams coordinator; the front office includes owners, executives, the GM and personnel and scouting staff. Every column includes franchise and season FE, the predetermined column-(4) controls of Table 19 (lagged win percentage and market expected wins, the shares of coaches new to the franchise and promoted, and the previous season's cap share, roster mean log draft pick, mean age and roster Black share) and the role-holder regressors of Table 19, except that the coordinator columns (1 and 6) omit the OC and DC regressors and the front-office column (4) omits the GM regressor, because those persons are members of the group whose share enters (row \textit{Role-holder regressors}). Team-seasons with no listed member of a group have a missing share and drop from that column, so the number of observations differs across columns. Team-seasons with a missing share: Personnel and scouting share Black (12) (personnel: mostly in 2007). Standard errors, in parentheses, are clustered at the franchise level (32 clusters). Wild cluster bootstrap-t $p$-values (restricted, Webb six-point weights, 9,999 replications, clustered by franchise) are reported in the bottom panel because 32 clusters are few. \textbf{Sensitivity measure.} Race is the Wikipedia category flag. The flag is positive-only and misses most Black players and staff, so team shares are lower bounds whose coverage varies with Wikipedia editing.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}
