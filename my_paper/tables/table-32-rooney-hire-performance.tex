@@ -1,0 +1,46 @@
+\begin{table}[H]
+\centering
+\caption{Team performance after a head-coach hire by the hire's documented race and policy era \label{tab:rooney-hire-performance}}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lrrrrrr}
+\toprule
+Outcome & Win \%, season $t$, 1990-- & Win \%, $t$, 1990--, franchise FE & Win \%, season $t+1$, 1990-- & Win \%, $t$, 1999-- & Wins over expected, $t$, 1999-- & Wins over expected, $t+1$, 1999-- \\
+ & (1) & (2) & (3) & (4) & (5) & (6) \\
+\midrule
+Documented Black hire & 0.126$^{*}$ & 0.094 & 0.192$^{***}$ & 0.148$^{*}$ & 1.084 & 2.575$^{***}$ \\
+ & (0.063) & (0.083) & (0.050) & (0.084) & (1.114) & (0.601) \\
+$\times$ Rule era (2003--2020) & -0.198$^{**}$ & -0.183$^{*}$ & -0.205$^{***}$ & -0.198$^{**}$ & -1.669 & -2.474$^{***}$ \\
+ & (0.074) & (0.102) & (0.054) & (0.096) & (1.300) & (0.688) \\
+$\times$ Amended era (2021--) & -0.230$^{**}$ & -0.251$^{*}$ & -0.169$^{*}$ & -0.257$^{*}$ & -1.847 & -2.492$^{**}$ \\
+ & (0.102) & (0.129) & (0.091) & (0.131) & (1.572) & (0.930) \\
+Lagged win \% & 0.273$^{***}$ & 0.278$^{***}$ & 0.042 & -0.129 & -3.158$^{*}$ & -2.277 \\
+ & (0.057) & (0.068) & (0.074) & (0.133) & (1.668) & (1.635) \\
+Lagged expected wins &  &  &  & 0.041$^{***}$ & 0.259 & 0.105 \\
+ &  &  &  & (0.013) & (0.158) & (0.136) \\
+Retained interim & -0.015 & 0.018 & -0.047 & -0.008 & -0.421 & -0.551 \\
+ & (0.044) & (0.057) & (0.062) & (0.057) & (0.515) & (0.632) \\
+\midrule
+Mean outcome, hires not documented Black & 0.447 & 0.447 & 0.458 & 0.447 & 0.119 & 0.018 \\
+MDE (80\% power), Black $\times$ Rule era & 0.208 & 0.285 & 0.151 & 0.268 & 3.642 & 1.926 \\
+MDE (80\% power), Black $\times$ Amended era & 0.287 & 0.360 & 0.255 & 0.366 & 4.403 & 2.605 \\
+Pre-rule Black $\times$ trend, $p$ & 0.218 & 0.218 & 0.672 & 0.115 & 0.007 & 0.465 \\
+Pre-rule placebo break 1997, $p$ & 0.446 & 0.446 & 0.961 &  &  &  \\
+Rule-era Black $\times$ trend, $p$ & 0.160 & 0.160 & 0.621 & 0.123 & 0.060 & 0.559 \\
+$H_0$: lagged win \% coefficient $= 1$, $p$ & 0.000 & 0.000 & 0.000 & 0.000 &  &  \\
+Observations (hires) & 243 & 243 & 236 & 179 & 179 & 172 \\
+Documented Black hires, pre-rule (reference) & 7 & 7 & 7 & 2 & 2 & 2 \\
+Documented Black hires & 36 & 36 & 35 & 31 & 31 & 30 \\
+Hires without documented race & 190 & 190 & 184 & 132 & 132 & 126 \\
+Franchise clusters & 32 & 32 & 32 & 32 & 32 & 32 \\
+Seasons & 36 & 36 & 35 & 26 & 26 & 25 \\
+\bottomrule
+\end{tabular}
+}
+\par\smallskip
+\begin{minipage}{\textwidth}
+\footnotesize
+\textit{Notes:} Hire sample of table 31. Outcomes are the franchise's regular-season results in the hire season $t$ (and $t+1$), whoever coached the games: intention-to-initial-hire, not games under the hired coach. Wins over expected is regular-season wins minus the sum of pre-game market win probabilities (1999--). The lagged win percentage enters freely; the bottom panel tests the unit-coefficient restriction that a change-in-win-percentage outcome would impose. Retained interims' lagged outcomes partly reflect the new coach's own games. Documented Black hire is positive public documentation (undocumented hires are not documented Black, never assumed white). Era is the first full offseason hiring cycle: Rule era hires 2003--2020, Amended era hires 2021 onward (the March 2022 expansion postdates most 2022 hires). Season fixed effects absorb the common policy level; the interactions compare documented-Black with other hires within era. These are not treatment effects. Every policy changed for all franchises in the same offseason, so there is no cross-sectional exposure, 32 clusters carry few common policy shocks, and a race-by-era interaction can move with the composition of hires, the teams that hire, and the league. The pre-rule trend and the 1997 placebo break test whether the Black gap was already moving before 2003 (a rejection disqualifies the Rule-era interaction as a break); the rule-era trend tests drift within 2003--2020. A null is informative only up to the MDE. Standard errors clustered by franchise in parentheses; $p$-values use $t$ with 31 degrees of freedom. $^{*}p<0.1$, $^{**}p<0.05$, $^{***}p<0.01$.
+\end{minipage}
+\end{table}

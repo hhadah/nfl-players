@@ -1,0 +1,48 @@
+\begin{table}[H]
+\centering\centering
+\caption{Career pay profiles with and without player fixed effects \label{tab:pay-career-fe}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\fontsize{8}{10}\selectfont
+\begin{tabular}[t]{lcccccccc}
+\toprule
+  & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\
+\midrule
+P(Black) $\times$ experience 0-3 (vs 4-6) & 0.387** & -0.120 & 0.275** & -0.056 & 0.247 & -0.127 & 0.152 & -0.042\\
+ & (0.167) & (0.179) & (0.123) & (0.167) & (0.162) & (0.182) & (0.134) & (0.170)\\
+P(Black) $\times$ experience 7+ (vs 4-6) & -0.138* & -0.020 & -0.135** & -0.022 & -0.143* & -0.016 & -0.124* & -0.017\\
+ & (0.072) & (0.067) & (0.067) & (0.065) & (0.073) & (0.068) & (0.069) & (0.066)\\
+P(other race) $\times$ experience 0-3 (vs 4-6) & 0.529 & -0.295 & 0.377* & -0.486 & 0.238 & -0.305 & 0.210 & -0.430\\
+ & (0.363) & (0.318) & (0.204) & (0.311) & (0.303) & (0.319) & (0.232) & (0.303)\\
+P(other race) $\times$ experience 7+ (vs 4-6) & 0.132 & 0.198* & -0.039 & 0.189 & 0.060 & 0.193 & -0.009 & 0.200*\\
+ & (0.157) & (0.117) & (0.123) & (0.117) & (0.158) & (0.118) & (0.126) & (0.118)\\
+P(Black) (level at experience 4-6; no player FE) & 0.021 &  & 0.030 &  & 0.133 &  & 0.049 & \\
+ & (0.076) &  & (0.061) &  & (0.082) &  & (0.066) & \\
+P(other race) (level at experience 4-6; no player FE) & -0.117 &  & -0.032 &  & -0.023 &  & -0.040 & \\
+ & (0.133) &  & (0.101) &  & (0.145) &  & (0.112) & \\
+\midrule
+Observations & 5284 & 5284 & 5284 & 5284 & 5284 & 5284 & 5284 & 5284\\
+R$^2$ & 0.293 & 0.805 & 0.582 & 0.828 & 0.402 & 0.806 & 0.626 & 0.830\\
+Within R$^2$ & 0.166 & 0.035 & 0.507 & 0.149 & 0.295 & 0.039 & 0.558 & 0.155\\
+Design & No player FE & Player FE & No player FE & Player FE & No player FE & Player FE & No player FE & Player FE\\
+Player FE & No & Yes & No & Yes & No & Yes & No & Yes\\
+Position group $\times$ season FE & Yes & Yes & Yes & Yes & Yes & Yes & Yes & Yes\\
+Experience bins, age (A) & Yes & Yes & Yes & Yes & Yes & Yes & Yes & Yes\\
+Lagged and career production (B, C) & No & No & Yes & Yes & No & No & Yes & Yes\\
+Pre-NFL signals (D) & Bucket (prior) & Bucket (prior) & Bucket (prior) & Bucket (prior) & Yes & Yes & Yes & Yes\\
+Signals $\times$ experience & No & No & No & No & Yes & Yes & Yes & Yes\\
+Joint $p$, Black $\times$ experience & 0.007 & 0.774 & 0.008 & 0.897 & 0.031 & 0.770 & 0.087 & 0.943\\
+Joint $p$, other race $\times$ experience & 0.266 & 0.138 & 0.148 & 0.066 & 0.707 & 0.148 & 0.642 & 0.073\\
+Players & 1,557 & 1,557 & 1,557 & 1,557 & 1,557 & 1,557 & 1,557 & 1,557\\
+Players with 2+ seasons & 1,557 & 1,557 & 1,557 & 1,557 & 1,557 & 1,557 & 1,557 & 1,557\\
+Controls dropped as collinear & 0 & 31 & 2 & 34 & 72 & 327 & 75 & 330\\
+Mean of outcome & 1.395 & 1.395 & 1.395 & 1.395 & 1.395 & 1.395 & 1.395 & 1.395\\
+\bottomrule
+\multicolumn{9}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}}
+\end{table}
+
+{\footnotesize
+\noindent\textit{Notes:} This table compares the experience profile of the race gap of Table \ref{tab:pay-gap-learning} on the same 5,284 UFA/extension player-seasons 2014-2025 with positive cap numbers and a race prediction. Both designs exclude 665 single-season players before fitting. The outcome is log cap number (\$ millions). Odd columns include P(Black), P(other race), their experience-bin interactions and position group $\times$ season fixed effects. They use both between- and within-player variation. Even columns add player fixed effects, which absorb time-invariant characteristics including race. The race level is not estimated in the even columns. Both designs are normalized to the 4-6 experience bin: each interaction is the change in the race gap relative to the gap at 4-6 seasons, and the 4-6 interaction is zero by construction in both. In the odd columns the main terms give the 4-6 gap itself. Within player, an interaction is identified only by players observed in that bin and in another bin. Players observed in two or more bins (expected Black players, sums of P(Black), in parentheses): 0-3|4-6 36 (18), 0-3|4-6|7+ 33 (11), 0-3|7+ 1 (1), 4-6|7+ 711 (428); 781 of 1,557 players in all. Expected Black seasons, sums of P(Black), by bin: 0-3 31, 4-6 1,889, 7+ 1,151. Columns (1)-(2) control for career stage (block A); (3)-(4) add lagged and career production (B and C). Columns (5)-(6) add pre-NFL signals and their experience interactions without production; (7)-(8) add production. Both columns in each pair request the same control design. Truly time-invariant controls are absorbed by player fixed effects. The collinearity row counts controls absorbed by the fixed effects or other regressors. The requested controls are identical within each odd/even pair; position-specific pre-NFL slopes remain when a position change makes them vary within player. The script stops if a focal race interaction is unidentified. All columns request the race-prior covariate controls; player fixed effects absorb them in the even columns. Differences between profiles are specification sensitivity, not a causal decomposition or a bound on survivor selection. Player fixed effects remove permanent heterogeneity but not time-varying selection. Experience also advances with calendar time, so the profile does not isolate employer learning. Cap numbers reflect contracts signed earlier, and lagged production can postdate the pay decision. The joint $p$-values are player-clustered Wald tests that the race $\times$ experience interactions are jointly zero (that the race gap does not vary with experience); they are not tests of the gap's level. Controls with incomplete coverage are set to zero with a missing indicator (interacted like the control). Regression calibration identifies the Black-white gap only if, in addition to names and hometown being unrelated to pay given race and the controls, (i) P(Black) is calibrated given every control in the column, not only given the prior's covariates, and (ii) the gap does not vary with the controls (otherwise the coefficient is a variance-weighted average of gaps). Controls that predict P(Black) within the prior's cells do not by themselves violate (i): under (i) they predict P(Black) exactly when they predict race. They do reduce the variation in P(Black) that identifies the coefficient (overlap), and if (i) fails for them the coefficient moves as they are added for reasons unrelated to pay. Table \ref{tab:pay-gap-veteran} reports the identifying variation by column and checks (i) against documented race. P(Black) is the predicted probability of being non-Hispanic Black alone; Black Hispanic and multiracial Black players enter P(other race), and Table \ref{tab:pay-gap-race-measures} also reports estimates with P(Black) + P(multiracial) as the Black regressor. The predicted Black share is not calibrated in levels: it lies below the TIDES African-American player share through 2016 and above the self-identified Black-alone share (below the Black-or-multiracial share) from 2019 (Table \ref{tab:race-prediction-tides}); Table \ref{tab:pay-gap-race-measures} reports estimates with the TIDES-raked posterior. Standard errors treat the predicted probabilities as known; the prior is estimated by EM on the whole player population of the database, so the omitted first-stage variance is likely small. Standard errors are clustered at the player level. P(Black) and P(other race) enter together, so the coefficient on P(Black) compares a Black (predicted: non-Hispanic Black alone) with a white player. Race is predicted, not observed: each person's probability of being non-Hispanic Black alone combines first name, surname and hometown county (BIFSG) with an NFL-specific prior estimated by EM on predetermined characteristics (players: position at entry, rookie era, draft round, college type, county availability; staff: role, unit and era at first appearance); documented race statements are not used (notes/race-prediction-design.md). Black Hispanic and multiracial Black persons are in the other-race probability, so P(Black) is narrower than the Black-alone-or-in-combination definition of the hand codes and of TIDES. Regressions use the probabilities (regression calibration) and control for the prior's covariates; the coefficient on P(Black) is the Black-white gap if the probabilities are calibrated given the regression's controls and names and hometown are unrelated to the outcome given race and the controls. The validation exhibit compares the predictions with published TIDES shares.
+\par}
+

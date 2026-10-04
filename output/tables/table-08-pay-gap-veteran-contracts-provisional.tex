@@ -1,0 +1,39 @@
+\begin{table}[!h]
+\centering\centering
+\caption{Race gap in veteran-contract pay (provisional race measure) \label{tab:pay-gap-veteran}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{lcccccccc}
+\toprule
+  & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\
+\midrule
+Black & 0.153*** & 0.088** & 0.001 & -0.017 & -0.011 & 0.000 & -0.009 & -0.012\\
+ & (0.048) & (0.037) & (0.027) & (0.026) & (0.026) & (0.025) & (0.026) & (0.028)\\
+Other race & 0.056 & 0.031 & 0.029 & 0.028 & 0.031 & 0.021 & 0.027 & 0.030\\
+ & (0.077) & (0.061) & (0.049) & (0.049) & (0.051) & (0.048) & (0.050) & (0.056)\\
+\midrule
+Observations & 5058 & 5058 & 5058 & 5058 & 5058 & 5058 & 5058 & 5058\\
+R$^2$ & 0.105 & 0.389 & 0.656 & 0.678 & 0.713 & 0.752 & 0.781 & 0.680\\
+Within R$^2$ & 0.004 & 0.320 & 0.617 & 0.642 & 0.680 & 0.724 & 0.728 & 0.644\\
+Position $\times$ year FE & Yes & Yes & Yes & Yes & Yes & Yes & Yes & Yes\\
+Career stage (A) & No & Yes & Yes & Yes & Yes & Yes & Yes & Yes\\
+Prior-season production (B) & No & No & Yes & Yes & Yes & Yes & Yes & Yes\\
+Career production (C) & No & No & No & Yes & Yes & Yes & Yes & Yes\\
+Pre-NFL signals (D) & No & No & No & No & Yes & Yes & Yes & Yes\\
+Usage (E) & No & No & No & No & No & Yes & Yes & No\\
+Signing team $\times$ year FE & No & No & No & No & No & No & Yes & No\\
+Draft slot, round, extension dummy & No & Ext. only & Ext. only & Ext. only & Yes & Yes & Yes & No\\
+Race-prior covariate FE & No & No & No & No & No & No & No & No\\
+Mean of outcome & 1.154 & 1.154 & 1.154 & 1.154 & 1.154 & 1.154 & 1.154 & 1.154\\
+Implied Black gap (\%) & 16.5 & 9.1 & 0.1 & -1.7 & -1.1 & 0.0 & -0.9 & -1.2\\
+SE of Black clustered by player and signing team & (0.048) & (0.033) & (0.026) & (0.028) & (0.029) & (0.026) & (0.028) & (0.032)\\
+\bottomrule
+\multicolumn{9}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table includes the estimation results of equation (1). The outcome is log APY (\$ millions); with OTC position $\times$ year-signed fixed effects this equals log APY over the league salary cap of the signing year, without OTC's rounding of the cap share. The sample is freely bargained veteran contracts (unrestricted free agents, including those who re-sign with their own team, and extensions) signed 2014-2026 by players with a Wikipedia article (race classified by the provisional measure); tags and tenders, whose pay is set by a CBA formula, are in Table \ref{tab:pay-gap-terms}. 4 contracts of players with no Wikipedia article and 0 with missing APY are excluded. Every column includes OTC position (18 market positions) $\times$ year-signed fixed effects; column (7) adds signing franchise $\times$ year-signed fixed effects. Column (8) is column (5) without draft slot, draft-round dummies and the extension dummy. Career stage (A): experience-bin dummies (0, 1, 2, 3, 4-6, 7+ seasons), age at signing and its square, a left-censored-experience indicator and an extension dummy (reference: unrestricted free agents). Whether a team extends a player is itself a team decision. Prior-season production (B): season-before-signing box-score and PFR measures with position-group-specific slopes (passing for QBs, rushing and receiving for RBs, receiving for WRs and TEs, tackles, sacks, QB hits, tackles for loss and pressures for DL and LB, tackles, interceptions, passes defended and coverage allowed for DBs, kicking and punting), games played and injury weeks interacted with position group, and a no-prior-season indicator. Career production (C): career games and injury weeks interacted with position group, and career sums of the block B production measures with the same position-group slopes. Pre-NFL signals (D): log draft pick, an undrafted indicator, draft-round dummies, 247 rating and stars, combine measures (40, vertical, bench, broad jump, cone, shuttle, height, weight) and athletic scores (a composite and size, speed, explosion and agility subscores built from the combine measures) interacted with position group, and the final college team's Power-conference, SRS and HBCU indicators. Usage (E): prior-season offensive, defensive and special-teams snaps, prior-season games started, career depth-chart starts and career snaps, interacted with position group. Snaps and starts are chosen by coaches, so the usage controls may absorb discrimination in playing time. Controls with incomplete coverage are set to zero with a missing indicator (interacted like the control). Games played and the box-score volume counts (attempts, targets, tackles) also depend on playing time, and draft slot and the extension dummy record earlier team decisions, so columns (3)-(5) estimate a gap conditional on earlier allocation decisions, which discrimination could also affect. The identifying assumption is that, conditional on the controls and fixed effects, race is uncorrelated with unobserved productivity. Omitted quality would bias the estimate: there are no PFF-type grades, and offensive linemen have no production measure, so their quality rests on games, injury weeks and pre-NFL signals. Column (5) is the main specification. The implied gap is $100(e^{\hat\beta_1}-1)$. The 95\% confidence interval for Black in column (5) is [-0.062, 0.040] log points. Standard errors are clustered at the player level. The row 'SE of Black clustered by player and signing team' reports the standard error of the race coefficient with two-way clustering by player and signing franchise (teams set pay). The omitted group is players with a Wikipedia article and no race or Hispanic category flag. \textbf{Sensitivity measure.} Race is the Wikipedia category flag. The flag is positive-only and misses most Black players and staff, so the comparison group mixes white and unflagged Black persons and the estimates are attenuated.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

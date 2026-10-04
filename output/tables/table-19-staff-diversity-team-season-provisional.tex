@@ -1,0 +1,65 @@
+\begin{table}[!h]
+\centering\centering
+\caption{Coaching-staff racial composition and team performance (provisional race measure) \label{tab:staff-diversity-main}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{lccccccccc}
+\toprule
+  & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8) & (9)\\
+\midrule
+Coaches' share Black & -0.202 & -0.127 & -0.148 & -0.112 & -0.227 & -0.251 & -1.201 & -0.134 & -0.052\\
+ & (0.131) & (0.123) & (0.129) & (0.110) & (0.205) & (0.199) & (1.192) & (0.106) & (0.126)\\
+Black head coach &  &  & -0.047 & -0.046 &  &  & -0.291 & -0.040 & -0.019\\
+ &  &  & (0.038) & (0.030) &  &  & (0.326) & (0.034) & (0.032)\\
+Black offensive coordinator &  &  & 0.025 & 0.025 & 0.072 & 0.069 & 0.039 & 0.026 & 0.029\\
+ &  &  & (0.052) & (0.043) & (0.049) & (0.048) & (0.450) & (0.045) & (0.046)\\
+Black defensive coordinator &  &  & 0.033 & 0.033 & 0.013 & 0.011 & 0.398 & 0.038* & 0.037\\
+ &  &  & (0.023) & (0.022) & (0.040) & (0.038) & (0.252) & (0.022) & (0.023)\\
+Black general manager &  &  & 0.033 & 0.012 & -0.063 & -0.062 & 0.297 & 0.015 & 0.014\\
+ &  &  & (0.032) & (0.030) & (0.060) & (0.058) & (0.371) & (0.027) & (0.027)\\
+Coaches' share Black, predicted (model only) &  &  &  &  &  &  &  &  & -0.298\\
+ &  &  &  &  &  &  &  &  & (0.180)\\
+P(Black): head coach, predicted (model only) &  &  &  &  &  &  &  &  & -0.040\\
+ &  &  &  &  &  &  &  &  & (0.081)\\
+Coaches' mean prior P(Black) &  &  &  &  &  &  &  & -0.665 & -0.469\\
+ &  &  &  &  &  &  &  & (0.441) & (0.441)\\
+Head coach's prior P(Black) &  &  &  &  &  &  &  & 0.005 & 0.002\\
+ &  &  &  &  &  &  &  & (0.121) & (0.129)\\
+Roster share Black ($t-1$) &  &  &  & 0.096 & 0.104 & 0.110 & -0.150 & 0.133 & 0.117\\
+ &  &  &  & (0.124) & (0.176) & (0.170) & (1.167) & (0.132) & (0.134)\\
+Lagged win percentage &  &  &  & -0.090 & -0.207*** &  & -2.358** & -0.073 & -0.078\\
+ &  &  &  & (0.078) & (0.065) &  & (0.868) & (0.080) & (0.079)\\
+Lagged market expected wins &  &  &  & 0.032*** & 0.016* & 0.000 & 0.134 & 0.030*** & 0.030***\\
+ &  &  &  & (0.008) & (0.009) & (0.007) & (0.082) & (0.008) & (0.008)\\
+Share of coaches new to franchise &  &  &  & -0.082** & -0.076** & -0.035 & -0.557 & -0.076* & -0.071*\\
+ &  &  &  & (0.038) & (0.037) & (0.037) & (0.397) & (0.038) & (0.037)\\
+Share of coaches promoted &  &  &  & -0.231** & -0.124 & -0.137 & -2.762*** & -0.242** & -0.248**\\
+ &  &  &  & (0.101) & (0.103) & (0.102) & (0.972) & (0.099) & (0.102)\\
+\midrule
+Observations & 608 & 608 & 608 & 607 & 563 & 563 & 607 & 607 & 607\\
+R$^2$ & 0.006 & 0.185 & 0.198 & 0.299 & 0.510 & 0.501 & 0.137 & 0.309 & 0.315\\
+Within R$^2$ & 0.006 & 0.002 & 0.019 & 0.144 & 0.101 & 0.085 & 0.083 & 0.156 & 0.164\\
+Season FE & Yes & Yes & Yes & Yes & Yes & Yes & Yes & Yes & Yes\\
+Franchise FE & No & Yes & Yes & Yes & No & No & Yes & Yes & Yes\\
+Franchise $\times$ HC-spell FE & No & No & No & No & Yes & Yes & No & No & No\\
+Controls (column 4) & No & No & No & Yes & Yes & Yes, excl. lag. win \% & Yes & Yes & Yes\\
+Model-only prior controls & No & No & No & No & No & No & No & Yes & Yes\\
+Outcome & Win \% & Win \% & Win \% & Win \% & Win \% & Win \% & Wins over exp. & Win \% & Win \%\\
+Mean of outcome & 0.500 & 0.500 & 0.500 & 0.500 & 0.515 & 0.515 & 0.002 & 0.500 & 0.500\\
+SD of coaches' share net of FE & 0.077 & 0.068 & 0.068 & 0.068 & 0.040 & 0.040 & 0.068 & 0.068 & 0.068\\
+Effect of 1 SD of coaches' share (win pp; wins in col. 7) & -1.543 & -0.862 & -1.007 & -0.765 & -0.900 & -0.995 & -0.082 & -0.911 & -0.355\\
+Spells with a within-spell GM change &  &  &  &  & 7 & 7 &  &  & \\
+WCB $p$-value: coaches' share Black & 0.137 & 0.317 & 0.269 & 0.329 & 0.312 & 0.253 & 0.330 & 0.238 & 0.699\\
+WCB $p$-value: head coach &  &  & 0.242 & 0.150 &  &  & 0.400 & 0.268 & 0.578\\
+WCB $p$-value: coaches' share, other measure &  &  &  &  &  &  &  &  & 0.140\\
+WCB $p$-value: general manager &  &  &  &  & 0.595 & 0.572 &  &  & \\
+\bottomrule
+\multicolumn{10}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table includes the estimation results of equation (3). The unit of observation is a franchise-season; the sample is the 608 team-seasons with the full staff observed (Wikipedia staff templates, 2007-2025). The outcome is the regular-season win percentage in columns (1)-(6), (8) and (9) and wins minus market expected wins (the sum of pre-game implied win probabilities) in column (7). The model-only prior controls are the team mean of the coaches' prior probability of being Black from the predicted-race model (a function of first role, unit and first-season era, no names) for the coaches' share and the holder's prior for each role holder (row \textit{Model-only prior controls}); only the coaches' and head coach's priors are displayed. Column (8) reverses the column-(4) choice: it adds the model-only priors, an ordinary predetermined control under this measure. Column (9) adds to column (4) the coaches' share and head-coach regressor under the predicted (model only) measure, with the priors. Coaches are on-field coaches (head coach, coordinators, position coaches, assistants and quality control). The coaches' share includes the head coach and the coordinators. Conditional on the role-holder regressors (from column 3 on), its coefficient is identified from the composition of the remaining coaches, and the role coefficients are net of the role holder's own contribution to the share. The column-(4) controls are predetermined: lagged win percentage and market expected wins, the shares of coaches new to the franchise and promoted from within (staff listed at the start of the season), and the previous season's cap share (observed from 2013, so from 2014 here, zero-filled before; its missing indicator is absorbed by the season FE), game-day roster mean log draft pick, mean age and Black share. Contemporaneous roster measures respond to in-season results and to the staff's own choices, so they appear only in Table 19c. Columns (5) and (6) replace franchise FE with franchise $\times$ head-coach-spell FE (a spell is a run of consecutive seasons of one season head coach with a franchise), so the head coach's race is absorbed. Of 171 spells, 45 last one season; these team-seasons are perfectly fit by their spell FE and are removed, leaving 126 spells. The identifying assumption is that, within a head coach's tenure, changes in the composition of the other coaches (assistant and coordinator turnover) are not timed to shocks in team quality. Spells are short, so a lagged outcome with spell FE is subject to Nickell bias; column (6) drops the lagged win percentage. With spell FE the GM coefficient is identified only from the 7 spells (at 6 franchises) in which the GM regressor changes within the spell; with so few effective clusters neither the clustered standard error nor the bootstrap is reliable, and the GM coefficient in columns (5) and (6) is not interpreted (the GM enters as a control). Columns (2)-(4) and (7)-(9) assume that, conditional on franchise and season FE and the controls, staff composition is uncorrelated with unobserved team quality. Because pre-game betting lines price staff quality and update during the season, the wins-over-expected column estimates performance relative to market expectations (mispricing), not the total effect of staff composition. The SD row is the SD of the coaches' Black share net of each column's fixed effects in its estimation sample; the effect row multiplies it by the coefficient (in percentage points of win percentage, and in wins in column 7). Column (8) adds the model-only priors of the predicted-race model (an ordinary predetermined control under this measure); column (9) adds the model-only predicted share and head-coach P(Black) with their priors. Role-holder indicators (HC, OC, DC, GM) are zero-filled when the role has no listed holder (e.g. teams without a GM title) or the holder's race is unknown and each enters with a missing indicator, so no team-season is dropped for a missing role holder. Standard errors, in parentheses, are clustered at the franchise level (32 clusters). Wild cluster bootstrap-t $p$-values (restricted, Webb six-point weights, 9,999 replications, clustered by franchise) are reported in the bottom panel because 32 clusters are few. HC race coefficients are subject to the glass-cliff threat: if Black head coaches are hired into persistently worse situations than the controls capture, the coefficient on a level outcome is biased downward. LagWinPct and LagExpectedWins condition on the situation the coach inherits. \textbf{Sensitivity measure.} Race is the Wikipedia category flag. The flag is positive-only and misses most Black players and staff, so team shares are lower bounds whose coverage varies with Wikipedia editing.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

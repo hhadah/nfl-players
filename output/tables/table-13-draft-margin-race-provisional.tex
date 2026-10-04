@@ -1,0 +1,32 @@
+\begin{table}[!h]
+\centering\centering
+\caption{Race gap at the draft margin (provisional race measure) \label{tab:draft-margin}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{lcccc}
+\toprule
+  & (1) Log pick & (2) Log pick & (3) Log pick & (4) Drafted\\
+\midrule
+Black & -0.419*** & -0.200*** & -0.059** & 0.014\\
+ & (0.057) & (0.033) & (0.029) & (0.019)\\
+Other race & -0.241** & -0.169* & -0.011 & -0.008\\
+ & (0.098) & (0.088) & (0.066) & (0.037)\\
+\midrule
+Observations & 3033 & 3033 & 3033 & 3357\\
+R$^2$ & 0.087 & 0.426 & 0.679 & 0.261\\
+Within R$^2$ & 0.027 & 0.388 & 0.658 & 0.215\\
+Class $\times$ position group FE & Yes & Yes & Yes & Yes\\
+Combine, recruit, college (D) & No & Yes & Yes & Yes\\
+Pre-draft grade (F) & No & No & Yes & No\\
+Sample & Drafted & Drafted & Drafted & Invitees, NFL id\\
+Mean of outcome & 4.549 & 4.549 & 4.549 & 0.780\\
+\bottomrule
+\multicolumn{5}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table includes the estimation results of a prospect-level analogue of equation (1), $Y_{icg} = \beta_1 Black_i + \beta_2 Other_i + X_i\pi + \delta_{c,g} + \varepsilon_{icg}$ for prospect $i$ of draft class $c$ in position group $g$, where $\delta_{c,g}$ are draft class $\times$ position group fixed effects. The sample is NFL draft prospects of the 2011-2022 classes (drafted players and combine invitees) with a Wikipedia article (race classified by the provisional measure); 752 prospects without one, including every prospect without a GSIS id, are excluded. Columns (1)-(3): log overall pick among drafted players (a positive coefficient is a later pick). Column (4): linear probability model of being drafted among combine invitees. Race is attached through the GSIS id, which an undrafted invitee has only if he later joined an NFL team, so this sample conditions on later NFL employment, an outcome of the draft: 494 of 1457 undrafted invitees and 9 of 2639 drafted invitees have no GSIS id, and 720 undrafted and 19 drafted invitees have no race measure. The drafted share is 0.644 among all invitees and 0.780 among invitees with a race measure. Column (4) is therefore not an estimate of the race gap in the probability of being drafted. The pre-draft grade is not used in column (4): it exists only for drafted players, so its missing indicator would determine the outcome. Block D: combine measures (40, vertical, bench, broad jump, cone, shuttle, height, weight) and the 247 rating interacted with position group; age at draft; the final college team's Power-conference, SRS and HBCU indicators; and final-season college production with position-group slopes (passing for QBs, rushing and receiving for RBs, receiving for WRs and TEs, tackles, tackles for loss and sacks for DL and LB, tackles, interceptions and passes defended for DBs, kicking and punting; defensive statistics start in 2016). Block F: the CFBD pre-draft grade, which may itself embed scouts' bias. Controls with incomplete coverage are set to zero with a missing indicator (interacted like the control). Standard errors are clustered at the college level (final college team as listed in the draft or combine record; prospects without a college form their own cluster). The omitted group is players with a Wikipedia article and no race or Hispanic category flag. \textbf{Sensitivity measure.} Race is the Wikipedia category flag. The flag is positive-only and misses most Black players and staff, so the comparison group mixes white and unflagged Black persons and the estimates are attenuated.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

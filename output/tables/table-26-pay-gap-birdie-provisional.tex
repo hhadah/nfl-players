@@ -1,0 +1,30 @@
+\begin{table}[!h]
+\centering
+\caption{Race gap in veteran-contract pay: BIRDiE cross-check (provisional race measure) \label{tab:pay-gap-birdie}}
+\centering
+\begin{threeparttable}
+\begin{tabular}[t]{lrr}
+\toprule
+ & Log APY & SE\\
+\midrule
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{A. Mean log APY by race, E[Y $|$ R] (BIRDiE)}}\\
+\hspace{1em}White & 1.111 & (0.022)\\
+\hspace{1em}Black & 1.299 & (0.039)\\
+\hspace{1em}Other race & 1.195 & (0.077)\\
+\hspace{1em}Black $-$ white & 0.189 & (0.044)\\
+\hspace{1em}Black $-$ white, intercept-only BIRDiE (no X) & 0.189 & (0.044)\\
+\hspace{1em}Black $-$ white, probability-weighted means & 0.190 & (0.044)\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{B. Conditional Black-white gap}}\\
+\hspace{1em}BIRDiE conditional gap & 0.014 & (0.029)\\
+\hspace{1em}Regression calibration, same X & 0.025 & (0.030)\\
+\hspace{1em}Regression calibration, main specification (Table \ref{tab:pay-gap-veteran}, column (5)) & -0.011 & (0.026)\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table compares the regression-calibration estimates of equation (1) with BIRDiE \citep{mccartan2025birdie}, which treats race as a latent variable whose prior is the race prediction (P(white), P(Black), P(other race)) and fits a Normal linear model of log APY with race-specific coefficients by EM. The sample is the main sample of Table \ref{tab:pay-gap-veteran}: 5,058 freely bargained veteran contracts (UFA and extensions) of 2,787 players signed 2014-2026. X is parsimonious: OTC market position group, signing-year bucket (2014-16, 2017-19, 2020-22, 2023-26), experience bin, the race prior's covariates (position at NFL entry, entry era, draft-round bucket, college type, whether a home county is known), prior-season games played and games started, career games, log draft pick with missing and undrafted indicators, and the athletic score with its missing indicator. Panel A reports BIRDiE's finite-sample estimates of mean log APY by race and their difference (the raw gap, without conditioning on position or year), from the model with X and from an intercept-only model, which does not depend on the race-specific X model; and, for comparison, the difference between means weighted by P(Black) and by P(white), which mixes the groups when the probabilities are not 0 or 1 and also picks up any relation between the prior covariates and pay, so its bias has no definite sign. Panel B: the BIRDiE conditional gap is the mean over contracts, weighted by BIRDiE's posterior probability of being Black given pay, X, names and county, of $X_i'(\hat\beta_{Black} - \hat\beta_{white})$, the gap at the characteristics of Black players allowing every coefficient to differ by race. The regression-calibration rows regress log APY on P(Black), P(other race) and controls with common slopes: the same X, and the main specification (position $\times$ year-signed fixed effects, blocks A-D and the prior-covariate fixed effects). Both estimators assume that first name, surname and home county are independent of pay given race and X, and both treat the predicted probabilities as P(race $|$ names, county, X), i.e. as calibrated given X, although X includes characteristics (games, draft slot, athletic score) that are not in the prior; regression calibration in addition assumes common slopes. Under the provisional measure the race regressors are 0/1 indicators, so BIRDiE reduces to race-specific regressions and the probability-weighted means are group means. BIRDiE standard errors come from a player-cluster bootstrap with 199 successful replications of 199 (players resampled with replacement; BIRDiE refit by EM in each); regression-calibration standard errors are clustered at the player level. The omitted group is players with a Wikipedia article and no race or Hispanic category flag. \textbf{Sensitivity measure.} Race is the Wikipedia category flag. The flag is positive-only and misses most Black players and staff, so the comparison group mixes white and unflagged Black persons and the estimates are attenuated.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

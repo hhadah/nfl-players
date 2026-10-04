@@ -1,0 +1,54 @@
+\begin{table}[H]
+\centering\centering\centering
+\caption{Racial composition by staff group and team performance \label{tab:staff-diversity-groups}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{tabular}[t]{lccccccc}
+\toprule
+  & Coord. & Position & Assistants & Front office & Personnel & Coaching jointly & Blau\\
+\midrule
+Coordinators' expected share Black & -0.055 &  &  &  &  & -0.064 & \\
+ & (0.075) &  &  &  &  & (0.069) & \\
+Position coaches' expected share Black &  & 0.067 &  &  &  & 0.033 & \\
+ &  & (0.092) &  &  &  & (0.092) & \\
+Assistants' expected share Black &  &  & -0.163* &  &  & -0.158* & \\
+ &  &  & (0.086) &  &  & (0.089) & \\
+Front office expected share Black &  &  &  & 0.114 &  &  & \\
+ &  &  &  & (0.169) &  &  & \\
+Personnel and scouting expected share Black &  &  &  &  & 0.055 &  & \\
+ &  &  &  &  & (0.096) &  & \\
+Blau index of coaches (Black/non-Black) &  &  &  &  &  &  & -0.276*\\
+ &  &  &  &  &  &  & (0.143)\\
+P(Black): head coach & -0.098 & -0.102 & -0.084 & -0.105 & -0.102 & -0.080 & -0.080\\
+ & (0.072) & (0.071) & (0.076) & (0.072) & (0.072) & (0.076) & (0.076)\\
+P(Black): offensive coordinator &  & -0.007 & 0.001 & -0.001 & -0.005 &  & 0.017\\
+ &  & (0.048) & (0.048) & (0.046) & (0.048) &  & (0.048)\\
+P(Black): defensive coordinator &  & -0.020 & -0.025 & -0.023 & -0.009 &  & -0.006\\
+ &  & (0.030) & (0.030) & (0.029) & (0.030) &  & (0.030)\\
+P(Black): general manager & -0.015 & -0.019 & -0.006 &  & -0.018 & -0.003 & 0.000\\
+ & (0.045) & (0.048) & (0.050) &  & (0.049) & (0.051) & (0.053)\\
+\midrule
+Observations & 608 & 608 & 608 & 608 & 595 & 608 & 608\\
+R$^2$ & 0.297 & 0.302 & 0.311 & 0.301 & 0.300 & 0.306 & 0.308\\
+Within R$^2$ & 0.139 & 0.146 & 0.157 & 0.145 & 0.147 & 0.150 & 0.153\\
+Season FE & Yes & Yes & Yes & Yes & Yes & Yes & Yes\\
+Franchise FE & Yes & Yes & Yes & Yes & Yes & Yes & Yes\\
+Controls (column 4 of Table 19) & Yes & Yes & Yes & Yes & Yes & Yes & Yes\\
+Role-holder regressors & HC, GM & HC, OC, DC, GM & HC, OC, DC, GM & HC, OC, DC & HC, OC, DC, GM & HC, GM & HC, OC, DC, GM\\
+Model-only prior controls & Yes & Yes & Yes & Yes & Yes & Yes & Yes\\
+Mean of outcome & 0.500 & 0.500 & 0.500 & 0.500 & 0.502 & 0.500 & 0.500\\
+WCB $p$-value: coordinators & 0.477 &  &  &  &  & 0.370 & \\
+WCB $p$-value: position coaches &  & 0.479 &  &  &  & 0.733 & \\
+WCB $p$-value: assistants &  &  & 0.093 &  &  & 0.113 & \\
+WCB $p$-value: front office &  &  &  & 0.548 &  &  & \\
+WCB $p$-value: personnel &  &  &  &  & 0.621 &  & \\
+WCB $p$-value: Blau index &  &  &  &  &  &  & 0.080\\
+\bottomrule
+\multicolumn{8}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}}
+\end{table}
+
+{\footnotesize
+\noindent\textit{Notes:} This table includes the estimation results of equation (3) with the coaches' Black share replaced by the Black share of one staff group at a time (columns 1-5), the three coaching groups jointly (column 6) and the two-group Blau index of on-field coaches, $2s(1-s)$ with $s$ the coaches' Black share (column 7). The outcome is the regular-season win percentage; the sample is FullStaffObserved team-seasons, 2007-2025. Under this measure $s$ is the expected share, so column (7) uses $2s(1-s)$ of the expected share, not the expected Blau index $E[2S(1-S)] = 2s(1-s) - 2\mathrm{Var}(S)$, and regression calibration does not carry over to this nonlinear function. Because $s$ is below 0.5 in every team-season (maximum 0.453), the index is a monotone transform of the share, not an independent diversity measure. Coordinators are the OC, DC and special-teams coordinator; the front office includes owners, executives, the GM and personnel and scouting staff. All staff regressors (shares, role holders, their priors and the coaching-turnover shares) are measured at opening day, from the preseason staff snapshot taken before the franchise's first regular-season game, so in-season hires, firings and interim promotions, which respond to results, do not enter; Table 19d repeats the headline columns with the all-season union staff as a robustness check. Every column includes franchise and season FE, the predetermined column-(4) controls of Table 19 (lagged win percentage and market expected wins, the shares of opening-day coaches new to the franchise and promoted, and the previous season's cap share, roster mean log draft pick, mean age and roster Black share) and the role-holder regressors of Table 19, except that the coordinator columns (1 and 6) omit the OC and DC regressors and the front-office column (4) omits the GM regressor, because those persons are members of the group whose share enters (row \textit{Role-holder regressors}). Team-seasons with no listed member of a group at the opening have a missing share and drop from that column, so the number of observations differs across columns. Team-seasons with a missing share: Personnel and scouting expected share Black (13) (personnel: mostly in 2007). Under the predicted measure, staff shares are expected shares (mean member P(Black)), role-holder regressors are the holder's P(Black), and every specification controls for the matching model-only priors (the members' mean prior for each share, the holder's prior for each role holder); see the notes to Table 19 on their measurement and Table 29 for the other race measures. Standard errors, in parentheses, are clustered at the franchise level (32 clusters). Wild cluster bootstrap-t $p$-values (restricted, Webb six-point weights, 9,999 replications, clustered by franchise) are reported in the bottom panel because 32 clusters are few. Race is predicted, not observed: each person's probability of being non-Hispanic Black alone combines first name, surname and hometown county (BIFSG) with an NFL-specific prior estimated by EM on predetermined characteristics (players: position at entry, rookie era, draft round, college type, county availability; staff: role, unit and era at first appearance); documented race statements are not used (notes/race-prediction-design.md). Black Hispanic and multiracial Black persons are in the other-race probability, so P(Black) is narrower than the Black-alone-or-in-combination definition of the hand codes and of TIDES. Team shares are expected shares (mean member probability). Their error is Berkson-type: estimates are consistent if the probabilities are calibrated given the regression's controls (the team mean of the prior is one of them), but less precise than with observed race; individual coaches' probabilities are noisy because names carry little information for many Black coaches. The validation exhibit compares the predictions with published TIDES shares.
+\par}
+

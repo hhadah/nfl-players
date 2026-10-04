@@ -1,0 +1,42 @@
+\begin{table}[!h]
+\centering\centering
+\caption{Roster racial composition and team performance: other outcomes, headcount share, 2002-2025 (provisional race measure) \label{tab:roster-diversity-outcomes-headcount}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{lccccc}
+\toprule
+  & (1) Point diff./game & (2) Wins over exp. & (3) Off. EPA/play & (4) $-$Def. EPA/play & (5) Playoffs\\
+\midrule
+Roster share flagged Black (headcount) & 10.200** & 1.456 &  &  & 0.803**\\
+ & (4.199) & (1.328) &  &  & (0.377)\\
+Offense share flagged Black (headcount) &  &  & 0.033 & -0.036 & \\
+ &  &  & (0.051) & (0.035) & \\
+Defense share flagged Black (headcount) &  &  & 0.035 & 0.095*** & \\
+ &  &  & (0.033) & (0.031) & \\
+Opening-day coaches' share flagged Black & -2.344 & -0.775 & 0.018 & -0.061 & -0.291\\
+ & (3.013) & (1.079) & (0.040) & (0.052) & (0.261)\\
+Opening-day head coach flagged Black & -0.568 & -0.091 & -0.014 & 0.009 & 0.040\\
+ & (0.768) & (0.299) & (0.014) & (0.012) & (0.067)\\
+Opening-day starting QB flagged Black & -0.439 & -0.136 & 0.008 & -0.007 & -0.046\\
+ & (0.569) & (0.187) & (0.011) & (0.007) & (0.055)\\
+\midrule
+Observations & 767 & 767 & 767 & 767 & 767\\
+R$^2$ & 0.294 & 0.099 & 0.299 & 0.227 & 0.177\\
+Within R$^2$ & 0.102 & 0.043 & 0.080 & 0.069 & 0.051\\
+WCB p-value, diversity & 0.024 & 0.294 & 0.545 & 0.004 & 0.055\\
+Mean of outcome & 0.013 & 0.000 & -0.013 & 0.012 & 0.391\\
+SD of diversity net of FE & 0.067 & 0.067 & 0.076 & 0.102 & 0.067\\
+Effect of 1-SD change & 0.679 & 0.097 & 0.002 & 0.010 & 0.053\\
+Season and franchise FE & Yes & Yes & Yes & Yes & Yes\\
+Lagged outcomes, roster quality, staff and QB & Yes & Yes & Yes & Yes & Yes\\
+Mean prior and prior-covariate shares & No & No & No & No & No\\
+\bottomrule
+\multicolumn{6}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table includes the estimation results of equation (2) with the column (4) specification of Table \ref{tab:roster-diversity-main}: season and franchise fixed effects, lagged outcomes, opening-day roster quality and the staff and quarterback controls. The unit of observation is a franchise-season, 2002-2025. The headcount share Black weights each player by the regular-season weeks he was on the franchise's game-day roster. The unit shares are the headcount shares of offensive (QB, RB, WR, TE, OL) and defensive (DL, LB, DB) game-day players. Controls are fixed by opening day: the lagged win percentage and lagged market expected wins; roster quality of the active roster of the first regular-season game (mean log draft pick, undrafted = log 300; share of first-round picks; mean age; mean experience); and the Black share of the on-field coaches listed in the preseason staff snapshot, used only where the full staff is observed (2007 on; a missing indicator absorbs earlier seasons), the opening-day head coach's race and the opening-day starting quarterback's race. Race controls are zero-filled with missing indicators when a person is uncoded. The outcomes are regular-season point differential per game (column (1)), wins over expected (column (2): actual wins minus the sum of the market's pre-game win probabilities), offensive EPA per play (column (3)), minus defensive EPA per play (column (4), higher = better defense) and a playoff indicator (column (5), linear probability model). Wins over expected nets out what the betting market prices before each game, including roster composition, so its coefficient estimates only the part of any composition effect the market fails to price; it is zero under market efficiency even if composition has a causal effect on winning. Columns (3) and (4) enter the offense and defense shares jointly, so each unit's composition is separated from the other unit's; the WCB p-value, SD and effect rows refer to the unit's own share. The SD row is the SD of the diversity term net of franchise and season fixed effects; the effect row multiplies it by the coefficient, in units of the outcome. Lagged-outcome and roster-quality coefficients are not shown. Standard errors, in parentheses, are clustered at the franchise level (32 clusters); wild cluster bootstrap-t p-values (restricted, WCR) use Webb weights and 9,999 replications. For these team-level estimates the provisional measure's error is not classical: the flagged share also varies with how completely Wikipedia editors categorize a franchise-season's players, which may rise with team success. The measurement error can therefore be correlated with the outcome, and the bias is of unknown sign, not attenuation. The estimates test the pipeline; they are not estimates of the effect of roster composition. \textbf{Sensitivity measure.} Race is the Wikipedia category flag. The flag is positive-only and misses most Black players and staff, so team shares are lower bounds whose coverage varies with Wikipedia editing.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

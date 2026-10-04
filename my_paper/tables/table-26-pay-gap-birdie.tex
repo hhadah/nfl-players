@@ -1,0 +1,63 @@
+\begin{table}[H]
+\centering
+\caption{Race gap in veteran-contract pay: BIRDiE cross-check and diagnosis of its disagreement with regression calibration \label{tab:pay-gap-birdie}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\fontsize{8}{10}\selectfont
+\begin{tabular}[t]{lrr}
+\toprule
+ & Log APY & SE\\
+\midrule
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{A. Mean log APY by race, E[Y $|$ R], and raw Black-white gap}}\\
+\hspace{1em}White (BIRDiE, with X) & 1.107 & (0.057)\\
+\hspace{1em}Black (BIRDiE, with X) & 1.215 & (0.030)\\
+\hspace{1em}Other race (BIRDiE, with X) & 0.947 & (0.184)\\
+\hspace{1em}Black $-$ white (BIRDiE, with X) & 0.108 & (0.051)\\
+\hspace{1em}Black $-$ white, intercept-only BIRDiE (no X) & 0.197 & (0.048)\\
+\hspace{1em}Black $-$ white, regression calibration without X (log APY on P(Black), P(other race)) & 0.199 & (0.049)\\
+\hspace{1em}Black $-$ white, probability-weighted means & 0.126 & (0.032)\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{B. Conditional gaps: unrestricted EM and the estimable-contrast comparison}}\\
+\hspace{1em}BIRDiE, unrestricted Black characteristics (includes unsupported extrapolation) & -0.162 & (0.096)\\
+\hspace{1em}BIRDiE: EM slopes, posterior-weighted on estimable contrasts & -0.162 & (0.096)\\
+\hspace{1em}BIRDiE: EM slopes, prior-weighted on estimable contrasts & -0.159 & (0.096)\\
+\hspace{1em}Interacted regression calibration, prior-weighted on estimable contrasts & -0.158 & (2.237)\\
+\hspace{1em}Regression calibration, same X, common slopes & -0.048 & (0.048)\\
+\hspace{1em}Regression calibration, main specification (Table \ref{tab:pay-gap-veteran}, column (5)) & -0.004 & (0.051)\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{C. Steps of panel B (bootstrap SE of each difference)}}\\
+\hspace{1em}Weights: posterior $-$ prior (same EM slopes); model disagreement & -0.002 & (0.002)\\
+\hspace{1em}Slopes: EM $-$ OLS (same prior weights); model disagreement & -0.001 & (2.240)\\
+\hspace{1em}Contrast: supported race-specific average $-$ full-sample common slope (OLS) & -0.110 & (2.239)\\
+\hspace{1em}Total: supported BIRDiE gap $-$ common-slope regression calibration & -0.113 & (0.092)\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{D. One contract per player (first main-sample contract)}}\\
+\hspace{1em}BIRDiE conditional gap on estimable contrasts, posterior-weighted & -0.132 & (0.118)\\
+\hspace{1em}Interacted regression calibration on estimable contrasts, prior-weighted & -0.122 & (5.508)\\
+\hspace{1em}Regression calibration, same X, common slopes & -0.055 & (0.061)\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{E. Posterior diagnostics of the BIRDiE fit (point values, no SE)}}\\
+\hspace{1em}Mean $|$posterior $-$ prior$|$ P(Black) & 0.042 & \\
+\hspace{1em}Correlation of posterior and prior P(Black) & 0.970 & \\
+\hspace{1em}Share of contracts with $|$posterior $-$ prior$|$ $>$ 0.2 & 0.047 & \\
+\hspace{1em}Mean within-player SD of posterior P(Black) (players with 2+ contracts) & 0.036 & \\
+\hspace{1em}Share of such players with posterior range $>$ 0.25 & 0.061 & \\
+\hspace{1em}Players with 2+ contracts & 1,387 & \\
+\hspace{1em}Residual SD $\hat\sigma$ (common to the three race groups) & 0.580 & \\
+\hspace{1em}EM iterations & 36 & \\
+\hspace{1em}Contracts in the one-per-player sample & 2,789 & \\
+\hspace{1em}Contracts with an estimable Black-white contrast & 5,055 & \\
+\hspace{1em}Share of prior Black weight on estimable contrasts & 0.999 & \\
+\hspace{1em}First contracts with an estimable contrast & 2,784 & \\
+\hspace{1em}Share of first-contract prior Black weight on estimable contrasts & 0.999 & \\
+\hspace{1em}Interacted design rank & 164 & \\
+\hspace{1em}Interacted design columns & 171 & \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+{\footnotesize
+\noindent\textit{Notes:} This table compares the regression-calibration estimates of equation (1) with BIRDiE \citep{mccartan2025birdie}, which treats race as a latent variable whose prior is the race prediction (P(white), P(Black), P(other race)) and fits a Normal linear model of log APY with race-specific coefficients and a common residual variance by EM, and it traces their disagreement to its sources. Panels A-C use the same race probabilities (P(Black) is the predicted probability of non-Hispanic Black alone) and the main sample of Table \ref{tab:pay-gap-veteran}: 5,062 freely bargained veteran contracts (UFA and extensions) of 2,789 players signed 2014-2026. The adjusted models share the parsimonious X defined below, except for the separately labelled Table 8 column-(5) benchmark with its richer controls. X is parsimonious: OTC market position group, signing-year bucket (2014-16, 2017-19, 2020-22, 2023-26), experience bin, the race prior's covariates (position at NFL entry, entry era, draft-round bucket, college type, whether a home county is known), prior-season games played and games started, career games, log draft pick with missing and undrafted indicators, and the athletic score with its missing indicator. Panel A reports BIRDiE's finite-population estimates of mean log APY by race and their difference (the raw gap, without conditioning on position or year), from the model with X and from an intercept-only model; the regression of log APY on P(Black) and P(other race) alone estimates the same raw gap under the same assumption as the intercept-only model (calibration unconditional on X), so the two differ only through BIRDiE's posterior update of race by pay; the difference between means weighted by P(Black) and by P(white) mixes the groups when the probabilities are not 0 or 1 and is descriptive. Panel B first reports the unrestricted EM average, which includes counterfactuals not identified by the interacted design. The next three rows compare EM and OLS on the same estimable Black-white contrasts: 5,055 contracts, carrying 99.918\% of prior Black weight. All contracts and all X columns remain in every fit. A scaled QR decomposition tests whether each contrast is orthogonal to the design's null space; aliased coefficients are not interpreted as zero effects. The EM gap $X_i'(\hat\beta_{Black}-\hat\beta_{white})$ is averaged first with posterior Black weights and then prior Black weights. The OLS comparison fits log APY on X, P(Black) $\times$ X and P(other race) $\times$ X and uses the same prior weights and estimable rows. The common-slope rows retain the full sample and therefore change both slope restrictions and the averaging target. The last row is the main specification of Table \ref{tab:pay-gap-veteran}. Panel C reports the weighting step (-0.002 (0.002)) and EM-versus-OLS step (-0.001 (2.240)) at the same estimable contrasts. The contrast step (-0.110 (2.239)) compares the supported race-specific average with the full-sample common-slope coefficient, a different estimand. These steps sum to the total (-0.113 (0.092)); bootstrap standard errors of each difference use the same replications. Panel D repeats the three X-based estimators on the first main-sample contract of each player, because BIRDiE treats each contract's race as a separate latent variable: a player's later contracts update his race afresh, and the within-player variation of the posterior in panel E measures how far the fitted model departs from one race per player. Panel E also reports how far the pay update moves P(Black) from the prior. Both estimators assume that first name, surname and home county are independent of pay given race and X, and both treat the predicted probabilities as P(race $|$ names, county, X), i.e. as calibrated given X, although X includes characteristics (games, draft slot, athletic score) that are not in the prior; the common-slope rows in addition assume common slopes, and BIRDiE in addition assumes Normal residuals with one variance for the three groups, which lets the EM reassign race by residual pay. The documented-race check of calibration given the controls is in the notes to Table \ref{tab:pay-gap-veteran}. With correctly specified models and probabilities calibrated given X, the BIRDiE raw gaps with and without X would agree, the panel C model-disagreement steps would be zero and only the contrast step would remain; where they are not, the table does not say which estimator is right: BIRDiE's extra information is the Normal model, not observed race, so the table is a diagnostic rather than an independent estimate of the gap. BIRDiE and interacted-regression standard errors come from a player-cluster bootstrap with 199 successful replications of 199. Players are resampled with replacement, the three EM models refit, and estimable contrast support recomputed in each replication; failed or nonconvergent replications are counted and excluded. These SEs describe the support-adaptive diagnostic, not the unrestricted heterogeneous gap. Common-slope regression-calibration SEs cluster by player; panel E reports point diagnostics without SEs. P(Black) and P(other race) enter together, so the coefficient on P(Black) compares a Black (predicted: non-Hispanic Black alone) with a white player. Race is predicted, not observed: each person's probability of being non-Hispanic Black alone combines first name, surname and hometown county (BIFSG) with an NFL-specific prior estimated by EM on predetermined characteristics (players: position at entry, rookie era, draft round, college type, county availability; staff: role, unit and era at first appearance); documented race statements are not used (notes/race-prediction-design.md). Black Hispanic and multiracial Black persons are in the other-race probability, so P(Black) is narrower than the Black-alone-or-in-combination definition of the hand codes and of TIDES. Regressions use the probabilities (regression calibration) and control for the prior's covariates; the coefficient on P(Black) is the Black-white gap if the probabilities are calibrated given the regression's controls and names and hometown are unrelated to the outcome given race and the controls. The validation exhibit compares the predictions with published TIDES shares.
+\par}
+

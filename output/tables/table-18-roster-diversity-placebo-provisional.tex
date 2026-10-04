@@ -1,0 +1,44 @@
+\begin{table}[!h]
+\centering\centering
+\caption{Roster racial composition and team performance: placebo tests (provisional race measure) \label{tab:roster-diversity-placebo}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{lccccccc}
+\toprule
+  & (1) & (2) & (3) & (4) & (5) & (6) & (7)\\
+\midrule
+Roster share flagged Black, season $t+1$ & 0.143 & 0.905 & 0.206* &  &  &  & \\
+ & (0.132) & (1.577) & (0.106) &  &  &  & \\
+Roster share flagged Black, season $t$ & -0.142 & -2.283 & 0.133 &  &  &  & \\
+ & (0.153) & (1.751) & (0.144) &  &  &  & \\
+Roster share flagged Black, season $t-1$ &  &  &  & 0.602*** & 0.688*** & 0.601*** & 0.688***\\
+ &  &  &  & (0.051) & (0.042) & (0.050) & (0.043)\\
+Win pct., season $t-1$ & -0.115 & -2.462** & -0.012 & 0.010 & 0.014 & 0.010 & 0.016*\\
+ & (0.089) & (1.001) & (0.062) & (0.021) & (0.009) & (0.021) & (0.009)\\
+Mean prior P(Black), season $t$ &  &  &  &  &  & -0.084 & 0.276*\\
+ &  &  &  &  &  & (0.269) & (0.138)\\
+Mean prior P(Black), season $t-1$ &  &  &  &  &  & -0.090 & -0.236*\\
+ &  &  &  &  &  & (0.260) & (0.129)\\
+\midrule
+Observations & 384 & 384 & 735 & 384 & 736 & 384 & 736\\
+R$^2$ & 0.371 & 0.186 & 0.271 & 0.659 & 0.668 & 0.659 & 0.671\\
+Within R$^2$ & 0.150 & 0.060 & 0.105 & 0.356 & 0.459 & 0.356 & 0.464\\
+WCB p-value, share (t+1) & 0.294 & 0.577 & 0.061 &  &  &  & \\
+WCB p-value, share (t) & 0.375 & 0.213 & 0.372 &  &  &  & \\
+WCB p-value, lagged win pct. &  &  &  & 0.637 & 0.150 & 0.649 & 0.086\\
+Mean of outcome & 0.500 & 0.000 & 0.500 & 0.222 & 0.206 & 0.222 & 0.206\\
+Diversity measure & Snap-weighted & Snap-weighted & Headcount & Snap-weighted & Headcount & Snap-weighted & Headcount\\
+Seasons & 2013-2024 & 2013-2024 & 2002-2024 & 2014-2025 & 2003-2025 & 2014-2025 & 2003-2025\\
+Season and franchise FE & Yes & Yes & Yes & Yes & Yes & Yes & Yes\\
+Lagged outcomes, roster quality, staff and QB & Yes & Yes & Yes & No & No & No & No\\
+Calibration controls and their leads & No & No & No & No & No & No & No\\
+\bottomrule
+\multicolumn{8}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table includes the estimation results of placebo versions of equation (2). The unit of observation is a franchise-season; all columns include season and franchise fixed effects. Columns (1)-(3) add next season's roster share (season $t+1$) to the current share, with the column (4) controls of Table \ref{tab:roster-diversity-main}. Next season's roster cannot affect this season's results, so a lead coefficient similar to the current-share coefficient indicates that performance shapes composition (winning teams retain or acquire different players) or that a persistent franchise trait drives both. The dependent variable is the win percentage (columns (1) and (3)) or wins over the market expectation (column (2)).   The lead is missing in 2025, the last season observed. Columns (4)-(5) test reverse causality directly: the dependent variable is the current roster share, regressed on last season's win percentage conditional on last season's share, so the coefficient on the lagged win percentage is the change in composition predicted by past performance. No season-$t$ controls enter, because roster quality in season $t$ is itself an outcome of season $t-1$ results (e.g., draft position). With franchise fixed effects the coefficient on the lagged share is subject to Nickell bias.  Columns (6)-(7) decompose the reverse-causality coefficient: they add the current and lagged mean prior P(Black), so the coefficient on the lagged win percentage is the change in composition not accounted for by changes in the roster's position, draft, college and era mix (on which the prior depends). The snap-weighted share Black weights each player by his offensive plus defensive snaps for the franchise in the regular season; it is measured during season $t$ and can respond to injuries and benching. Snap weights also respond to game script: teams that trail run more offensive plays, teams with weak offenses play more defensive snaps, and defensive units have higher Black shares, so losing can raise the snap-weighted share mechanically (Table \ref{tab:roster-diversity-robustness} reports the unit-balanced share and a control for the defensive snap share). The headcount share Black weights each player by the regular-season weeks he was on the franchise's game-day roster. Controls are fixed by opening day: the lagged win percentage and lagged market expected wins; roster quality of the active roster of the first regular-season game (mean log draft pick, undrafted = log 300; share of first-round picks; mean age; mean experience); and the Black share of the on-field coaches listed in the preseason staff snapshot, used only where the full staff is observed (2007 on; a missing indicator absorbs earlier seasons), the opening-day head coach's race and the opening-day starting quarterback's race. Race controls are zero-filled with missing indicators when a person is uncoded. Standard errors, in parentheses, are clustered at the franchise level (32 clusters); wild cluster bootstrap-t p-values (restricted, WCR) use Webb weights and 9,999 replications. For these team-level estimates the provisional measure's error is not classical: the flagged share also varies with how completely Wikipedia editors categorize a franchise-season's players, which may rise with team success. The measurement error can therefore be correlated with the outcome, and the bias is of unknown sign, not attenuation. The estimates test the pipeline; they are not estimates of the effect of roster composition. \textbf{Sensitivity measure.} Race is the Wikipedia category flag. The flag is positive-only and misses most Black players and staff, so team shares are lower bounds whose coverage varies with Wikipedia editing.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

@@ -1,0 +1,44 @@
+\begin{table}[!h]
+\centering\centering
+\caption{Coaching-staff racial composition and other team outcomes (provisional race measure) \label{tab:staff-diversity-outcomes}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{lcccccc}
+\toprule
+  & (1) & (2) & (3) & (4) & (5) & (6)\\
+\midrule
+Coaches' share Black & -2.582 & -8.744 & -0.007 & -0.110 & -0.053 & -0.053\\
+ & (3.554) & (6.718) & (0.056) & (0.100) & (0.054) & (0.081)\\
+Black head coach & -1.382 &  & -0.024** &  & 0.000 & \\
+ & (0.848) &  & (0.011) &  & (0.013) & \\
+Black offensive coordinator & 0.484 & 1.081 & 0.002 & 0.030 & 0.004 & -0.005\\
+ & (1.330) & (1.570) & (0.025) & (0.031) & (0.016) & (0.019)\\
+Black defensive coordinator & 0.345 & -0.790 & 0.000 & -0.016 & 0.004 & -0.002\\
+ & (0.797) & (1.369) & (0.013) & (0.020) & (0.009) & (0.014)\\
+Black general manager & -0.894 & -2.921 & -0.031* & -0.059 & 0.015** & -0.000\\
+ & (0.935) & (2.219) & (0.017) & (0.045) & (0.006) & (0.018)\\
+Roster share Black ($t-1$) & 5.458 & 7.382 & 0.095** & 0.092 & 0.026 & 0.074\\
+ & (4.095) & (6.148) & (0.046) & (0.063) & (0.052) & (0.080)\\
+\midrule
+Observations & 607 & 563 & 607 & 563 & 607 & 563\\
+R$^2$ & 0.331 & 0.534 & 0.326 & 0.530 & 0.226 & 0.417\\
+Within R$^2$ & 0.134 & 0.104 & 0.107 & 0.079 & 0.071 & 0.044\\
+Outcome & Point diff. per game & Point diff. per game & Off. EPA per play & Off. EPA per play & $-$Def. EPA per play & $-$Def. EPA per play\\
+Franchise FE & Yes & No & Yes & No & Yes & No\\
+Franchise $\times$ HC-spell FE & No & Yes & No & Yes & No & Yes\\
+Season FE, controls (column 4) & Yes & Yes & Yes & Yes & Yes & Yes\\
+Mean of outcome & 0.013 & 0.515 & -0.008 & -0.002 & 0.008 & 0.011\\
+Effect of 1 SD of coaches' share net of FE & -0.176 & -0.347 & -0.0004 & -0.0044 & -0.0036 & -0.0021\\
+Model-only prior controls & No & No & No & No & No & No\\
+WCB $p$-value: coaches' share Black & 0.492 & 0.234 & 0.914 & 0.304 & 0.356 & 0.520\\
+WCB $p$-value: head coach & 0.127 &  & 0.052 &  & 0.988 & \\
+\bottomrule
+\multicolumn{7}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table includes the estimation results of equation (3) for three further outcomes: the regular-season point differential per game (columns 1-2), offensive EPA per play (3-4) and minus defensive EPA per play allowed (5-6; higher is better). Odd columns use the column-(4) specification of Table 19 (franchise and season FE); even columns use the column-(5) specification (franchise $\times$ head-coach-spell and season FE, singleton spells removed, the head coach's race absorbed). The sample is FullStaffObserved team-seasons, 2007-2025. The coaches' share includes the head coach and the coordinators. Conditional on the role-holder regressors (from column 3 on), its coefficient is identified from the composition of the remaining coaches, and the role coefficients are net of the role holder's own contribution to the share. The column-(4) controls are predetermined: lagged win percentage and market expected wins, the shares of coaches new to the franchise and promoted from within (staff listed at the start of the season), and the previous season's cap share (observed from 2013, so from 2014 here, zero-filled before; its missing indicator is absorbed by the season FE), game-day roster mean log draft pick, mean age and Black share. Contemporaneous roster measures respond to in-season results and to the staff's own choices, so they appear only in Table 19c. The effect row is the coefficient times the SD of the coaches' Black share net of the column's fixed effects, in the outcome's units. Role-holder indicators (HC, OC, DC, GM) are zero-filled when the role has no listed holder (e.g. teams without a GM title) or the holder's race is unknown and each enters with a missing indicator, so no team-season is dropped for a missing role holder. Standard errors, in parentheses, are clustered at the franchise level (32 clusters). Wild cluster bootstrap-t $p$-values (restricted, Webb six-point weights, 9,999 replications, clustered by franchise) are reported in the bottom panel because 32 clusters are few. \textbf{Sensitivity measure.} Race is the Wikipedia category flag. The flag is positive-only and misses most Black players and staff, so team shares are lower bounds whose coverage varies with Wikipedia editing.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

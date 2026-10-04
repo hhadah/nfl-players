@@ -1,0 +1,165 @@
+series_id,season,plot_value,value_basis,unit,value,derived_base,report_year,timing_basis,definition_caveat,n_alternatives,alt_values
+hc_black,1992,7,printed percent,percent,7,,2023,retrospective (2023 Appendix II),"",0,""
+hc_black,1993,7,printed percent,percent,7,,2023,retrospective (2023 Appendix II),"",0,""
+hc_black,1994,7,printed percent,percent,7,,2023,retrospective (2023 Appendix II),"",0,""
+hc_black,1995,10,printed percent,percent,10,,2023,retrospective (2023 Appendix II),"",0,""
+hc_black,1997,10,printed percent,percent,10,,2023,retrospective (2023 Appendix II),"",0,""
+hc_black,1999,6,printed percent,percent,6,,2023,retrospective (2023 Appendix II),appendix 1999/2000 season labels unreliable (README),0,""
+hc_black,2000,6.45161290322581,count / number of teams,count,2,31,2001,contemporaneous report,"",0,""
+hc_black,2001,9.67741935483871,count / number of teams,count,3,31,2001,contemporaneous report,"",1,2 (2003)
+hc_black,2002,6.25,count / number of teams,count,2,32,2003,contemporaneous report,"",0,""
+hc_black,2003,9.375,count / number of teams,count,3,32,2004,contemporaneous report,"",0,""
+hc_black,2004,9.375,count / number of teams,count,3,32,2005,contemporaneous report,"",0,""
+hc_black,2005,18.75,count / number of teams,count,6,32,2005,contemporaneous report,"",1,6 (2004)
+hc_black,2006,21.875,count / number of teams,count,7,32,2006,contemporaneous report,"",1,7 (2005)
+hc_black,2007,18.75,count / number of teams,count,6,32,2006,contemporaneous report,"",1,6 (2008)
+hc_black,2008,18.75,count / number of teams,count,6,32,2008,contemporaneous report,"",0,""
+hc_black,2009,18.75,count / number of teams,count,6,32,2009,contemporaneous report,"",0,""
+hc_black,2010,18.75,count / number of teams,count,6,32,2010,contemporaneous report,"",0,""
+hc_black,2011,21.875,count / number of teams,count,7,32,2011,contemporaneous report,"",0,""
+hc_black,2012,15.625,count / number of teams,count,5,32,2012,contemporaneous report,"",0,""
+hc_black,2013,9.375,count / number of teams,count,3,32,2013,contemporaneous report,"",0,""
+hc_black,2014,12.5,count / number of teams,count,4,32,2014,contemporaneous report,"",0,""
+hc_black,2015,15.625,count / number of teams,count,5,32,2015,contemporaneous report,"",0,""
+hc_black,2016,15.625,count / number of teams,count,5,32,2016,contemporaneous report,"",0,""
+hc_black,2017,21.875,count / number of teams,count,7,32,2017,contemporaneous report,"",0,""
+hc_black,2018,21.875,count / number of teams,count,7,32,2018,contemporaneous report,as-of date late in the season,0,""
+hc_black,2019,9.375,count / number of teams,count,3,32,2019,contemporaneous report,"",0,""
+hc_black,2020,9.4,printed percent,percent,9.4,,2020,contemporaneous report,"",1,9.4 (2023)
+hc_black,2021,9.4,printed percent,percent,9.4,,2021,contemporaneous report,"",1,9.4 (2023)
+hc_black,2022,9.4,printed percent,percent,9.4,,2022,contemporaneous report,"",1,9.4 (2023)
+hc_black,2023,9.4,printed percent,percent,9.4,,2023,contemporaneous report,"",1,9.4 (2023)
+hc_black,2024,18.75,count / number of teams,count,6,32,2024,"secondary (AP), not TIDES","",0,""
+hc_poc,2011,25,count / number of teams,count,8,32,2011,contemporaneous report,"",0,""
+hc_poc,2012,18.75,count / number of teams,count,6,32,2012,contemporaneous report,"",1,6 (2013)
+hc_poc,2013,12.5,count / number of teams,count,4,32,2013,contemporaneous report,"",0,""
+hc_poc,2014,15.625,count / number of teams,count,5,32,2014,contemporaneous report,"",0,""
+hc_poc,2015,18.75,count / number of teams,count,6,32,2015,contemporaneous report,"",1,6 (2016)
+hc_poc,2016,18.75,count / number of teams,count,6,32,2016,contemporaneous report,"",0,""
+hc_poc,2017,25,count / number of teams,count,8,32,2017,contemporaneous report,"",0,""
+hc_poc,2018,25,count / number of teams,count,8,32,2018,contemporaneous report,as-of date late in the season,0,""
+hc_poc,2019,12.5,count / number of teams,count,4,32,2019,contemporaneous report,"",0,""
+hc_poc,2020,12.5,count / number of teams,count,4,32,2020,contemporaneous report,"",0,""
+hc_poc,2021,15.625,count / number of teams,count,5,32,2021,contemporaneous report,"",0,""
+hc_poc,2022,18.75,count / number of teams,count,6,32,2022,contemporaneous report,"",0,""
+hc_poc,2023,18.75,count / number of teams,count,6,32,2023,contemporaneous report,"",0,""
+hc_poc,2024,28.125,count / number of teams,count,9,32,2024,"secondary (AP), not TIDES","",0,""
+ac_black,1994,23,printed percent,percent,23,,2023,retrospective (2023 Appendix II),"",0,""
+ac_black,1995,23,printed percent,percent,23,,2023,retrospective (2023 Appendix II),"",0,""
+ac_black,1996,25,printed percent,percent,25,,2023,retrospective (2023 Appendix II),"",0,""
+ac_black,1997,26,printed percent,percent,26,,2023,retrospective (2023 Appendix II),"",0,""
+ac_black,1999,28,printed percent,percent,28,,2023,retrospective (2023 Appendix II),appendix 1999/2000 season labels unreliable (README),0,""
+ac_black,2000,28,printed percent,percent,28,,2001,contemporaneous report,"",0,""
+ac_black,2001,28,printed percent,percent,28,,2023,retrospective (2023 Appendix II),"",0,""
+ac_black,2002,28,printed percent,percent,28,,2003,contemporaneous report,season label ambiguous (2001 or 2002),0,""
+ac_black,2003,30,printed percent,percent,30,,2004,contemporaneous report,"",1,30 (2023)
+ac_black,2005,32,printed percent,percent,32,,2023,retrospective (2023 Appendix II),"",0,""
+ac_black,2006,35,printed percent,percent,35,,2006,contemporaneous report,"",1,35 (2023)
+ac_black,2007,36,printed percent,percent,36,,2008,contemporaneous report,"",1,36 (2023)
+ac_black,2008,34,printed percent,percent,34,,2009,contemporaneous report,"",1,34 (2023)
+ac_black,2009,34,printed percent,percent,34,,2010,contemporaneous report,"",1,34 (2023)
+ac_black,2010,31,printed percent,percent,31,,2011,contemporaneous report,"",1,31 (2023)
+ac_black,2011,32,printed percent,percent,32,,2012,contemporaneous report,"",1,31 (2023)
+ac_black,2012,31,printed percent,percent,31,,2013,contemporaneous report,"",1,31 (2023)
+ac_black,2013,29,printed percent,percent,29,,2014,contemporaneous report,"",1,29.1 (2023)
+ac_black,2014,29.6,printed percent,percent,29.6,,2023,retrospective (2023 Appendix II),"",0,""
+ac_black,2015,34.7,printed percent,percent,34.7,,2015,contemporaneous report,"",1,34.7 (2023)
+ac_black,2016,27.7,printed percent,percent,27.7,,2016,contemporaneous report,"",1,27.8 (2023)
+ac_black,2017,28.2,printed percent,percent,28.2,,2017,contemporaneous report,"",1,28.2 (2023)
+ac_black,2018,30.9,printed percent,percent,30.9,,2018,contemporaneous report,two-or-more-races and not-disclosed categories from 2018,1,30.9 (2023)
+ac_black,2019,29.6,printed percent,percent,29.6,,2019,contemporaneous report,two-or-more-races and not-disclosed categories from 2018,1,29.6 (2023)
+ac_black,2020,30.5,printed percent,percent,30.5,,2020,contemporaneous report,two-or-more-races and not-disclosed categories from 2018,1,30.5 (2023)
+ac_black,2021,34.5,printed percent,percent,34.5,,2021,contemporaneous report,two-or-more-races and not-disclosed categories from 2018,1,34.5 (2023)
+ac_black,2022,36.3,printed percent,percent,36.3,,2022,contemporaneous report,two-or-more-races and not-disclosed categories from 2018,1,36.3 (2023)
+ac_black,2023,36.6,printed percent,percent,36.6,,2023,contemporaneous report,two-or-more-races and not-disclosed categories from 2018,1,36.6 (2023)
+ac_poc,2003,33,printed percent,percent,33,,2004,contemporaneous report,"",0,""
+ac_poc,2005,34,printed percent,percent,34,,2005,contemporaneous report,"",0,""
+ac_poc,2006,38,printed percent,percent,38,,2006,contemporaneous report,"",0,""
+ac_poc,2007,38,printed percent,percent,38,,2008,contemporaneous report,"",0,""
+ac_poc,2008,37,printed percent,percent,37,,2009,contemporaneous report,"",0,""
+ac_poc,2009,36,printed percent,percent,36,,2010,contemporaneous report,"",0,""
+ac_poc,2010,32,printed percent,percent,32,,2011,contemporaneous report,"",1,33 (2012)
+ac_poc,2011,34,printed percent,percent,34,,2012,contemporaneous report,"",0,""
+ac_poc,2012,32,printed percent,percent,32,,2013,contemporaneous report,"",0,""
+ac_poc,2013,31,printed percent,percent,31,,2014,contemporaneous report,"",0,""
+ac_poc,2015,37.9,printed percent,percent,37.9,,2015,contemporaneous report,"",0,""
+ac_poc,2016,31.9,printed percent,percent,31.9,,2016,contemporaneous report,"",0,""
+ac_poc,2017,31.3,printed percent,percent,31.3,,2017,contemporaneous report,"",0,""
+ac_poc,2018,35.5,printed percent,percent,35.5,,2018,contemporaneous report,two-or-more-races and not-disclosed categories from 2018,0,""
+ac_poc,2019,33.6,printed percent,percent,33.6,,2019,contemporaneous report,two-or-more-races and not-disclosed categories from 2018,0,""
+ac_poc,2020,35.6,printed percent,percent,35.6,,2020,contemporaneous report,two-or-more-races and not-disclosed categories from 2018,0,""
+ac_poc,2021,40.9,printed percent,percent,40.9,,2021,contemporaneous report,two-or-more-races and not-disclosed categories from 2018,0,""
+ac_poc,2022,42.9,printed percent,percent,42.9,,2022,contemporaneous report,two-or-more-races and not-disclosed categories from 2018,0,""
+ac_poc,2023,43.6,printed percent,percent,43.6,,2023,contemporaneous report,two-or-more-races and not-disclosed categories from 2018,0,""
+coord_black,2002,12,printed count,count,12,,2003,contemporaneous report,season label ambiguous (2001 or 2002),0,""
+coord_black,2003,12,printed count,count,12,,2004,contemporaneous report,"",0,""
+coord_black,2005,7,printed count,count,7,,2005,contemporaneous report,"",0,""
+coord_black,2006,6,printed count,count,6,,2006,contemporaneous report,"",0,""
+coord_black,2007,7,printed count,count,7,,2008,contemporaneous report,"",0,""
+coord_black,2008,9,printed count,count,9,,2008,contemporaneous report,"",1,8 (2009)
+coord_black,2009,9,printed count,count,9,,2009,contemporaneous report,"",1,8 (2010)
+coord_black,2010,12,printed count,count,12,,2010,contemporaneous report,"",0,""
+coord_black,2011,9,printed count,count,9,,2011,contemporaneous report,"",1,8 (2012)
+coord_black,2012,5,printed count,count,5,,2013,contemporaneous report,"",0,""
+coord_black,2013,14,printed count,count,14,,2014,contemporaneous report,coordinator list broadened from the 2013 season,0,""
+coord_black,2014,15,printed count,count,15,,2015,contemporaneous report,coordinator list broadened from the 2013 season,0,""
+coord_black,2015,15,printed count,count,15,,2015,contemporaneous report,coordinator list broadened from the 2013 season,0,""
+coord_black,2016,13,printed count,count,13,,2016,contemporaneous report,coordinator list broadened from the 2013 season,1,14 (2017)
+coord_black,2017,13,printed count,count,13,,2017,contemporaneous report,coordinator list broadened from the 2013 season,0,""
+gm_black,1995,13,printed percent,percent,13,,2023,retrospective (2023 Appendix II),"",0,""
+gm_black,1996,17,printed percent,percent,17,,2023,retrospective (2023 Appendix II),"",0,""
+gm_black,1997,13,printed percent,percent,13,,2023,retrospective (2023 Appendix II),"",0,""
+gm_black,1998,13,printed percent,percent,13,,2023,retrospective (2023 Appendix II),"",0,""
+gm_black,1999,13,printed percent,percent,13,,2023,retrospective (2023 Appendix II),appendix 1999/2000 season labels unreliable (README),0,""
+gm_black,2000,13,printed percent,percent,13,,2001,contemporaneous report,"",0,""
+gm_black,2001,6,printed percent,percent,6,,2003,contemporaneous report,"",1,6 (2023)
+gm_black,2003,6,printed percent,percent,6,,2004,contemporaneous report,"",1,6 (2023)
+gm_black,2005,13,printed percent,percent,13,,2005,contemporaneous report,"",1,13 (2023)
+gm_black,2006,13,printed percent,percent,13,,2006,contemporaneous report,"",1,13 (2023)
+gm_black,2007,16,printed percent,percent,16,,2008,contemporaneous report,"",1,16 (2023)
+gm_black,2008,17,printed percent,percent,17,,2023,retrospective (2023 Appendix II),"",0,""
+gm_black,2009,16,printed percent,percent,16,,2009,contemporaneous report,"",1,16 (2023)
+gm_black,2010,16,printed percent,percent,16,,2010,contemporaneous report,"",1,17 (2023)
+gm_black,2011,16,printed percent,percent,16,,2011,contemporaneous report,"",1,16 (2023)
+gm_black,2012,19,printed percent,percent,19,,2012,contemporaneous report,"",1,19 (2023)
+gm_black,2013,19,printed percent,percent,19,,2023,retrospective (2023 Appendix II),GM counts are people of color from the 2014 report,0,""
+gm_black,2014,24.1,printed percent,percent,24.1,,2023,retrospective (2023 Appendix II),GM counts are people of color from the 2014 report,0,""
+gm_black,2015,21.9,printed percent,percent,21.9,,2023,retrospective (2023 Appendix II),GM counts are people of color from the 2014 report,0,""
+gm_black,2016,15.6,printed percent,percent,15.6,,2023,retrospective (2023 Appendix II),GM counts are people of color from the 2014 report,0,""
+gm_black,2017,18.8,printed percent,percent,18.8,,2023,retrospective (2023 Appendix II),GM counts are people of color from the 2014 report,0,""
+gm_black,2018,12.5,printed percent,percent,12.5,,2018,contemporaneous report,GM counts are people of color from the 2014 report,1,12.5 (2023)
+gm_black,2019,6.3,printed percent,percent,6.3,,2023,retrospective (2023 Appendix II),GM counts are people of color from the 2014 report,0,""
+gm_black,2020,6.5,printed percent,percent,6.5,,2023,retrospective (2023 Appendix II),GM counts are people of color from the 2014 report,0,""
+gm_black,2021,15.6,printed percent,percent,15.6,,2023,retrospective (2023 Appendix II),GM counts are people of color from the 2014 report,0,""
+gm_black,2022,21.9,printed percent,percent,21.9,,2023,retrospective (2023 Appendix II),GM counts are people of color from the 2014 report,0,""
+gm_black,2023,26.7,printed percent,percent,26.7,,2023,retrospective (2023 Appendix II),GM counts are people of color from the 2014 report,0,""
+player_black,1990,61,printed percent,percent,61,,2023,retrospective (2023 Appendix II),"",0,""
+player_black,1991,62,printed percent,percent,62,,2023,retrospective (2023 Appendix II),"",0,""
+player_black,1992,68,printed percent,percent,68,,2023,retrospective (2023 Appendix II),"",0,""
+player_black,1993,65,printed percent,percent,65,,2023,retrospective (2023 Appendix II),"",0,""
+player_black,1994,68,printed percent,percent,68,,2023,retrospective (2023 Appendix II),"",0,""
+player_black,1995,67,printed percent,percent,67,,2023,retrospective (2023 Appendix II),"",0,""
+player_black,1996,66,printed percent,percent,66,,2023,retrospective (2023 Appendix II),"",0,""
+player_black,1997,65,printed percent,percent,65,,2023,retrospective (2023 Appendix II),"",0,""
+player_black,1998,66,printed percent,percent,66,,2023,retrospective (2023 Appendix II),"",0,""
+player_black,1999,67,printed percent,percent,67,,2023,retrospective (2023 Appendix II),appendix 1999/2000 season labels unreliable (README),0,""
+player_black,2000,67,printed percent,percent,67,,2001,contemporaneous report,"",0,""
+player_black,2001,65,printed percent,percent,65,,2003,contemporaneous report,"",0,""
+player_black,2003,69,printed percent,percent,69,,2004,contemporaneous report,"",2,69.2 (2004); 69.2 (2023)
+player_black,2005,66,printed percent,percent,66,,2005,contemporaneous report,"",2,65.5 (2005); 65 (2023)
+player_black,2006,67,printed percent,percent,67,,2006,contemporaneous report,"",2,67 (2006); 65.8 (2023)
+player_black,2007,66,printed percent,percent,66,,2008,contemporaneous report,"",2,66 (2008); 64.9 (2023)
+player_black,2008,67,printed percent,percent,67,,2009,contemporaneous report,"",2,67 (2009); 65.2 (2023)
+player_black,2009,67,printed percent,percent,67,,2010,contemporaneous report,"",2,67 (2010); 65.9 (2023)
+player_black,2010,67,printed percent,percent,67,,2011,contemporaneous report,"",2,67 (2011); 66.4 (2023)
+player_black,2011,67,printed percent,percent,67,,2012,contemporaneous report,"",3,67 (2012); 66.6 (2013); 66.1 (2023)
+player_black,2012,66.3,printed percent,percent,66.3,,2013,contemporaneous report,"",2,66.3 (2013); 65.4 (2023)
+player_black,2013,67.3,printed percent,percent,67.3,,2014,contemporaneous report,"",2,67.3 (2014); 66.3 (2023)
+player_black,2014,68.7,printed percent,percent,68.7,,2015,contemporaneous report,"",2,68.7 (2015); 68 (2023)
+player_black,2015,69.2,printed percent,percent,69.2,,2016,contemporaneous report,"",0,""
+player_black,2016,69.7,printed percent,percent,69.7,,2016,contemporaneous report,"",2,69.7 (2016); 69.7 (2023)
+player_black,2019,58.9,printed percent,percent,58.9,,2019,contemporaneous report,self-identified categories from 2019 (break in series),2,58.9 (2019); 58.9 (2023)
+player_black,2020,57.5,printed percent,percent,57.5,,2020,contemporaneous report,self-identified categories from 2019 (break in series),1,57.5 (2023)
+player_black,2021,58,printed percent,percent,58,,2021,contemporaneous report,self-identified categories from 2019 (break in series),1,58 (2023)
+player_black,2022,56.4,printed percent,percent,56.4,,2022,contemporaneous report,self-identified categories from 2019 (break in series),1,56.4 (2023)
+player_black,2023,53.5,printed percent,percent,53.5,,2023,contemporaneous report,self-identified categories from 2019 (break in series),1,53.5 (2023)

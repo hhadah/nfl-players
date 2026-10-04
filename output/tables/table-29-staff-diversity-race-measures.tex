@@ -1,0 +1,80 @@
+\begin{table}[H]
+\centering\centering
+\caption{Staff composition and team performance under alternative race measures \label{tab:staff-diversity-race-measures}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{tabular}[t]{lcccccc}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{2}{c}{Franchise FE} & \multicolumn{1}{c}{Spell FE} & \multicolumn{1}{c}{Hires} & \multicolumn{1}{c}{Unit stacked} & \multicolumn{1}{c}{Joint} \\
+\cmidrule(l{3pt}r{3pt}){2-3} \cmidrule(l{3pt}r{3pt}){4-4} \cmidrule(l{3pt}r{3pt}){5-5} \cmidrule(l{3pt}r{3pt}){6-6} \cmidrule(l{3pt}r{3pt}){7-7}
+ & (1) & (2) & (3) & (4) & (5) & (6)\\
+\midrule
+\addlinespace[0.3em]
+\multicolumn{7}{l}{\textbf{Panel A: Predicted race (model only) (primary)}}\\
+\hspace{1em}Coaches' share Black & -0.327* & -0.305* & -0.172 &  &  & -0.357\\
+\hspace{1em} & (0.164) & (0.169) & (0.209) &  &  & (0.226)\\
+\hspace{1em} & {}[0.071] & {}[0.095] & {}[0.422] &  &  & {}[0.144]\\
+\hspace{1em}Head coach (new head coach in col. 4) & -0.075 & -0.079 &  & -0.104 &  & \\
+\hspace{1em} & (0.071) & (0.076) &  & (0.069) &  & \\
+\hspace{1em} & {}[0.334] & {}[0.347] &  & {}[0.160] &  & \\
+\hspace{1em}Unit coordinator &  &  &  &  & 0.011 & \\
+\hspace{1em} &  &  &  &  & (0.015) & \\
+\hspace{1em} &  &  &  &  & {}[0.487] & \\
+\hspace{1em}Unit coaches' share Black &  &  &  &  & -0.068 & \\
+\hspace{1em} &  &  &  &  & (0.042) & \\
+\hspace{1em} &  &  &  &  & {}[0.129] & \\
+\hspace{1em}Coaches' share Black, other measure$^a$ &  &  &  &  &  & 0.055\\
+\hspace{1em} &  &  &  &  &  & (0.127)\\
+\hspace{1em} &  &  &  &  &  & {}[0.666]\\
+\hspace{1em}Observations & 608 & 608 & 581 & 179 & 1,216 & \vphantom{2} 608\\
+\addlinespace[0.3em]
+\multicolumn{7}{l}{\textbf{Panel B: Documented race, else predicted (preddoc)}}\\
+\hspace{1em}Coaches' share Black & -0.150 & -0.152 & -0.159 &  &  & 0.026\\
+\hspace{1em} & (0.100) & (0.097) & (0.171) &  &  & (0.144)\\
+\hspace{1em} & {}[0.161] & {}[0.143] & {}[0.382] &  &  & {}[0.861]\\
+\hspace{1em}Head coach (new head coach in col. 4) & -0.029 & -0.031 &  & -0.053 &  & \\
+\hspace{1em} & (0.032) & (0.037) &  & (0.042) &  & \\
+\hspace{1em} & {}[0.393] & {}[0.426] &  & {}[0.234] &  & \\
+\hspace{1em}Unit coordinator &  &  &  &  & 0.009 \vphantom{1} & \\
+\hspace{1em} &  &  &  &  & (0.013) & \\
+\hspace{1em} &  &  &  &  & {}[0.490] & \\
+\hspace{1em}Unit coaches' share Black &  &  &  &  & -0.063** & \\
+\hspace{1em} &  &  &  &  & (0.030) & \\
+\hspace{1em} &  &  &  &  & {}[0.048] & \\
+\hspace{1em}Coaches' share Black, other measure$^a$ &  &  &  &  &  & -0.342\\
+\hspace{1em} &  &  &  &  &  & (0.235)\\
+\hspace{1em} &  &  &  &  &  & {}[0.187]\\
+\hspace{1em}Observations & 608 & 608 & 581 & 179 & 1,216 & \vphantom{1} 608\\
+\addlinespace[0.3em]
+\multicolumn{7}{l}{\textbf{Panel C: Wikipedia category flag (provisional)}}\\
+\hspace{1em}Coaches' share Black & -0.074 & -0.088 & -0.164 &  &  & -0.014\\
+\hspace{1em} & (0.111) & (0.108) & (0.202) &  &  & (0.122)\\
+\hspace{1em} & {}[0.523] & {}[0.434] & {}[0.449] &  &  & {}[0.916]\\
+\hspace{1em}Head coach (new head coach in col. 4) & -0.036 & -0.036 &  & -0.047 &  & \\
+\hspace{1em} & (0.032) & (0.035) &  & (0.044) &  & \\
+\hspace{1em} & {}[0.278] & {}[0.326] &  & {}[0.317] &  & \\
+\hspace{1em}Unit coordinator &  &  &  &  & 0.009 & \\
+\hspace{1em} &  &  &  &  & (0.012) & \\
+\hspace{1em} &  &  &  &  & {}[0.492] & \\
+\hspace{1em}Unit coaches' share Black &  &  &  &  & -0.041 & \\
+\hspace{1em} &  &  &  &  & (0.027) & \\
+\hspace{1em} &  &  &  &  & {}[0.165] & \\
+\hspace{1em}Coaches' share Black, other measure$^a$ &  &  &  &  &  & -0.294\\
+\hspace{1em} &  &  &  &  &  & (0.182)\\
+\hspace{1em} &  &  &  &  &  & {}[0.146]\\
+\hspace{1em}Observations & 608 & 608 & 581 & 179 & 1,216 & 608\\
+\addlinespace[0.3em]
+\multicolumn{7}{l}{\textbf{Specification}}\\
+\hspace{1em}Outcome & Win \% & Win \% & Win \% & Win \% & Unit EPA/play & Win \%\\
+\hspace{1em}Fixed effects & Fr., season & Fr., season & Fr. $\times$ spell, season & Season & Fr. $\times$ season, unit $\times$ season & Fr., season\\
+\hspace{1em}Model-only prior controls & No & Yes & Predicted panel & Predicted panel & Predicted panel & Yes\\
+\hspace{1em}Source (predicted panel) & T19 (8) & T19 (4) & T19 (5) & T22 (2) & T21 (2) & T19 (9)\\
+\hspace{1em}Source (other panels) & T19 (4) & T19 (8) & T19 (5) & T22 (2) & T21 (2) & T19 (9)\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+{\footnotesize
+\noindent\textit{Notes:} This table re-estimates the headline specifications of equation (3) under each race measure. Column (1) is the Table 19 column-(4) specification (franchise and season FE, predetermined controls) without the model-only prior controls and column (2) the same with them (the members' mean prior for each share and the holder's prior for each role holder); in the predicted panel column (2) is Table 19 column (4) and column (1) its column (8), in the other panels the reverse. Column (3) is Table 19 column (5) (franchise $\times$ head-coach-spell and season FE, singleton spells removed); column (4) is Table 22 column (2) (head-coach hires, win percentage with the lagged win percentage and market expected wins, season FE); column (5) is Table 21 column (2) (offense and defense stacked, franchise $\times$ season and unit $\times$ season FE, unit roster and QB/HC controls); column (6) is Table 19 column (9). Columns (3)-(5) include the prior controls in the predicted panel only, where they are the regression-calibration controls; elsewhere the model-only prior is an ordinary predetermined control (under preddoc a documented person's probability does not depend on it). Each panel rebuilds the samples and every race regressor (shares, role holders, roster share controls) under its measure. Staff measures are the opening-day ones (preseason snapshot), as in Tables 19-23; the hire column uses the first-game head coach. $^a$ Column (6) adds to column (2) the coaches' share and head-coach regressor of another probability measure: the documented-race (preddoc) measure in the predicted panel and the model-only predicted measure in the other panels. Fr.\ = franchise. Predicted race: each person's probability of being Black from first name, surname and hometown county combined with an NFL-specific prior on predetermined characteristics; shares are expected shares and role holders enter as probabilities. Documented race (preddoc): the documented race where a public source states it, else a prediction; documentation depends on fame, so its error may be correlated with outcomes. Provisional: the positive-only Wikipedia category flag, a lower bound whose coverage varies with Wikipedia editing; non-flagged persons count as non-Black. The coaches' share coefficient in each panel's prior-consistent franchise-FE column (column 2 in the predicted panel, column 1 elsewhere) is: predicted -0.305 (WCB $p$ = 0.095); preddoc -0.150 (WCB $p$ = 0.161); provisional -0.074 (WCB $p$ = 0.523). In the predicted panel, column (6) gives -0.357 (SE 0.226, WCB $p$ = 0.144) for the predicted share and 0.055 (SE 0.127, WCB $p$ = 0.666) for the documented-race (preddoc) share entered jointly. A predicted-share coefficient that persists conditional on the documented share rests on the part of P(Black) that departs from documented race, which regression calibration cannot read as a race effect; magnitudes across measures are not comparable without a calibration slope of the true on the expected share, which is not estimated here. Head-coach validation for the predicted measure: see the notes to Tables 19 and 22. Each coefficient is followed by its standard error, clustered at the franchise level (32 clusters), in parentheses and by its wild cluster bootstrap-t $p$-value (restricted, Webb six-point weights, 9,999 replications, clustered by franchise) in brackets; stars use the clustered $p$-value.
+\par}
+

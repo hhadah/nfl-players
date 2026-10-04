@@ -1,6 +1,14 @@
-nfl_data_py>=0.3.2
-cfbd>=5.0.0
-duckdb>=0.10.0
-pandas>=2.0.0
-requests>=2.31.0
-beautifulsoup4>=4.12.0
+# Python 3.12+ (tested on 3.14, arm64). Install into the project venv:
+#   python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+# CFBD is called through its REST API with requests (the cfbd client pins
+# pydantic<2, which conflicts with nflreadpy).
+nflreadpy==0.1.5
+polars==1.44.2
+duckdb==1.5.5
+pandas==3.0.6
+pyarrow==25.0.1
+requests==2.34.2
+beautifulsoup4==4.15.0
+mwparserfromhell==0.7.2
+tqdm==4.70.1
+scikit-learn==1.9.1     # 04e_predict_race.py: weighted multinomial logit (EM prior)

@@ -1,0 +1,49 @@
+\begin{table}[!h]
+\centering\centering
+\caption{Roster racial composition and game outcomes: within-season design, regular season 2002-2025 (provisional race measure) \label{tab:roster-diversity-game}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{lccccccccc}
+\toprule
+  & (1) ATS margin & (2) ATS, residual share & (3) Margin, spread and home & (4) Win minus market prob. & (5) ATS, franchise and season FE & (6) ATS, opponent-season FE & (7) Margin, opponent-season FE & (8) Symmetry check & (9) Symmetry, game QB\\
+\midrule
+Active-roster share flagged Black & -10.094** &  & -9.017* & -0.389* & 2.732 & -8.180 & 2.993 & -8.176 & -7.539\\
+ & (4.551) &  & (4.748) & (0.192) & (1.751) & (4.886) & (5.502) & (9.551) & (9.811)\\
+Residual active-roster share flagged Black &  & -10.242** &  &  &  &  &  &  & \\
+ &  & (4.607) &  &  &  &  &  &  & \\
+Opponent active-roster share flagged Black &  &  &  &  &  &  &  & 8.555 & 8.983\\
+ &  &  &  &  &  &  &  & (7.825) & (7.850)\\
+Point spread (team favored $>$ 0) &  &  & 0.798*** &  &  &  & -0.187*** &  & \\
+ &  &  & (0.020) &  &  &  & (0.040) &  & \\
+Home team &  &  & 0.959*** &  &  &  & 5.183*** &  & \\
+ &  &  & (0.233) &  &  &  & (0.274) &  & \\
+Starting QB flagged Black (game) &  &  &  &  &  &  &  &  & -0.661\\
+ &  &  &  &  &  &  &  &  & (0.823)\\
+Opponent starting QB flagged Black (game) &  &  &  &  &  &  &  &  & -0.539\\
+ &  &  &  &  &  &  &  &  & (0.964)\\
+\midrule
+Observations & 12446 & 12446 & 12446 & 12446 & 12446 & 12446 & 12446 & 6223 & 6223\\
+R$^2$ & 0.064 & 0.064 & 0.260 & 0.062 & 0.006 & 0.127 & 0.359 & 0.245 & 0.245\\
+Within R$^2$ & 0.000 & 0.000 & 0.101 & 0.000 & 0.000 & 0.000 & 0.035 & 0.000 & 0.001\\
+Two-way clustered SE, roster share & (4.493) & (4.543) & (4.687) & (0.187) & (1.771) & (4.829) & (5.411) & (7.947) & (8.163)\\
+Two-way clusters & Franchise, game & Franchise, game & Franchise, game & Franchise, game & Franchise, game & Franchise, game & Franchise, game & Home, away team & Home, away team\\
+WCB p-value, roster share & 0.032 & 0.034 & 0.066 & 0.049 & 0.144 &  &  &  & \\
+p-value, own + opponent share = 0 &  &  &  &  &  &  &  & 0.975 & 0.906\\
+Mean of outcome & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.049 & 0.049\\
+SD of roster share net of FE & 0.021 & 0.021 & 0.021 & 0.021 & 0.071 & 0.020 & 0.020 & 0.019 & 0.019\\
+Effect of 1-SD change & -0.208 & -0.211 & -0.186 & -0.008 & 0.195 & -0.163 & 0.060 & -0.153 & -0.141\\
+Sample & Both teams & Both teams & Both teams & Both teams & Both teams & Both teams & Both teams & One row per game & One row per game\\
+Franchise $\times$ season FE & Yes & Yes & Yes & Yes & No & Yes & Yes & Yes & Yes\\
+Franchise and season FE & No & No & No & No & Yes & No & No & No & No\\
+Opponent $\times$ season FE & No & No & No & No & No & Yes & Yes & Yes & Yes\\
+Mean prior and prior-covariate shares & No & No & No & No & No & No & No & No & No\\
+\bottomrule
+\multicolumn{10}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table includes the estimation results of equation (3), the within-season game-level version of equation (2). The unit of observation is a franchise-game in the regular season, 2002-2025 (12,446 team-games; each game enters once for each team, except in columns (8)-(9)). The treatment is the Black share of the game-day active roster (players not listed inactive), weighting players equally. Inactive designations are not recorded in 2016-2018, when the active roster equals the full game-day roster. With franchise $\times$ season fixed effects, identification comes from week-to-week changes in a team's active roster (injuries, inactives, signings) within a team-season. Column (1), the main specification, uses the margin against the closing spread (margin minus the spread, positive when the team is favored) as the outcome, which imposes a unit slope on the spread; the raw slope of the margin on the spread is about 1.04. The spread prices opponent strength and home field, so no opponent fixed effects are needed. Because the betting market prices roster changes, including composition, the coefficient estimates only the part of any composition effect the market fails to price; it is zero under market efficiency even if composition has a causal effect. Column (2) uses the residual share, net of the team's game-day position mix. The residual share is the actual share minus the expected share given the team's position mix (the sum over position groups of the team's position weight times the league-season Black share at that position on all other franchises). Column (3) uses the raw margin and controls for the spread and a home indicator (home varies within a team-season and is not absorbed). The spread's slope there is estimated within team-season, where the spread also responds to earlier results of the same team-season; it is therefore not strictly exogenous, and the slope is far below one. Column (4) is a linear probability model of a win (ties count one half) net of the market's pre-game win probability. Columns (5)-(7) show the sensitivity to the fixed effects: franchise and season fixed effects (column (5)), and franchise $\times$ season plus opponent $\times$ season fixed effects (columns (6)-(7), the plan's original design). In column (7) the spread's slope is distorted further by the two sets of incidental team-season parameters, so the column is a robustness check only. Columns (8)-(9) are a symmetry check, not a placebo: the opponent's composition can legitimately affect the margin, and in a symmetric model it should enter with the opposite sign and similar size. In the stacked sample the opponent coefficient is mechanically minus the own coefficient, so these columns use one row per game (the home team; 6,223 games), with  home-team $\times$ season and away-team $\times$ season fixed effects. The p-value row tests that the own and opponent coefficients sum to zero. Column (9) adds the race of each team's starting quarterback in that game (zero-filled with missing indicators). Standard errors, in parentheses, are clustered at the franchise level (32 clusters). The rows below report standard errors clustered two ways: by franchise and game in the stacked columns, where the two rows of a game are mirror images and share a game cluster but neither a franchise nor an opponent cluster; and by home and away franchise in columns (8)-(9). Wild cluster bootstrap-t p-values (franchise clusters, Webb weights, 9,999 replications) are  reported for columns (1)-(5); in columns (1)-(4) the team-season fixed effects are projected out before the bootstrap (team-seasons are nested in franchise clusters, so this is equivalent to including them). The SD row is the SD of the treatment net of the column's fixed effects; the effect row multiplies it by the coefficient, in points (columns (1)-(3) and (5)-(9)) or win probability (column (4)). For these team-level estimates the provisional measure's error is not classical: the flagged share also varies with how completely Wikipedia editors categorize a franchise-season's players, which may rise with team success. The measurement error can therefore be correlated with the outcome, and the bias is of unknown sign, not attenuation. The estimates test the pipeline; they are not estimates of the effect of roster composition. \textbf{Sensitivity measure.} Race is the Wikipedia category flag. The flag is positive-only and misses most Black players and staff, so team shares are lower bounds whose coverage varies with Wikipedia editing.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

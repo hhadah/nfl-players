@@ -1,0 +1,39 @@
+\begin{table}[!h]
+\centering\centering
+\caption{Race gaps in contract terms and across market margins (provisional race measure) \label{tab:pay-gap-terms}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{lccccccc}
+\toprule
+  & (1) Guarantee share & (2) Zero guarantee & (3) Log years & (4) Log value & (5) Log APY & (6) Log APY & (7) Near minimum\\
+\midrule
+Black & -0.004 & -0.017* & -0.011 & -0.018 & 0.001 &  & -0.012*\\
+ & (0.010) & (0.010) & (0.018) & (0.040) & (0.022) &  & (0.007)\\
+Other race & 0.029 & -0.035** & 0.007 & 0.039 & 0.017 & 0.017 & -0.014\\
+ & (0.021) & (0.017) & (0.035) & (0.080) & (0.045) & (0.045) & (0.012)\\
+Black $\times$ UFA, new team &  &  &  &  &  & -0.016 & \\
+ &  &  &  &  &  & (0.037) \vphantom{1} & \\
+Black $\times$ UFA, re-signs with own team &  &  &  &  &  & 0.029 & \\
+ &  &  &  &  &  & (0.038) & \\
+Black $\times$ extension &  &  &  &  &  & -0.067 & \\
+ &  &  &  &  &  & (0.050) & \\
+Black $\times$ tag or tender &  &  &  &  &  & 0.043 & \\
+ &  &  &  &  &  & (0.037) & \\
+\midrule
+Observations & 4682 & 5058 & 5058 & 5058 & 6490 & 6490 & 27724\\
+R$^2$ & 0.348 & 0.230 & 0.511 & 0.651 & 0.752 & 0.752 & 0.535\\
+Within R$^2$ & 0.234 & 0.188 & 0.445 & 0.624 & 0.726 & 0.727 & 0.522\\
+Sample & Bargained, known guar. & Bargained & Bargained & Bargained & All veteran & All veteran & Non-rookie 2017+\\
+Mean of outcome & 0.433 & 0.074 & 0.524 & 1.680 & 0.961 & 0.961 & 0.748\\
+Implied Black gap (\%) &  &  & -1.1 & -1.8 & 0.1 &  & \\
+Residual df & 4,034 & 4,409 & 4,409 & 4,409 & 5,837 & 5,833 & 27,113\\
+\bottomrule
+\multicolumn{8}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table includes the estimation results of equation (1) with the column-(5) controls of Table \ref{tab:pay-gap-veteran} (blocks A-D) and OTC position $\times$ year-signed fixed effects. Columns (1)-(4) use the main sample of freely bargained veteran contracts (unrestricted free agents and extensions) signed 2014-2026. Column (1): guaranteed money over total value, excluding contracts with zero recorded guarantees; a few contracts record guarantees above total value. Column (2): linear probability model of zero recorded guarantees (OTC records unknown guarantees as zero, so this mixes zero and unknown guarantees); it shows whether the sample of column (1) is selected by race. Column (3): log contract length in years. Column (4): log total contract value. Columns (5)-(6) use the full veteran market, which adds franchise and transition tags and RFA and ERFA tenders (pay set by a CBA formula; ERFA tenders are minimum deals); the outcome is log APY and the market-margin dummies are re-sign/extension and tag/tender (reference: UFA). Column (6) replaces Black with its interactions with margin indicators, with a dummy for UFAs who sign with a team other than their end-of-season team of the previous year, so each coefficient is the gap within that margin with common control slopes. Black contracts by margin: UFA new team 513, UFA own team 357, extension 186, tag or tender 231. Column (7) is a linear probability model of signing within 10\% of the reference minimum APY among non-rookie contracts (veteran market plus other, street free agent and practice-squad deals) signed 2017-2026; its market-margin dummies include the other/SFA/practice margin. Career stage (A): experience-bin dummies (0, 1, 2, 3, 4-6, 7+ seasons), age at signing and its square, a left-censored-experience indicator and an extension dummy (reference: unrestricted free agents). Whether a team extends a player is itself a team decision. Prior-season production (B): season-before-signing box-score and PFR measures with position-group-specific slopes (passing for QBs, rushing and receiving for RBs, receiving for WRs and TEs, tackles, sacks, QB hits, tackles for loss and pressures for DL and LB, tackles, interceptions, passes defended and coverage allowed for DBs, kicking and punting), games played and injury weeks interacted with position group, and a no-prior-season indicator. Career production (C): career games and injury weeks interacted with position group, and career sums of the block B production measures with the same position-group slopes. Pre-NFL signals (D): log draft pick, an undrafted indicator, draft-round dummies, 247 rating and stars, combine measures (40, vertical, bench, broad jump, cone, shuttle, height, weight) and athletic scores (a composite and size, speed, explosion and agility subscores built from the combine measures) interacted with position group, and the final college team's Power-conference, SRS and HBCU indicators. Controls with incomplete coverage are set to zero with a missing indicator (interacted like the control). The identifying assumption is that, conditional on the controls and fixed effects, race is uncorrelated with unobserved productivity. Omitted quality would bias the estimate: there are no PFF-type grades, and offensive linemen have no production measure, so their quality rests on games, injury weeks and pre-NFL signals. The implied gap is $100(e^{\hat\beta_1}-1)$ for log outcomes. Residual degrees of freedom are observations minus estimated coefficients and fixed effects. Standard errors are clustered at the player level. The omitted group is players with a Wikipedia article and no race or Hispanic category flag. \textbf{Sensitivity measure.} Race is the Wikipedia category flag. The flag is positive-only and misses most Black players and staff, so the comparison group mixes white and unflagged Black persons and the estimates are attenuated.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

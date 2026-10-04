@@ -1,0 +1,42 @@
+\begin{table}[!h]
+\centering\centering
+\caption{Roster racial composition and team performance: other outcomes, snap-weighted share, 2013-2025 (provisional race measure) \label{tab:roster-diversity-outcomes}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{lccccc}
+\toprule
+  & (1) Point diff./game & (2) Wins over exp. & (3) Off. EPA/play & (4) $-$Def. EPA/play & (5) Playoffs\\
+\midrule
+Roster share flagged Black (snap-weighted) & 1.723 & -1.391 &  &  & -0.015\\
+ & (4.385) & (1.611) &  &  & (0.490)\\
+Offense share flagged Black (snap-weighted) &  &  & -0.059 & -0.028 & \\
+ &  &  & (0.052) & (0.036) & \\
+Defense share flagged Black (snap-weighted) &  &  & 0.058 & 0.038 & \\
+ &  &  & (0.044) & (0.037) & \\
+Opening-day coaches' share flagged Black & 1.434 & -0.340 & 0.051 & -0.009 & -0.001\\
+ & (4.172) & (1.561) & (0.059) & (0.059) & (0.385)\\
+Opening-day head coach flagged Black & -0.588 & -0.266 & -0.014 & 0.008 & 0.036\\
+ & (1.072) & (0.383) & (0.013) & (0.013) & (0.083)\\
+Opening-day starting QB flagged Black & -1.295 & -0.243 & -0.001 & -0.020** & -0.071\\
+ & (0.838) & (0.338) & (0.016) & (0.008) & (0.080)\\
+\midrule
+Observations & 416 & 416 & 416 & 416 & 416\\
+R$^2$ & 0.362 & 0.155 & 0.334 & 0.295 & 0.212\\
+Within R$^2$ & 0.099 & 0.056 & 0.071 & 0.108 & 0.038\\
+WCB p-value, diversity & 0.705 & 0.406 & 0.293 & 0.371 & 0.979\\
+Mean of outcome & 0.002 & 0.000 & -0.004 & 0.004 & 0.404\\
+SD of diversity net of FE & 0.076 & 0.076 & 0.086 & 0.114 & 0.076\\
+Effect of 1-SD change & 0.131 & -0.106 & -0.005 & 0.004 & -0.001\\
+Season and franchise FE & Yes & Yes & Yes & Yes & Yes\\
+Lagged outcomes, roster quality, staff and QB & Yes & Yes & Yes & Yes & Yes\\
+Mean prior and prior-covariate shares & No & No & No & No & No\\
+\bottomrule
+\multicolumn{6}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table includes the estimation results of equation (2) with the column (4) specification of Table \ref{tab:roster-diversity-main}: season and franchise fixed effects, lagged outcomes, opening-day roster quality and the staff and quarterback controls. The unit of observation is a franchise-season, 2013-2025. The snap-weighted share Black weights each player by his offensive plus defensive snaps for the franchise in the regular season; it is measured during season $t$ and can respond to injuries and benching. Snap weights also respond to game script: teams that trail run more offensive plays, teams with weak offenses play more defensive snaps, and defensive units have higher Black shares, so losing can raise the snap-weighted share mechanically (Table \ref{tab:roster-diversity-robustness} reports the unit-balanced share and a control for the defensive snap share). The unit shares weight players by their offensive or defensive snaps. Columns with roster quality also include the cap share of the roster (sum of players' cap percent; 2013-2025). Controls are fixed by opening day: the lagged win percentage and lagged market expected wins; roster quality of the active roster of the first regular-season game (mean log draft pick, undrafted = log 300; share of first-round picks; mean age; mean experience); and the Black share of the on-field coaches listed in the preseason staff snapshot, used only where the full staff is observed (2007 on; a missing indicator absorbs earlier seasons), the opening-day head coach's race and the opening-day starting quarterback's race. Race controls are zero-filled with missing indicators when a person is uncoded. The outcomes are regular-season point differential per game (column (1)), wins over expected (column (2): actual wins minus the sum of the market's pre-game win probabilities), offensive EPA per play (column (3)), minus defensive EPA per play (column (4), higher = better defense) and a playoff indicator (column (5), linear probability model). Wins over expected nets out what the betting market prices before each game, including roster composition, so its coefficient estimates only the part of any composition effect the market fails to price; it is zero under market efficiency even if composition has a causal effect on winning. Columns (3) and (4) enter the offense and defense shares jointly, so each unit's composition is separated from the other unit's; the WCB p-value, SD and effect rows refer to the unit's own share. The SD row is the SD of the diversity term net of franchise and season fixed effects; the effect row multiplies it by the coefficient, in units of the outcome. Lagged-outcome and roster-quality coefficients are not shown. Standard errors, in parentheses, are clustered at the franchise level (32 clusters); wild cluster bootstrap-t p-values (restricted, WCR) use Webb weights and 9,999 replications. For these team-level estimates the provisional measure's error is not classical: the flagged share also varies with how completely Wikipedia editors categorize a franchise-season's players, which may rise with team success. The measurement error can therefore be correlated with the outcome, and the bias is of unknown sign, not attenuation. The estimates test the pipeline; they are not estimates of the effect of roster composition. \textbf{Sensitivity measure.} Race is the Wikipedia category flag. The flag is positive-only and misses most Black players and staff, so team shares are lower bounds whose coverage varies with Wikipedia editing.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

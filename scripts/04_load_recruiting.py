@@ -1,101 +1,231 @@
-"""Load recruiting / high school data from the CollegeFootballData API.
+"""Load recruiting profiles (247Sports composite via CFBD) and CFBD NFL draft picks.
 
-CFBD aggregates the 247Sports composite, which includes:
-  - HS school name, hometown
-  - star rating (2-5)
-  - composite rating (numeric)
-  - national / position / state ranking
-  - height, weight at recruitment
-  - committed school
+Sources (common.CFBD; responses cached in data/raw/cfbd/<endpoint>/):
+  /recruiting/players  one call per class year and classification:
+                       RECRUIT_YEARS 2000-2025 x {HighSchool, JUCO}
+  /draft/picks         one call per draft year, DRAFT_YEARS 2000-2026
+  data/raw/nflverse/draft_picks.parquet (shared cache, as in 02_load_nfl.py)
+                       gsis_id by draft slot
+  data/raw/nflverse/players.parquet (shared cache) espn_id, to check which
+                       CFBD draft id is an ESPN athlete id
 
-This is your best free source for the HS layer. CFBD does NOT have HS game stats —
-for those you'd need to scrape MaxPreps or similar (much harder, often blocked).
+Tables written (full refresh; every source field kept, nested hometown
+objects flattened to hometown_info_* columns):
+  recruits          one row per recruit profile (recruit_id = CFBD recruit id).
+                    athlete_id is the CFBD college player id, i.e. the direct
+                    link to college_players.player_id and college_player_stats;
+                    college_players.recruit_ids links the other way. A
+                    negative athlete_id is a placeholder roster identity with
+                    no stats (18% of filled ids). recruit_type separates
+                    high-school and JUCO profiles.
+  cfbd_draft_picks  one row per pick. gsis_id comes from nflverse draft_picks
+                    on the draft slot (season, overall = nflverse pick); it
+                    agrees with the ESPN-id link below wherever both exist.
+                    college_athlete_id = CFBD college player id (= ESPN
+                    athlete id) from the 2009 draft on; negative values are
+                    placeholders (about 20-30% of 2010-2016 picks). In the
+                    2000-2008 drafts it is an ESPN draft-profile id that
+                    matches no CFBD roster or stat row.
+                    nfl_athlete_id is a separate CFBD/ESPN draft id, NOT the
+                    nflverse espn_id (its numeric overlaps are other people).
+                    franchise_id comes from nfl_team_id (the ESPN team id):
+                    nfl_team is only the CURRENT location ('New York', 'Los
+                    Angeles'; Raiders picks say 'Las Vegas' in every year).
+
+Derived columns: first_name / last_name / name_suffix (recruits carry only a
+full name), position_group (both 247 position vintages -- PRO/DUAL/WDE/SDE/
+OC... before 2021, QB/EDGE/DL/IOL... after -- mapped to one set),
+height_clean / weight_clean (NULL outside 60-84 in / 130-420 lb).
+
+The recruiting layer is the only high-school information: CFBD has no
+high-school game statistics. Class sizes are not comparable across cohorts:
+2000-2001 hold only top recruits, and the 2021 class lacks most 2-star
+recruits (237, against 923 in 2020 and 847 in 2022). PrepSchool profiles are
+not pulled.
+
+Usage: python 04_load_recruiting.py [--refresh]   (--refresh re-downloads
+everything and spends 79 CFBD calls).
 """
-import time
-import duckdb
+import argparse
+
+import nflreadpy as nfl
 import pandas as pd
-import cfbd
-from cfbd.rest import ApiException
-from config import DB_PATH, RECRUIT_YEARS, CFBD_API_KEY
+import polars as pl
+
+from cfbd_utils import (as_id, clean_height, clean_weight, key_report,
+                        position_group_cfbd, pull_years, split_name, stack)
+from common import FRANCHISES, CFBD, cached_parquet, connect, to_franchise, write_table
+from config import DRAFT_YEARS, RECRUIT_YEARS
+
+RECRUIT_TYPES = ["HighSchool", "JUCO"]
+SRC = "CFBD REST"
+
+# ESPN NFL team id (CFBD nflTeamId) -> franchise_id. Validated on the picks
+# whose college_athlete_id is an nflverse espn_id: for every team id the
+# nflverse draft_team agrees with this map in at least 97% of picks.
+ESPN_NFL_TEAM = {1: "ATL", 2: "BUF", 3: "CHI", 4: "CIN", 5: "CLE", 6: "DAL",
+                 7: "DEN", 8: "DET", 9: "GB", 10: "TEN", 11: "IND", 12: "KC",
+                 13: "LV", 14: "LA", 15: "MIA", 16: "MIN", 17: "NE", 18: "NO",
+                 19: "NYG", 20: "NYJ", 21: "PHI", 22: "ARI", 23: "PIT", 24: "LAC",
+                 25: "SF", 26: "SEA", 27: "TB", 28: "WAS", 29: "CAR", 30: "JAX",
+                 33: "BAL", 34: "HOU"}
 
 
-def get_client():
-    config = cfbd.Configuration(
-        host="https://api.collegefootballdata.com",
-        access_token=CFBD_API_KEY,
-    )
-    return cfbd.ApiClient(config)
+def load_recruits(con, api, refresh):
+    parts = [stack(pull_years(api, "/recruiting/players", RECRUIT_YEARS, refresh,
+                              classification=c), year_field="year")
+             for c in RECRUIT_TYPES]
+    df = pd.concat(parts, ignore_index=True).rename(columns={
+        "id": "recruit_id", "season": "recruit_class"})
+    df["recruit_id"] = as_id(df["recruit_id"])
+    df["athlete_id"] = as_id(df["athlete_id"])
+    # Recruits carry one name string; split it for name-based linkage
+    names = df["name"].map(split_name)
+    df["first_name"] = names.str[0]
+    df["last_name"] = names.str[1]
+    df["name_suffix"] = names.str[2]
+    df["position_group"] = df["position"].map(position_group_cfbd)
+    df["height_clean"] = clean_height(df["height"])
+    df["weight_clean"] = clean_weight(df["weight"])
+    lead = ["recruit_id", "athlete_id", "recruit_type", "recruit_class", "name",
+            "first_name", "last_name", "name_suffix", "position", "position_group"]
+    df = df[lead + [c for c in df.columns if c not in lead]]
+    write_table(con, "recruits", df, source=f"{SRC} /recruiting/players",
+                note="247 composite; HighSchool + JUCO; athlete_id = CFBD college player id")
 
 
-def upsert(con, table, df, key_cols):
-    if df is None or df.empty:
-        return
-    table_cols = [c[0] for c in con.execute(f"DESCRIBE {table}").fetchall()]
-    df = df[[c for c in table_cols if c in df.columns]]
-    if df.duplicated(subset=key_cols).any():
-        df = df.assign(_completeness=df.notna().sum(axis=1))
-        df = (df.sort_values("_completeness", ascending=False)
-                .drop_duplicates(subset=key_cols, keep="first")
-                .drop(columns="_completeness"))
-    con.register("staging", df)
-    where = " AND ".join([f"{table}.{k} = staging.{k}" for k in key_cols])
-    con.execute(f"DELETE FROM {table} WHERE EXISTS (SELECT 1 FROM staging WHERE {where})")
-    cols_csv = ", ".join(df.columns)
-    con.execute(f"INSERT INTO {table} ({cols_csv}) SELECT {cols_csv} FROM staging")
-    con.unregister("staging")
-    print(f"  -> upserted {len(df)} rows into {table}")
+def nflverse_draft_slots():
+    """gsis_id by draft slot from nflverse draft_picks (shared cache)."""
+    picks = cached_parquet("draft_picks", lambda: nfl.load_draft_picks(True))
+    return (picks.select(pl.col("season").cast(pl.Int64),
+                         pl.col("pick").cast(pl.Int64).alias("overall"), "gsis_id")
+                 .to_pandas())
 
 
-def load_recruits(con, client):
-    print("Loading recruiting data (247 composite)...")
-    api = cfbd.RecruitingApi(client)
-    rows = []
-    for year in RECRUIT_YEARS:
-        try:
-            recruits = api.get_recruits(year=year)
-            print(f"  {year}: {len(recruits)} recruits")
-        except ApiException as e:
-            print(f"  {year} failed: {e}")
-            continue
-        for r in recruits:
-            # Build a stable ID. CFBD doesn't always provide one, so synthesize.
-            rid = f"{year}_{(r.name or '').replace(' ', '_')}_{r.committed_to or 'uncommitted'}"
-            rows.append({
-                "recruit_id": rid,
-                "year": year,
-                "name": r.name,
-                "first_name": r.first_name if hasattr(r, "first_name") else None,
-                "last_name": r.last_name if hasattr(r, "last_name") else None,
-                "position": r.position,
-                "height_inches": r.height,
-                "weight_lbs": r.weight,
-                "stars": r.stars,
-                "rating": r.rating,
-                "ranking": r.ranking,
-                "position_ranking": getattr(r, "position_ranking", None),
-                "state_ranking": getattr(r, "state_ranking", None),
-                "committed_to": r.committed_to,
-                "high_school": r.school,           # the HS the recruit attended
-                "hometown_city": r.city,
-                "hometown_state": r.state_province,
-                "hometown_country": r.country,
-            })
-        time.sleep(0.3)
-    df = pd.DataFrame(rows)
-    upsert(con, "recruits", df, ["recruit_id"])
+def espn_to_gsis():
+    """ESPN athlete id -> gsis_id and nflverse draft slot (to validate the link)."""
+    players = cached_parquet("players", nfl.load_players)   # shared nflverse cache
+    ids = (players.filter(pl.col("espn_id").is_not_null())
+                  .select(pl.col("espn_id").cast(pl.Int64).alias("college_athlete_id"),
+                          "gsis_id", pl.col("draft_year").alias("nflverse_draft_year"),
+                          pl.col("draft_pick").alias("nflverse_draft_pick"))
+                  .to_pandas())
+    if ids["college_athlete_id"].duplicated().any():
+        raise ValueError("espn_id is not unique in nflverse players")
+    return ids
+
+
+def load_draft(con, api, refresh):
+    # season = draft year, as in nflverse draft_picks
+    df = stack(pull_years(api, "/draft/picks", DRAFT_YEARS, refresh), year_field="year")
+    df["college_athlete_id"] = df["college_athlete_id"].astype("Int64")
+    df["nfl_athlete_id"] = df["nfl_athlete_id"].astype("Int64")
+    for c in ("hometown_info_latitude", "hometown_info_longitude"):
+        df[c] = pd.to_numeric(df[c], errors="raise")
+    # franchise_id from the ESPN team id; the location string must agree
+    df.insert(df.columns.get_loc("nfl_team") + 1, "franchise_id",
+              df["nfl_team_id"].map(ESPN_NFL_TEAM).map(to_franchise))
+    if df["franchise_id"].isna().any():
+        raise ValueError("unmapped nfl_team_id: "
+                         f"{sorted(df.loc[df['franchise_id'].isna(), 'nfl_team_id'].unique())}")
+    bad = [(t, f) for t, f in df[["nfl_team", "franchise_id"]].drop_duplicates().itertuples(
+        index=False) if not FRANCHISES[f]["name"].startswith(t)]
+    if bad:
+        raise ValueError(f"nfl_team location disagrees with franchise: {bad}")
+    df["position_group"] = df["position"].map(position_group_cfbd)
+    ids = espn_to_gsis()
+    # nfl_athlete_id is not an nflverse espn_id: show that its overlaps are
+    # other players (draft slot disagrees), unlike college_athlete_id
+    for col in ("nfl_athlete_id", "college_athlete_id"):
+        m = df[["season", "overall", col]].merge(
+            ids.rename(columns={"college_athlete_id": col}), on=col)
+        same = (m["nflverse_draft_year"].eq(m["season"])
+                & m["nflverse_draft_pick"].eq(m["overall"])).sum()
+        print(f"  {col} found in nflverse espn_id: {len(m):,} picks; "
+              f"same draft slot in nflverse: {same:,}")
+    # gsis_id by draft slot (nflverse draft_picks is unique on season x pick)
+    df = df.merge(nflverse_draft_slots(), on=["season", "overall"], how="left",
+                  validate="one_to_one")
+    # Cross-check: where the ESPN-id link lands on the same slot, it should
+    # name the same gsis_id (the 2000-2001 CFBD ids that collide with other
+    # players' ESPN ids land elsewhere and are not compared)
+    m = df.merge(ids, on="college_athlete_id", suffixes=("", "_espn"))
+    m = m[m["nflverse_draft_year"].eq(m["season"]) & m["nflverse_draft_pick"].eq(m["overall"])]
+    print(f"  gsis_id attached by draft slot to {df['gsis_id'].notna().sum():,} of "
+          f"{len(df):,} picks; equals the ESPN-id link's gsis_id in "
+          f"{m['gsis_id'].eq(m['gsis_id_espn']).sum():,} of {len(m):,} same-slot matches")
+    lead = ["season", "round", "pick", "overall", "name", "position", "position_group",
+            "college_athlete_id", "nfl_athlete_id", "gsis_id"]
+    df = df[lead + [c for c in df.columns if c not in lead]]
+    write_table(con, "cfbd_draft_picks", df,
+                source=f"{SRC} /draft/picks + nflverse draft_picks, players",
+                note="season = draft year; gsis_id by draft slot (nflverse draft_picks); "
+                     "college_athlete_id = CFBD player id from the 2009 draft; "
+                     "nfl_athlete_id is not an nflverse id")
+
+
+def coverage(con):
+    print("\nCoverage summary")
+    key_report(con, "recruits", ["recruit_id"], "recruit_class")
+    key_report(con, "cfbd_draft_picks", ["season", "overall"], "season")
+
+    # Shares are over all rows; negative ids are placeholders with no stats
+    print("\nRecruits by class: rows; shares with an athlete_id (positive / "
+          "placeholder), with college stats, geocode and committed_to")
+    print(con.execute("""
+        SELECT recruit_class, recruit_type, count(*) AS n,
+               round(avg(coalesce(athlete_id > 0, false)::INT), 3) AS athlete_id,
+               round(avg(coalesce(athlete_id < 0, false)::INT), 3) AS placeholder,
+               round(avg(coalesce(athlete_id IN (SELECT player_id FROM college_player_stats),
+                                  false)::INT), 3) AS with_stats,
+               round(avg((hometown_info_fips_code IS NOT NULL)::INT), 3) AS fips,
+               round(avg((committed_to IS NOT NULL)::INT), 3) AS committed,
+               min(rating) AS min_rating
+        FROM recruits GROUP BY 1, 2 ORDER BY 2, 1""").df().to_string(index=False))
+
+    print("\nDraft picks by year: shares with a college_athlete_id (positive / "
+          "placeholder), found in CFBD rosters, with college stats; pre-draft "
+          "grade and ranking; gsis_id")
+    con.execute("""
+        CREATE OR REPLACE TEMP VIEW _picks AS
+        SELECT *,
+               coalesce(college_athlete_id IN (SELECT player_id FROM college_players),
+                        false) AS in_rosters,
+               coalesce(college_athlete_id IN (SELECT player_id FROM college_player_stats),
+                        false) AS has_stats
+        FROM cfbd_draft_picks""")
+    print(con.execute("""
+        SELECT season, count(*) AS picks,
+               round(avg(coalesce(college_athlete_id > 0, false)::INT), 3) AS college_id,
+               round(avg(coalesce(college_athlete_id < 0, false)::INT), 3) AS placeholder,
+               round(avg(in_rosters::INT), 3) AS in_rosters,
+               round(avg(has_stats::INT), 3) AS with_stats,
+               round(avg((pre_draft_grade IS NOT NULL)::INT), 3) AS grade,
+               round(avg((pre_draft_ranking IS NOT NULL)::INT), 3) AS ranking,
+               round(avg((gsis_id IS NOT NULL)::INT), 3) AS gsis_id
+        FROM _picks GROUP BY 1 ORDER BY 1""").df().to_string(index=False))
+
+    n, k = con.execute("""SELECT count(*), count(*) FILTER (WHERE has_stats)
+                          FROM _picks WHERE season BETWEEN 2005 AND 2026""").fetchone()
+    print(f"\nDraftees 2005-2026 whose college_athlete_id has college stats: "
+          f"{k:,} of {n:,} ({k / n:.1%})")
 
 
 def main():
-    if not CFBD_API_KEY:
-        print("CFBD_API_KEY not set — skipping recruiting load. "
-              "Get a free key at https://collegefootballdata.com/key, then "
-              "`export CFBD_API_KEY=...` and re-run.")
-        return
-    con = duckdb.connect(str(DB_PATH))
-    client = get_client()
-    load_recruits(con, client)
+    ap = argparse.ArgumentParser(description="Load CFBD recruits and draft picks")
+    ap.add_argument("--refresh", action="store_true",
+                    help="re-download every CFBD response (spends quota)")
+    args = ap.parse_args()
+
+    api = CFBD()
+    con = connect()
+    print("Recruits (247 composite)...")
+    load_recruits(con, api, args.refresh)
+    print("Draft picks...")
+    load_draft(con, api, args.refresh)
+    coverage(con)
     con.close()
-    print("Recruiting load complete.")
+    print(f"\nCFBD live calls this run: {api.live_calls}")
 
 
 if __name__ == "__main__":

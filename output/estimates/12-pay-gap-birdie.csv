@@ -1,0 +1,36 @@
+term,panel,estimate,std_error,se_type,boot_reps,nobs,nobs_first,contrast_target,support_n,support_pblack_share,race_measure
+ey_white,"A. Mean log APY by race, E[Y $|$ R], and raw Black-white gap",1.1067302867993352,0.05652306601558514,bootstrap,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+ey_black,"A. Mean log APY by race, E[Y $|$ R], and raw Black-white gap",1.2149119476604662,0.030379928984937927,bootstrap,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+ey_other,"A. Mean log APY by race, E[Y $|$ R], and raw Black-white gap",0.9472245867638617,0.18444525627865482,bootstrap,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+marg_gap,"A. Mean log APY by race, E[Y $|$ R], and raw Black-white gap",0.10818166086113101,0.05127815565380371,bootstrap,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+marg_gap0,"A. Mean log APY by race, E[Y $|$ R], and raw Black-white gap",0.1971118012606261,0.04824019903444038,bootstrap,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+rc_nox,"A. Mean log APY by race, E[Y $|$ R], and raw Black-white gap",0.19878024423510732,0.04899403783006294,bootstrap,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+pw_gap,"A. Mean log APY by race, E[Y $|$ R], and raw Black-white gap",0.12585189811333963,0.03220862447695439,bootstrap,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+cond_gap_full,B. Conditional gaps: unrestricted EM and the estimable-contrast comparison,-0.16162778427632174,0.09562104240894032,bootstrap,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+cond_gap,B. Conditional gaps: unrestricted EM and the estimable-contrast comparison,-0.16153252732802786,0.09572629717838492,bootstrap,199,5062,2789,Black characteristics with estimable interacted contrast,5055,0.9991834040343621,predicted
+cond_gap_prior,B. Conditional gaps: unrestricted EM and the estimable-contrast comparison,-0.15941595103927148,0.09584352849500812,bootstrap,199,5062,2789,Black characteristics with estimable interacted contrast,5055,0.9991834040343621,predicted
+rc_int_prior,B. Conditional gaps: unrestricted EM and the estimable-contrast comparison,-0.15846358751909043,2.2371072793043365,bootstrap,199,5062,2789,Black characteristics with estimable interacted contrast,5055,0.9991834040343621,predicted
+rc_same_x,B. Conditional gaps: unrestricted EM and the estimable-contrast comparison,-0.04849715393935965,0.04847771755964823,cluster,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+rc_main,B. Conditional gaps: unrestricted EM and the estimable-contrast comparison,-0.003592402175170296,0.050994971803778134,cluster,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+diff_weights,C. Steps of panel B (bootstrap SE of each difference),-0.002116576288756389,0.0016645884617378507,bootstrap,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+diff_slopes,C. Steps of panel B (bootstrap SE of each difference),-9.523635201810488e-4,2.239745541324284,bootstrap,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+diff_contrast,C. Steps of panel B (bootstrap SE of each difference),-0.10996643357973078,2.2391751379739455,bootstrap,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+diff_total,C. Steps of panel B (bootstrap SE of each difference),-0.11303537338866822,0.0919722441258912,bootstrap,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+cond_gap_first,D. One contract per player (first main-sample contract),-0.1318566156653483,0.11782177983745282,bootstrap,199,5062,2789,Black characteristics with estimable interacted contrast,5055,0.9991834040343621,predicted
+rc_int_prior_first,D. One contract per player (first main-sample contract),-0.1224581595498928,5.508018066762449,bootstrap,199,5062,2789,Black characteristics with estimable interacted contrast,5055,0.9991834040343621,predicted
+rc_same_x_first,D. One contract per player (first main-sample contract),-0.05463214251824949,0.060980405886325736,bootstrap,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+post_prior_mad,"E. Posterior diagnostics of the BIRDiE fit (point values, no SE)",0.04219539114100154,,none,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+post_prior_cor,"E. Posterior diagnostics of the BIRDiE fit (point values, no SE)",0.9700145016785044,,none,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+post_prior_move20,"E. Posterior diagnostics of the BIRDiE fit (point values, no SE)",0.047412090082971155,,none,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+within_player_sd,"E. Posterior diagnostics of the BIRDiE fit (point values, no SE)",0.03609508756489463,,none,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+within_player_range25,"E. Posterior diagnostics of the BIRDiE fit (point values, no SE)",0.06056236481614996,,none,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+n_players_multi,"E. Posterior diagnostics of the BIRDiE fit (point values, no SE)",1387,,none,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+sigma,"E. Posterior diagnostics of the BIRDiE fit (point values, no SE)",0.5796133780865685,,none,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+em_iters,"E. Posterior diagnostics of the BIRDiE fit (point values, no SE)",36,,none,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+n_first,"E. Posterior diagnostics of the BIRDiE fit (point values, no SE)",2789,,none,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+support_n,"E. Posterior diagnostics of the BIRDiE fit (point values, no SE)",5055,,none,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+support_pblack_share,"E. Posterior diagnostics of the BIRDiE fit (point values, no SE)",0.9991834040343621,,none,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+support_n_first,"E. Posterior diagnostics of the BIRDiE fit (point values, no SE)",2784,,none,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+support_pblack_share_first,"E. Posterior diagnostics of the BIRDiE fit (point values, no SE)",0.9992427618580584,,none,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+interacted_rank,"E. Posterior diagnostics of the BIRDiE fit (point values, no SE)",164,,none,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted
+interacted_columns,"E. Posterior diagnostics of the BIRDiE fit (point values, no SE)",171,,none,199,5062,2789,See panel and term,5055,0.9991834040343621,predicted

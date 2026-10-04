@@ -1,27 +1,43 @@
-"""Master runner — executes the full pipeline end-to-end.
+"""Master runner: rebuild the DuckDB (data/datasets/nfl_research.duckdb).
 
-Default run order (matches README.md):
-  01_build_db          schema
-  02_load_nfl          nflverse pulls (rosters, weekly rosters, stats, contracts, ...)
-  02b_load_nfl_coaches PFR scrape for HC/OC/DC
-  03_load_college      CFBD (teams, rosters, stats, coaches)
-  04_load_recruiting   CFBD recruiting / 247 composite
-  05_join_players      build player_id_map
-  06_example_queries   sanity checks (read-only)
-  07_export_csv        write all CSVs incl. the player-team-week panel
+Run order:
+  00_fetch_reference     Census 2010 surnames + Tzioumis first names
+  01_build_db            initialize DB, franchise-season crosswalk
+  02_load_nfl            nflverse players, rosters, draft, combine, contracts, injuries
+  02c_load_nfl_stats     nflverse schedules, team games/seasons (pbp EPA), player stats, snaps
+  02b_load_nfl_staff     full coaching staff + front office (Wikipedia staff templates)
+  02d_load_coach_history historical opening head coaches and records, 1989-1998
+  02e_coach_policy_reference sourced program participation, gender and job dates
+  03_load_college        CFBD teams, rosters, player/team stats, coaches, transfers
+  04_load_recruiting     CFBD recruits (247 composite) + CFBD draft picks
+  04c_infer_race         name-based BIFSG (secondary race measure)
+  05_join_players        NFL <-> college <-> recruit crosswalk
+  09_race_coding_sheets  human race-coding sheets (appends, never overwrites codes)
+  04d_race_documented    documented race evidence: Wikidata P172 + Wikipedia
+                         candidate sentences (needs player_wiki_signals from 09)
+  04e_predict_race       predicted race: model-only posterior (primary; BIFSG
+                         likelihood x EM-estimated NFL prior on predetermined
+                         covariates) + documented sensitivity variant (preddoc)
+                         (needs 04c, 05, 09, 04d, data/derived/race_text_labels.csv)
+  06_validate_db        cross-table checks; fails on critical problems
 
-Each step is its own subprocess so a crash in one step doesn't poison the
-others. Steps marked optional below (network-bound or read-only) won't stop
-the pipeline if they fail; non-optional failures abort by default.
+Every network response is cached under data/raw/, so after the first run a
+rebuild is offline (and spends no CFBD quota). --refresh is passed through to
+the loaders to force re-downloads. Every step is required: a failure stops the
+run unless --continue-on-error is given. On macOS the run holds a caffeinate
+assertion so idle or maintenance sleep cannot suspend it.
+
+The analysis samples are built afterwards in R: Rscript programs/95-make-all.R
 
 Examples:
-  python scripts/99_run_all.py
-  python scripts/99_run_all.py --skip 02b_load_nfl_coaches.py
-  python scripts/99_run_all.py --only 07_export_csv.py
-  python scripts/99_run_all.py --continue-on-error
+  .venv/bin/python scripts/99_run_all.py
+  .venv/bin/python scripts/99_run_all.py --only 02b_load_nfl_staff.py
+  .venv/bin/python scripts/99_run_all.py --skip 03_load_college.py 04_load_recruiting.py
 """
 import argparse
+import datetime as dt
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -29,86 +45,71 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 
-# (filename, human label, optional?, needs_cfbd_key?)
+# (filename, label, accepts --refresh)
 STEPS = [
-    ("01_build_db.py",          "Build / refresh schema",            False, False),
-    ("02_load_nfl.py",          "Load NFL data (nflverse)",          False, False),
-    ("02b_load_nfl_coaches.py", "Scrape NFL coaches (PFR/Wayback)",  True,  False),
-    ("03_load_college.py",      "Load college data (CFBD)",          True,  True),
-    ("04_load_recruiting.py",   "Load recruiting (CFBD)",            True,  True),
-    ("04c_infer_race.py",       "Infer race from surnames (Census)", False, False),
-    ("05_join_players.py",      "Build player_id_map",               False, False),
-    ("06_example_queries.py",   "Sanity-check queries",              True,  False),
-    ("07_export_csv.py",        "Export CSVs (panel + topic files)", False, False),
-    ("08_nfl_coach_data.py",    "Export team-week × coach × race",   False, False),
+    ("00_fetch_reference.py",    "Fetch race reference files",          True),
+    ("01_build_db.py",           "Initialize DB + franchise crosswalk", False),
+    ("02_load_nfl.py",           "nflverse players/rosters/contracts",  True),
+    ("02c_load_nfl_stats.py",    "nflverse games, team + player stats", True),
+    ("02b_load_nfl_staff.py",    "Coaching staff + front office",       True),
+    ("02d_load_coach_history.py", "Historical head coaches, 1989-1998",  True),
+    ("02e_coach_policy_reference.py", "Coach policy source references", True),
+    ("03_load_college.py",       "CFBD college data",                   True),
+    ("04_load_recruiting.py",    "CFBD recruits + draft picks",         True),
+    ("04c_infer_race.py",        "Name-based race inference (BIFSG)",   False),
+    ("05_join_players.py",       "Player ID crosswalk",                 False),
+    ("09_race_coding_sheets.py", "Race-coding sheets",                  False),
+    ("04d_race_documented.py",   "Documented race evidence (Wiki)",     True),
+    ("04e_predict_race.py",      "Predicted race (EM prior; + documented)", False),
+    ("06_validate_db.py",        "Validate DB",                         False),
 ]
 
 
-def run_step(name, label):
+def run_step(name, label, extra):
     path = HERE / name
     if not path.exists():
-        print(f"  [skip] {name} — file not found")
+        print(f"  [missing] {name}")
         return False
     bar = "=" * 72
-    print(f"\n{bar}\n=> {label}\n   {name}\n{bar}", flush=True)
+    started = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"\n{bar}\n=> {label}\n   {name} {' '.join(extra)}  (started {started})\n{bar}",
+          flush=True)
     t0 = time.time()
-    rc = subprocess.run([sys.executable, str(path)], cwd=HERE).returncode
-    dt = time.time() - t0
-    status = "ok" if rc == 0 else f"FAILED (exit {rc})"
-    print(f"   --> {status} in {dt:.1f}s", flush=True)
+    rc = subprocess.run([sys.executable, str(path), *extra], cwd=HERE).returncode
+    ended = dt.datetime.now().strftime("%H:%M:%S")
+    print(f"   --> {'ok' if rc == 0 else f'FAILED (exit {rc})'} in {time.time() - t0:.1f}s "
+          f"(ended {ended})", flush=True)
     return rc == 0
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Run the NFL-players pipeline end-to-end")
-    ap.add_argument("--skip", nargs="*", default=[],
-                    help="Step filenames to skip (e.g. 02b_load_nfl_coaches.py)")
-    ap.add_argument("--only", nargs="*", default=None,
-                    help="Run only these step filenames")
-    ap.add_argument("--continue-on-error", action="store_true",
-                    help="Keep going past failures of non-optional steps")
+    ap = argparse.ArgumentParser(description="Rebuild the NFL research DuckDB")
+    ap.add_argument("--skip", nargs="*", default=[], help="step filenames to skip")
+    ap.add_argument("--only", nargs="*", default=None, help="run only these steps")
+    ap.add_argument("--refresh", action="store_true",
+                    help="force re-download in the loaders that support it")
+    ap.add_argument("--continue-on-error", action="store_true")
     args = ap.parse_args()
 
-    # Preflight: warn if CFBD-dependent steps will be attempted without a key.
-    cfbd_key = os.environ.get("CFBD_API_KEY", "")
-    will_run_cfbd = any(
-        needs and (args.only is None or name in args.only) and name not in args.skip
-        for name, _, _, needs in STEPS
-    )
-    if will_run_cfbd and not cfbd_key:
-        print("WARNING: CFBD_API_KEY is not set — college / recruiting steps "
-              "will fail. Get a free key at https://collegefootballdata.com/key "
-              "and `export CFBD_API_KEY=...` before re-running.\n", flush=True)
+    # Keep macOS awake for the whole run (released when this process exits)
+    if sys.platform == "darwin" and shutil.which("caffeinate"):
+        subprocess.Popen(["caffeinate", "-i", "-w", str(os.getpid())])
 
-    pipeline_t0 = time.time()
-    ran, skipped, failed = [], [], []
-    for name, label, optional, _ in STEPS:
-        if args.only and name not in args.only:
-            skipped.append(name)
+    t0 = time.time()
+    failed = []
+    for name, label, refreshable in STEPS:
+        if (args.only and name not in args.only) or name in args.skip:
             continue
-        if name in args.skip:
-            print(f"\n[skip] {name}", flush=True)
-            skipped.append(name)
-            continue
-        ok = run_step(name, label)
-        ran.append(name)
-        if not ok:
+        extra = ["--refresh"] if (args.refresh and refreshable) else []
+        if not run_step(name, label, extra):
             failed.append(name)
-            if not (optional or args.continue_on_error):
-                print(f"\nAborting: {name} is required. "
-                      f"Re-run with --continue-on-error to ignore.", flush=True)
+            if not args.continue_on_error:
+                print(f"\nAborting: {name} failed.", flush=True)
                 sys.exit(1)
 
-    total = time.time() - pipeline_t0
     print("\n" + "=" * 72)
-    print(f"Pipeline finished in {total/60:.1f} min  "
-          f"(ran={len(ran)}, skipped={len(skipped)}, failed={len(failed)})")
-    if failed:
-        print(f"Failures: {failed}")
-        # Exit non-zero only if a non-optional step failed.
-        non_opt_failed = [n for n in failed
-                          if not next(o for f, _, o, _ in STEPS if f == n)]
-        sys.exit(1 if non_opt_failed else 0)
+    print(f"Pipeline finished in {(time.time() - t0) / 60:.1f} min; failures: {failed or 'none'}")
+    sys.exit(1 if failed else 0)
 
 
 if __name__ == "__main__":

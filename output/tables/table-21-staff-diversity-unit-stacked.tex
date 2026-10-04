@@ -1,0 +1,55 @@
+\begin{table}[H]
+\centering\centering\centering
+\caption{Unit coordinators, unit coaches and unit performance: offense and defense stacked \label{tab:staff-diversity-unit}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{tabular}[t]{lcccccc}
+\toprule
+  & (1) & (2) & (3) & (4) & (5) & (6)\\
+\midrule
+P(Black): unit coordinator & 0.006 & 0.011 & 0.004 & -0.003 & -0.000 & 0.000\\
+ & (0.020) & (0.015) & (0.016) & (0.008) & (0.005) & (0.007)\\
+Unit coaches' expected share Black & -0.047 & -0.068 & -0.066 & -0.001 & -0.014 & -0.025\\
+ & (0.053) & (0.042) & (0.055) & (0.023) & (0.017) & (0.021)\\
+Unit roster share Black (headcount) &  & -0.063 &  &  & -0.022 & \\
+ &  & (0.064) &  &  & (0.024) & \\
+Unit roster share Black (snap-weighted) &  &  & -0.002 &  &  & 0.010\\
+ &  &  & (0.051) &  &  & (0.021)\\
+Offense $\times$ P(Black): opening-day QB &  & 0.017 & 0.012 &  & 0.005 & 0.001\\
+ &  & (0.019) & (0.017) &  & (0.007) & (0.007)\\
+Offense $\times$ opening-day QB log draft pick &  & -0.002 & 0.004 &  & -0.001 & 0.002*\\
+ &  & (0.002) & (0.002) &  & (0.001) & (0.001)\\
+Defense $\times$ P(Black): head coach &  & 0.019 & 0.033 &  & 0.001 & 0.012\\
+ &  & (0.022) & (0.030) &  & (0.009) & (0.012)\\
+Unit mean log draft pick (headcount) &  & -0.022 &  &  & -0.008 & \\
+ &  & (0.017) &  &  & (0.007) & \\
+Unit mean log draft pick (snap-weighted) &  &  & -0.058*** &  &  & -0.030***\\
+ &  &  & (0.013) &  &  & (0.006)\\
+Unit cap share &  &  & 0.080 &  &  & 0.039*\\
+ &  &  & (0.049) &  &  & (0.020)\\
+Lagged unit EPA per play &  & 0.291*** & 0.271*** &  &  & \\
+ &  & (0.042) & (0.051) &  &  & \\
+Lagged unit success rate &  &  &  &  & 0.365*** & 0.301***\\
+ &  &  &  &  & (0.039) & (0.054)\\
+\midrule
+Observations & 1216 & 1216 & 832 & 1216 & 1216 & 832\\
+R$^2$ & 0.584 & 0.635 & 0.655 & 0.997 & 0.998 & 0.998\\
+Within R$^2$ & 0.004 & 0.127 & 0.182 & 0.002 & 0.176 & 0.218\\
+Franchise $\times$ season FE & Yes & Yes & Yes & Yes & Yes & Yes\\
+Unit $\times$ season FE & Yes & Yes & Yes & Yes & Yes & Yes\\
+Unit roster and QB/HC controls & No & Headcount & Snap-weighted & No & Headcount & Snap-weighted\\
+Seasons & 2007-2025 & 2007-2025 & 2013-2025 & 2007-2025 & 2007-2025 & 2013-2025\\
+Model-only prior controls & Yes & Yes & Yes & Yes & Yes & Yes\\
+Mean of outcome, offense & -0.008 & -0.008 & -0.004 & 0.429 & 0.429 & 0.432\\
+Mean of outcome, defense & 0.007 & 0.007 & 0.004 & -0.429 & -0.429 & -0.432\\
+WCB $p$-value: unit coordinator & 0.775 & 0.487 & 0.835 & 0.677 & 0.974 & 0.989\\
+WCB $p$-value: unit coaches' share & 0.390 & 0.129 & 0.262 & 0.973 & 0.424 & 0.275\\
+\bottomrule
+\multicolumn{7}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}}
+\end{table}
+
+{\footnotesize
+\noindent\textit{Notes:} This table includes the estimation results of the stacked unit version of equation (3): each FullStaffObserved franchise-season contributes an offense and a defense row (1216 unit-seasons, 2007-2025; columns 3 and 6 start in 2013, when snap counts and cap tables are observed). The outcome is EPA per play (columns 1-3) or success rate (columns 4-6), signed so that higher is better for both units (defense: minus the opponent's EPA per play or success rate). Because the two units' outcomes have opposite-signed levels, the outcome mean is reported by unit. The unit coordinator is the opening-day OC for the offense and DC for the defense; it is zero-filled with a missing indicator when no coordinator is listed at the opening (40 unit-seasons). Unit coaches are the coordinator and the unit's position and assistant coaches listed in the opening-day snapshot; the head coach is the opening-day head coach. Under the predicted measure every column controls for the model-only priors matched to each race regressor: the unit coordinator's prior, the unit coaches' and unit roster's mean priors, and the opening-day QB's and head coach's priors in their unit interactions. All staff regressors (shares, role holders, their priors and the coaching-turnover shares) are measured at opening day, from the preseason staff snapshot taken before the franchise's first regular-season game, so in-season hires, firings and interim promotions, which respond to results, do not enter; Table 19d repeats the headline columns with the all-season union staff as a robustness check. The design compares a franchise-season's offense with its defense. Franchise $\times$ season FE absorb factors that shift both units equally; unit $\times$ season FE absorb league-wide offense-defense differences in each season. Factors that load on one unit are controlled through unit interactions in columns (2), (3), (5) and (6): the opening-day starting QB's race and log draft pick (undrafted = log 300) interacted with the offense indicator, and the head coach's race interacted with the defense indicator (each zero-filled with an interacted missing indicator). The head coach's side of the ball is not observed, and QB quality is proxied only by draft position, so the differential influence of the play-calling head coach and of in-season QB changes remains a threat. The identifying assumption is that, within a franchise-season, the racial composition of one unit's staff relative to the other's is uncorrelated with the unit's unobserved quality, conditional on these interactions and the unit's roster controls (mean log draft pick, mean age, cap share in columns 3 and 6, the roster's Black share and the unit's lagged outcome). Under the predicted measure, staff shares are expected shares (mean member P(Black)), role-holder regressors are the holder's P(Black), and every specification controls for the matching model-only priors (the members' mean prior for each share, the holder's prior for each role holder); see the notes to Table 19 on their measurement and Table 29 for the other race measures. Standard errors, in parentheses, are clustered at the franchise level (32 clusters). Wild cluster bootstrap-t $p$-values (restricted, Webb six-point weights, 9,999 replications, clustered by franchise) are reported in the bottom panel because 32 clusters are few. The bootstrap refits each model by OLS with franchise $\times$ season dummies and defense $\times$ season dummies (one test took 1 seconds). Race is predicted, not observed: each person's probability of being non-Hispanic Black alone combines first name, surname and hometown county (BIFSG) with an NFL-specific prior estimated by EM on predetermined characteristics (players: position at entry, rookie era, draft round, college type, county availability; staff: role, unit and era at first appearance); documented race statements are not used (notes/race-prediction-design.md). Black Hispanic and multiracial Black persons are in the other-race probability, so P(Black) is narrower than the Black-alone-or-in-combination definition of the hand codes and of TIDES. Team shares are expected shares (mean member probability). Their error is Berkson-type: estimates are consistent if the probabilities are calibrated given the regression's controls (the team mean of the prior is one of them), but less precise than with observed race; individual coaches' probabilities are noisy because names carry little information for many Black coaches. The validation exhibit compares the predictions with published TIDES shares.
+\par}
+

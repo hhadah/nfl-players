@@ -1,0 +1,34 @@
+\begin{table}[H]
+\centering\centering
+\caption{Race gap in realized annual pay with and without paying-franchise fixed effects \label{tab:pay-employer-fe}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{tabular}[t]{lcccc}
+\toprule
+  & (1) & (2) & (3) & (4)\\
+\midrule
+P(Black) & 0.002 & 0.007 & -0.014 & 0.012\\
+ & (0.056) & (0.056) & (0.057) & (0.058)\\
+P(other race) & -0.046 & -0.026 & -0.083 & -0.022\\
+ & (0.093) & (0.097) & (0.090) & (0.095)\\
+\midrule
+Observations & 5949 & 5949 & 5948 & 5948\\
+R$^2$ & 0.611 & 0.653 & 0.631 & 0.660\\
+Within R$^2$ & 0.553 & 0.572 & 0.566 & 0.570\\
+Outcome & Log cap number & Log cap number & Log cash paid & Log cash paid\\
+Position group $\times$ season FE & Yes & Yes & Yes & Yes\\
+Paying franchise $\times$ season FE & No & Yes & No & Yes\\
+Controls (A-D) & Yes & Yes & Yes & Yes\\
+Mean of outcome & 1.333 & 1.333 & 1.468 & 1.468\\
+Implied Black gap (\%) & 0.2 & 0.7 & -1.4 & 1.2\\
+SE of P(Black) clustered by player and paying franchise & (0.053) & (0.052) & (0.045) & (0.048)\\
+Players & 2,222 & 2,222 & 2,222 & 2,222\\
+\bottomrule
+\multicolumn{5}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}}
+\end{table}
+
+{\footnotesize
+\noindent\textit{Notes:} This table estimates the player-season analogue of equation (1) of Table \ref{tab:pay-gap-learning} with and without paying franchise $\times$ season fixed effects on exactly the same seasons. Columns (1)-(2) use the 5,949 player-seasons 2014-2025 governed by a freely bargained veteran contract (UFA or extension), with a race prediction, a positive cap number and a known paying franchise (0 seasons without one are excluded from both columns). Columns (3)-(4) use the 5,948 of those seasons with positive cash paid. The paying franchise is the franchise on whose cap table the season's larger cap number sits, from OTC's contract-year rows, not the player's primary roster team of the season; the two differ in 15 seasons (players with cap hits from two teams after a trade or release are assigned to the team carrying the larger hit). There are 32 franchises and 384 franchise $\times$ season cells, 0 of them with a single season. The employer fixed effects absorb franchise-specific season pay levels. Each pair compares coefficient sensitivity to this conditioning on fixed rows. Residual race-score variation and its weighting also change, so the coefficient difference is not a causal decomposition of sorting or employer behavior. Cash paid is OTC's accounting amount for the season (base salary plus bonuses actually paid); it can be a few dollars for players released early (0 seasons below \$10,000), which pulls the log far below the log cap number, so columns (3)-(4) are a companion for reading accounting amounts and not the main estimates. Controls are blocks A-D of Table \ref{tab:pay-gap-learning}: experience bins, experience, age and its square (A), one-season lagged production (B), career production (C) and pre-NFL signals (D), with position-group slopes. Every column also includes fixed effects for the covariates of the race prediction's prior (position at NFL entry, entry era, draft-round bucket, college type and whether a home county is known), as regression calibration requires. Controls with incomplete coverage are set to zero with a missing indicator (interacted like the control). The identifying assumption is that, conditional on the controls and fixed effects, race is uncorrelated with unobserved productivity. Omitted quality would bias the estimate: there are no PFF-type grades, and offensive linemen have no production measure, so their quality rests on games, injury weeks and pre-NFL signals. Regression calibration identifies the Black-white gap only if, in addition to names and hometown being unrelated to pay given race and the controls, (i) P(Black) is calibrated given every control in the column, not only given the prior's covariates, and (ii) the gap does not vary with the controls (otherwise the coefficient is a variance-weighted average of gaps). Controls that predict P(Black) within the prior's cells do not by themselves violate (i): under (i) they predict P(Black) exactly when they predict race. They do reduce the variation in P(Black) that identifies the coefficient (overlap), and if (i) fails for them the coefficient moves as they are added for reasons unrelated to pay. Table \ref{tab:pay-gap-veteran} reports the identifying variation by column and checks (i) against documented race. P(Black) is the predicted probability of being non-Hispanic Black alone; Black Hispanic and multiracial Black players enter P(other race), and Table \ref{tab:pay-gap-race-measures} also reports estimates with P(Black) + P(multiracial) as the Black regressor. The predicted Black share is not calibrated in levels: it lies below the TIDES African-American player share through 2016 and above the self-identified Black-alone share (below the Black-or-multiracial share) from 2019 (Table \ref{tab:race-prediction-tides}); Table \ref{tab:pay-gap-race-measures} reports estimates with the TIDES-raked posterior. Standard errors treat the predicted probabilities as known; the prior is estimated by EM on the whole player population of the database, so the omitted first-stage variance is likely small. The implied gap is $100(e^{\hat\beta_1}-1)$. Standard errors are clustered at the player level. The row 'SE of P(Black) clustered by player and paying franchise' reports the standard error with two-way clustering by player and paying franchise. P(Black) and P(other race) enter together, so the coefficient on P(Black) compares a Black (predicted: non-Hispanic Black alone) with a white player. Race is predicted, not observed: each person's probability of being non-Hispanic Black alone combines first name, surname and hometown county (BIFSG) with an NFL-specific prior estimated by EM on predetermined characteristics (players: position at entry, rookie era, draft round, college type, county availability; staff: role, unit and era at first appearance); documented race statements are not used (notes/race-prediction-design.md). Black Hispanic and multiracial Black persons are in the other-race probability, so P(Black) is narrower than the Black-alone-or-in-combination definition of the hand codes and of TIDES. Regressions use the probabilities (regression calibration) and control for the prior's covariates; the coefficient on P(Black) is the Black-white gap if the probabilities are calibrated given the regression's controls and names and hometown are unrelated to the outcome given race and the controls. The validation exhibit compares the predictions with published TIDES shares.
+\par}
+

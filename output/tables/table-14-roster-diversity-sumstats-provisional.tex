@@ -1,0 +1,35 @@
+\begin{table}[!h]
+\centering
+\caption{Roster racial composition: summary statistics by period (provisional race measure) \label{tab:roster-sumstats}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{lrrrrrrrr}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{4}{c}{2002-2012} & \multicolumn{4}{c}{2013-2025} \\
+\cmidrule(l{3pt}r{3pt}){2-5} \cmidrule(l{3pt}r{3pt}){6-9}
+ & Mean & SD & Within SD & N & Mean & SD & Within SD & N\\
+\midrule
+Share flagged Black, headcount & 0.220 & 0.086 & 0.056 & 352 & 0.192 & 0.081 & 0.064 & 416\\
+Position-mix expected share flagged Black, headcount & 0.220 & 0.024 & 0.024 & 352 & 0.192 & 0.017 & 0.017 & 416\\
+Residual share flagged Black, headcount & 0.000 & 0.085 & 0.052 & 352 & 0.000 & 0.082 & 0.063 & 416\\
+Mean prior P(Black), headcount & 0.546 & 0.030 & 0.028 & 352 & 0.623 & 0.023 & 0.022 & 416\\
+Share other race, headcount & 0.032 & 0.025 & 0.021 & 352 & 0.041 & 0.025 & 0.022 & 416\\
+Three-group Blau index, headcount & 0.376 & 0.085 & 0.059 & 352 & 0.359 & 0.083 & 0.065 & 416\\
+Share flagged Black, opening-day active roster & 0.232 & 0.093 & 0.062 & 352 & 0.195 & 0.085 & 0.067 & 416\\
+Share flagged Black, snap-weighted &  &  &  &  & 0.225 & 0.103 & 0.080 & 416\\
+Position-mix expected share flagged Black, snap-weighted &  &  &  &  & 0.224 & 0.023 & 0.023 & 416\\
+Residual share flagged Black, snap-weighted &  &  &  &  & 0.000 & 0.104 & 0.079 & 416\\
+Mean prior P(Black), snap-weighted &  &  &  &  & 0.658 & 0.024 & 0.023 & 416\\
+Share other race, snap-weighted &  &  &  &  & 0.043 & 0.033 & 0.029 & 416\\
+Three-group Blau index, snap-weighted &  &  &  &  & 0.389 & 0.098 & 0.078 & 416\\
+Share flagged Black, opening day, prior-snap-weighted &  &  &  &  & 0.232 & 0.115 & 0.089 & 384\\
+Opening-day starting QB flagged Black & 0.182 & 0.386 & 0.309 & 352 & 0.250 & 0.434 & 0.347 & 416\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textit{Notes:} 
+\item This table reports summary statistics of roster racial composition across franchise-seasons. The headcount share is the Black share of the game-day roster, weighting each player by the regular-season weeks he was on the game-day roster (2002-2025). The snap-weighted share weights each player by his offensive plus defensive snaps (2013-2025, when snap counts start). The position-mix expected share is the sum over position groups of the team's position weight times the league-season Black share at that position, computed on all other franchises; the residual share is the actual minus the position-mix expected share, composition net of position mix. The mean prior P(Black) is the weighted mean over players of the predicted-race model's prior probability of being Black, which depends only on predetermined characteristics (position at entry, rookie era, draft round, college type, hometown-county availability) and not on names; it summarizes the roster's position, draft and college mix. Other race is neither Black nor white (e.g., Hispanic, Asian, Pacific Islander). The three-group Blau index is $1 - b^2 - w^2 - o^2$, the probability that two players drawn at random belong to different groups (Black, white, other). The opening-day shares are measured on the active roster of the franchise's first regular-season game, before the season's results arrive; the prior-snap-weighted version weights those players by their offensive plus defensive snaps in the previous season (2014-2025). The opening-day starting QB started the first regular-season game. The within SD is the standard deviation of the deviation from the franchise mean within the period. \textbf{Sensitivity measure.} Race is the Wikipedia category flag. The flag is positive-only and misses most Black players and staff, so team shares are lower bounds whose coverage varies with Wikipedia editing. For these team-level estimates the provisional measure's error is not classical: the flagged share also varies with how completely Wikipedia editors categorize a franchise-season's players, which may rise with team success. The measurement error can therefore be correlated with the outcome, and the bias is of unknown sign, not attenuation. The estimates test the pipeline; they are not estimates of the effect of roster composition.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

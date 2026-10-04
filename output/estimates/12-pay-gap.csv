@@ -1,0 +1,283 @@
+table,model,term,estimate,std_error,nobs,p_value,ci_low,ci_high,dep_var,wald_p,wald_stat,design,n_players,n_players_multi,n_single_season_dropped,fixed_effects,scale,inference,df1,df2,support_black,support_other,support_black_players,support_other_players,controls,employer_fe,n_dropped_no_employer,n_dropped_no_cash,n_employer_cells,n_singleton_cells,race_measure
+table-07,Black - White,apy,0.015692965387398172,0.4893607150426163,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-07,Black - White,ApyCapPct100,-0.017048791611549458,0.22441483667138987,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-07,Black - White,GuaranteeShareKnown,-0.01768098288923317,0.019687873397905453,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-07,Black - White,years,-0.13641850734201502,0.08534750158869665,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-07,Black - White,AgeKnown,-0.5725582538953631,0.13999256644148755,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-07,Black - White,ExperienceAtSigning,-0.042660236244939295,0.13160983632217688,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-07,Black - White,PriorGamesPlayed,0.25366095626786545,0.3002515225846411,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-07,Black - White,PriorOffDefSnaps,13.56757539433449,24.831603565708985,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-07,Black - White (draft-free posterior),Round12,0.14451075686549283,0.03806430981282105,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-07,Black - White (draft-free posterior),Undrafted,-0.09008228770164141,0.039617714215403284,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-07,Black - White,Rating247,0.027243852983850406,0.007484986283416725,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-07,Black - White,FortyKnown,-0.011380647588234554,0.01995570961439609,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(1),sd_pblack,0.3944247861937477,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(1),resid_sd_pblack,0.2750517284557819,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(1),r2_pblack,0.5137043784635793,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(2),sd_pblack,0.3944247861937477,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(2),resid_sd_pblack,0.2734167464158673,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(2),r2_pblack,0.5194685415359287,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(3),sd_pblack,0.3944247861937477,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(3),resid_sd_pblack,0.26933180543181173,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(3),r2_pblack,0.5337198933824272,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(4),sd_pblack,0.3944247861937477,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(4),resid_sd_pblack,0.2653079123467864,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(4),r2_pblack,0.5475485264873565,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(5),sd_pblack,0.3944247861937477,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(5),resid_sd_pblack,0.24322915896680872,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(5),r2_pblack,0.6197205311401826,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(6),sd_pblack,0.3944247861937477,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(6),resid_sd_pblack,0.2389966345858814,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(6),r2_pblack,0.6328401587270949,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(7),sd_pblack,0.3944247861937477,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(7),resid_sd_pblack,0.2277335625136628,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(7),r2_pblack,0.6666306391057788,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(8),sd_pblack,0.3936552213782574,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(8),resid_sd_pblack,0.2453057723366759,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(8),r2_pblack,0.611685593570575,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(9),sd_pblack,0.3936552213782574,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(9),resid_sd_pblack,0.27809682835985977,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-overlap,(9),r2_pblack,0.5009316377460145,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-calibration-check,slope,LogitP08,0.6470693574403389,0.06360965599449368,1409,2.630628497567177e-24,0.522396722622149,0.7717419922585288,DocAlone08,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08-calibration-check,index,LogitP08,0.6257672713289594,0.06814091985869565,1409,4.1757946504147166e-20,0.4922135225324858,0.759321020125433,DocAlone08,0.5081860195880025,0.43803140596048296,,,,,,,,,,,,,,,,,,,,predicted
+table-08-calibration-check,index,RaceIndex08,0.7334437692498366,1.108189928029878,1409,0.5080741454037576,-1.4385685777187578,2.905456116218431,DocAlone08,0.5081860195880025,0.43803140596048296,,,,,,,,,,,,,,,,,,,,predicted
+table-08,(1),Black,-0.022858503304913277,0.07036340821264075,5062,0.7453087538013643,-0.1608281460554949,0.11511113944566832,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08,(1),OtherRace,-0.07234194084262821,0.12303601711874446,5062,0.5565975747128038,-0.3135928375591125,0.16890895587385604,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08,(2),Black,-0.015135533493418347,0.05777332678772905,5062,0.7933551830453675,-0.128418352786751,0.09814728579991433,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08,(2),OtherRace,-0.13127177609459723,0.10060184892394207,5062,0.1920466987382322,-0.32853341404906367,0.06598986185986919,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08,(3),Black,-0.025805234941360278,0.0486499320211233,5062,0.5958581900936784,-0.12119876278910054,0.06958829290637998,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08,(3),OtherRace,-0.08671575806579859,0.08146561298806777,5062,0.2872188161661297,-0.24645477307277247,0.07302325694117529,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08,(4),Black,-0.03508499656349682,0.048800185060611366,5062,0.4722306723319122,-0.13077314286004374,0.060603149733050095,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08,(4),OtherRace,-0.07334475775490114,0.0812589311159832,5062,0.3668132820163522,-0.23267850779846744,0.08598899228866515,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08,(5),Black,-0.003592402175170296,0.050994971803778134,5062,0.9438435696725977,-0.10358411975344531,0.09639931540310473,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08,(5),OtherRace,-0.038345026325920156,0.08461879535084758,5062,0.6504758337012184,-0.2042668493459091,0.1275767966940688,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08,(6),Black,-0.038761697795999354,0.04522549338488116,5062,0.3914763910872401,-0.12744053419735885,0.049917138605360144,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08,(6),OtherRace,-0.09640140428564592,0.07583532580336864,5062,0.20376571744676109,-0.2451004664081806,0.05229765783688875,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08,(7),Black,-0.03932444427194038,0.04587361086689634,5062,0.3913889494438264,-0.129274119305559,0.05062523076167822,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08,(7),OtherRace,-0.09172768621509496,0.07947752963886363,5062,0.24854432726102008,-0.2475684371041747,0.0641130646739848,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08,(8),Black,-0.0010316825185793525,0.05536847893971513,5062,0.9851351867244875,-0.1095990395156957,0.107535674478537,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08,(8),OtherRace,0.012027070499993606,0.090117783239985,5062,0.8938396572849802,-0.164677251745463,0.1887313927454502,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08,(9),Black,0.09750664497521389,0.07291337152803982,5062,0.18123564157127295,-0.04546300469074471,0.24047629464117248,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-08,(9),OtherRace,-0.019493672382039594,0.13068300163416555,5062,0.8814321579381252,-0.2757388928317272,0.23675154806764803,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-10,(1) Guarantee share,Black,-0.011681623813016294,0.01866886274567925,4686,0.531547675709501,-0.048288705598176176,0.024925457972143586,GuaranteeShare,,,,,,,,,,,,,,,,,,,,,,predicted
+table-10,(1) Guarantee share,OtherRace,-0.013409228543510713,0.03429592904339835,4686,0.6958391249221395,-0.08065884607472816,0.05384038898770673,GuaranteeShare,,,,,,,,,,,,,,,,,,,,,,predicted
+table-10,(2) Zero guarantee,Black,0.014530504164924704,0.019570407379978363,5062,0.45786319584939916,-0.02384344876440319,0.0529044570942526,GuaranteedZero,,,,,,,,,,,,,,,,,,,,,,predicted
+table-10,(2) Zero guarantee,OtherRace,0.04291533761154216,0.036616407450543946,5062,0.24128724121937153,-0.028882671937598775,0.1147133471606831,GuaranteedZero,,,,,,,,,,,,,,,,,,,,,,predicted
+table-10,(3) Log years,Black,-0.04100642653444443,0.03533390925084172,5062,0.2459282488641938,-0.11028969407582981,0.028276841006940945,LogYears,,,,,,,,,,,,,,,,,,,,,,predicted
+table-10,(3) Log years,OtherRace,-0.07613416078178716,0.06298715207563327,5062,0.22687092170924625,-0.1996403281278775,0.04737200656430318,LogYears,,,,,,,,,,,,,,,,,,,,,,predicted
+table-10,(4) Log value,Black,-0.038030258038328234,0.08060184006057669,5062,0.637086016723845,-0.19607557393022487,0.12001505785356839,LogValue,,,,,,,,,,,,,,,,,,,,,,predicted
+table-10,(4) Log value,OtherRace,-0.09861576928124875,0.13463462788632358,5062,0.46394357516838003,-0.36260939868586417,0.16537786012336664,LogValue,,,,,,,,,,,,,,,,,,,,,,predicted
+table-10,(5) Log APY,Black,0.02354593101507228,0.041789782875689754,6511,0.5731747033492667,-0.0583901330634332,0.10548199509357777,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-10,(5) Log APY,OtherRace,0.0038032141112477012,0.07040126210463804,6511,0.9569208891138439,-0.13423058089965956,0.14183700912215497,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-10,(6) Log APY,OtherRace,0.006235680820379196,0.07075959234634378,6511,0.9297826850359867,-0.13250068232142753,0.14497204396218594,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-10,(6) Log APY,BlackM_UFANew,0.006193414427871357,0.053003143369057454,6511,0.906985966149251,-0.0977283734495112,0.11011520230525391,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-10,(6) Log APY,BlackM_UFAOwn,0.0030961617062321843,0.05376411203383789,6511,0.9540803304956511,-0.1023176362508547,0.10850995966331907,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-10,(6) Log APY,BlackM_Ext,0.07882332969953675,0.06607779337019327,6511,0.232998151076225,-0.050733560506178124,0.20838021990525163,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-10,(6) Log APY,BlackM_TagTender,0.04372976951773478,0.049460430460271064,6511,0.37668598628119065,-0.0532459197697235,0.14070545880519306,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-10,(7) Near minimum,Black,-0.003505710268419018,0.010071524919089107,29634,0.7277907809000088,-0.02324935622152751,0.016237935684689474,NearMinimum,,,,,,,,,,,,,,,,,,,,,,predicted
+table-10,(7) Near minimum,OtherRace,-0.01606525188362735,0.015499359346156334,29634,0.3000040095329536,-0.0464493164507029,0.014318812683448201,NearMinimum,,,,,,,,,,,,,,,,,,,,,,predicted
+table-11-wcb,(1),BlackPos_DB,-0.011968483085911094,,5062,0.9143914391439144,-0.2292659829285049,0.20719088213750175,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-11-wcb,(1),BlackPos_DL,0.0012287934531225362,,5062,0.9887988798879888,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-11-wcb,(1),BlackPos_LB,-0.08902274515248058,,5062,0.31543154315431543,-0.2649202317289931,0.08861465963029272,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-11-wcb,(1),BlackPos_OL,-0.022236690487641594,,5062,0.8370837083708371,-0.22910220707515763,0.18927172252571678,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-11-wcb,(1),BlackPos_QB,-0.02205065996043275,,5062,0.9201920192019202,-0.4830142179414874,0.4397875758752359,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-11-wcb,(1),BlackPos_RB,-0.0074448826109116545,,5062,0.965096509650965,-0.3237199283429687,0.3175344939780842,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-11-wcb,(1),BlackPos_TE,0.14619791186865505,,5062,0.17521752175217523,-0.06900303168065194,0.3574157223070106,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-11-wcb,(1),BlackPos_WR,0.006810684477861007,,5062,0.9565956595659566,-0.23444769056330528,0.2524320810874002,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-11,(1),BlackPos_DB,-0.011968483086200661,0.10778785299062876,5062,0.9115946806407748,-0.22332054728734335,0.19938358111494203,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-11,(1),BlackPos_DL,0.0012287934520500284,0.0832566075408144,5062,0.9882254173245392,-0.16202203095824236,0.16447961786234244,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-11,(1),BlackPos_LB,-0.08902274515394328,0.08636508449144842,5062,0.3027369752803177,-0.25836871852406595,0.08032322821617942,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-11,(1),BlackPos_OL,-0.022236690488340496,0.10228560046541241,5062,0.8279140556491028,-0.22279985411585795,0.17832647313917693,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-11,(1),BlackPos_QB,-0.02205065996029186,0.1790159844334879,5062,0.9019757811686483,-0.37306792939515815,0.3289666094745744,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-11,(1),BlackPos_RB,-0.00744488260731634,0.14024880218241903,5062,0.9576692645155467,-0.2824468704989306,0.2675571052842979,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-11,(1),BlackPos_TE,0.14619791186347533,0.10146351325811656,5062,0.14972763792609067,-0.0527532906441705,0.34514911437112117,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-11,(1),BlackPos_WR,0.0068106844771148875,0.11794987472904107,5062,0.9539581222027904,-0.22446722675854527,0.23808859571277505,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-11,(1),OtherRace,-0.04891896984949739,0.08803980194433594,5062,0.5784974147473331,-0.22154875471415122,0.12371081501515643,LogAPY,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(1),Black,-0.0108625039256997,0.07186591855581043,5949,0.8798714434497505,-0.15179391781969417,0.13006890996829476,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(1),OtherRace,-0.07052329912697407,0.13043377136574877,5949,0.5887804404236772,-0.3263081855864092,0.18526158733246106,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(2),Black,-0.04406600939305502,0.07121011023608476,5949,0.5361005437813872,-0.18371136174912303,0.09557934296301299,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(2),OtherRace,-0.09480633243821845,0.12783218660922285,5949,0.4583797729235731,-0.34548942620550943,0.15587676132907252,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(3),Black,-0.025131791746368395,0.0523623472569915,5949,0.6313036475938011,-0.127816065210504,0.07755248171776721,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(3),OtherRace,-0.06636185297241964,0.08576902092240532,5949,0.4391742795747182,-0.23455770477261745,0.10183399882777816,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(4),OtherRace,-0.06579772376755018,0.0862749664647122,5949,0.44575231179538743,-0.2349857513036679,0.10339030376856755,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(4),BlackExp_0_3,0.17018023336394816,0.1216957598919114,5949,0.16213041555234772,-0.06846912715528064,0.40882959388317697,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(4),BlackExp_4_6,0.02375175273732738,0.054562206812408934,5949,0.6633760211476469,-0.08324651717663342,0.13075002265128818,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(4),BlackExp_7plus,-0.12610815548947843,0.06612073546456021,5949,0.05661831206928393,-0.2557730776666659,0.003556766687709073,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(5),OtherRace,-0.03630070799515531,0.1306079219540949,5949,0.781086978301773,-0.2924271094472226,0.21982569345691202,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(5),BlackExp_0_3,0.2633026209753409,0.16466384180035332,5949,0.10995590584895859,-0.05960855178200736,0.5862137937326892,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(5),BlackExp_4_6,0.10268850071642292,0.07364027534243026,5949,0.16331786550858685,-0.04172248479811015,0.247099486230956,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(5),BlackExp_7plus,-0.057978764518124455,0.08438669040398243,5949,0.49211631453250626,-0.22346382101583315,0.10750629197958425,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(5),LogDraftPick_x_Exp,0.002020849386288215,0.005088675241255531,5949,0.6913121056409092,-0.007958208990883573,0.011999907763460002,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(5),Undrafted_x_Exp,0.02312758748206134,0.024727597062786856,5949,0.34973818643758936,-0.025364038121432453,0.07161921308555513,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(5),RecruitRating_x_Exp,-0.09788739889571296,0.09448948930515956,5949,0.30033324818923995,-0.2831843740614322,0.08740957627000628,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(5),RecruitRatingMiss_x_Exp,-0.10476124936420206,0.0824463883726002,5949,0.20398304929307345,-0.2664413101955473,0.05691881146714317,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(6),OtherRace,-0.048613286324115816,0.09128455937290783,5949,0.5944007135853551,-0.22762528919893402,0.13039871655070237,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(6),BlackExp_0_3,0.1863196454701737,0.1270871008645794,5949,0.14276850624317872,-0.06290231081254849,0.4355416017528959,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(6),BlackExp_4_6,0.045370556706870194,0.05826722698120491,5949,0.43626097425616284,-0.06889337878803888,0.15963449220177928,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(6),BlackExp_7plus,-0.09843559740765612,0.06953071577699016,5949,0.1569995116060307,-0.23478760236954677,0.03791640755423453,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(6),LogDraftPick_x_Exp,0.01046814442343355,0.004782825479409229,5949,0.02872284471354502,0.0010888674202751865,0.019847421426591915,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(6),Undrafted_x_Exp,0.09265781321736644,0.024250267469035105,5949,1.3661772409378754e-4,0.045102246539893864,0.140213379894839,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(6),RecruitRating_x_Exp,0.05155160643125001,0.08096374083205944,5949,0.5243698567267289,-0.10722093414022973,0.21032414700272975,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(6),RecruitRatingMiss_x_Exp,0.0410902674807021,0.07176078088874938,5949,0.5669730988414333,-0.09963496801370894,0.18181550297511315,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(7),Black,-0.13340939834468313,0.04292695140939493,16858,0.0018939573788644471,-0.21756249957114437,-0.04925629711822188,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(7),OtherRace,-0.08419781314340855,0.06922019637061132,16858,0.22389180517194776,-0.21989564401282147,0.05150001772600438,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(8),Black,-0.14509246063711106,0.03812585023809077,25839,1.426520777366587e-4,-0.2198306327109547,-0.0703542885632674,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(8),OtherRace,-0.06320354695986345,0.05572465594241284,25839,0.2567445377747446,-0.17244068917627123,0.046033595256544324,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(8),OnRookieContract,0.9254036310048683,0.029368682447572566,25839,5.9027262310956375e-204,0.8678321505358031,0.9829751114739336,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(8),BlackRookie,0.1524665951752838,0.0343852444139148,25839,9.387778626448204e-6,0.08506113935568321,0.21987205099488438,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(9),Black,-0.12896150080908964,0.04479934577407588,16858,0.004008673123531778,-0.21678520493963613,-0.04113779667854314,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(9),OtherRace,-0.10073723366394828,0.07301279361073572,16858,0.1677267565496062,-0.24386999315001429,0.04239552582211771,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(10),OtherRace,-0.07382569070381134,0.05651872734448225,16858,0.19153153246105561,-0.18462382630982685,0.036972444902204166,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(10),BlackCT_UFAExt,-0.03192671805619763,0.04315932042007993,16858,0.45948756072239827,-0.11653535065015747,0.05268191453776221,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(10),BlackCT_Tender,0.11389545513200154,0.05927670557527664,16858,0.05472844271219221,-0.002309363539460374,0.23010027380346346,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(10),BlackCT_SFA,-0.09990678038958734,0.0437055965018567,16858,0.02229633389838293,-0.18558632123344665,-0.014227239545728007,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(10),BlackCT_Practice,-0.14944691804296978,0.05270749803272159,16858,0.004592891146757634,-0.2527735991072668,-0.046120236978672735,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(10),BlackCT_Other,-0.03375379876040134,0.08740893448911681,16858,0.6993928504885356,-0.2051084529031575,0.13760085538235478,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(11),Black,-0.08465970651126194,0.04516215115993005,13647,0.06091474955809168,-0.17319912219275646,0.003879709170232587,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12,(11),OtherRace,-0.06585968503106876,0.07341511885619975,13647,0.3697197619879987,-0.20978842976018638,0.07806905969804886,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+figure-pay-gap-by-experience,Without production controls,BlackExp_0_3,0.20849711264964305,0.1652315213718836,5949,0.20713588031765326,-0.11552729829156522,0.5325215235908514,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+figure-pay-gap-by-experience,Without production controls,BlackExp_4_6,0.02049015890462519,0.07112659920123711,5949,0.7733122928970826,-0.11899142558409567,0.15997174339334605,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+figure-pay-gap-by-experience,Without production controls,BlackExp_7plus,-0.16160935223895523,0.08628029303222746,5949,0.061189454504629905,-0.3308078253479706,0.007589120870060112,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+figure-pay-gap-by-experience,With lagged and career production,BlackExp_0_3,0.17018023336394816,0.1216957598919114,5949,0.16213041555234772,-0.06846912715528064,0.40882959388317697,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+figure-pay-gap-by-experience,With lagged and career production,BlackExp_4_6,0.02375175273732738,0.054562206812408934,5949,0.6633760211476469,-0.08324651717663342,0.13075002265128818,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+figure-pay-gap-by-experience,With lagged and career production,BlackExp_7plus,-0.12610815548947843,0.06612073546456021,5949,0.05661831206928393,-0.2557730776666659,0.003556766687709073,LogCapNumber,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12b,(1),Black,0.021101382709250494,0.07624152070629471,5284,0.781993306576386,-0.1284455784441817,0.17064834386268268,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(1),OtherRace,-0.11727548208776106,0.13313956487271744,5284,0.37853709261101964,-0.37842737349227323,0.1438764093167511,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(1),BlackExp_0_3,0.38716724100843575,0.16677067889536326,5284,0.020385521305298176,0.06004826427169174,0.7142862177451798,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(1),BlackExp_7plus,-0.13787981672117308,0.07219627784634154,5284,0.05634381198298452,-0.27949207548108823,0.0037324420387420676,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(1),OtherExp_0_3,0.5289019058218035,0.3631229874322193,5284,0.14544610261846816,-0.18336011089005444,1.2411639225336615,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(1),OtherExp_7plus,0.13248480538414764,0.15718976491191466,5284,0.3994510840080926,-0.1758413068081347,0.44081091757643,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(2),BlackExp_0_3,-0.11968815175738856,0.1792950418317134,5284,0.504520775652715,-0.471373537980233,0.2319972344654559,LogCapNumber,,,within,1557,1557,665,gsis_id + PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(2),BlackExp_7plus,-0.019700417547412606,0.06734020192419017,5284,0.7699046701219494,-0.15178753317586174,0.11238669808103652,LogCapNumber,,,within,1557,1557,665,gsis_id + PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(2),OtherExp_0_3,-0.29470256965784525,0.3176471010968042,5284,0.35367221553401273,-0.9177641015916139,0.3283589622759234,LogCapNumber,,,within,1557,1557,665,gsis_id + PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(2),OtherExp_7plus,0.1984661220437624,0.11720359222203704,5284,0.09058996671691583,-0.031427522399567365,0.4283597664870922,LogCapNumber,,,within,1557,1557,665,gsis_id + PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(3),Black,0.02953352342881238,0.061419017297789216,5284,0.6306885275257748,-0.0909392492654516,0.15000629612307637,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(3),OtherRace,-0.03157380447819137,0.10056865202059276,5284,0.7535990128184058,-0.22883818427609987,0.16569057531971715,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(3),BlackExp_0_3,0.2747345971530961,0.12291223019348384,5284,0.025545004958996725,0.0336435178600116,0.5158256764461806,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(3),BlackExp_7plus,-0.13477506189717073,0.06711112555873468,5284,0.044790628284817606,-0.2664128465835219,-0.003137277210819578,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(3),OtherExp_0_3,0.37697027338015987,0.20427768945311614,5284,0.06517195280783661,-0.023718320002472204,0.777658866762792,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(3),OtherExp_7plus,-0.0391110977578593,0.12260448631398528,5284,0.7497676807870528,-0.2795985405866363,0.20137634507091767,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(4),BlackExp_0_3,-0.05560109826955849,0.16706709576056425,5284,0.7393248095635858,-0.3833014936482024,0.27209929710908537,LogCapNumber,,,within,1557,1557,665,gsis_id + PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(4),BlackExp_7plus,-0.022356926010335308,0.06512958397637801,5284,0.7314429472226647,-0.15010793719983861,0.10539408517916798,LogCapNumber,,,within,1557,1557,665,gsis_id + PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(4),OtherExp_0_3,-0.4858963793033565,0.31132541717291495,5284,0.11878971315225705,-1.0965579930372762,0.12476523443056331,LogCapNumber,,,within,1557,1557,665,gsis_id + PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(4),OtherExp_7plus,0.18933530515651684,0.11655974152867754,5284,0.10450094007563332,-0.03929543275325406,0.4179660430662877,LogCapNumber,,,within,1557,1557,665,gsis_id + PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(5),Black,0.13325215417682734,0.08234045989524512,5284,0.1057990912719949,-0.028257813662695364,0.29476212201635005,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(5),OtherRace,-0.023045196394475196,0.14502870122711756,5284,0.8737675440444925,-0.30751750685763474,0.2614271140686843,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(5),BlackExp_0_3,0.24732311135423896,0.16203447192102638,5284,0.12712319460656296,-0.07050584396314874,0.5651520666716267,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(5),BlackExp_7plus,-0.14297418683454938,0.07294147408803611,5284,0.05015977044051951,-0.28604814038197657,9.976671287781347e-5,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(5),OtherExp_0_3,0.23753964527864566,0.30318448264058623,5284,0.43346323916224927,-0.3571536088399302,0.8322328993972216,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(5),OtherExp_7plus,0.06048174540938531,0.15845145076011358,5284,0.7027321483832436,-0.25031915063794763,0.3712826414567182,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(6),BlackExp_0_3,-0.12714915128238105,0.1822382274722115,5284,0.4854637829483971,-0.4846075659622847,0.23030926339752258,LogCapNumber,,,within,1557,1557,665,gsis_id + PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(6),BlackExp_7plus,-0.01609834337765642,0.06803461423447624,5284,0.812982828214553,-0.14954754163285255,0.11735085487753971,LogCapNumber,,,within,1557,1557,665,gsis_id + PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(6),OtherExp_0_3,-0.3054353954459992,0.3186507324522031,5284,0.3379458900542549,-0.9304655399930498,0.31959474910105146,LogCapNumber,,,within,1557,1557,665,gsis_id + PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(6),OtherExp_7plus,0.1927659888514891,0.1175328370250982,5284,0.10118582450265648,-0.03777346589726513,0.42330544360024336,LogCapNumber,,,within,1557,1557,665,gsis_id + PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(7),Black,0.04910747020157547,0.0659613531361916,5284,0.45669340287016935,-0.0802750476666895,0.17848998806984043,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(7),OtherRace,-0.03957939079918809,0.11191910484522057,5284,0.7236544688770601,-0.25910756743527186,0.1799487858368957,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(7),BlackExp_0_3,0.15150859592152582,0.13425502517896568,5284,0.25927712199358227,-0.11183125943676575,0.4148484512798174,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(7),BlackExp_7plus,-0.12417289604753468,0.06902324656195814,5284,0.07221221594817166,-0.2595612864765401,0.011215494381470709,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(7),OtherExp_0_3,0.21020985284368432,0.23157670126992796,5284,0.3641597742636482,-0.24402547231811572,0.6644451780054843,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(7),OtherExp_7plus,-0.009284471104732274,0.12607368953891449,5284,0.9413037538309756,-0.256576720489119,0.23800777827965447,LogCapNumber,,,between,1557,1557,665,PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(8),BlackExp_0_3,-0.04203534743216,0.16991129833284088,5284,0.8046345365136702,-0.37531461699443003,0.29124392213010997,LogCapNumber,,,within,1557,1557,665,gsis_id + PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(8),BlackExp_7plus,-0.01675625116549021,0.06594632907330526,5284,0.7994602046544106,-0.14610929948844684,0.11259679715746643,LogCapNumber,,,within,1557,1557,665,gsis_id + PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(8),OtherExp_0_3,-0.42960101578387366,0.3032492326461845,5284,0.15678256583488442,-1.0244212763745422,0.16521924480679495,LogCapNumber,,,within,1557,1557,665,gsis_id + PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b,(8),OtherExp_7plus,0.19985247505007198,0.11759358427048278,5284,0.08942139908591618,-0.03080613479765648,0.43051108489780043,LogCapNumber,,,within,1557,1557,665,gsis_id + PositionGroup^season,Black-white log-cap-gap change versus experience 4-6; main terms only without player FE,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12b-joint,(1),BlackExp joint,4.957084324344397,,5284,0.007067257867932361,,,,,,,,,,,,,2,5111,,,,,,,,,,,predicted
+table-12b-joint,(2),BlackExp joint,0.2562583329666956,,5284,0.7739561718609451,,,,,,,,,,,,,2,3588,,,,,,,,,,,predicted
+table-12b-joint,(3),BlackExp joint,4.8778471732561774,,5284,0.007649881932442775,,,,,,,,,,,,,2,4969,,,,,,,,,,,predicted
+table-12b-joint,(4),BlackExp joint,0.10878320803805597,,5284,0.8969279215988561,,,,,,,,,,,,,2,3447,,,,,,,,,,,predicted
+table-12b-joint,(5),BlackExp joint,3.4628161879467485,,5284,0.031418820655176226,,,,,,,,,,,,,2,4854,,,,,,,,,,,predicted
+table-12b-joint,(6),BlackExp joint,0.26182903295355525,,5284,0.7696574364165986,,,,,,,,,,,,,2,3555,,,,,,,,,,,predicted
+table-12b-joint,(7),BlackExp joint,2.447082721006455,,5284,0.086655652934762,,,,,,,,,,,,,2,4713,,,,,,,,,,,predicted
+table-12b-joint,(8),BlackExp joint,0.059182008334869314,,5284,0.9425361712305402,,,,,,,,,,,,,2,3414,,,,,,,,,,,predicted
+table-12b-joint,(1),OtherExp joint,1.3237900769480349,,5284,0.2662159857844757,,,,,,,,,,,,,2,5111,,,,,,,,,,,predicted
+table-12b-joint,(2),OtherExp joint,1.982671849612136,,5284,0.13785166501103904,,,,,,,,,,,,,2,3588,,,,,,,,,,,predicted
+table-12b-joint,(3),OtherExp joint,1.9132447684754472,,5284,0.14770939570983221,,,,,,,,,,,,,2,4969,,,,,,,,,,,predicted
+table-12b-joint,(4),OtherExp joint,2.719602958891501,,5284,0.06604232135187782,,,,,,,,,,,,,2,3447,,,,,,,,,,,predicted
+table-12b-joint,(5),OtherExp joint,0.3466379896323326,,5284,0.7070787468667098,,,,,,,,,,,,,2,4854,,,,,,,,,,,predicted
+table-12b-joint,(6),OtherExp joint,1.9102093573926202,,5284,0.14820131711829368,,,,,,,,,,,,,2,3555,,,,,,,,,,,predicted
+table-12b-joint,(7),OtherExp joint,0.4429514793765848,,5284,0.6421650932334104,,,,,,,,,,,,,2,4713,,,,,,,,,,,predicted
+table-12b-joint,(8),OtherExp joint,2.625469614307933,,5284,0.07255193589547154,,,,,,,,,,,,,2,3414,,,,,,,,,,,predicted
+table-12b-support,support,bin_0-3,77,,5284,,,,,,,,70,,,,,,,,31.123733824991895,8.975318633716864,30.12974808336621,8.507547519112908,,,,,,,predicted
+table-12b-support,support,bin_7+,2161,,5284,,,,,,,,745,,,,,,,,1150.7338847395833,254.4688039933071,440.3098331405263,93.42808121834987,,,,,,,predicted
+table-12b-support,cross-bin players,bins_0-3|4-6,36,,5284,,,,,,,,,,,,,,,,,,17.910747931911786,3.739574640674836,,,,,,,predicted
+table-12b-support,cross-bin players,bins_0-3|4-6|7+,33,,5284,,,,,,,,,,,,,,,,,,11.222832968213737,4.764274069399556,,,,,,,predicted
+table-12b-support,cross-bin players,bins_0-3|7+,1,,5284,,,,,,,,,,,,,,,,,,0.996167183240693,0.003698809038511229,,,,,,,predicted
+table-12b-support,cross-bin players,bins_4-6|7+,711,,5284,,,,,,,,,,,,,,,,,,428.09083298907177,88.66010833991182,,,,,,,predicted
+figure-pay-career-fe,(1),BlackExp_0_3,0.38716724100843575,0.16677067889536326,5284,0.020385521305298176,0.06004826427169174,0.7142862177451798,LogCapNumber,,,Without player FE,,,,,,,,,,,,,Career stage (A),,,,,,predicted
+figure-pay-career-fe,(1),BlackExp_7plus,-0.13787981672117308,0.07219627784634154,5284,0.05634381198298452,-0.27949207548108823,0.0037324420387420676,LogCapNumber,,,Without player FE,,,,,,,,,,,,,Career stage (A),,,,,,predicted
+figure-pay-career-fe,(2),BlackExp_0_3,-0.11968815175738856,0.1792950418317134,5284,0.504520775652715,-0.471373537980233,0.2319972344654559,LogCapNumber,,,With player FE,,,,,,,,,,,,,Career stage (A),,,,,,predicted
+figure-pay-career-fe,(2),BlackExp_7plus,-0.019700417547412606,0.06734020192419017,5284,0.7699046701219494,-0.15178753317586174,0.11238669808103652,LogCapNumber,,,With player FE,,,,,,,,,,,,,Career stage (A),,,,,,predicted
+figure-pay-career-fe,(3),BlackExp_0_3,0.2747345971530961,0.12291223019348384,5284,0.025545004958996725,0.0336435178600116,0.5158256764461806,LogCapNumber,,,Without player FE,,,,,,,,,,,,,"With lagged and career production (A, B, C)",,,,,,predicted
+figure-pay-career-fe,(3),BlackExp_7plus,-0.13477506189717073,0.06711112555873468,5284,0.044790628284817606,-0.2664128465835219,-0.003137277210819578,LogCapNumber,,,Without player FE,,,,,,,,,,,,,"With lagged and career production (A, B, C)",,,,,,predicted
+figure-pay-career-fe,(4),BlackExp_0_3,-0.05560109826955849,0.16706709576056425,5284,0.7393248095635858,-0.3833014936482024,0.27209929710908537,LogCapNumber,,,With player FE,,,,,,,,,,,,,"With lagged and career production (A, B, C)",,,,,,predicted
+figure-pay-career-fe,(4),BlackExp_7plus,-0.022356926010335308,0.06512958397637801,5284,0.7314429472226647,-0.15010793719983861,0.10539408517916798,LogCapNumber,,,With player FE,,,,,,,,,,,,,"With lagged and career production (A, B, C)",,,,,,predicted
+figure-pay-career-fe,(1),BlackExp_4_6,0,,5284,,,,LogCapNumber,,,Without player FE,,,,,,,,,,,,,Career stage (A),,,,,,predicted
+figure-pay-career-fe,(2),BlackExp_4_6,0,,5284,,,,LogCapNumber,,,With player FE,,,,,,,,,,,,,Career stage (A),,,,,,predicted
+figure-pay-career-fe,(3),BlackExp_4_6,0,,5284,,,,LogCapNumber,,,Without player FE,,,,,,,,,,,,,"With lagged and career production (A, B, C)",,,,,,predicted
+figure-pay-career-fe,(4),BlackExp_4_6,0,,5284,,,,LogCapNumber,,,With player FE,,,,,,,,,,,,,"With lagged and career production (A, B, C)",,,,,,predicted
+table-12c,(1),Black,0.0018383684285469485,0.056193127464375436,5949,0.9739046559722456,-0.10835819016034474,0.11203492701743865,LogCapNumber,,,,2222,,,PositionGroup^season,Black-white log-pay gap; annual accounting totals,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,FALSE,0,1,384,0,predicted
+table-12c,(1),OtherRace,-0.04553028784489065,0.09272843400155079,5949,0.6234701780430698,-0.22737377603276848,0.13631320034298716,LogCapNumber,,,,2222,,,PositionGroup^season,Black-white log-pay gap; annual accounting totals,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,FALSE,0,1,384,0,predicted
+table-12c,(2),Black,0.00672355004621625,0.05639024335659039,5949,0.9051019371679659,-0.10385955924638984,0.11730665933882234,LogCapNumber,,,,2222,,,PositionGroup^season + PayFranchise^season,Black-white log-pay gap; annual accounting totals,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,TRUE,0,1,384,0,predicted
+table-12c,(2),OtherRace,-0.02590654426215937,0.0968216469218079,5949,0.7890553592622229,-0.21577695669748861,0.16396386817316985,LogCapNumber,,,,2222,,,PositionGroup^season + PayFranchise^season,Black-white log-pay gap; annual accounting totals,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,TRUE,0,1,384,0,predicted
+table-12c,(3),Black,-0.013629380811997457,0.057121016351548586,5948,0.8114336191304109,-0.1256455598194925,0.09838679819549759,LogCashPaid,,,,2222,,,PositionGroup^season,Black-white log-pay gap; annual accounting totals,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,FALSE,0,1,384,0,predicted
+table-12c,(3),OtherRace,-0.08255676678765071,0.09007812130207651,5948,0.3595032283149743,-0.25920290519549266,0.09408937162019122,LogCashPaid,,,,2222,,,PositionGroup^season,Black-white log-pay gap; annual accounting totals,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,FALSE,0,1,384,0,predicted
+table-12c,(4),Black,0.011924374857689834,0.05801963422575279,5948,0.8371822900463355,-0.1018540231557957,0.12570277287117537,LogCashPaid,,,,2222,,,PositionGroup^season + PayFranchise^season,Black-white log-pay gap; annual accounting totals,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,TRUE,0,1,384,0,predicted
+table-12c,(4),OtherRace,-0.02187445052519325,0.09485492249750745,5948,0.8176393907783166,-0.20788805211852,0.1641391510681335,LogCashPaid,,,,2222,,,PositionGroup^season + PayFranchise^season,Black-white log-pay gap; annual accounting totals,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,TRUE,0,1,384,0,predicted
+table-12d,(1),Order2,0.10327624962159833,0.06072680124184011,3491,0.08923821432955707,-0.01585426258646,0.22240676182965666,LogAPY,,,,1334,,,gsis_id + position^year_signed,Black-white log-APY-gap change versus first observed eligible deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d,(1),Order3p,0.25404555390223843,0.09975890617784754,3491,0.010989603712910443,0.05834399631559517,0.4497471114888817,LogAPY,,,,1334,,,gsis_id + position^year_signed,Black-white log-APY-gap change versus first observed eligible deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d,(1),BlackOrd_2,0.02177518961940564,0.07007978443876574,3491,0.7560620801777171,-0.11570349269044661,0.15925387192925788,LogAPY,,,,1334,,,gsis_id + position^year_signed,Black-white log-APY-gap change versus first observed eligible deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d,(1),BlackOrd_3plus,0.06314642525508862,0.11821442959979517,3491,0.5933140267293054,-0.16876016723152587,0.2950530177417031,LogAPY,,,,1334,,,gsis_id + position^year_signed,Black-white log-APY-gap change versus first observed eligible deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d,(1),OtherOrd_2,0.1339088790274611,0.13261269478205892,3491,0.3127867334468652,-0.12624344139136548,0.3940611994462877,LogAPY,,,,1334,,,gsis_id + position^year_signed,Black-white log-APY-gap change versus first observed eligible deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d,(1),OtherOrd_3plus,0.28456929015178956,0.18365118637466926,3491,0.12149661803872143,-0.07570754730754808,0.6448461276111273,LogAPY,,,,1334,,,gsis_id + position^year_signed,Black-white log-APY-gap change versus first observed eligible deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d,(2),Order2,0.039035979714893795,0.06151452802971427,3491,0.5258103082859928,-0.08163985175583634,0.15971181118562394,LogAPY,,,,1334,,,gsis_id + position^year_signed,Black-white log-APY-gap change versus first observed eligible deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d,(2),Order3p,0.17375659394530052,0.09899879833094197,3491,0.07946533481191463,-0.02045382570416393,0.36796701359476497,LogAPY,,,,1334,,,gsis_id + position^year_signed,Black-white log-APY-gap change versus first observed eligible deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d,(2),BlackOrd_2,0.04350691309983813,0.06939201154142394,3491,0.5307843418434033,-0.09262253401455488,0.17963636021423113,LogAPY,,,,1334,,,gsis_id + position^year_signed,Black-white log-APY-gap change versus first observed eligible deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d,(2),BlackOrd_3plus,0.07777807882752694,0.11269494551740093,3491,0.4902107293554253,-0.14330069213031565,0.2988568497853695,LogAPY,,,,1334,,,gsis_id + position^year_signed,Black-white log-APY-gap change versus first observed eligible deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d,(2),OtherOrd_2,0.13241701773743908,0.13028300556764605,3491,0.30963298845911347,-0.12316504599532685,0.387999081470205,LogAPY,,,,1334,,,gsis_id + position^year_signed,Black-white log-APY-gap change versus first observed eligible deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d,(2),OtherOrd_3plus,0.2566999580055944,0.17888654120524958,3491,0.15152522324301157,-0.09422985955618374,0.6076297755673725,LogAPY,,,,1334,,,gsis_id + position^year_signed,Black-white log-APY-gap change versus first observed eligible deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d,(3),Order2,0.023285839027095006,0.053086288784888795,3491,0.6609925437278326,-0.08085593437182068,0.1274276124260107,LogAPY,,,,1334,,,gsis_id + position^year_signed,Black-white log-APY-gap change versus first observed eligible deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d,(3),Order3p,0.18303805646396795,0.08467142392306563,3491,0.030815319684579835,0.016934295108748526,0.3491418178191874,LogAPY,,,,1334,,,gsis_id + position^year_signed,Black-white log-APY-gap change versus first observed eligible deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d,(3),BlackOrd_2,0.02767892636238429,0.05944264969312212,3491,0.641548659673656,-0.0889324076801338,0.1442902604049024,LogAPY,,,,1334,,,gsis_id + position^year_signed,Black-white log-APY-gap change versus first observed eligible deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d,(3),BlackOrd_3plus,0.006344642961725049,0.09400821865711323,3491,0.9462015044729123,-0.17807553085557926,0.19076481677902934,LogAPY,,,,1334,,,gsis_id + position^year_signed,Black-white log-APY-gap change versus first observed eligible deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d,(3),OtherOrd_2,0.14548208364237844,0.1138396028008726,3491,0.20148718732705512,-0.07784221327260465,0.36880638055736154,LogAPY,,,,1334,,,gsis_id + position^year_signed,Black-white log-APY-gap change versus first observed eligible deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d,(3),OtherOrd_3plus,0.2195155823839016,0.16981526659100368,3491,0.19634824936879955,-0.1136187055422648,0.552649870310068,LogAPY,,,,1334,,,gsis_id + position^year_signed,Black-white log-APY-gap change versus first observed eligible deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d,(4),BlackChange,0.030457036874669975,0.06588183167092113,2157,0.643943102408375,-0.0987863316489854,0.15970040539832533,DeltaLogAPY,,,,1334,,,position^year_signed + PrevPosition^PrevYear,Black-white difference in adjacent log-APY change; per deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d,(4),OtherChange,0.11077556674462087,0.10434625188532608,2157,0.28860270983252034,-0.09392519436718401,0.31547632785642576,DeltaLogAPY,,,,1334,,,position^year_signed + PrevPosition^PrevYear,Black-white difference in adjacent log-APY change; per deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d,(5),BlackChange,-0.0031660710817934764,0.05559607965220602,2157,0.9545953597584442,-0.11223141472390197,0.105899272560315,DeltaLogAPY,,,,1334,,,position^year_signed + PrevPosition^PrevYear,Black-white difference in adjacent log-APY change; per deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d,(5),OtherChange,0.016170183927074824,0.09223706621172297,2157,0.8608617950089901,-0.16477544004233596,0.19711580789648558,DeltaLogAPY,,,,1334,,,position^year_signed + PrevPosition^PrevYear,Black-white difference in adjacent log-APY change; per deal,Player-clustered SE; 95% CI; race scores held fixed,,,,,,,,,,,,,predicted
+table-12d-joint,(1),BlackOrd joint,0.14549658501281149,,3491,0.8646023843720096,,,,,,,,,,,,,2,1918,,,,,,,,,,,predicted
+table-12d-joint,(2),BlackOrd joint,0.26366103043635464,,3491,0.7682618743973845,,,,,,,,,,,,,2,1909,,,,,,,,,,,predicted
+table-12d-joint,(3),BlackOrd joint,0.15235291012557492,,3491,0.8586964606992192,,,,,,,,,,,,,2,1768,,,,,,,,,,,predicted
+table-12d-joint,(1),OtherOrd joint,1.2282224476177146,,3491,0.2930427997724294,,,,,,,,,,,,,2,1918,,,,,,,,,,,predicted
+table-12d-joint,(2),OtherOrd joint,1.0753371090136095,,3491,0.3413892941981901,,,,,,,,,,,,,2,1909,,,,,,,,,,,predicted
+table-12d-joint,(3),OtherOrd joint,1.100225851941048,,3491,0.3330236570615845,,,,,,,,,,,,,2,1768,,,,,,,,,,,predicted
+table-12d-changes,adjacent pairs,pairs,2157,,2157,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12d-changes,adjacent pairs,mean_change,-0.011740921559382533,,2157,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12d-changes,adjacent pairs,median_change,0.058840500022933284,,2157,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12d-changes,adjacent pairs,sd_change,0.6799308117496227,,2157,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12d-changes,adjacent pairs,share_unchanged,0.024571163653222067,,2157,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12d-changes,adjacent pairs,share_abs_change_over_0_10,0.8099211868335652,,2157,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12d-changes,adjacent pairs,mean_gap_years,1.9258229021789524,,2157,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12d-changes,adjacent pairs,mean_change_black_weighted,-0.03836746394411413,,2157,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12d-changes,adjacent pairs,mean_change_white_weighted,0.03121790645443605,,2157,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12d-flow,sample flow,eligible_contracts,5062,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12d-flow,sample flow,ambiguous_cells,58,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12d-flow,sample flow,ambiguous_contracts,117,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12d-flow,sample flow,truncated_after_ambiguity,37,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12d-flow,sample flow,players_with_ambiguity,58,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12d-flow,sample flow,ordered_contracts,4908,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12d-flow,sample flow,single_deal_contracts,1417,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12d-flow,sample flow,repeat_contracts,3491,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12d-flow,sample flow,repeat_players,1334,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12d-flow,sample flow,repeat_black_players,804.2629126072676,,5062,,,,,,,,,,,,,,,,,,,,,,,,,,predicted
+table-12d-flow,contracts by order,order_1,1334,,3491,,,,,,,,,,,,,,,,804.2629126072676,157.57414534696434,,,,,,,,,predicted
+table-12d-flow,contracts by order,order_2,1334,,3491,,,,,,,,,,,,,,,,804.2629126072677,157.57414534696437,,,,,,,,,predicted
+table-12d-flow,contracts by order,order_3+,823,,3491,,,,,,,,,,,,,,,,471.86263368340445,92.40107986287201,,,,,,,,,predicted
+table-13,(1) Log pick,Black,-0.28769155274941677,0.08884343108912023,3051,0.0013618160918763959,-0.4626486018606455,-0.11273450363818802,LogPick,,,,,,,,,,,,,,,,,,,,,,predicted
+table-13,(1) Log pick,OtherRace,-0.2586251126675005,0.14231469847249625,3051,0.07034392558243167,-0.5388817324836095,0.021631507148608453,LogPick,,,,,,,,,,,,,,,,,,,,,,predicted
+table-13,(2) Log pick,Black,-0.12496076098517651,0.0796592277447927,3051,0.11795500223074382,-0.28183159825313264,0.0319100762827796,LogPick,,,,,,,,,,,,,,,,,,,,,,predicted
+table-13,(2) Log pick,OtherRace,-0.06401018741521992,0.13622624586812812,3051,0.6388397183996757,-0.3322769764891405,0.2042566016587007,LogPick,,,,,,,,,,,,,,,,,,,,,,predicted
+table-13,(3) Log pick,Black,0.01730783367107692,0.052747198510759465,3051,0.7430830848773425,-0.08656584710864701,0.12118151445080086,LogPick,,,,,,,,,,,,,,,,,,,,,,predicted
+table-13,(3) Log pick,OtherRace,0.09253364488707497,0.0940855685845966,3051,0.3262874462623271,-0.09274660871998047,0.2778138984941304,LogPick,,,,,,,,,,,,,,,,,,,,,,predicted
+table-13,(4) Drafted,Black,-0.06468561537475122,0.03500906654337707,3593,0.06565620610831467,-0.13358673002334387,0.004215499273841419,Drafted,,,,,,,,,,,,,,,,,,,,,,predicted
+table-13,(4) Drafted,OtherRace,-0.08263364181841673,0.05893466380886772,3593,0.16193708474060084,-0.19862256779677145,0.03335528415993799,Drafted,,,,,,,,,,,,,,,,,,,,,,predicted

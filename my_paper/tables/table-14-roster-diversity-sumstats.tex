@@ -1,0 +1,34 @@
+\begin{table}[H]
+\centering\centering
+\caption{Roster racial composition: summary statistics by period \label{tab:roster-sumstats}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{tabular}[t]{lrrrrrrrr}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{4}{c}{2002-2012} & \multicolumn{4}{c}{2013-2025} \\
+\cmidrule(l{3pt}r{3pt}){2-5} \cmidrule(l{3pt}r{3pt}){6-9}
+ & Mean & SD & Within SD & N & Mean & SD & Within SD & N\\
+\midrule
+Share Black, headcount & 0.566 & 0.044 & 0.035 & 352 & 0.619 & 0.047 & 0.041 & 416\\
+Position-mix expected share Black, headcount & 0.566 & 0.014 & 0.014 & 352 & 0.619 & 0.019 & 0.018 & 416\\
+Residual share Black, headcount & 0.000 & 0.045 & 0.035 & 352 & 0.000 & 0.045 & 0.039 & 416\\
+Mean prior P(Black), headcount & 0.546 & 0.030 & 0.028 & 352 & 0.623 & 0.023 & 0.022 & 416\\
+Share other race, headcount & 0.058 & 0.032 & 0.030 & 352 & 0.114 & 0.022 & 0.019 & 416\\
+Three-group Blau index, headcount & 0.529 & 0.026 & 0.023 & 352 & 0.528 & 0.037 & 0.033 & 416\\
+Share Black, opening-day active roster & 0.568 & 0.050 & 0.040 & 352 & 0.618 & 0.051 & 0.045 & 416\\
+Share Black, snap-weighted &  &  &  &  & 0.656 & 0.056 & 0.047 & 416\\
+Position-mix expected share Black, snap-weighted &  &  &  &  & 0.655 & 0.015 & 0.015 & 416\\
+Residual share Black, snap-weighted &  &  &  &  & 0.000 & 0.055 & 0.046 & 416\\
+Mean prior P(Black), snap-weighted &  &  &  &  & 0.658 & 0.024 & 0.023 & 416\\
+Share other race, snap-weighted &  &  &  &  & 0.115 & 0.029 & 0.024 & 416\\
+Three-group Blau index, snap-weighted &  &  &  &  & 0.498 & 0.051 & 0.043 & 416\\
+Share Black, opening day, prior-snap-weighted &  &  &  &  & 0.653 & 0.070 & 0.060 & 384\\
+Opening-day starting QB P(Black) & 0.130 & 0.220 & 0.184 & 352 & 0.279 & 0.328 & 0.272 & 416\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+{\footnotesize
+\noindent\textit{Notes:} This table reports summary statistics of roster racial composition across franchise-seasons. The headcount share is the Black share of the game-day roster, weighting each player by the regular-season weeks he was on the game-day roster (2002-2025). The snap-weighted share weights each player by his offensive plus defensive snaps (2013-2025, when snap counts start); the snap-weighted estimation panel (Tables \ref{tab:roster-diversity-main},  \ref{tab:roster-diversity-outcomes} and \ref{tab:roster-diversity-robustness})  is 2014-2025, from the first season with the prior season's cap share. The position-mix expected share is the sum over position groups of the team's position weight times the league-season Black share at that position, computed on all other franchises; the residual share is the actual minus the position-mix expected share, composition net of position mix. The mean prior P(Black) is the weighted mean over players of the predicted-race model's prior probability of being Black, which depends only on predetermined characteristics (position at entry, rookie era, draft round, college type, hometown-county availability) and not on names; it summarizes the roster's position, draft and college mix. Other race is neither Black nor white (e.g., Hispanic, Asian, Pacific Islander). The three-group Blau index is $1 - b^2 - w^2 - o^2$, the probability that two players drawn at random belong to different groups (Black, white, other). The opening-day shares are measured on the active roster of the franchise's first regular-season game, before the season's results arrive; the prior-snap-weighted version weights those players by their offensive plus defensive snaps in the previous season (2014-2025). The opening-day starting QB started the first regular-season game. The within SD is the standard deviation of the deviation from the franchise mean within the period. Under the model-only predicted measure a share Black is the expected share of players who are non-Hispanic Black alone (multiracial and Hispanic Black players count as non-Black); the documented, provisional and hand-coded sensitivity measures count Black alone or in combination. Race is predicted, not observed: each person's probability of being non-Hispanic Black alone combines first name, surname and hometown county (BIFSG) with an NFL-specific prior estimated by EM on predetermined characteristics (players: position at entry, rookie era, draft round, college type, county availability; staff: role, unit and era at first appearance); documented race statements are not used (notes/race-prediction-design.md). Black Hispanic and multiracial Black persons are in the other-race probability, so P(Black) is narrower than the Black-alone-or-in-combination definition of the hand codes and of TIDES. Team shares are expected shares (mean member probability). Their error is Berkson-type: estimates are consistent if the probabilities are calibrated given the regression's controls (the team mean of the prior is one of them), but less precise than with observed race; individual coaches' probabilities are noisy because names carry little information for many Black coaches. The validation exhibit compares the predictions with published TIDES shares.
+\par}
+

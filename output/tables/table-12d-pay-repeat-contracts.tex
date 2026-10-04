@@ -1,0 +1,51 @@
+\begin{table}[H]
+\centering\centering
+\caption{Race differences in pay across successive freely bargained contracts of the same player \label{tab:pay-repeat-contracts}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\fontsize{8}{10}\selectfont
+\begin{tabular}[t]{lccccc}
+\toprule
+  & (1) & (2) & (3) & (4) & (5)\\
+\midrule
+Second observed deal & 0.103* & 0.039 & 0.023 &  & \\
+ & (0.061) & (0.062) & (0.053) &  & \\
+Third or later observed deal & 0.254** & 0.174* & 0.183** &  & \\
+ & (0.100) & (0.099) & (0.085) &  & \\
+P(Black) $\times$ second observed deal & 0.022 & 0.044 & 0.028 &  & \\
+ & (0.070) & (0.069) & (0.059) &  & \\
+P(Black) $\times$ third or later observed deal & 0.063 & 0.078 & 0.006 &  & \\
+ & (0.118) & (0.113) & (0.094) &  & \\
+P(other race) $\times$ second observed deal & 0.134 & 0.132 & 0.145 &  & \\
+ & (0.133) & (0.130) & (0.114) &  & \\
+P(other race) $\times$ third or later observed deal & 0.285 & 0.257 & 0.220 &  & \\
+ & (0.184) & (0.179) & (0.170) &  & \\
+P(Black) (race difference in the adjacent change) &  &  &  & 0.030 & -0.003\\
+ &  &  &  & (0.066) & (0.056)\\
+P(other race) (race difference in the adjacent change) &  &  &  & 0.111 & 0.016\\
+ &  &  &  & (0.104) & (0.092)\\
+\midrule
+Observations & 3491 & 3491 & 3491 & 2157 & 2157\\
+R$^2$ & 0.834 & 0.840 & 0.898 & 0.257 & 0.544\\
+Within R$^2$ & 0.021 & 0.054 & 0.399 & 0.001 & 0.387\\
+Outcome & Log APY & Log APY & Log APY & Change in log APY & Change in log APY\\
+Unit & Contract & Contract & Contract & Adjacent pair & Adjacent pair\\
+Player FE & Yes & Yes & Yes & No & No\\
+Position $\times$ year-signed FE & Yes & Yes & Yes & Both deals & Both deals\\
+Career stage at signing (A) & No & Yes & Yes & No & Changes\\
+Prior and career production (B, C) & No & No & Yes & No & Changes\\
+Joint $p$, Black $\times$ deal order & 0.865 & 0.768 & 0.859 &  & \\
+Joint $p$, other race $\times$ deal order & 0.293 & 0.341 & 0.333 &  & \\
+Players & 1,334 & 1,334 & 1,334 & 1,334 & 1,334\\
+Mean of outcome & 1.098 & 1.098 & 1.098 & -0.012 & -0.012\\
+Share of adjacent pairs with unchanged APY &  &  &  & 0.025 & 0.025\\
+Share of adjacent pairs with $|$change$|$ $>$ 0.10 &  &  &  & 0.810 & 0.810\\
+\bottomrule
+\multicolumn{6}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}}
+\end{table}
+
+{\footnotesize
+\noindent\textit{Notes:} This table follows players across their successive freely bargained veteran contracts (UFA and extensions) signed 2014-2026 in the sample of Table \ref{tab:pay-gap-veteran}. The outcome of columns (1)-(3) is log APY (\$ millions); the unit is the contract. Columns (1)-(3) include player fixed effects and OTC position $\times$ year-signed fixed effects on the common sample of 3,491 contracts of the 1,334 players with two or more ordered eligible deals (expected Black players, sum of P(Black), 804). Deals are ordered by signing year within player. The first observed eligible deal is not the player's first contract: rookie deals, tags and tenders are not eligible, and deals signed before 2014 are not observed. Order indicators mark the second and the third-or-later observed deal (reference: the first observed deal); contracts (expected Black contracts) by order: first 1,334 (804), second 1,334 (804), third or later 823 (472). Two eligible contracts of one player in the same signing year have no observed order (OTC's row sequence is not a signing date). Of 5,062 eligible contracts, 117 in 58 such player-years are excluded, together with the 37 later contracts of those 58 players, so that deals on either side of a tie are never treated as consecutive; 1,417 contracts of players with a single ordered deal do not enter columns (1)-(3). Successive deals are strictly increasing in signing year (1.9 years apart on average). The player fixed effects absorb every time-invariant characteristic, including the race measure, so no race level is estimated: each P(Black) $\times$ order coefficient is the difference between Black and white players in the change in log APY from the first observed deal to that deal, within player and within position $\times$ year. Column (1) has no controls; column (2) adds career stage at signing (block A); column (3) adds production in the season before signing and career production before the signing year (blocks B and C), all dated before the signing year, as in Table \ref{tab:pay-gap-veteran}. Pre-NFL signals and the race-prior covariates are fixed within player and absorbed. Columns (4)-(5) use 2,157 adjacent observed deal pairs. The outcome is the change in log APY, with separate position $\times$ signing-year fixed effects for both the earlier and later deal. These are flexible conditional change models, not an algebraically identical first-difference fit of columns (1)-(3). The share with unchanged APY is 0.025; the share changing by more than 0.10 log points is 0.810. Race coefficients describe differences in adjacent changes; column (5) adds differences in block A-C controls. Intervals between deals vary, so changes are per deal, not annual growth rates. A player enters the repeat sample only if he signs a second eligible deal, which is itself a market outcome; the within-player comparisons describe the progression of players the market re-signed and say nothing about players who did not get a second deal. Signing dates are observed only as years. Prior-season statistics can include games played after an early-January signing; timing is therefore approximate. The 2026 signing window is partial. The joint $p$-values are player-clustered Wald tests that the race $\times$ order interactions are jointly zero. Career stage (A): experience-bin dummies (0, 1, 2, 3, 4-6, 7+ seasons), age at signing and its square, a left-censored-experience indicator and an extension dummy (reference: unrestricted free agents). Whether a team extends a player is itself a team decision. Prior-season production (B): season-before-signing box-score and PFR measures with position-group-specific slopes (passing for QBs, rushing and receiving for RBs, receiving for WRs and TEs, tackles, sacks, QB hits, tackles for loss and pressures for DL and LB, tackles, interceptions, passes defended and coverage allowed for DBs, kicking and punting), games played and injury weeks interacted with position group, and a no-prior-season indicator. Career production (C): career games and injury weeks interacted with position group, and career sums of the block B production measures with the same position-group slopes. Controls with incomplete coverage are set to zero with a missing indicator (interacted like the control). Regression calibration identifies the Black-white gap only if, in addition to names and hometown being unrelated to pay given race and the controls, (i) P(Black) is calibrated given every control in the column, not only given the prior's covariates, and (ii) the gap does not vary with the controls (otherwise the coefficient is a variance-weighted average of gaps). Controls that predict P(Black) within the prior's cells do not by themselves violate (i): under (i) they predict P(Black) exactly when they predict race. They do reduce the variation in P(Black) that identifies the coefficient (overlap), and if (i) fails for them the coefficient moves as they are added for reasons unrelated to pay. Table \ref{tab:pay-gap-veteran} reports the identifying variation by column and checks (i) against documented race. P(Black) is the predicted probability of being non-Hispanic Black alone; Black Hispanic and multiracial Black players enter P(other race), and Table \ref{tab:pay-gap-race-measures} also reports estimates with P(Black) + P(multiracial) as the Black regressor. The predicted Black share is not calibrated in levels: it lies below the TIDES African-American player share through 2016 and above the self-identified Black-alone share (below the Black-or-multiracial share) from 2019 (Table \ref{tab:race-prediction-tides}); Table \ref{tab:pay-gap-race-measures} reports estimates with the TIDES-raked posterior. Standard errors treat the predicted probabilities as known; the prior is estimated by EM on the whole player population of the database, so the omitted first-stage variance is likely small. Standard errors are clustered at the player level. P(Black) and P(other race) enter together, so the coefficient on P(Black) compares a Black (predicted: non-Hispanic Black alone) with a white player. Race is predicted, not observed: each person's probability of being non-Hispanic Black alone combines first name, surname and hometown county (BIFSG) with an NFL-specific prior estimated by EM on predetermined characteristics (players: position at entry, rookie era, draft round, college type, county availability; staff: role, unit and era at first appearance); documented race statements are not used (notes/race-prediction-design.md). Black Hispanic and multiracial Black persons are in the other-race probability, so P(Black) is narrower than the Black-alone-or-in-combination definition of the hand codes and of TIDES. Regressions use the probabilities (regression calibration) and control for the prior's covariates; the coefficient on P(Black) is the Black-white gap if the probabilities are calibrated given the regression's controls and names and hometown are unrelated to the outcome given race and the controls. The validation exhibit compares the predictions with published TIDES shares.
+\par}
+

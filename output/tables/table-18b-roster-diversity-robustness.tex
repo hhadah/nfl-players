@@ -1,0 +1,63 @@
+\begin{table}[H]
+\centering\centering\centering
+\caption{Roster racial composition and win percentage: robustness \label{tab:roster-diversity-robustness}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{tabular}[t]{lccccccccc}
+\toprule
+  & (1) Contemp. controls & (2) No lagged outcomes & (3) Opening-day share & (4) Opening day, prior snaps & (5) Trimmed, snap-weighted & (6) Trimmed, headcount & (7) Unit-balanced snap share & (8) Defensive snap share control & (9) Offense and defense shares\\
+\midrule
+Roster share Black (snap-weighted) & -0.780*** & -0.677** &  &  & -0.739*** &  &  & -0.520** & \\
+ & (0.223) & (0.265) &  &  & (0.257) &  &  & (0.226) & \\
+Roster share Black (headcount) &  &  &  &  &  & -0.474** &  &  & \\
+ &  &  &  &  &  & (0.218) &  &  & \\
+Opening-day active-roster share Black &  &  & -0.491*** &  &  &  &  &  & \\
+ &  &  & (0.176) &  &  &  &  &  & \\
+Opening-day share Black, prior-snap-weighted &  &  &  & -0.448** &  &  &  &  & \\
+ &  &  &  & (0.207) &  &  &  &  & \\
+Coaches' share Black (all snapshots) & -0.409** &  &  &  &  &  &  &  & \\
+ & (0.187) &  &  &  &  &  &  &  & \\
+Opening-day coaches' share Black &  & -0.378 & -0.317** & -0.426* & -0.438* & -0.288* & -0.236 & -0.230 & -0.234\\
+ &  & (0.239) & (0.155) & (0.237) & (0.246) & (0.160) & (0.220) & (0.219) & (0.221)\\
+Season head coach Black (most games) & -0.155** &  &  &  &  &  &  &  & \\
+ & (0.071) &  &  &  &  &  &  &  & \\
+Season starting QB Black (most starts) & 0.015 &  &  &  &  &  &  &  & \\
+ & (0.043) &  &  &  &  &  &  &  & \\
+Opening-day head coach Black &  & -0.139 & -0.022 & -0.122 & -0.128 & -0.013 & -0.103 & -0.106 & -0.097\\
+ &  & (0.090) & (0.057) & (0.102) & (0.083) & (0.051) & (0.093) & (0.090) & (0.089)\\
+Opening-day starting QB Black &  & -0.038 & 0.024 & -0.020 & -0.033 & 0.004 & -0.031 & -0.033 & -0.027\\
+ &  & (0.038) & (0.038) & (0.033) & (0.032) & (0.037) & (0.030) & (0.030) & (0.031)\\
+Unit-balanced snap-weighted share Black &  &  &  &  &  &  & -0.534** &  & \\
+ &  &  &  &  &  &  & (0.223) &  & \\
+Offense share Black (snap-weighted) &  &  &  &  &  &  &  &  & -0.386***\\
+ &  &  &  &  &  &  &  &  & (0.137)\\
+Defense share Black (snap-weighted) &  &  &  &  &  &  &  &  & -0.102\\
+ &  &  &  &  &  &  &  &  & (0.190)\\
+Defensive share of snap weight &  &  &  &  &  &  &  & -2.299*** & \\
+ &  &  &  &  &  &  &  & (0.654) & \\
+\midrule
+Observations & 384 & 384 & 767 & 384 & 372 & 743 & 384 & 384 & 384\\
+R$^2$ & 0.490 & 0.405 & 0.292 & 0.391 & 0.437 & 0.305 & 0.447 & 0.447 & 0.449\\
+Within R$^2$ & 0.316 & 0.202 & 0.131 & 0.182 & 0.231 & 0.142 & 0.258 & 0.258 & 0.261\\
+WCB p-value, diversity & 0.002 & 0.015 & 0.010 & 0.045 & 0.004 & 0.049 & 0.016 & 0.022 & 0.007\\
+Mean of outcome & 0.500 & 0.500 & 0.500 & 0.500 & 0.500 & 0.501 & 0.500 & 0.500 & 0.500\\
+SD of diversity net of FE & 0.044 & 0.044 & 0.045 & 0.059 & 0.041 & 0.038 & 0.043 & 0.044 & 0.065\\
+Effect of 1-SD change in expected share (win pct. pts.) & -3.42 & -2.97 & -2.19 & -2.63 & -3.06 & -1.78 & -2.32 & -2.28 & -2.51\\
+WCB p-value, defense share &  &  &  &  &  &  &  &  & 0.606\\
+Seasons & 2014-2025 & 2014-2025 & 2002-2025 & 2014-2025 & 2014-2025 & 2002-2025 & 2014-2025 & 2014-2025 & 2014-2025\\
+Season and franchise FE & Yes & Yes & Yes & Yes & Yes & Yes & Yes & Yes & Yes\\
+Lagged outcomes & Yes & No & Yes & Yes & Yes & Yes & Yes & Yes & Yes\\
+Opening-day quality, HC and QB & No & Yes & Yes & Yes & Yes & Yes & Yes & Yes & Yes\\
+Prior-season cap share & No & Yes & No & Yes & Yes & No & Yes & Yes & Yes\\
+In-season quality, season HC and QB & Yes & No & No & No & No & No & No & No & No\\
+Current-season cap share & Yes & No & No & No & No & No & No & No & No\\
+Calibration controls & Yes & Yes & Yes & Yes & Yes & Yes & Yes & Yes & Yes\\
+\bottomrule
+\multicolumn{10}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+\end{tabular}}
+\end{table}
+
+{\footnotesize
+\noindent\textit{Notes:} This table includes the estimation results of equation (2) under alternative treatments, controls and samples. The unit of observation is a franchise-season; the dependent variable is the regular-season win percentage; all columns include season and franchise fixed effects. Column (1) replaces the opening-day controls of Table \ref{tab:roster-diversity-main}, column (4), with contemporaneous ones, on the same franchise-seasons: the season's own cap share (the sum of the season's cap numbers, which in-season signings, releases and restructures change) in place of the prior season's, snap-weighted roster quality, the season starting QB (most starts) and the season head coach (most games). These are set during the season and respond to injuries, benching, tanking and firings that also drive results, so they are possible bad controls. Column (2) drops the lagged outcomes (Nickell bias). Columns (3)-(4) use predetermined treatments, fixed before the season's results arrive: the Black share of the active roster of the first regular-season game (column (3), 2002-2025, without a cap share), and the same players weighted by their offensive plus defensive snaps in the previous season (column (4), 2014-2025, with the prior season's cap share; players without prior-season snaps get zero weight). The snap-weighted share of Table \ref{tab:roster-diversity-main} is measured during the season and is partly an outcome of it, so its coefficients are descriptive conditional associations; columns (3)-(4) are the estimates for a roster fixed before the season. Columns (5)-(6) drop, in each season, franchise-seasons above the league-season 99th percentile of the share (in practice the season's largest share), a guard against franchise-season spikes in the measured share.  Columns (7)-(9) address the game-script channel of the snap weights (teams that trail run more offensive plays, teams with weak offenses play more defensive snaps, and defensive units have higher Black shares): column (7) uses the unit-balanced share, the mean of the offense and defense snap-weighted shares, which does not depend on the offense-defense snap balance; column (8) controls for the defensive share of the snap weight (itself an outcome of the season, so a possible bad control); column (9) enters the offense and defense shares jointly (the SD and effect rows refer to the offense share). Columns (7) and (9) add the mean prior of each unit. Controls are fixed by opening day: the lagged win percentage and lagged market expected wins; roster quality of the active roster of the first regular-season game (mean log draft pick, undrafted = log 300; share of first-round picks; mean age; mean experience); and the Black share of the on-field coaches listed in the preseason staff snapshot, used only where the full staff is observed (2007 on; a missing indicator absorbs earlier seasons), the opening-day head coach's race and the opening-day starting quarterback's race. Under the predicted measures these race controls are predicted probabilities like the treatment, and the calibration controls include their priors (the coaches' mean prior and the head coach's and quarterback's priors). The head coach's predicted probability is calibrated to the staff population, not to the selected population of head coaches, so it is a noisy control. Under the predicted measure every column includes the calibration controls of its treatment's roster group (mean prior and prior-covariate shares of the snap-weighted, headcount, opening-day or prior-snap-weighted opening-day roster) and the priors of the race controls (in column (1), of the season head coach and quarterback and of all listed coaches). The SD row is the SD of the share net of franchise and season fixed effects; the effect row multiplies it by the coefficient and by 100 (win-percentage points). Standard errors, in parentheses, are clustered at the franchise level (32 clusters); wild cluster bootstrap-t p-values (restricted, WCR) use Webb weights and 9,999 replications. Under the model-only predicted measure a share Black is the expected share of players who are non-Hispanic Black alone (multiracial and Hispanic Black players count as non-Black); the documented, provisional and hand-coded sensitivity measures count Black alone or in combination. Under regression calibration the coefficient on an expected roster share (the mean over players of the predicted probability of being non-Hispanic Black) equals the effect of the true share only if the probabilities are calibrated at the team level given the regression's controls; this requires that players' names and hometown counties be unrelated to team performance given race and the prior's covariates, and the calibration controls (the team mean of the prior and the weighted shares of its draft-round, college-type, rookie-era and hometown-county levels, plus the priors of the coaches, head coach and quarterback whose predicted race enters as a control) condition on those covariates. Shrinkage toward the prior by itself causes no attenuation (the error of an expected share is of the Berkson type), but individual-level calibration does not imply team-level calibration: if the true share rises more (less) than one-for-one with the expected share across teams, the coefficient overstates (understates) the effect, so the sign of any bias is not known. A league-wide level error, such as the model's shortfall against the TIDES league share, is absorbed by the season fixed effects. A team-level calibration check among documented players (validation only): regressing a franchise-season's documented Black share of its documented players on the same players' mean predicted probability, with franchise and season fixed effects, gives a slope of 0.79 (SE 0.06) for snap weights and  0.69 (SE 0.06) for headcount weights, against one under calibration. Documented players are a selected, mostly Black and famous subset (about 28 percent of the weight), so the check does not establish the team-level calibration of the full roster in either direction. Effect rows refer to a one-SD change in the expected share, whose SD is smaller than that of the true share. Race is predicted, not observed: each person's probability of being non-Hispanic Black alone combines first name, surname and hometown county (BIFSG) with an NFL-specific prior estimated by EM on predetermined characteristics (players: position at entry, rookie era, draft round, college type, county availability; staff: role, unit and era at first appearance); documented race statements are not used (notes/race-prediction-design.md). Black Hispanic and multiracial Black persons are in the other-race probability, so P(Black) is narrower than the Black-alone-or-in-combination definition of the hand codes and of TIDES. Team shares are expected shares (mean member probability). Their error is Berkson-type: estimates are consistent if the probabilities are calibrated given the regression's controls (the team mean of the prior is one of them), but less precise than with observed race; individual coaches' probabilities are noisy because names carry little information for many Black coaches. The validation exhibit compares the predictions with published TIDES shares.
+\par}
+

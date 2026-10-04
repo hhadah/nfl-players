@@ -1,0 +1,26 @@
+\begin{table}[H]
+\centering
+\caption{Race and retention and contract access under alternative race measures \label{tab:player-retention-race-measures}}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{tabular}[t]{lrrrrrrrr}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{4}{c}{Retained in $t+1$ (Table 34, col. 4)} & \multicolumn{4}{c}{First UFA/extension in $t+1$ (Table 35, col. 4)} \\
+\cmidrule(l{3pt}r{3pt}){2-5} \cmidrule(l{3pt}r{3pt}){6-9}
+Race measure & Coef. & (SE) & Mean & N & Coef. & (SE) & Mean & N\\
+\midrule
+Predicted (model only) & -0.032 & (0.008) & 0.778 & 46,083 & -0.007 & (0.009) & 0.122 & 17,282\\
+Predicted, TIDES-raked & -0.032 & (0.008) & 0.778 & 46,083 & -0.007 & (0.009) & 0.122 & 17,282\\
+Predicted, draft-free prior & -0.031 & (0.008) & 0.778 & 46,083 & -0.008 & (0.009) & 0.122 & 17,282\\
+Predicted, Black or multiracial & -0.033 & (0.008) & 0.778 & 46,083 & -0.007 & (0.009) & 0.122 & 17,282\\
+Documented where available, else predicted & -0.035 & (0.007) & 0.778 & 46,083 & -0.009 & (0.008) & 0.122 & 17,282\\
+\addlinespace
+Wikipedia category flag (provisional) & 0.026 & (0.004) & 0.786 & 45,347 & -0.004 & (0.006) & 0.124 & 16,902\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+{\footnotesize
+\noindent\textit{Notes:} This table includes the coefficient on the Black regressor from the column-(4) specifications of Tables \ref{tab:player-retention} and \ref{tab:player-contract-access} under each race measure, with its clustered standard error, the mean of the outcome and the number of player-seasons. Predicted measures use probabilities (regression calibration) with the prior's covariates as fixed effects; the TIDES-raked variant shifts the Black log-odds so the mean matches published TIDES player shares; the draft-free variant drops the draft-round bucket from the prior and its fixed effects; the Black-or-multiracial variant adds P(multiracial) to the Black regressor. Documented-where-available (preddoc) and the Wikipedia flag are sensitivity measures whose coverage depends on fame; the preddoc prior conditions on career length, an outcome here, which is not controlled. The Wikipedia flag is positive-only: its comparison group mixes white and unflagged Black players, and whether a Black player is flagged rises with the length and visibility of his career, which is the outcome here; its retention coefficient is therefore not a race gap and is shown only to document the measure's behaviour. The estimates are conditional associations among players already employed in season $t$; survival to $t$ is itself selected on the same unobservables that drive the outcome, so the coefficients describe who stays and who reaches a bargained contract given observed quality, not a causal effect of race. Pay is neither an outcome nor a control; roster weeks are not paid weeks. Standard errors, clustered by player, in parentheses. $^{*}p<0.1$, $^{**}p<0.05$, $^{***}p<0.01$.
+\par}
+
